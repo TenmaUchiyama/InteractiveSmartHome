@@ -1,0 +1,19 @@
+{
+  "name": "Action Container",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "action",
+  "workspaceFolder": "/action_workspace",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+  "forwardPorts": [4049]
+}

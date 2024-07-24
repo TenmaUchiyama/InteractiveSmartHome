@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  action:
+    build:
+      context: ./Action
+      dockerfile: Dockerfile
+    ports:
+      - "4049:4049"
+    volumes:
+      - ./Action/workspaces:/action_workspace
+    working_dir: /action_workspace
+    command: sleep infinity
+
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    networks:
+      - mqtt-network
+
+  mqtt-client:
+    image: eclipse-mosquitto
+    container_name: mqtt-client
+    networks:
+      - mqtt-network
+    entrypoint: sh -c "while sleep 1000; do :; done"
+
+networks:
+  mqtt-network:
+    driver: bridge
