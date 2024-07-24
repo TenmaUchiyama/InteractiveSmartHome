@@ -2,6 +2,7 @@
   "name": "Action Container",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "action",
+  "runServices": ["mqtt-broker"],
   "workspaceFolder": "/action_workspace",
 
   "customizations": {
@@ -15,5 +16,6 @@
       ]
     }
   },
+  "postCreateCommand": "npm install",
   "forwardPorts": [4049]
 }
