@@ -10,6 +10,10 @@ services:
       - ./Action/workspaces:/action_workspace
     working_dir: /action_workspace
     command: sleep infinity
+    networks:
+      - mqtt-network
+    environment:
+      CHOKIDAR_USEPOLLING: 1
 
   mqtt-broker:
     image: eclipse-mosquitto

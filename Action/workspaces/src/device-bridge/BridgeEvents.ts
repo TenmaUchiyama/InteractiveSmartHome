@@ -1,14 +1,14 @@
 import { EventEmitter } from "events";
 
-export enum ActionEventKey
+export enum BridgeEventKey
 {
     StartAction = "start_action", 
     ExitAction = "exit_action"
 }
 
 
-export class ActionEvents{
-    private static instance: ActionEvents; 
+export class BridgeEvents{
+    private static instance: BridgeEvents; 
 
     private emitter: EventEmitter;
 
@@ -20,12 +20,12 @@ export class ActionEvents{
 
 
     public static GetInstance = () => {
-        if(ActionEvents.instance == null)
+        if(BridgeEvents.instance == null)
         {
-            ActionEvents.instance = new ActionEvents()
+            BridgeEvents.instance = new BridgeEvents()
         }
 
-        return ActionEvents.instance;
+        return BridgeEvents.instance;
     }
 
 

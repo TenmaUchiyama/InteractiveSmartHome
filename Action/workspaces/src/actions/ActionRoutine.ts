@@ -1,58 +1,39 @@
-import ActionBlock from "./ActionBlock";
+import { EventEmitter } from "stream";
+import {ActionBlock} from "./ActionBlock";
+import { ActionEvents, ActionEventKey } from "./ActionEvents";
 
 
-export default class ActionManager
+export class ActionRoutine 
 {
 
-    private actionBlocks: ActionBlock[] ; 
-    private currentBlockInd: number = 0;
+    private actionBlocks : ActionBlock[]; 
+    private currentBlockIndex: number;
 
-
-    constructor (){
-
-
-        this.actionBlocks = [
-            new ActionBlock("Action1"),
-            new ActionBlock("Action2"),
-            new ActionBlock("Action3"),
-            new ActionBlock("Action4"),
-            new ActionBlock("Action5"),
-            new ActionBlock("Action6"),
-        ]
+    constructor(actionBlocks: ActionBlock[]) 
+    {
+        this.actionBlocks = actionBlocks; 
+        this.currentBlockIndex = 0; 
+        ActionEvents.GetInstance().on(ActionEventKey.ExitAction, this.onActionBlockExit.bind(this));
     }
 
 
-
-    startRoutine = async () => {
-        await 
+    public Start(): void {
+        this.runNextActionBlock();
     }
 
-    executeCurrentBlock = async () => {
-        if (this.currentBlockInd < this.actionBlocks.length) {
-            const currentAction = this.actionBlocks[this.currentBlockInd];
-            currentAction.startAction();
-            this.moveToNextBlock();
+    private runNextActionBlock(): void {
+        if (this.currentBlockIndex < this.actionBlocks.length) {
+            const currentActionBlock = this.actionBlocks[this.currentBlockIndex];
+            currentActionBlock.Start();
         } else {
-            this.postProcess();
+            console.log('All ActionBlocks have been executed.');
         }
     }
 
-
-    moveToNextBlock = () => {
-        this.currentBlockInd++;
-        this.executeCurrentBlock();
+    private onActionBlockExit(id: number): void {
+        console.log(`ActionBlock ${id} exited.`);
+        this.currentBlockIndex++;
+        this.runNextActionBlock();
     }
-
-
-    postProcess =() => {
-        console.log("Done Everything")
-    }
-
-    
-
-
 
 }
-
-
-

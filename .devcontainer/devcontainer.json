@@ -13,9 +13,14 @@
       "extensions": [
         "ms-azuretools.vscode-docker",
         "ms-vscode-remote.remote-containers"
-      ]
+      ],
+      "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+
+
     }
+
   },
   "postCreateCommand": "npm install",
-  "forwardPorts": [4049]
+  "forwardPorts": [4049],
+
 }
