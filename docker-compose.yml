@@ -10,8 +10,7 @@ services:
       - ./Action/workspaces:/action_workspace
     working_dir: /action_workspace
     command: sleep infinity
-    networks:
-      - mqtt-network
+
     environment:
       CHOKIDAR_USEPOLLING: 1
 
@@ -23,9 +22,12 @@ services:
       - "9001:9001"
     volumes:
       - ./mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf
-    networks:
-      - mqtt-network
 
-networks:
-  mqtt-network:
-    driver: bridge
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db:/data/devices
