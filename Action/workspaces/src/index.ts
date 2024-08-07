@@ -1,1 +1,1 @@
-import "./test/action-routine-test"
+import "./server/router"

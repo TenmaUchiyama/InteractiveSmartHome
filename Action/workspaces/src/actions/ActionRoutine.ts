@@ -4,17 +4,24 @@ import { ActionEvents, ActionEventKey } from "./ActionEvents";
 export class ActionRoutine {
   private actionBlocks: ActionBlock[];
   private currentBlockIndex: number;
+  private routineId: string;
 
-  constructor(actionBlocks: ActionBlock[]) {
+  constructor(routineId: string, actionBlocks: ActionBlock[]) {
     this.actionBlocks = actionBlocks;
     this.currentBlockIndex = 0;
+    this.routineId = routineId;
+
+    this.actionBlocks.forEach((actionBlocks) => {
+      actionBlocks.setRoutineID(this.routineId);
+    });
+
     ActionEvents.GetInstance().on(
-      ActionEventKey.ExitAction,
+      `${ActionEventKey.ExitAction}_${this.routineId}`,
       this.onActionBlockExit.bind(this)
     );
   }
 
-  public Start(): void {
+  public start(): void {
     this.runNextActionBlock();
   }
 
@@ -29,15 +36,19 @@ export class ActionRoutine {
   }
 
   private onActionBlockExit(id: string): void {
-    let currentActionBlockId = this.actionBlocks[this.currentBlockIndex].getID();
-   
-    if(currentActionBlockId !== id)
-    {
+    console.log(id);
+    console.log(this.currentBlockIndex);
+    console.log(this.actionBlocks);
+
+    let currentActionBlockId =
+      this.actionBlocks[this.currentBlockIndex].getID();
+
+    if (currentActionBlockId !== id) {
       console.log("X: ActionBlock ID does not match the current block ID.");
-      return
-    }else{
+      return;
+    } else {
       console.log(`O: ActionBlock ${id} has been exited.`);
-    } 
+    }
     this.currentBlockIndex++;
     this.runNextActionBlock();
   }
