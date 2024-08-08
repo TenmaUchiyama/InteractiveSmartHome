@@ -2,25 +2,24 @@
   "name": "Action Container",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "action",
-  "runServices": ["mqtt-broker"],
+  "runServices": ["mqtt-broker", "mongodb"],
   "workspaceFolder": "/action_workspace",
 
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true,
+        "prettier.singleQuote": true,
+        "prettier.trailingComma": "all"
       },
       "extensions": [
         "ms-azuretools.vscode-docker",
         "ms-vscode-remote.remote-containers"
       ],
       "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
-
-
     }
-
   },
   "postCreateCommand": "npm install",
-  "forwardPorts": [4049],
-
+  "forwardPorts": [4049]
 }
