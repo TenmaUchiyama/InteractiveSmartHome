@@ -9,13 +9,15 @@
     "vscode": {
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "prettier.singleQuote": true,
         "prettier.trailingComma": "all"
       },
       "extensions": [
         "ms-azuretools.vscode-docker",
-        "ms-vscode-remote.remote-containers"
+        "ms-vscode-remote.remote-containers",
+        "esbenp.prettier-vscode"
       ],
       "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
     }
