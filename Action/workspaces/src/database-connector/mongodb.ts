@@ -1,10 +1,6 @@
-import { Db, MongoClient } from "mongodb";
-import {
-  IDevice,
-  IAction,
-  IRoutine,
-  IActionSequence,
-} from "@/src/types/ActionTypes";
+import { Db, MongoClient } from 'mongodb';
+import { DeviceData, RoutineData, ActionSequence } from '../types/DBTypes';
+import { ActionBlockType } from '../types/ActionBlockTypes';
 
 export class MongoDB {
   public static instance: MongoDB = new MongoDB();
@@ -12,68 +8,66 @@ export class MongoDB {
   private client: MongoClient;
   private db: Db;
 
-  private COL_ROUTINE = "routine";
-  private COL_ACTION = "action";
-  private COL_DEVICE = "device";
+  private COL_ROUTINE = 'routine';
+  private COL_ACTION = 'action';
+  private COL_DEVICE = 'device';
 
   private constructor() {
     // MongoDB接続URI
-    const uri = "mongodb://mongodb:27017"; // 適切なURIに置き換えてください
+    const uri = 'mongodb://mongodb:27017'; // 適切なURIに置き換えてください
     this.client = new MongoClient(uri);
     this.client
       .connect()
       .then(() => {
-        console.log("connected to MongoDB");
+        console.log('connected to MongoDB');
       })
       .catch((err) => {
-        console.error("Failed to connect to MongoDB", err);
+        console.error('Failed to connect to MongoDB', err);
       });
 
-    this.db = this.client.db("InteractiveSmartHome");
+    this.db = this.client.db('InteractiveSmartHome');
   }
 
   public static getInstance(): MongoDB {
     if (!MongoDB.instance) {
-      console.log("Creating new [MongoDB] instance");
+      console.log('Creating new [MongoDB] instance');
       MongoDB.instance = new MongoDB();
     }
     return MongoDB.instance;
   }
 
   getWholeData = async () => {
-    console.log("connected to MongoDB");
-    const routineCollection = this.db.collection("routine");
-    const actionCollection = this.db.collection("action");
-    const deviceCollection = this.db.collection("device");
+    console.log('connected to MongoDB');
+    const routineCollection = this.db.collection('routine');
+    const actionCollection = this.db.collection('action');
+    const deviceCollection = this.db.collection('device');
 
     // データの取得
-    const routines: IRoutine[] = (await routineCollection.find().toArray()).map(
-      (data: any) => {
-        let output: IRoutine = {
-          id: data.id, // MongoDBの_idフィールドを文字列に変換
-          name: data.name,
-          actionBlocks: data.actionBlocks,
-        };
+    const routines: RoutineData[] = (
+      await routineCollection.find().toArray()
+    ).map((data: any) => {
+      let output: RoutineData = {
+        id: data.id, // MongoDBの_idフィールドを文字列に変換
+        name: data.name,
+        actionBlocks: data.actionBlocks,
+      };
 
-        return output;
-      }
-    );
+      return output;
+    });
     const actions = (await actionCollection.find().toArray()).map(
       (data: any) => {
-        let output: IAction = {
+        let output: ActionBlockType = {
           id: data.id,
-          actionType: data.actionType,
-          deviceId: data.deviceId,
           name: data.name,
           description: data.description,
         };
 
         return output;
-      }
+      },
     );
     const devices = (await deviceCollection.find().toArray()).map(
       (data: any) => {
-        let output: IDevice = {
+        let output: DeviceData = {
           id: data.id,
           topic: data.topic,
           name: data.name,
@@ -86,7 +80,7 @@ export class MongoDB {
           },
         };
         return output;
-      }
+      },
     );
 
     return {
@@ -143,7 +137,7 @@ export class MongoDB {
 
     if (routine === null) return null;
     let actionIds = routine.actionBlocks.map(
-      (actionData: IActionSequence) => actionData.actionId
+      (actionData: ActionSequence) => actionData.actionId,
     );
     let actionDatas = await this.db
       .collection(this.COL_ACTION)

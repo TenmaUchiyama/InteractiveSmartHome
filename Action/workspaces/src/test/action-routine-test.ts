@@ -1,74 +1,271 @@
-import { ActionBlock } from "../actions/ActionBlock";
-import { ActionRoutine } from "../actions/ActionRoutine";
-import { randomUUID } from 'crypto';
-import { fetchData } from "./mongo-test";
-import { IAction, IDevice, IRoutine } from "src/types/ActionTypes";
+import path from 'path';
+import fs from 'fs';
+import { Subject } from 'rxjs';
+import MqttBridge from '../device-bridge/MqttBridge';
 
+interface IActionBlock {
+  nextActionBlock: IActionBlock | undefined;
+  isActionStarted: boolean;
+  setNextActionBlock(nextActionBlock: IActionBlock): void;
+  setPreviousActionBlock(previousActionBlock: IActionBlock): void;
+  setDataStream(dataStream: Subject<any>): void;
+  startAction(): void;
+  exitAction(): void;
+  getIsActionStarted(): boolean;
+}
 
+class SensorBlock implements IActionBlock {
+  isActionStarted: boolean = false;
+  private topic: string;
 
+  nextActionBlock: IActionBlock | undefined;
+  previousActionBlock: IActionBlock | undefined;
 
-const main = async () => {
-    let datas = await fetchData();
-    
-    let routineActions = datas.routines.flatMap((routine: IRoutine) => {
-        let data_actionBlock: IAction[] = routine.actionBlocks.map((actionBlockId: string) => {
-            let action = datas.actions.find((action: IAction) => action.id === actionBlockId);
-            if (action === undefined) {
-                throw new Error(`Action ${actionBlockId} not found`);
-            }
-            return action;
-        });
-        
-        let actionBlocks: ActionBlock[] = data_actionBlock.map((action: IAction) => {
-            if (action.actionType === "sensor" || action.actionType === "actuator") {
-                let device = datas.devices.find((device: IDevice) => device.id === action.deviceId);
-                if (device) {
-                    return new ActionBlock(device);
-                }
-            }
-            throw new Error(`Device for action ${action.id} not found`);
-        });
-    
-        // 配列の配列にならないように、flatMapを使用してフラット化
-        return actionBlocks;
-    });
-    
-   
-    let actionRoutine = new ActionRoutine(datas.routines[0].id, routineActions);
+  dataStream = new Subject<any>();
 
+  constructor(topic: string) {
+    this.topic = topic;
+  }
+  setPreviousActionBlock(previousActionBlock: IActionBlock): void {
+    this.previousActionBlock = previousActionBlock;
+  }
 
-}   
+  setNextActionBlock(nextActionBlock: IActionBlock): void {
+    this.nextActionBlock = nextActionBlock;
+    this.nextActionBlock.setDataStream(this.dataStream);
+    this.nextActionBlock.setPreviousActionBlock(this);
+  }
+  getIsActionStarted(): boolean {
+    return this.isActionStarted;
+  }
 
-main()
+  exitAction(): void {
+    this.isActionStarted = false;
+    MqttBridge.getInstance().unsubscribeFromTopic(this.topic);
+  }
 
+  setDataStream = (dataStream: Subject<any>) => {
+    this.dataStream = dataStream;
+  };
 
+  startAction(): void {
+    this.isActionStarted = true;
+    MqttBridge.getInstance().subscribeToTopic(
+      this.topic,
+      this.receiveData.bind(this),
+    );
+  }
 
- 
+  private receiveData(data: any) {
+    if (this.nextActionBlock && !this.nextActionBlock.getIsActionStarted()) {
+      this.nextActionBlock.startAction();
+    }
 
+    this.dataStream.next(data);
+  }
+}
 
+class TimerLogicBlock implements IActionBlock {
+  isActionStarted: boolean = false;
+  nextActionBlock: IActionBlock | undefined;
+  previousActionBlock: IActionBlock | undefined;
 
-// let actionRoutine = new ActionRoutine([
-//     new ActionBlock(randomUUID(), "topic1_1"), 
-//     new ActionBlock(randomUUID(), "topic1_2"), 
-//     new ActionBlock(randomUUID(), "topic1_3"), 
-//     new ActionBlock(randomUUID(), "topic1_4"), 
-//     new ActionBlock(randomUUID(), "topic1_5"), 
-//     new ActionBlock(randomUUID(), "topic1_6"), 
-//     new ActionBlock(randomUUID(), "topic1_7"), 
-// ]);
+  dataStream = new Subject<any>();
+  waitTime: number;
+  constructor(waitTime: number) {
+    this.waitTime = waitTime;
+  }
+  setPreviousActionBlock(previousActionBlock: IActionBlock): void {
+    this.previousActionBlock = previousActionBlock;
+  }
+  setNextActionBlock(nextActionBlock: IActionBlock): void {
+    this.nextActionBlock = nextActionBlock;
+  }
 
+  setDataStream(dataStream: Subject<any>): void {
+    this.nextActionBlock?.setDataStream(dataStream);
+  }
 
-// let actionRoutine2 = new ActionRoutine([
-//     new ActionBlock(randomUUID(), "topic2_1"), 
-//     new ActionBlock(randomUUID(), "topic2_2"), 
-//     new ActionBlock(randomUUID(), "topic2_3"), 
-//     new ActionBlock(randomUUID(), "topic2_4"), 
-//     new ActionBlock(randomUUID(), "topic2_5"), 
-//     new ActionBlock(randomUUID(), "topic2_6"), 
-//     new ActionBlock(randomUUID(), "topic2_7"), 
-// ]);
+  startAction(): void {
+    console.log('TIMER STARTED');
+    this.previousActionBlock?.exitAction();
+    setTimeout(() => {
+      this.nextActionBlock?.startAction();
+      this.exitAction();
+    }, this.waitTime);
+  }
 
+  exitAction(): void {
+    this.isActionStarted = false;
+  }
 
+  getIsActionStarted(): boolean {
+    return this.isActionStarted;
+  }
+}
 
-// actionRoutine.Start(); 
-// actionRoutine2.Start();
+class SimpleCompareLogic implements IActionBlock {
+  isActionStarted: boolean = false;
+  nextActionBlock: IActionBlock | undefined;
+  previousActionBlock: IActionBlock | undefined;
+
+  dataStream = new Subject<any>();
+  threshold: number;
+
+  constructor(threshold: number) {
+    this.threshold = threshold;
+  }
+
+  setPreviousActionBlock(previousActionBlock: IActionBlock): void {
+    this.previousActionBlock = previousActionBlock;
+  }
+
+  setNextActionBlock(nextActionBlock: IActionBlock): void {
+    this.nextActionBlock = nextActionBlock;
+    this.nextActionBlock.setDataStream(this.dataStream);
+    this.nextActionBlock.setPreviousActionBlock(this);
+  }
+
+  setDataStream(dataStream: Subject<any>): void {
+    this.dataStream = dataStream;
+    this.dataStream.subscribe(this.handleDataFromPreviousBlock.bind(this));
+  }
+
+  startAction(): void {
+    this.isActionStarted = true;
+  }
+
+  exitAction(): void {
+    this.isActionStarted = false;
+  }
+
+  getIsActionStarted(): boolean {
+    return this.isActionStarted;
+  }
+
+  private handleDataFromPreviousBlock(data: any) {
+    const parsedData = parseInt(data);
+
+    if (isNaN(parsedData)) {
+      console.error('Data is not a number');
+      return;
+    }
+    if (data > this.threshold) {
+      if (this.nextActionBlock && !this.nextActionBlock.getIsActionStarted()) {
+        this.previousActionBlock?.exitAction();
+        this.nextActionBlock.startAction();
+      }
+    } else {
+      console.log('Data is less than threshold');
+    }
+  }
+}
+
+class ActuatorBlock implements IActionBlock {
+  isActionStarted: boolean = false;
+
+  nextActionBlock: IActionBlock | undefined;
+  previousActionBlock: IActionBlock | undefined;
+
+  private topic: string;
+  dataStream = new Subject<any>();
+
+  constructor(topic: string) {
+    this.topic = topic;
+  }
+  setPreviousActionBlock(previousActionBlock: IActionBlock): void {
+    this.previousActionBlock = previousActionBlock;
+  }
+  setNextActionBlock(nextActionBlock: IActionBlock): void {
+    this.nextActionBlock = nextActionBlock;
+  }
+
+  async startAction() {
+    this.isActionStarted = true;
+    await MqttBridge.getInstance().publishMessage(
+      this.topic,
+      'Hello from actuator',
+    );
+    this.nextActionBlock?.startAction();
+  }
+
+  exitAction(): void {
+    this.isActionStarted = false;
+    MqttBridge.getInstance().unsubscribeFromTopic(this.topic);
+  }
+
+  public getIsActionStarted() {
+    return this.isActionStarted;
+  }
+
+  public setDataStream = (dataStream: Subject<any>) => {
+    this.dataStream = dataStream;
+
+    this.dataStream.subscribe(this.handleDataFromPreviousBlock);
+  };
+
+  handleDataFromPreviousBlock(handleDataFromPreviousBlock: any) {
+    console.log(
+      'Received Data From Previous Block: ',
+      handleDataFromPreviousBlock,
+    );
+  }
+}
+
+const getActionBlock = (block: any) => {
+  switch (block.action_type) {
+    case 'sensor':
+      return new SensorBlock(block.topic);
+    case 'compare':
+      return new SimpleCompareLogic(block.threshold);
+    case 'timer':
+      return new TimerLogicBlock(block.wait_time);
+    case 'actuator':
+      return new ActuatorBlock(block.topic);
+  }
+};
+
+export function test() {
+  const routine = [
+    {
+      action_type: 'sensor',
+      name: 'sensor-test',
+      description: 'this is just a test sensor block',
+      topic: 'sensor-data',
+    },
+    {
+      action_type: 'compare',
+      name: 'threshold-test',
+      description: 'this is a threshold logic block',
+      threshold: 50,
+    },
+    {
+      action_type: 'timer',
+      name: 'timer-test',
+      description: 'this is just a test timer block',
+      wait_time: 4000,
+    },
+    {
+      action_type: 'actuator',
+      name: 'actuator-test',
+      description: 'this is just a test actuator block',
+      topic: 'actuator-data',
+    },
+  ];
+
+  let actionBlocks: any[] = [];
+  for (const [index, block] of routine.entries()) {
+    let actionBlock = getActionBlock(block);
+    if (index !== 0) {
+      actionBlocks[index - 1].setNextActionBlock(actionBlock);
+    }
+    if (index === routine.length - 1) {
+      actionBlock!.setNextActionBlock(actionBlocks[0]);
+    }
+    actionBlocks.push(actionBlock);
+  }
+
+  actionBlocks[0].startAction();
+}
+
+test();

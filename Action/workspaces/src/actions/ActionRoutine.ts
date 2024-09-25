@@ -1,5 +1,5 @@
-import { ActionBlock } from "./ActionBlock";
-import { ActionEvents, ActionEventKey } from "./ActionEvents";
+import { ActionBlock } from './action-blocks/ActionBlock';
+import { ActionEvents, ActionEventKey } from './ActionEvents';
 
 export class ActionRoutine {
   private actionBlocks: ActionBlock[];
@@ -11,13 +11,9 @@ export class ActionRoutine {
     this.currentBlockIndex = 0;
     this.routineId = routineId;
 
-    this.actionBlocks.forEach((actionBlocks) => {
-      actionBlocks.setRoutineID(this.routineId);
-    });
-
     ActionEvents.GetInstance().on(
       `${ActionEventKey.ExitAction}_${this.routineId}`,
-      this.onActionBlockExit.bind(this)
+      this.onActionBlockExit.bind(this),
     );
   }
 
@@ -28,9 +24,9 @@ export class ActionRoutine {
   private runNextActionBlock(): void {
     if (this.currentBlockIndex < this.actionBlocks.length) {
       const currentActionBlock = this.actionBlocks[this.currentBlockIndex];
-      currentActionBlock.start();
+      // currentActionBlock.startAction();
     } else {
-      console.log("All ActionBlocks have been executed.");
+      console.log('All ActionBlocks have been executed.');
       process.exit(0);
     }
   }
@@ -44,7 +40,7 @@ export class ActionRoutine {
       this.actionBlocks[this.currentBlockIndex].getID();
 
     if (currentActionBlockId !== id) {
-      console.log("X: ActionBlock ID does not match the current block ID.");
+      console.log('X: ActionBlock ID does not match the current block ID.');
       return;
     } else {
       console.log(`O: ActionBlock ${id} has been exited.`);

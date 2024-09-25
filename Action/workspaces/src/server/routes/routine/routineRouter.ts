@@ -1,16 +1,19 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   connectionTest,
   startAllRoutine,
-  startRoutine,
-} from "./routineController";
+  // startRoutine,
+} from './routineController';
+import { test } from '../../../test/action-routine-test';
 
 const routineRouter = Router();
 
-routineRouter.get("/", connectionTest);
+routineRouter.get('/', connectionTest);
 
-routineRouter.get("/start-all", startAllRoutine);
+routineRouter.get('/start-all', startAllRoutine);
 
-routineRouter.get("/start/:routineId", startRoutine);
+routineRouter.get('/test', test);
 
+// routineRouter.get("/start/:routineId", startRoutine);
+//
 export default routineRouter;

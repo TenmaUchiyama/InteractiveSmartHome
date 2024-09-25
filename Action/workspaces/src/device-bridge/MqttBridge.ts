@@ -1,30 +1,24 @@
+import { EventEmitter } from 'events';
+import mqtt, { MqttClient } from 'mqtt';
 
-import { EventEmitter } from "events";
-import mqtt, { MqttClient } from "mqtt";
+/**
+ * This module bridges between the application to the MQTT broker for communication with the devices.
+ */
 
-
-type TopicHandler = (data:string) => void;
-
-export default class MqttBridge extends EventEmitter{
+export default class MqttBridge extends EventEmitter {
   public static instance: MqttBridge = new MqttBridge();
 
-
   private mqttClient: MqttClient;
-  private mqttTopic: string = "bridge";
-
-
-  private topicHandlers: { [topic: string]: TopicHandler[] } = {};
-
+  private mqttTopic: string = 'bridge';
 
   public static getInstance(): MqttBridge {
     if (!MqttBridge.instance) {
-        
-        MqttBridge.instance = new MqttBridge();
+      MqttBridge.instance = new MqttBridge();
     }
     return MqttBridge.instance;
-}
+  }
   constructor() {
-    super()
+    super();
 
     this.mqttClient = mqtt.connect('mqtt://mqtt-broker:1883');
     this.setupMqtt();
@@ -32,46 +26,43 @@ export default class MqttBridge extends EventEmitter{
 
   private setupMqtt() {
     this.mqttClient.on('connect', () => {
-        console.log('Connected to MQTT broker');
+      console.log('Connected to MQTT broker');
     });
-
-    this.mqttClient.on('message', (topic, message) => {
-        const payload = message.toString();
-        this.emitMessageToHandlers(topic, payload);
-    });
-}
-
-  
-public subscribeToTopic(topic: string, handler: TopicHandler) {
-  if (!this.topicHandlers[topic]) {
-      this.topicHandlers[topic] = [];
-      this.mqttClient.subscribe(topic, (err) => {
-          if (err) {
-              console.error(`Failed to subscribe to topic ${topic}:`, err);
-          } else {
-              console.log(`Subscribed to topic: ${topic}`);
-          }
-      });
   }
-  this.topicHandlers[topic].push(handler);
-}
 
-
-public publishMessage(topic: string, message: string) {
-  this.mqttClient.publish(topic, message, (err) => {
+  public subscribeToTopic(topic: string, handler: (data: string) => void) {
+    this.mqttClient.subscribe(topic, (err) => {
       if (err) {
-          console.error(`Failed to publish message to ${topic}:`, err);
+        console.error(`Failed to subscribe to topic ${topic}:`, err);
       } else {
-          console.log(`Message published to ${topic}: ${message}`);
+        console.log(`Subscribed to topic: ${topic}`);
+
+        this.mqttClient.on('message', (topic, message) => {
+          const payload = message.toString();
+          console.log(`Received message from ${topic}: ${payload}`);
+          handler(payload);
+        });
       }
-  });
-}
+    });
+  }
 
+  public unsubscribeFromTopic(topic: string) {
+    this.mqttClient.unsubscribe(topic, (err) => {
+      if (err) {
+        console.error(`Failed to unsubscribe from topic ${topic}:`, err);
+      } else {
+        console.log(`Unsubscribed from topic: ${topic}`);
+      }
+    });
+  }
 
-  private emitMessageToHandlers(topic: string, message: string) {
-    const handlers = this.topicHandlers[topic];
-    if (handlers) {
-        handlers.forEach(handler => handler(message));
-    }
-}
+  public async publishMessage(topic: string, message: string) {
+    this.mqttClient.publish(topic, message, (err) => {
+      if (err) {
+        console.error(`Failed to publish message to ${topic}:`, err);
+      } else {
+        console.log(`Message published to ${topic}: ${message}`);
+      }
+    });
+  }
 }

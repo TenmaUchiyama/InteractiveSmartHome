@@ -1,1 +1,1 @@
-import "./server/router"
+import './server/router';
