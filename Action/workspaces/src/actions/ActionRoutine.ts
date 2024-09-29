@@ -1,51 +1,76 @@
-import { ActionBlock } from './action-blocks/ActionBlock';
-import { ActionEvents, ActionEventKey } from './ActionEvents';
+import {
+  IActionBlock,
+  IRoutine,
+  IRoutineData,
+} from '../types/ActionBlockInterfaces';
+import ActionBlock from './action-blocks/ActionBlock';
+import getActionBlock from './GetBlockInstance';
+import { MongoDB } from '../database-connector/mongodb';
 
-export class ActionRoutine {
-  private actionBlocks: ActionBlock[];
-  private currentBlockIndex: number;
-  private routineId: string;
+export default class ActionRoutine implements IRoutineData {
+  id: string;
+  name: string;
+  action_routine: IRoutine[];
 
-  constructor(routineId: string, actionBlocks: ActionBlock[]) {
-    this.actionBlocks = actionBlocks;
-    this.currentBlockIndex = 0;
-    this.routineId = routineId;
+  constructor(routineData: IRoutineData) {
+    this.id = routineData.id;
+    this.name = routineData.name;
+    this.action_routine = routineData.action_routine;
+  }
 
-    ActionEvents.GetInstance().on(
-      `${ActionEventKey.ExitAction}_${this.routineId}`,
-      this.onActionBlockExit.bind(this),
+  async startRoutine() {
+    const actionIdMap = new Map<string, ActionBlock>();
+
+    for (const route of this.action_routine) {
+      let currentBlock: ActionBlock | undefined;
+      if (actionIdMap.has(route.current_block_id)) {
+        currentBlock = actionIdMap.get(route.current_block_id);
+      } else {
+        const currentBlockId = route.current_block_id;
+        const blockData = await MongoDB.getInstance().getActionData(
+          currentBlockId,
+        );
+
+        const newBlock = await getActionBlock(blockData);
+
+        actionIdMap.set(route.current_block_id, newBlock);
+        currentBlock = newBlock;
+      }
+
+      if (route.last) continue;
+      if (route.next_block_id === '') continue;
+
+      let nextBlock: ActionBlock | undefined;
+      if (actionIdMap.has(route.next_block_id)) {
+        nextBlock = actionIdMap.get(route.next_block_id);
+      } else {
+        const blockData = await MongoDB.getInstance().getActionData(
+          route.next_block_id,
+        );
+        const newBlock = await getActionBlock(blockData);
+
+        actionIdMap.set(route.next_block_id, newBlock);
+        nextBlock = newBlock;
+      }
+
+      if (currentBlock && nextBlock) {
+        currentBlock.setNextActionBlock([nextBlock]);
+      }
+    }
+
+    const firstBlocks: IRoutine[] = this.action_routine.filter(
+      (route) => route.first,
     );
-  }
 
-  public start(): void {
-    this.runNextActionBlock();
-  }
+    firstBlocks.forEach((block: IRoutine) => {
+      const action = actionIdMap.get(block.current_block_id);
+      if (action) {
+        action.startAction();
+      } else {
+        console.error(`Action not found for ID: ${block.current_block_id}`);
+      }
+    });
 
-  private runNextActionBlock(): void {
-    if (this.currentBlockIndex < this.actionBlocks.length) {
-      const currentActionBlock = this.actionBlocks[this.currentBlockIndex];
-      // currentActionBlock.startAction();
-    } else {
-      console.log('All ActionBlocks have been executed.');
-      process.exit(0);
-    }
-  }
-
-  private onActionBlockExit(id: string): void {
-    console.log(id);
-    console.log(this.currentBlockIndex);
-    console.log(this.actionBlocks);
-
-    let currentActionBlockId =
-      this.actionBlocks[this.currentBlockIndex].getID();
-
-    if (currentActionBlockId !== id) {
-      console.log('X: ActionBlock ID does not match the current block ID.');
-      return;
-    } else {
-      console.log(`O: ActionBlock ${id} has been exited.`);
-    }
-    this.currentBlockIndex++;
-    this.runNextActionBlock();
+    console.log('[ACTION ROUTINE] Routine started ID: ', this.id);
   }
 }
