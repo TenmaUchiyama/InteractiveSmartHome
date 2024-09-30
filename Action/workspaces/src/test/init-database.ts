@@ -91,6 +91,14 @@ class DataInserter {
       device_data_id: 'thermo1',
     },
     {
+      id: 'thermo-101',
+      name: 'Thermometer Sensor',
+      description: 'Thermometer Sensor',
+      action_type: ActionType.Device,
+      device_type: DeviceType.Sensor_Thermometer,
+      device_data_id: 'thermo1',
+    },
+    {
       id: 'timer-1',
       name: 'Timer',
       description: 'Timer',
@@ -185,9 +193,17 @@ class DataInserter {
   async insertData() {
     try {
       // コレクションにデータを挿入
-      await this.db.collection(this.COL_ROUTINE).insertMany(this.routinesData);
-      await this.db.collection(this.COL_ACTION).insertMany(this.actionBlocks);
-      await this.db.collection(this.COL_DEVICE).insertMany(this.devicesData);
+      // await this.db.collection(this.COL_ROUTINE).insertMany(this.routinesData);
+      // await this.db.collection(this.COL_ACTION).insertMany(this.actionBlocks);
+      // await this.db.collection(this.COL_DEVICE).insertMany(this.devicesData);
+      await this.db.collection(this.COL_ACTION).insertOne({
+        id: 'thermo-101',
+        name: 'Thermometer Sensor',
+        description: 'Thermometer Sensor',
+        action_type: ActionType.Device,
+        device_type: DeviceType.Sensor_Thermometer,
+        device_data_id: 'thermo1',
+      });
 
       console.log('Data inserted successfully');
     } catch (err) {
