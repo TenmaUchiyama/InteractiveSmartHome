@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
-import { IActionBlock } from '../../types/ActionBlockInterfaces';
-import { ActionType } from '../../types/ActionType';
+import { IActionBlock, IRxData } from '@/types/ActionBlockInterfaces';
+import { ActionType } from '@/types/ActionType';
 
 export default class ActionBlock implements IActionBlock {
   name: string;
@@ -9,9 +9,11 @@ export default class ActionBlock implements IActionBlock {
   description: string;
   isActionBlockActive: boolean;
   nextActionBlock: ActionBlock[] | undefined;
-  senderDataStream: Subject<any> | undefined;
-  receiverDataStream: Subject<any>[] = [];
-  onReceiveDataFromPreviousBlock(data: any) {}
+  senderDataStream: Subject<IRxData> | undefined;
+  receiverDataStream: Subject<IRxData>[] = [];
+
+  routineId: string;
+  onReceiveDataFromPreviousBlock(data: IRxData) {}
 
   constructor(actionBlockInitializers: IActionBlock) {
     this.id = actionBlockInitializers.id;
@@ -30,6 +32,14 @@ export default class ActionBlock implements IActionBlock {
     throw new Error('Method not implemented.');
   }
 
+  setRoutineId(routineId: string) {
+    this.routineId = routineId;
+  }
+
+  getRoutineId(): string {
+    return this.routineId;
+  }
+
   getIsActionBlockActive(): boolean {
     return this.isActionBlockActive;
   }
@@ -44,7 +54,7 @@ export default class ActionBlock implements IActionBlock {
       block.setReceiverDataStream(this.senderDataStream);
     });
   }
-  setReceiverDataStream(dataStream: Subject<any> | undefined): void {
+  setReceiverDataStream(dataStream: Subject<IRxData> | undefined): void {
     if (dataStream && !this.receiverDataStream.includes(dataStream)) {
       this.receiverDataStream.push(dataStream);
       dataStream.subscribe(this.onReceiveDataFromPreviousBlock.bind(this));

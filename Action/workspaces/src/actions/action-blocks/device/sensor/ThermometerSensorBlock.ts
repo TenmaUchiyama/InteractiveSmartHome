@@ -1,4 +1,5 @@
-import { IDeviceBlock } from '../../../../types/ActionBlockInterfaces';
+import Debugger from '@debugger/Debugger';
+import { IDeviceBlock, IRxData } from '@/types/ActionBlockInterfaces';
 import DeviceBlock from '../DeviceBlock';
 
 export default class ThermometerSensorBlock extends DeviceBlock {
@@ -6,9 +7,18 @@ export default class ThermometerSensorBlock extends DeviceBlock {
     super(sensorBlockInitializers);
   }
 
-  onReceiveDataFromSensor(data: any) {
-    console.log('[THERMOMETER]Received data from thermometer sensor:', data);
+  onReceiveDataFromSensor(data: string) {
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      'THERMOMETER',
+      'Received data from thermometer sensor:' + data,
+    );
 
-    this.senderDataStream?.next(data);
+    const jsonData = JSON.parse(data);
+    const rxData: IRxData = {
+      data_type: jsonData.data_type,
+      value: jsonData.value,
+    };
+    this.senderDataStream?.next(rxData);
   }
 }

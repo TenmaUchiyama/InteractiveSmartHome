@@ -1,9 +1,7 @@
-import ActionBlock from '../ActionBlock';
-import {
-  IDeviceBlock,
-  IDeviceData,
-} from '../../../types/ActionBlockInterfaces';
-import MqttBridge from '../../../device-bridge/MqttBridge';
+import ActionBlock from '@block/ActionBlock';
+import { IDeviceBlock, IDeviceData } from '@/types/ActionBlockInterfaces';
+import MqttBridge from '@mqtt-bridge';
+import Debugger from '@debugger/Debugger';
 
 export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
   device_data: IDeviceData;
@@ -17,7 +15,11 @@ export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
   }
 
   startAction(): void {
-    console.log(`[DEVICE] Subscribing to topic: ${this.topic}`);
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      'DEVICE BLOCK',
+      'start',
+    );
     MqttBridge.getInstance().subscribeToTopic(
       this.topic,
       this.onReceiveDataFromSensor.bind(this),
@@ -28,5 +30,5 @@ export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
     MqttBridge.getInstance().unsubscribeFromTopic(this.topic);
   }
 
-  onReceiveDataFromSensor(data: any) {}
+  onReceiveDataFromSensor(data: string) {}
 }

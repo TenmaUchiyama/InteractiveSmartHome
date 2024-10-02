@@ -1,5 +1,6 @@
-import MqttBridge from '../../../../device-bridge/MqttBridge';
-import { IDeviceBlock } from '../../../../types/ActionBlockInterfaces';
+import Debugger from '@debugger/Debugger';
+import MqttBridge from '@mqtt-bridge';
+import { IDeviceBlock, IRxData } from '@/types/ActionBlockInterfaces';
 import DeviceBlock from '../DeviceBlock';
 
 export default class LightActuatorBlock extends DeviceBlock {
@@ -7,8 +8,16 @@ export default class LightActuatorBlock extends DeviceBlock {
     super(sensorBlockInitializers);
   }
 
-  onReceiveDataFromPreviousBlock(data: any): void {
-    console.log(`[LIGHT ACTUATOR] Sending data to topic ${this.topic}:`, data);
-    MqttBridge.getInstance().publishMessage(this.topic, data);
+  onReceiveDataFromPreviousBlock(data: IRxData): void {
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      'LIGHT ACTUATOR BLOCK',
+      'received data from previous block' + data,
+    );
+
+    if (data.data_type === 'boolean') {
+      MqttBridge.getInstance().publishMessage(this.topic, String(data.value));
+      this.senderDataStream?.next(data);
+    }
   }
 }

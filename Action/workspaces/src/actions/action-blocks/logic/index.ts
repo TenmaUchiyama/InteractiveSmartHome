@@ -1,4 +1,9 @@
 import TimerLogicBlock from './TimerLogicBlock';
-import ComparatorLogicBlock from './ComparatorLogicBlock';
+import SimpleComparatorLogicBlock from './SimpleComparatorLogicBlock';
+import RangeComparatorLogicBlock from './RangeComparatorLogicBlock';
 
-export { TimerLogicBlock, ComparatorLogicBlock };
+export {
+  TimerLogicBlock,
+  SimpleComparatorLogicBlock,
+  RangeComparatorLogicBlock,
+};

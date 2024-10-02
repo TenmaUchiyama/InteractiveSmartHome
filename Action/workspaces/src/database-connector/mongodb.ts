@@ -1,11 +1,12 @@
 import { Db, MongoClient } from 'mongodb';
 import {
-  IDBDeviceData,
+  IDBDeviceBlock,
   IDeviceData,
   IRoutine,
   IRoutineData,
-} from '../types/ActionBlockInterfaces';
-import { ActionType } from '../types/ActionType';
+} from '@/types/ActionBlockInterfaces';
+import Debugger from '@debugger/Debugger';
+import { ActionType } from '@/types/ActionType';
 
 export class MongoDB {
   public static instance: MongoDB = new MongoDB();
@@ -24,7 +25,7 @@ export class MongoDB {
     this.client
       .connect()
       .then(() => {
-        console.log('[MONGODB] connected to MongoDB');
+        console.log('[MONGODB] Connected to MongoDB');
       })
       .catch((err) => {
         console.error('[MONGODB] Failed to connect to MongoDB', err);
@@ -41,7 +42,7 @@ export class MongoDB {
   }
 
   // IDからルーチンを取得するメソッド
-  getRoutine = async (routineId: string): Promise<IRoutineData> => {
+  getRoutine = async (routineId: string): Promise<IRoutineData | null> => {
     try {
       const routineData = await this.db
         .collection(this.COL_ROUTINE)
@@ -74,11 +75,12 @@ export class MongoDB {
   };
 
   // デバイスデータを取得するメソッド
-  getDeviceData = async (deviceId: string): Promise<IDeviceData> => {
+  getDevice = async (deviceId: string): Promise<IDeviceData | null> => {
     try {
       const deviceDatas = await this.db
         .collection(this.COL_DEVICE)
         .findOne({ device_id: deviceId });
+
       if (deviceDatas === null) return null; // データが見つからない場合
       const { _id, ...deviceData } = deviceDatas; // _idを除外
       return deviceData as IDeviceData; // デバイスデータを返す
@@ -105,7 +107,7 @@ export class MongoDB {
   };
 
   // アクションデータを取得するメソッド
-  getActionData = async (actionId?: string): Promise<object> => {
+  getAction = async (actionId?: string): Promise<object | null> => {
     try {
       const actionDatas = await this.db
         .collection(this.COL_ACTION)
@@ -131,6 +133,136 @@ export class MongoDB {
       return dataWithoutId; // アクションデータの配列を返す
     } catch (err) {
       console.error('Error fetching all actions:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // デバイスを追加するメソッド
+  addDevices = async (devices: IDeviceData | IDeviceData[]): Promise<void> => {
+    try {
+      const deviceArray = Array.isArray(devices) ? devices : [devices]; // 配列に変換
+      const result = await this.db
+        .collection(this.COL_DEVICE)
+        .insertMany(deviceArray);
+      console.log(`${result.insertedCount} device(s) added successfully.`);
+    } catch (err) {
+      console.error('Error adding devices:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // アクションを追加するメソッド
+  addActions = async (actions: object | object[]): Promise<void> => {
+    try {
+      const actionArray = Array.isArray(actions) ? actions : [actions]; // 配列に変換
+      const result = await this.db
+        .collection(this.COL_ACTION)
+        .insertMany(actionArray);
+      console.log(`${result.insertedCount} action(s) added successfully.`);
+    } catch (err) {
+      console.error('Error adding actions:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // ルーチンを追加するメソッド
+  addRoutines = async (
+    routines: IRoutineData | IRoutineData[],
+  ): Promise<void> => {
+    try {
+      const routineArray = Array.isArray(routines) ? routines : [routines]; // 配列に変換
+      const result = await this.db
+        .collection(this.COL_ROUTINE)
+        .insertMany(routineArray);
+      console.log(`${result.insertedCount} routine(s) added successfully.`);
+    } catch (err) {
+      console.error('Error adding routines:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  deleteRoutine = async (routineId: string): Promise<void> => {
+    try {
+      const result = await this.db
+        .collection(this.COL_ROUTINE)
+        .deleteOne({ id: routineId });
+      console.log(`${result.deletedCount} routine(s) deleted successfully.`);
+    } catch (err) {
+      console.error('Error deleting routine:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // デバイスを削除するメソッド
+  deleteDevice = async (deviceId: string): Promise<void> => {
+    try {
+      const result = await this.db
+        .collection(this.COL_DEVICE)
+        .deleteOne({ device_id: deviceId });
+      console.log(`${result.deletedCount} device(s) deleted successfully.`);
+    } catch (err) {
+      console.error('Error deleting device:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // アクションを削除するメソッド
+  deleteAction = async (actionId: string): Promise<void> => {
+    try {
+      const result = await this.db
+        .collection(this.COL_ACTION)
+        .deleteOne({ id: actionId });
+      console.log(`${result.deletedCount} action(s) deleted successfully.`);
+    } catch (err) {
+      console.error('Error deleting action:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // ルーチンを更新するメソッド
+  updateRoutine = async (routineData: Partial<IRoutineData>): Promise<void> => {
+    try {
+      const routineId = routineData.id;
+      const result = await this.db
+        .collection(this.COL_ROUTINE)
+        .updateOne({ id: routineId }, { $set: routineData });
+      console.log(
+        `${result.matchedCount} routine(s) matched, ${result.modifiedCount} routine(s) updated successfully.`,
+      );
+    } catch (err) {
+      console.error('Error updating routine:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // アクションを更新するメソッド
+  updateAction = async (actionData: Partial<any>): Promise<void> => {
+    try {
+      const actionId = actionData['id'];
+      const result = await this.db
+        .collection(this.COL_ACTION)
+        .updateOne({ id: actionId }, { $set: actionData });
+      console.log(
+        `${result.matchedCount} action(s) matched, ${result.modifiedCount} action(s) updated successfully.`,
+      );
+    } catch (err) {
+      console.error('Error updating action:', err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  // デバイスを更新するメソッド
+  updateDevice = async (deviceData: Partial<IDeviceData>): Promise<void> => {
+    try {
+      const deviceId = deviceData.device_id;
+      const result = await this.db
+        .collection(this.COL_DEVICE)
+        .updateOne({ device_id: deviceId }, { $set: deviceData });
+      console.log(
+        `${result.matchedCount} device(s) matched, ${result.modifiedCount} device(s) updated successfully.`,
+      );
+    } catch (err) {
+      console.error('Error updating device:', err);
       throw err; // エラーを再スロー
     }
   };

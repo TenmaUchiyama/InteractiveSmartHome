@@ -1,12 +1,24 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-
-    "target": "es2016",
+    "target": "ES2019",
     "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "importHelpers": true,
     "strict": false,
-    "skipLibCheck": true
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@debugger/*": ["./src/debugger/*"],
+      "@block/*": ["./src/actions/action-blocks/*"],
+      "@types/*": ["./src/types/*"],
+      "@mqtt-bridge": ["./src/device-bridge/MqttBridge.ts"],
+      "@database": ["./src/database-connector/mongodb.ts"]
+    },
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true
   }
 }

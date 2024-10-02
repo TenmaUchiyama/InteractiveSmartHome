@@ -1,36 +1,53 @@
-import ActionBlock from './action-blocks/ActionBlock';
-import { ComparatorLogicBlock, TimerLogicBlock } from './action-blocks/logic';
+import { IDBDeviceBlock, IDeviceBlock } from '@/types/ActionBlockInterfaces';
+import { MongoDB } from '@database';
+import { ActionType, DeviceType } from '@/types/ActionType';
+import ActionBlock from '@block/ActionBlock';
+import {
+  SimpleComparatorLogicBlock,
+  RangeComparatorLogicBlock,
+  TimerLogicBlock,
+} from '@block/logic';
 import {
   ToggleButtonSensorBlock,
   ThermometerSensorBlock,
-} from './action-blocks/device/sensor';
-import { LightActuatorBlock } from './action-blocks/device/actuator';
-import { ActionType, DeviceType } from '../types/ActionType';
-import { IDBDeviceData, IDeviceBlock } from '../types/ActionBlockInterfaces';
-import { MongoDB } from '../database-connector/mongodb';
+  MotionSensorBlock,
+} from '@block/device/sensor';
+import { LightActuatorBlock } from '@block/device/actuator';
+
+const actionBlockMap = {
+  [ActionType.Logic_Timer]: TimerLogicBlock,
+  [ActionType.Logic_SimpleComparator]: SimpleComparatorLogicBlock,
+  [ActionType.Logic_RangeComparator]: RangeComparatorLogicBlock,
+  [ActionType.Device]: getDeviceBlock,
+};
+
+const deviceBlockMap = {
+  [DeviceType.Actuator_Light]: LightActuatorBlock,
+  [DeviceType.Sensor_ToggleButton]: ToggleButtonSensorBlock,
+  [DeviceType.Sensor_Thermometer]: ThermometerSensorBlock,
+  [DeviceType.Sensor_Motion]: MotionSensorBlock,
+};
 
 export default async function getActionBlock(
   actionBlockData: any,
 ): Promise<ActionBlock> {
-  switch (actionBlockData.action_type) {
-    case ActionType.Logic_Timer:
-      return new TimerLogicBlock(actionBlockData);
-    case ActionType.Logic_Comparator:
-      return new ComparatorLogicBlock(actionBlockData);
-    case ActionType.Device:
+  const ActionBlockConstructor = actionBlockMap[actionBlockData.action_type];
+
+  if (ActionBlockConstructor) {
+    if (actionBlockData.action_type === ActionType.Device) {
       return await getDeviceBlock(actionBlockData);
-    default:
-      console.error(
-        `[GetBlockInstance] ActionBlock not found for: ${actionBlockData.action_type}`,
-      );
+    }
+    return new ActionBlockConstructor(actionBlockData);
   }
+
+  throw new Error(`Unknown action type: ${actionBlockData.action_type}`);
 }
 
 async function getDeviceBlock(
-  actionBlockData: IDBDeviceData,
+  actionBlockData: IDBDeviceBlock,
 ): Promise<ActionBlock> {
   const device_id = actionBlockData.device_data_id;
-  const device_data = await MongoDB.getInstance().getDeviceData(device_id);
+  const device_data = await MongoDB.getInstance().getDevice(device_id);
 
   const actionBlock: IDeviceBlock = {
     device_data: device_data,
@@ -40,17 +57,23 @@ async function getDeviceBlock(
     action_type: actionBlockData.action_type,
   };
 
-  switch (actionBlockData.device_type) {
-    case DeviceType.Actuator_Light:
-      return new LightActuatorBlock(actionBlock);
-    case DeviceType.Sensor_ToggleButton:
-      return new ToggleButtonSensorBlock(actionBlock);
-    case DeviceType.Sensor_Thermometer:
-      return new ThermometerSensorBlock(actionBlock);
-
-    default:
-      console.error(
-        `[GetBlockInstance] ActionBlock not found for: ${actionBlockData.action_type}`,
-      );
+  if (device_data === null) {
+    console.error(
+      `[GetBlockInstance] DeviceData not found for: ${JSON.stringify(
+        actionBlockData,
+        null,
+        2,
+      )}`,
+    );
   }
+
+  const DeviceBlockConstructor = deviceBlockMap[actionBlockData.device_type];
+
+  if (DeviceBlockConstructor) {
+    return new DeviceBlockConstructor(actionBlock);
+  }
+
+  console.error(
+    `[GetBlockInstance] ActionBlock not found for: ${actionBlockData.device_type}`,
+  );
 }

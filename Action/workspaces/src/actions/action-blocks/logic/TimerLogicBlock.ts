@@ -1,7 +1,7 @@
-import { ActionType } from '../../../types/ActionType';
-import { ITimerLogicBlock } from '../../../types/ActionBlockInterfaces';
+import { ActionType } from '@/types/ActionType';
+import { IRxData, ITimerLogicBlock } from '@/types/ActionBlockInterfaces';
 import ActionBlock from '../ActionBlock';
-
+import Debugger from '@debugger/Debugger';
 export default class TimerLogicBlock
   extends ActionBlock
   implements ITimerLogicBlock
@@ -13,9 +13,13 @@ export default class TimerLogicBlock
     this.action_type = ActionType.Logic_Timer;
   }
 
-  onReceiveDataFromPreviousBlock(data: any): void {
+  onReceiveDataFromPreviousBlock(data: IRxData): void {
     setTimeout(() => {
-      console.log('[TIMER] pass the data to next block', data);
+      Debugger.getInstance().debugLog(
+        this.getRoutineId(),
+        'TIMER',
+        'pass the data to next block ' + data,
+      );
       this.senderDataStream?.next(data);
     }, 2000);
   }

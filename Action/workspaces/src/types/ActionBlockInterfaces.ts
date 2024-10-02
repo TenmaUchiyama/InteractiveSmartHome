@@ -15,6 +15,11 @@ export interface IRoutineData {
 }
 
 /////////////Action Block/////////////////////
+
+export interface IRxData {
+  data_type: 'string' | 'number' | 'boolean' | 'json';
+  value: string | number | boolean | object;
+}
 export interface IActionBlock {
   id: string;
   name: string;
@@ -35,7 +40,7 @@ export interface IDeviceData {
   };
 }
 
-export interface IDBDeviceData extends IActionBlock {
+export interface IDBDeviceBlock extends IActionBlock {
   device_data_id: string;
   device_type: DeviceType;
 }
@@ -45,10 +50,19 @@ export interface IDeviceBlock extends IActionBlock {
 }
 
 /////////////Logic Block/////////////////////
-export interface IComparatorLogicBlock extends IActionBlock {
-  threshold: number;
+type ComparatorOperator = '>' | '<' | '=' | '!=' | '>=' | '<=';
+
+export interface ISimpleComparatorLogicBlock extends IActionBlock {
+  operator: ComparatorOperator;
+  value: number;
 }
 
+export interface IRangeComparatorLogicBlock extends IActionBlock {
+  operatorFrom: ComparatorOperator;
+  operatorTo: ComparatorOperator;
+  from: number;
+  to: number;
+}
 export interface ITimerLogicBlock extends IActionBlock {
   waitTime: number;
 }

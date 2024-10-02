@@ -2,7 +2,7 @@ import Debugger from '@debugger/Debugger';
 import { IDeviceBlock, IRxData } from '@/types/ActionBlockInterfaces';
 import DeviceBlock from '../DeviceBlock';
 
-export default class ToggleButtonSensorBlock extends DeviceBlock {
+export default class MotionSensorBlock extends DeviceBlock {
   constructor(sensorBlockInitializers: IDeviceBlock) {
     super(sensorBlockInitializers);
   }
@@ -10,11 +10,9 @@ export default class ToggleButtonSensorBlock extends DeviceBlock {
   onReceiveDataFromSensor(data: string) {
     Debugger.getInstance().debugLog(
       this.getRoutineId(),
-      'TOGGLE',
-      'Received data from toggle button sensor: ' + data,
+      'MOTION SENSOR',
+      'Received data from motion sensor:' + data,
     );
-    this.startNextActionBlock();
-
     const jsonData = JSON.parse(data);
     const rxData: IRxData = {
       data_type: jsonData.data_type,
