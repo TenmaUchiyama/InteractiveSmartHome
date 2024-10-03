@@ -8,16 +8,22 @@ export const connectionTest = (req: Request, res: Response) => {
 
 export const startAllRoutineApi = async (req: Request, res: Response) => {
   try {
-    console.log('Starting all routines');
     const routines = await MongoDB.getInstance().getAllRoutine();
+    const startRoutine = async (routine, index) => {
+      try {
+        const routineStarter = new ActionRoutine(routine);
+        return await routineStarter.startRoutine();
+      } catch (error) {
+        console.error(`Routine ${routine.name} failed:`, error);
 
-    let routinePromises = routines.map(async (routine, index) => {
-      const routineStarter = new ActionRoutine(routine);
-      return routineStarter.startRoutine();
-    });
+        console.log(`Restarting routine ${routine.name}...`);
+        return startRoutine(routine, index);
+      }
+    };
 
-    // Promise.allで全てのroutinesを並行で実行
-    await Promise.all(routinePromises);
+    let routinePromises = routines.map(startRoutine);
+
+    const results = await Promise.all(routinePromises);
     return res.status(200).send('Starting all routines');
   } catch {
     return res.status(500).send('Failed to start routines');
@@ -37,7 +43,7 @@ export const startRoutineApi = async (req: Request, res: Response) => {
     return res.status(200).send('Starting routine');
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(error); // エラー内容をログに記録
+      console.error(error);
       return res.status(500).send('Failed to start routine: ' + error.message);
     } else {
       console.error('Unexpected error:', error);

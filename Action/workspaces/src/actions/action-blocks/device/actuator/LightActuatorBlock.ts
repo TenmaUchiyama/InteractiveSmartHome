@@ -12,11 +12,25 @@ export default class LightActuatorBlock extends DeviceBlock {
     Debugger.getInstance().debugLog(
       this.getRoutineId(),
       'LIGHT ACTUATOR BLOCK',
-      'received data from previous block' + data,
+      'received data from previous block' + JSON.stringify(data),
     );
 
+    if (data.data_type === 'trigger') {
+      MqttBridge.getInstance().publishMessage(this.topic, 'true');
+      data.action_id = this.id;
+      this.startNextActionBlock();
+      this.senderDataStream?.next(data);
+      Debugger.getInstance().debugLog(
+        this.getRoutineId(),
+        'LIGHT ACTUATOR BLOCK',
+        'sending data to ' + this.topic,
+      );
+    }
     if (data.data_type === 'boolean') {
       MqttBridge.getInstance().publishMessage(this.topic, String(data.value));
+
+      data.action_id = this.id;
+      this.startNextActionBlock();
       this.senderDataStream?.next(data);
     }
   }

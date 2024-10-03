@@ -16,8 +16,9 @@ export default class ThermometerSensorBlock extends DeviceBlock {
 
     const jsonData = JSON.parse(data);
     const rxData: IRxData = {
+      action_id: this.id,
       data_type: jsonData.data_type,
-      value: jsonData.value,
+      value: jsonData.value as boolean,
     };
     this.senderDataStream?.next(rxData);
   }

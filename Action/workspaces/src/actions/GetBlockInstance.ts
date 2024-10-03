@@ -6,18 +6,26 @@ import {
   SimpleComparatorLogicBlock,
   RangeComparatorLogicBlock,
   TimerLogicBlock,
+  GateLogicBlock,
+  NotGateLogicBlock,
+  ScheduleLogicBlock,
 } from '@block/logic';
 import {
   ToggleButtonSensorBlock,
   ThermometerSensorBlock,
   MotionSensorBlock,
 } from '@block/device/sensor';
+import TestBlock from '@block/test/TestBlock';
 import { LightActuatorBlock } from '@block/device/actuator';
 
 const actionBlockMap = {
   [ActionType.Logic_Timer]: TimerLogicBlock,
   [ActionType.Logic_SimpleComparator]: SimpleComparatorLogicBlock,
   [ActionType.Logic_RangeComparator]: RangeComparatorLogicBlock,
+  [ActionType.Logic_Gate]: GateLogicBlock,
+  [ActionType.Logic_NotGate]: NotGateLogicBlock,
+  [ActionType.Logic_Schedule]: ScheduleLogicBlock,
+  [ActionType.Test]: TestBlock,
   [ActionType.Device]: getDeviceBlock,
 };
 
@@ -31,13 +39,13 @@ const deviceBlockMap = {
 export default async function getActionBlock(
   actionBlockData: any,
 ): Promise<ActionBlock> {
-  const ActionBlockConstructor = actionBlockMap[actionBlockData.action_type];
+  const actionBlockConstructor = actionBlockMap[actionBlockData.action_type];
 
-  if (ActionBlockConstructor) {
+  if (actionBlockConstructor) {
     if (actionBlockData.action_type === ActionType.Device) {
       return await getDeviceBlock(actionBlockData);
     }
-    return new ActionBlockConstructor(actionBlockData);
+    return new actionBlockConstructor(actionBlockData);
   }
 
   throw new Error(`Unknown action type: ${actionBlockData.action_type}`);

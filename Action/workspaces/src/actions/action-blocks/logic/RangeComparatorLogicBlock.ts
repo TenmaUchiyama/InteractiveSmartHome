@@ -10,8 +10,8 @@ export default class RangeComparatorLogicBlock
   extends ActionBlock
   implements IRangeComparatorLogicBlock
 {
-  operatorFrom: '>' | '<' | '=' | '!=' | '>=' | '<=';
-  operatorTo: '>' | '<' | '=' | '!=' | '>=' | '<=';
+  operatorFrom: '>' | '<' | '>=' | '<=';
+  operatorTo: '>' | '<' | '>=' | '<=';
   from: number;
   to: number;
 
@@ -34,6 +34,7 @@ export default class RangeComparatorLogicBlock
     if (isValid) {
       this.startNextActionBlock();
       this.senderDataStream?.next({
+        action_id: this.id,
         data_type: 'boolean',
         value: true,
       });

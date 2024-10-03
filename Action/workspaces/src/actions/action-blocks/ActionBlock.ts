@@ -51,10 +51,13 @@ export default class ActionBlock implements IActionBlock {
       : [...this.nextActionBlock, ...nextActionBlock!];
 
     this.nextActionBlock!.forEach((block) => {
-      block.setReceiverDataStream(this.senderDataStream);
+      block.setReceiverDataStream(this.id, this.senderDataStream);
     });
   }
-  setReceiverDataStream(dataStream: Subject<IRxData> | undefined): void {
+  setReceiverDataStream(
+    action_id: string,
+    dataStream: Subject<IRxData> | undefined,
+  ): void {
     if (dataStream && !this.receiverDataStream.includes(dataStream)) {
       this.receiverDataStream.push(dataStream);
       dataStream.subscribe(this.onReceiveDataFromPreviousBlock.bind(this));

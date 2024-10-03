@@ -17,8 +17,9 @@ export interface IRoutineData {
 /////////////Action Block/////////////////////
 
 export interface IRxData {
-  data_type: 'string' | 'number' | 'boolean' | 'json';
-  value: string | number | boolean | object;
+  action_id: string;
+  data_type: 'string' | 'number' | 'boolean' | 'json' | 'trigger';
+  value: string | number | boolean | object | null;
 }
 export interface IActionBlock {
   id: string;
@@ -50,19 +51,29 @@ export interface IDeviceBlock extends IActionBlock {
 }
 
 /////////////Logic Block/////////////////////
-type ComparatorOperator = '>' | '<' | '=' | '!=' | '>=' | '<=';
 
 export interface ISimpleComparatorLogicBlock extends IActionBlock {
-  operator: ComparatorOperator;
+  operator: '>' | '<' | '=' | '!=' | '>=' | '<=';
   value: number;
 }
 
 export interface IRangeComparatorLogicBlock extends IActionBlock {
-  operatorFrom: ComparatorOperator;
-  operatorTo: ComparatorOperator;
+  operatorFrom: '>' | '<' | '>=' | '<=';
+  operatorTo: '>' | '<' | '>=' | '<=';
   from: number;
   to: number;
 }
 export interface ITimerLogicBlock extends IActionBlock {
   waitTime: number;
+}
+
+export interface IGateLogicBlock extends IActionBlock {
+  logic_operator: 'AND' | 'OR';
+}
+
+export interface INotGateLogicBlock extends IActionBlock {
+  logic_operator: 'NOT';
+}
+export interface IScheduleLogicBlock extends IActionBlock {
+  cronExpression: string;
 }

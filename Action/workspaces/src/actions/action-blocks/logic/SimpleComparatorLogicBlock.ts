@@ -25,15 +25,13 @@ export default class SimpleComparatorLogicBlock
       'SIMPLE COMPARATOR',
       `Received data from previous block: ${data.value}, isValid: ${isValid}`,
     );
+    this.startNextActionBlock();
 
-    if (isValid) {
-      this.startNextActionBlock();
-
-      this.senderDataStream?.next({
-        data_type: 'boolean',
-        value: true,
-      });
-    }
+    this.senderDataStream?.next({
+      action_id: this.id,
+      data_type: 'boolean',
+      value: isValid,
+    });
   }
 
   // 比較関数

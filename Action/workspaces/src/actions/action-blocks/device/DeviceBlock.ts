@@ -15,11 +15,6 @@ export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
   }
 
   startAction(): void {
-    Debugger.getInstance().debugLog(
-      this.getRoutineId(),
-      'DEVICE BLOCK',
-      'start',
-    );
     MqttBridge.getInstance().subscribeToTopic(
       this.topic,
       this.onReceiveDataFromSensor.bind(this),

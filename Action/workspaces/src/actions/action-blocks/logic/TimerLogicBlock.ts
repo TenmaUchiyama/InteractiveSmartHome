@@ -20,6 +20,8 @@ export default class TimerLogicBlock
         'TIMER',
         'pass the data to next block ' + data,
       );
+      data.action_id = this.id;
+      this.startNextActionBlock();
       this.senderDataStream?.next(data);
     }, 2000);
   }

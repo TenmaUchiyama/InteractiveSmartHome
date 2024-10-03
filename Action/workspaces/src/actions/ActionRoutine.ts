@@ -51,12 +51,17 @@ export default class ActionRoutine implements IRoutineData {
   async startRoutine() {
     const actionIdMap = await this.createActionIdMap();
 
+    Debugger.getInstance().debugLog(
+      this.id,
+      'ActionRoutine',
+      'Starting routine: ' + JSON.stringify(actionIdMap.keys()),
+    );
     for (const route of this.action_routine) {
       let currentBlock: ActionBlock | undefined;
       if (actionIdMap.has(route.current_block_id)) {
         currentBlock = actionIdMap.get(route.current_block_id);
       } else {
-        Debugger.getInstance().debugLog(
+        Debugger.getInstance().debugError(
           this.id,
           'ActionRoutine',
           `Block not found for ID: ${route.current_block_id}`,
@@ -70,7 +75,7 @@ export default class ActionRoutine implements IRoutineData {
       if (actionIdMap.has(route.next_block_id)) {
         nextBlock = actionIdMap.get(route.next_block_id);
       } else {
-        Debugger.getInstance().debugLog(
+        Debugger.getInstance().debugError(
           this.id,
           'ActionRoutine',
           `Block not found for ID: ${route.next_block_id}`,
@@ -91,7 +96,7 @@ export default class ActionRoutine implements IRoutineData {
       if (action) {
         action.startAction();
       } else {
-        Debugger.getInstance().debugLog(
+        Debugger.getInstance().debugError(
           this.id,
           'ActionRoutine',
           `Block not found for ID: ${block.current_block_id}`,

@@ -29,6 +29,21 @@ export default class Debugger {
   }
 
   public debugLog(routineName: string, caller: string, debugMsg: string) {
+    const color = this.getColor(routineName);
+    console.log(
+      `${color}${routineName}  [${caller}]: ${debugMsg}${this.reset}`,
+    );
+  }
+
+  public debugError(routineName: string, caller: string, debugMsg: string) {
+    const color = this.getColor(routineName);
+    const errorColor = '\u001b[31m';
+    console.log(
+      `${color}${routineName} ${errorColor} ERROR ${color} [${caller}]: ${debugMsg}${this.reset}`,
+    );
+  }
+
+  getColor(routineName: string): string {
     // 新しいルーチン名の場合
 
     if (!(routineName in this.routineIdColorMap)) {
@@ -38,10 +53,11 @@ export default class Debugger {
       const color = this.colors[colorKeys[colorIndex % colorKeys.length]]; // 色をループさせる
       this.routineIdColorMap[routineName] = color; // 色をマッピングに追加
     }
-
     const color = this.routineIdColorMap[routineName];
+    if (routineName === undefined) {
+      const color = this.reset;
+    }
 
-    // コンソールに色付きメッセージを出力
-    console.log(`${color}${routineName} [${caller}]: ${debugMsg}${this.reset}`);
+    return color;
   }
 }
