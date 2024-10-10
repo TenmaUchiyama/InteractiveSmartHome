@@ -1,8 +1,7 @@
-import Debugger from '@/debugger/Debugger';
-import { IRxData } from '@/types/ActionBlockInterfaces';
-import { EventEmitter } from 'events';
-import mqtt from 'mqtt';
-import MqttClient from 'mqtt';
+import Debugger from "@/debugger/Debugger";
+import { IRxData } from "@/types/ActionBlockInterfaces";
+import { EventEmitter } from "events";
+import mqtt, { MqttClient } from "mqtt";
 
 export default class MqttBridge extends EventEmitter {
   private static instance: MqttBridge;
@@ -19,7 +18,8 @@ export default class MqttBridge extends EventEmitter {
 
   // Singleton instance accessor with optional broker URL parameter
   public static getInstance(
-    brokerUrl: string = 'mqtt://mqtt-broker:1883',
+    //mqtt://mqtt-broker:1883
+    brokerUrl: string = "mqtt://localhost:1883"
   ): MqttBridge {
     if (!MqttBridge.instance) {
       MqttBridge.instance = new MqttBridge(brokerUrl);
@@ -28,17 +28,17 @@ export default class MqttBridge extends EventEmitter {
   }
 
   private setupMqtt() {
-    this.mqttClient.on('connect', () => {
-      console.log('[MQTT BRIDGE] Connected to MQTT broker');
+    this.mqttClient.on("connect", () => {
+      console.log("[MQTT BRIDGE] Connected to MQTT broker");
     });
 
     // Message event handler is set up once
-    this.mqttClient.on('message', this.handleMessage.bind(this));
+    this.mqttClient.on("message", this.handleMessage.bind(this));
   }
 
   // Helper method to normalize topic names
   private normalizeTopic(topic: string): string {
-    return topic.startsWith('/') ? `bridge${topic}` : `bridge/${topic}`;
+    return topic.startsWith("/") ? `bridge${topic}` : `bridge/${topic}`;
   }
 
   // Centralized message handler

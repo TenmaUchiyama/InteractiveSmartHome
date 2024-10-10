@@ -18,11 +18,6 @@ import {
   type IEdge,
 } from "@type/NodeType";
 import { DBConnector } from "./DBConnector";
-export const nodeTypes = {
-  [NodeType.Timer]: TimerLogicNode,
-  [NodeType.Light]: LightActuatorNode,
-  [NodeType.ToggleButton]: ToggleBtnSensorNode,
-};
 
 const genNodeDataForDB = (node: Node[]): IDBNode[] => {
   return node.map((node) => {

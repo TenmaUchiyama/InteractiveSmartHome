@@ -16,7 +16,7 @@
 </script>
 
 <LogicNode label="Simple Comparator">
-  <main style="display: flex; flex-direction: row; ">
+  <main style="display: flex; flex-direction: row; gap:20px;">
     <select name="" id="" bind:value={selectedOperator}>
       {#each operators as operator}
         <option value={operator}>{operator}</option>

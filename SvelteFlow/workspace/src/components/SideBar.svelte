@@ -35,7 +35,7 @@
   aria-labelledby="offcanvasScrollingLabel"
 >
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Add Node</h5>
+    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Action Node</h5>
     <button
       type="button"
       class="btn-close"

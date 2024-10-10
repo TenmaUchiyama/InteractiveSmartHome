@@ -4,17 +4,14 @@
     Controls,
     Background,
     MiniMap,
-    NodeToolbar,
     type Node,
-    type Edge,
     useSvelteFlow,
   } from "@xyflow/svelte";
   import SideBar from "@/components/SideBar.svelte";
   import { nodes, edges, useDnD } from "@/store/flowStore";
   import {
-    getFlowData,
-    nodeTypes,
     extractEdge,
+    getFlowData,
     startRoutine,
   } from "@/utils/utilFunctions";
   import { NodeType, type IEdge } from "@type/NodeType";
@@ -22,7 +19,9 @@
   import { generateNode } from "@/utils/NodeGenerator";
   import StartRoutineButton from "@/components/StartRoutineButton.svelte";
   import type { IRoutineData } from "@/type/ActionBlockInterface";
-
+  import SimpleComparatorLogicNode from "@/nodes/logic/SimpleComparatorLogicNode.svelte";
+  import TimerLogicNode from "@/nodes/logic/TimerLogicNode.svelte";
+  import { nodeTypes } from "@/type/NodeTypeMaps";
   const type = useDnD();
   const { screenToFlowPosition } = useSvelteFlow();
   const onStartRoutine = async () => {
@@ -31,21 +30,11 @@
     await startRoutine($nodes, $edges);
   };
 
-  $: console.log($type);
   onMount(async () => {
     const flowData = await getFlowData("fb91ff72-0c63-4ac5-8e69-42f480d6f872");
     console.log(flowData.edges);
     if (flowData.nodes) $nodes = flowData.nodes;
     if (flowData.edges) $edges = extractEdge(flowData.edges);
-
-    let newNode: Node = {
-      id: crypto.randomUUID(),
-      type: NodeType.SimpleComparator,
-      data: { action_data: null },
-      position: { x: 0, y: 0 },
-    };
-
-    $nodes = [...$nodes, newNode];
   });
 
   const onDragOver = (event: DragEvent) => {
