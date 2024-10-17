@@ -1,4 +1,4 @@
-import { ActionType, DeviceType } from './ActionType';
+import { ActionType, DeviceType } from "./ActionType";
 
 /////////////Routine/////////////////////
 export interface IRoutine {
@@ -18,7 +18,7 @@ export interface IRoutineData {
 
 export interface IRxData {
   action_id: string;
-  data_type: 'string' | 'number' | 'boolean' | 'json' | 'trigger';
+  data_type: "string" | "number" | "boolean" | "json" | "trigger";
   value: string | number | boolean | object | null;
 }
 export interface IActionBlock {
@@ -34,7 +34,7 @@ export interface IDeviceData {
   device_name: string;
   device_type: string;
   mqtt_topic: string;
-  device_location: {
+  device_position: {
     x: number;
     y: number;
     z: number;
@@ -53,13 +53,13 @@ export interface IDeviceBlock extends IActionBlock {
 /////////////Logic Block/////////////////////
 
 export interface ISimpleComparatorLogicBlock extends IActionBlock {
-  operator: '>' | '<' | '=' | '!=' | '>=' | '<=';
+  operator: ">" | "<" | "=" | "!=" | ">=" | "<=";
   value: number;
 }
 
 export interface IRangeComparatorLogicBlock extends IActionBlock {
-  operatorFrom: '>' | '<' | '>=' | '<=';
-  operatorTo: '>' | '<' | '>=' | '<=';
+  operatorFrom: ">" | "<" | ">=" | "<=";
+  operatorTo: ">" | "<" | ">=" | "<=";
   from: number;
   to: number;
 }
@@ -68,11 +68,11 @@ export interface ITimerLogicBlock extends IActionBlock {
 }
 
 export interface IGateLogicBlock extends IActionBlock {
-  logic_operator: 'AND' | 'OR';
+  logic_operator: "AND" | "OR";
 }
 
 export interface INotGateLogicBlock extends IActionBlock {
-  logic_operator: 'NOT';
+  logic_operator: "NOT";
 }
 export interface IScheduleLogicBlock extends IActionBlock {
   cronExpression: string;

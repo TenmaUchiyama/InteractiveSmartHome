@@ -1,17 +1,25 @@
 <script lang="ts">
-  import { Handle, Position } from "@xyflow/svelte";
+  import {
+    Handle,
+    Position,
+    NodeToolbar,
+    useHandleConnections,
+  } from "@xyflow/svelte";
   import LogicNode from "./LogicNode.svelte"; // 親コンポーネント
   import {
     ActionType,
     type ITimerLogicBlock,
   } from "@type/ActionBlockInterface";
-  import { onMount } from "svelte";
-
+  import NodeContent from "../NodeContent.svelte";
+  import { handleStyle } from "@/utils/FlowManager";
+  export let id: string;
   export let data: { action_data: ITimerLogicBlock };
+
+  const connections = useHandleConnections({ nodeId: id, type: "target" });
+  $: isConnectable = $connections.length === 0;
 </script>
 
-<LogicNode label="Timer">
-  <!-- 緑色背景のLogicNodeを使用 -->
+<LogicNode label="Timer Logic" action_data={data.action_data}>
   <div class="timepicker">
     <div>
       time (s): <strong>{data.action_data?.waitTime}</strong>
@@ -26,10 +34,14 @@
       }}
       value={data.action_data?.waitTime}
     />
-    <Handle type="target" position={Position.Left} />
-
-    <Handle type="source" position={Position.Right} />
   </div>
+  <Handle
+    type="target"
+    position={Position.Left}
+    style={handleStyle}
+    {isConnectable}
+  />
+  <Handle type="source" position={Position.Right} style={handleStyle} />
 </LogicNode>
 
 <style>
@@ -41,8 +53,8 @@
   }
 
   h3 {
-    font-size: 0.9rem; /* タイトルを小さくする */
-    font-weight: normal; /* 普通の太さにする */
-    margin: 0.5rem 0; /* 上下の余白を調整 */
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin: 0.5rem 0;
   }
 </style>

@@ -1,5 +1,5 @@
 import type { IDeviceData, IRoutineData } from "@type/ActionBlockInterface";
-import type { IDBEdge, IDBNode } from "@type/NodeType";
+import type { RoutineEdge, IDBNode } from "@type/NodeType";
 
 export class DBConnector {
   private baseUrl = "http://localhost:4049";
@@ -24,11 +24,9 @@ export class DBConnector {
       const contentType = result.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await result.json();
-        console.log("JSON Response: ", data);
       } else {
         // JSONでない場合はテキストとして処理
         const text = await result.text();
-        console.log("Text Response: ", text);
       }
     } else {
       console.error("Error: ", result.statusText);
@@ -38,6 +36,23 @@ export class DBConnector {
   async connectionTest() {
     const result = await fetch(this.baseUrl);
     this.handleResult(result);
+  }
+
+  async getDevice(device_id: string): Promise<IDeviceData | null> {
+    const url = this.deviceUrl + "/get/" + device_id;
+    const result = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (result.ok) {
+      const data = await result.json();
+      return data;
+    }
+
+    return null;
   }
 
   async startRoutine(routine_id: string) {
@@ -52,6 +67,41 @@ export class DBConnector {
     this.handleResult(result);
   }
 
+  async stopRoutine(routine_id: string) {
+    const url = this.routineUrl + "/stop/" + routine_id;
+    const result = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    this.handleResult(result);
+  }
+
+  async startAllRoutine() {
+    const url = this.routineUrl + "/start-all";
+    const result = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    this.handleResult(result);
+  }
+
+  async stopAllRoutine() {
+    const url = this.routineUrl + "/stop-all";
+    const result = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    this.handleResult(result);
+  }
   async restartRoutine(routine_id: string) {
     const url = this.routineUrl + "/restart/" + routine_id;
     const result = await fetch(url, {
@@ -107,6 +157,15 @@ export class DBConnector {
     this.handleResult(result);
   }
 
+  async deleteRoutine(routine_id: string) {
+    const url = this.routineUrl + "/delete/" + routine_id;
+    const result = await fetch(url, {
+      method: "DELETE",
+    });
+
+    this.handleResult(result);
+  }
+
   async getAction(action_id: string) {
     const url = this.actionUrl + "/get/" + action_id;
     try {
@@ -149,6 +208,22 @@ export class DBConnector {
       },
       body: JSON.stringify(action),
     });
+    this.handleResult(result);
+  }
+
+  async deleteActions(action_ids: string[]) {
+    const url = this.actionUrl + "/delete";
+    const body = {
+      ids: action_ids,
+    };
+    const result = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
     this.handleResult(result);
   }
 
@@ -220,7 +295,7 @@ export class DBConnector {
     this.handleResult(result);
   }
 
-  async getEdge(edge_id: string): Promise<IDBEdge | null> {
+  async getEdge(edge_id: string): Promise<RoutineEdge | null> {
     const url = this.edgeUrl + "/get/" + edge_id;
     const result = await fetch(url, {
       method: "GET",
@@ -230,13 +305,13 @@ export class DBConnector {
     });
 
     if (result.ok) {
-      const data = (await result.json()) as IDBEdge;
+      const data = (await result.json()) as RoutineEdge;
       return data;
     }
     return null;
   }
 
-  async getAllEdge(): Promise<IDBEdge[]> {
+  async getAllEdge(): Promise<RoutineEdge[]> {
     const url = this.edgeUrl + "/get-all";
     const result = await fetch(url, {
       method: "GET",
@@ -254,7 +329,7 @@ export class DBConnector {
     }
   }
 
-  async addEdge(edge: IDBEdge) {
+  async addEdge(edge: RoutineEdge) {
     const url = this.edgeUrl + "/add";
     const result = await fetch(url, {
       method: "POST",
@@ -276,7 +351,32 @@ export class DBConnector {
     this.handleResult(result);
   }
 
-  async updateEdge(edge: IDBEdge) {
+  async deleteNodes(ids: string[]) {
+    const url = this.nodeUrl + "/delete";
+    const body = {
+      ids: ids,
+    };
+    const result = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    this.handleResult(result);
+  }
+
+  async deleteEdge(id: string) {
+    const url = this.edgeUrl + "/delete/" + id;
+    const result = await fetch(url, {
+      method: "DELETE",
+    });
+
+    this.handleResult(result);
+  }
+
+  async updateEdge(edge: RoutineEdge) {
     const url = this.edgeUrl + "/update";
     const result = await fetch(url, {
       method: "PUT",

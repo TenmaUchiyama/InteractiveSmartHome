@@ -1,7 +1,7 @@
-import { Subject } from 'rxjs';
-import { IActionBlock, IRxData } from '@/types/ActionBlockInterfaces';
-import { ActionType } from '@/types/ActionType';
-import Debugger from '@/debugger/Debugger';
+import { Subject } from "rxjs";
+import { IActionBlock, IRxData } from "@/types/ActionBlockInterfaces";
+import { ActionType } from "@/types/ActionType";
+import Debugger from "@/debugger/Debugger";
 
 export default class ActionBlock implements IActionBlock {
   name: string;
@@ -34,23 +34,30 @@ export default class ActionBlock implements IActionBlock {
     Debugger.getInstance().debugLog(
       this.getRoutineId(),
       this.name,
-      'Exiting action block',
+      "Exiting action block"
     );
     this.isActionBlockActive = false;
 
-    if (this.senderDataStream && this.senderDataStream.observers.length > 0) {
-      this.senderDataStream.complete();
-      this.senderDataStream = undefined;
+    if (this.senderDataStream) {
+      try {
+        // 完了の呼び出しを避ける
+        this.senderDataStream.unsubscribe(); // 購読を解除
+      } catch (error) {
+        console.error("Error unsubscribing from senderDataStream:", error);
+      }
+      this.senderDataStream = undefined; // ストリームを無効化
     }
 
     this.receiverDataStream.forEach((stream) => {
-      if (stream && stream.observers.length > 0) {
-        stream.unsubscribe();
-        stream.complete();
+      if (stream) {
+        try {
+          stream.unsubscribe(); // 各受信ストリームの購読を解除
+        } catch (error) {
+          console.error("Error unsubscribing from receiver stream:", error);
+        }
       }
     });
-
-    this.receiverDataStream = [];
+    this.receiverDataStream = []; // 配列をリセット
   }
 
   setRoutineId(routineId: string) {
@@ -77,7 +84,7 @@ export default class ActionBlock implements IActionBlock {
   }
   setReceiverDataStream(
     action_id: string,
-    dataStream: Subject<IRxData> | undefined,
+    dataStream: Subject<IRxData> | undefined
   ): void {
     if (dataStream && !this.receiverDataStream.includes(dataStream)) {
       this.receiverDataStream.push(dataStream);

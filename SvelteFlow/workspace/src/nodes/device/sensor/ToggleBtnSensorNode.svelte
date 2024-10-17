@@ -8,16 +8,18 @@
 
   import NodeWrapper from "@/components/NodeWrapper.svelte";
   import { Handle, Position, type NodeProps } from "@xyflow/svelte";
+  import { handleStyle } from "@/utils/FlowManager";
+  import NodeContent from "@/nodes/NodeContent.svelte";
 
-  type $$Props = NodeProps;
-  export let data: { action_data: IDBDeviceBlock | null };
+  export let data: { action_data: IDBDeviceBlock };
 </script>
 
 <NodeWrapper label="Toggle Button" style="background-color:#abd991; ">
-  <!-- 親のスロットにタイトルを送信 -->
-  <div class="toggle-btn-sensor">
-    <Handle type="source" position={Position.Right} />
-  </div>
+  <NodeContent action_data={data.action_data}>
+    <div class="toggle-btn-sensor">
+      <Handle type="source" position={Position.Right} style={handleStyle} />
+    </div>
+  </NodeContent>
 </NodeWrapper>
 
 <style>

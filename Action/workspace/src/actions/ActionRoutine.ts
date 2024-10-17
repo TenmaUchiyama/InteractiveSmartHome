@@ -2,11 +2,11 @@ import {
   IActionBlock,
   IRoutine,
   IRoutineData,
-} from '@/types/ActionBlockInterfaces';
-import ActionBlock from '@block/ActionBlock';
-import getActionBlock from './GetBlockInstance';
-import { MongoDB } from '@database';
-import Debugger from '@debugger/Debugger';
+} from "@/types/ActionBlockInterfaces";
+import ActionBlock from "@block/ActionBlock";
+import getActionBlock from "./GetBlockInstance";
+import { MongoDB } from "@database";
+import Debugger from "@debugger/Debugger";
 
 export default class ActionRoutine implements IRoutineData {
   id: string;
@@ -15,11 +15,13 @@ export default class ActionRoutine implements IRoutineData {
   is_runninng: boolean = false;
   actionIdMap: Map<string, ActionBlock> = new Map();
   runningActions: Promise<void>[] = [];
+  routine_data: IRoutineData;
 
   constructor(routineData: IRoutineData) {
     this.id = routineData.id;
     this.name = routineData.name;
     this.action_routine = routineData.action_routine;
+    this.routine_data = routineData;
   }
 
   getIsRunning(): boolean {
@@ -55,18 +57,22 @@ export default class ActionRoutine implements IRoutineData {
     return actionMap;
   }
 
+  getRoutineData(): IRoutineData {
+    return this.routine_data;
+  }
+
   async startRoutine() {
     this.actionIdMap = await this.createActionIdMap();
 
     Debugger.getInstance().debugLog(
       this.id,
-      'ActionRoutine',
-      'Starting routine: ' +
+      "ActionRoutine",
+      "Starting routine: " +
         JSON.stringify(
           Array.from(this.actionIdMap.values()).map(
-            (actionBlock) => actionBlock.name,
-          ),
-        ),
+            (actionBlock) => actionBlock.name
+          )
+        )
     );
     for (const route of this.action_routine) {
       let currentBlock: ActionBlock | undefined;
@@ -75,13 +81,13 @@ export default class ActionRoutine implements IRoutineData {
       } else {
         Debugger.getInstance().debugError(
           this.id,
-          'ActionRoutine',
-          `Block not found for ID: ${route.current_block_id}`,
+          "ActionRoutine",
+          `Block not found for ID: ${route.current_block_id}`
         );
       }
 
       if (route.last) break;
-      if (route.next_block_id === '') continue;
+      if (route.next_block_id === "") continue;
 
       let nextBlock: ActionBlock | undefined;
       if (this.actionIdMap.has(route.next_block_id)) {
@@ -89,8 +95,8 @@ export default class ActionRoutine implements IRoutineData {
       } else {
         Debugger.getInstance().debugError(
           this.id,
-          'ActionRoutine',
-          `Block not found for ID: ${route.next_block_id}`,
+          "ActionRoutine",
+          `Block not found for ID: ${route.next_block_id}`
         );
       }
 
@@ -100,7 +106,7 @@ export default class ActionRoutine implements IRoutineData {
     }
 
     const firstBlocks: IRoutine[] = this.action_routine.filter(
-      (route) => route.first,
+      (route) => route.first
     );
 
     firstBlocks.forEach((block: IRoutine) => {
@@ -110,8 +116,8 @@ export default class ActionRoutine implements IRoutineData {
       } else {
         Debugger.getInstance().debugError(
           this.id,
-          'ActionRoutine',
-          `Block not found for ID: ${block.current_block_id}`,
+          "ActionRoutine",
+          `Block not found for ID: ${block.current_block_id}`
         );
       }
     });

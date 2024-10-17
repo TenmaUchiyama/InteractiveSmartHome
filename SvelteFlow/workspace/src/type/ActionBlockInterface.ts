@@ -55,7 +55,7 @@ export interface IDeviceData {
   device_name: string;
   device_type: string;
   mqtt_topic: string;
-  device_location: {
+  device_position: {
     x: number;
     y: number;
     z: number;

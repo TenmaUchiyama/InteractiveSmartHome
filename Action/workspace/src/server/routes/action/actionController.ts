@@ -1,50 +1,50 @@
-import { Request, Response } from 'express';
-import { MongoDB } from '@database';
+import { Request, Response } from "express";
+import { MongoDB } from "@database";
 
 export const connectionTest = (req: Request, res: Response) => {
-  res.status(200).send('Hello from device');
+  res.status(200).send("Hello from device");
 };
 
 export const getAllActionsApi = async (req: Request, res: Response) => {
   try {
-    console.log('Getting all actions');
+    console.log("Getting all actions");
     const actions = await MongoDB.getInstance().getAllActions();
     return res.status(200).send(actions);
   } catch {
-    return res.status(500).send('Failed to get actions');
+    return res.status(500).send("Failed to get actions");
   }
 };
 
 export const getActionApi = async (req: Request, res: Response) => {
   try {
     const actionId = req.params.id;
-    console.log('Getting action:', actionId);
+    console.log("Getting action:", actionId);
     if (actionId === undefined) {
-      return res.status(400).send('Action ID is required');
+      return res.status(400).send("Action ID is required");
     }
     const action = await MongoDB.getInstance().getAction(actionId);
     if (action === null) {
-      return res.status(404).send('Action not found');
+      return res.status(404).send("Action not found");
     }
     return res.status(200).send(action);
   } catch (error) {
     console.error(error); // エラー内容をログに記録
-    return res.status(500).send('Failed to get action: ' + error.message);
+    return res.status(500).send("Failed to get action: " + error.message);
   }
 };
 
 export const addActionApi = async (req: Request, res: Response) => {
   try {
     const action = req.body;
-    console.log('Adding action:', action);
+    console.log("Adding action:", action);
     // アクションが配列かどうかを確認し、必要に応じて配列に変換
     const actionArray = Array.isArray(action) ? action : [action];
 
     await MongoDB.getInstance().addActions(actionArray);
-    return res.status(201).send('Action added');
+    return res.status(201).send("Action added");
   } catch (error) {
     console.error(error); // エラー内容をログに記録
-    return res.status(500).send('Failed to add action: ' + error.message);
+    return res.status(500).send("Failed to add action: " + error.message);
   }
 };
 
@@ -58,24 +58,41 @@ export const updateActionApi = async (req: Request, res: Response) => {
     } else {
       await MongoDB.getInstance().updateSingleAction(action);
     }
-    return res.status(200).send('Action updated');
+    return res.status(200).send("Action updated");
   } catch (error) {
     console.error(error);
-    return res.status(500).send('Failed to update action: ' + error.message);
+    return res.status(500).send("Failed to update action: " + error.message);
   }
 };
 
 export const deleteActionApi = async (req: Request, res: Response) => {
   try {
     const actionId = req.params.id;
-    console.log('Deleting action:', actionId);
+    console.log("Deleting action:", actionId);
     if (actionId === undefined) {
-      return res.status(400).send('Action ID is required');
+      return res.status(400).send("Action ID is required");
     }
     await MongoDB.getInstance().deleteAction(actionId);
-    return res.status(204).send('Action deleted');
+    return res.status(204).send("Action deleted");
   } catch (error) {
     console.error(error); // エラー内容をログに記録
-    return res.status(500).send('Failed to delete action: ' + error.message);
+    return res.status(500).send("Failed to delete action: " + error.message);
+  }
+};
+
+export const deleteActionsApi = async (req: Request, res: Response) => {
+  try {
+    const actionIds: string[] = req.body.ids; // リクエストボディから複数のIDを取得
+    console.log("Deleting actions:", actionIds);
+
+    if (!Array.isArray(actionIds) || actionIds.length === 0) {
+      return res.status(400).send("No action IDs provided for deletion");
+    }
+
+    await MongoDB.getInstance().deleteActions(actionIds); // 複数のアクションを削除するメソッドを呼び出し
+    return res.status(204).send("Actions deleted");
+  } catch (error) {
+    console.error(error); // エラー内容をログに記録
+    return res.status(500).send("Failed to delete actions: " + error.message);
   }
 };

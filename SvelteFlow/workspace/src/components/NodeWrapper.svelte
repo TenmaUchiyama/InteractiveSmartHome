@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { NodeToolbar } from "@xyflow/svelte";
+  import { NodeToolbar, Position } from "@xyflow/svelte";
+
   export let label: string;
   export let style: string | null;
 </script>

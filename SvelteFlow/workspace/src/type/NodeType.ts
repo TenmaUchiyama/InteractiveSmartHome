@@ -4,11 +4,12 @@ export enum NodeType {
   RangeComparator = "node-range-comparator",
   GateLogic = "node-gate-logic",
   NotGate = "node-not-gate",
-  Scheduler = "node-scheduler",
 
   Light = "node-light",
   ToggleButton = "node-toggle-button",
   Thermometer = "node-thermo-sensor",
+
+  Scheduler = "node-scheduler",
 }
 
 export interface IDBNode {
@@ -24,8 +25,10 @@ export interface IEdge {
   target: string;
 }
 
-export interface IDBEdge {
+export interface RoutineEdge {
   id: string;
   associated_routine_id: string;
+  routine_name: string;
   edges: IEdge[];
+  nodes: string[];
 }

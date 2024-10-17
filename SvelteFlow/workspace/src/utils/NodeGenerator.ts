@@ -5,8 +5,9 @@ import {
   type ITimerLogicBlock,
 } from "@/type/ActionBlockInterface";
 import { NodeType } from "@/type/NodeType";
+import { type Node } from "@xyflow/svelte";
 
-const nodeTemplate: any = {
+const actionDataTemplate: any = {
   [NodeType.Timer]: {
     waitTime: 0,
     id: crypto.randomUUID(),
@@ -59,23 +60,23 @@ const nodeTemplate: any = {
     description: "This is a light template",
     action_type: ActionType.Device,
     device_data_id: "led-sample-1",
-  },
+  } satisfies IDBDeviceBlock,
 
   [NodeType.ToggleButton]: {
-    device_type: DeviceType.Sensor_ToggleButton,
     id: crypto.randomUUID(),
     name: "Toggle Button Template",
     description: "This is a toggle button template",
     action_type: ActionType.Device,
     device_data_id: "toggle-device-1",
-  },
+    device_type: DeviceType.Sensor_ToggleButton,
+  } satisfies IDBDeviceBlock,
   [NodeType.Thermometer]: {
     device_type: DeviceType.Sensor_Thermometer,
     id: crypto.randomUUID(),
     name: "Thermo Sensor Template",
     description: "This is a thermo sensor template",
     action_type: ActionType.Device,
-    device_data_id: "thermo-device-1",
+    device_data_id: "thermo1",
   },
 };
 
@@ -87,9 +88,12 @@ export const generateNode = (node: NodeType): Node => {
     position: { x: 0, y: 0 },
   };
 
-  let newBlock = nodeTemplate[node];
+  // Deep copy the action data template to avoid reference issues
+  let newBlock = JSON.parse(JSON.stringify(actionDataTemplate[node]));
 
-  newBlock.data = { action_data: newBlock };
+  newNode.data = { action_data: newBlock };
+  console.log(newNode.data.action_data);
+  console.log(actionDataTemplate);
 
   return newNode;
 };

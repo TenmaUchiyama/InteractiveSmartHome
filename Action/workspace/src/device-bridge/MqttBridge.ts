@@ -19,7 +19,7 @@ export default class MqttBridge extends EventEmitter {
   // Singleton instance accessor with optional broker URL parameter
   public static getInstance(
     //mqtt://mqtt-broker:1883
-    brokerUrl: string = "mqtt://localhost:1883"
+    brokerUrl: string = "mqtt://192.168.10.102:1883"
   ): MqttBridge {
     if (!MqttBridge.instance) {
       MqttBridge.instance = new MqttBridge(brokerUrl);
@@ -43,6 +43,9 @@ export default class MqttBridge extends EventEmitter {
 
   // Centralized message handler
   private handleMessage(topic: string, message: Buffer) {
+    console.log(
+      `[BRIDGE] Received message from ${topic}: ${message.toString()}`
+    );
     const handlers = this.subscribedTopicsMap.get(topic);
     if (handlers) {
       const payload = message.toString();

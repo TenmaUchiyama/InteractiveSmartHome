@@ -1,14 +1,14 @@
-import { Db, MongoClient } from 'mongodb';
+import { Db, MongoClient } from "mongodb";
 import {
   IDBDeviceBlock,
   IDeviceData,
   IRoutine,
   IRoutineData,
-} from '@/types/ActionBlockInterfaces';
-import Debugger from '@debugger/Debugger';
-import { ActionType } from '@/types/ActionType';
-import { deleteActionApi } from '@/server/routes/action/actionController';
-import { IDBEdge, IDBNode } from '@/types/FlowNodeType';
+} from "@/types/ActionBlockInterfaces";
+import Debugger from "@debugger/Debugger";
+import { ActionType } from "@/types/ActionType";
+import { deleteActionApi } from "@/server/routes/action/actionController";
+import { IDBEdge, IDBNode } from "@/types/FlowNodeType";
 
 export class MongoDB {
   public static instance: MongoDB = new MongoDB();
@@ -16,31 +16,32 @@ export class MongoDB {
   private client: MongoClient;
   private db: Db;
 
-  private COL_ROUTINE = 'routine';
-  private COL_ACTION = 'action';
-  private COL_DEVICE = 'device';
+  private COL_ROUTINE = "routine";
+  private COL_ACTION = "action";
+  private COL_DEVICE = "device";
 
-  private COL_NODE = 'flow-node';
-  private COL_EDGE = 'flow-edge';
+  private COL_NODE = "flow-node";
+  private COL_EDGE = "flow-edge";
 
   constructor() {
     // MongoDB接続URI
-    const uri = 'mongodb://mongodb:27017'; // 適切なURIに置き換えてください
+    // "mongodb://mongodb:27017" はDockerコンテナ内でのMongoDBのURI
+    const uri = "mongodb://localhost:27017"; // 適切なURIに置き換えてください
     this.client = new MongoClient(uri);
     this.client
       .connect()
       .then(() => {
-        console.log('[MONGODB] Connected to MongoDB');
+        console.log("[MONGODB] Connected to MongoDB");
       })
       .catch((err) => {
-        console.error('[MONGODB] Failed to connect to MongoDB', err);
+        console.error("[MONGODB] Failed to connect to MongoDB", err);
       });
 
-    this.db = this.client.db('InteractiveSmartHome');
+    this.db = this.client.db("InteractiveSmartHome");
   }
   public static getInstance(): MongoDB {
     if (!MongoDB.instance) {
-      console.log('Creating new [MongoDB] instance');
+      console.log("Creating new [MongoDB] instance");
       MongoDB.instance = new MongoDB();
     }
     return MongoDB.instance;
@@ -58,7 +59,7 @@ export class MongoDB {
       const { _id, ...routine } = routineData; // _idを除外
       return routine as IRoutineData; // ルーチンデータを返す
     } catch (err) {
-      console.error('Error fetching routine:', err);
+      console.error("Error fetching routine:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -76,7 +77,7 @@ export class MongoDB {
       });
       return dataWithoutId as IRoutineData[]; // データを返す
     } catch (err) {
-      console.error('Error fetching routines:', err);
+      console.error("Error fetching routines:", err);
       throw err; // エラーを再スローして呼び出し元で処理できるようにする
     }
   };
@@ -92,7 +93,7 @@ export class MongoDB {
       const { _id, ...deviceData } = deviceDatas; // _idを除外
       return deviceData as IDeviceData; // デバイスデータを返す
     } catch (err) {
-      console.error('Error fetching device data:', err);
+      console.error("Error fetching device data:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -108,7 +109,7 @@ export class MongoDB {
       });
       return dataWithoutId as IDeviceData[]; // デバイスデータの配列を返す
     } catch (err) {
-      console.error('Error fetching all devices:', err);
+      console.error("Error fetching all devices:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -123,7 +124,7 @@ export class MongoDB {
       const { _id, ...actionData } = actionDatas; // _idを除外
       return actionData; // アクションデータを返す
     } catch (err) {
-      console.error('Error fetching action data:', err);
+      console.error("Error fetching action data:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -139,7 +140,7 @@ export class MongoDB {
       });
       return dataWithoutId; // アクションデータの配列を返す
     } catch (err) {
-      console.error('Error fetching all actions:', err);
+      console.error("Error fetching all actions:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -153,7 +154,7 @@ export class MongoDB {
         .insertMany(deviceArray);
       console.log(`${result.insertedCount} device(s) added successfully.`);
     } catch (err) {
-      console.error('Error adding devices:', err);
+      console.error("Error adding devices:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -167,14 +168,14 @@ export class MongoDB {
         .insertMany(actionArray);
       console.log(`${result.insertedCount} action(s) added successfully.`);
     } catch (err) {
-      console.error('Error adding actions:', err);
+      console.error("Error adding actions:", err);
       throw err; // エラーを再スロー
     }
   };
 
   // ルーチンを追加するメソッド
   addRoutines = async (
-    routines: IRoutineData | IRoutineData[],
+    routines: IRoutineData | IRoutineData[]
   ): Promise<void> => {
     try {
       const routineArray = Array.isArray(routines) ? routines : [routines]; // 配列に変換
@@ -183,7 +184,7 @@ export class MongoDB {
         .insertMany(routineArray);
       console.log(`${result.insertedCount} routine(s) added successfully.`);
     } catch (err) {
-      console.error('Error adding routines:', err);
+      console.error("Error adding routines:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -195,7 +196,7 @@ export class MongoDB {
         .deleteOne({ id: routineId });
       console.log(`${result.deletedCount} routine(s) deleted successfully.`);
     } catch (err) {
-      console.error('Error deleting routine:', err);
+      console.error("Error deleting routine:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -208,7 +209,7 @@ export class MongoDB {
         .deleteOne({ device_id: deviceId });
       console.log(`${result.deletedCount} device(s) deleted successfully.`);
     } catch (err) {
-      console.error('Error deleting device:', err);
+      console.error("Error deleting device:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -221,7 +222,31 @@ export class MongoDB {
         .deleteOne({ id: actionId });
       console.log(`${result.deletedCount} action(s) deleted successfully.`);
     } catch (err) {
-      console.error('Error deleting action:', err);
+      console.error("Error deleting action:", err);
+      throw err; // エラーを再スロー
+    }
+  };
+
+  deleteActions = async (actionIds: string[]): Promise<void> => {
+    try {
+      const bulkOps = actionIds.map((actionId) => {
+        return {
+          deleteOne: {
+            filter: { id: actionId },
+          },
+        };
+      });
+
+      if (bulkOps.length > 0) {
+        const result = await this.db
+          .collection(this.COL_ACTION)
+          .bulkWrite(bulkOps);
+        console.log(`${result.deletedCount} action(s) deleted successfully.`);
+      } else {
+        console.log("No actions to delete.");
+      }
+    } catch (err) {
+      console.error("Error deleting actions:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -232,12 +257,12 @@ export class MongoDB {
       const routineId = routineData.id;
       const result = await this.db
         .collection(this.COL_ROUTINE)
-        .updateOne({ id: routineId }, { $set: routineData });
+        .replaceOne({ id: routineId }, routineData);
       console.log(
-        `${result.matchedCount} routine(s) matched, ${result.modifiedCount} routine(s) updated successfully.`,
+        `${result.matchedCount} routine(s) matched, ${result.modifiedCount} routine(s) updated successfully.`
       );
     } catch (err) {
-      console.error('Error updating routine:', err);
+      console.error("Error updating routine:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -250,27 +275,22 @@ export class MongoDB {
       // bulkWrite 用の操作配列を作成
       const bulkOps = actionData.map((action) => {
         return {
-          updateOne: {
+          replaceOne: {
             filter: { id: action.id }, // 更新対象のフィルタ
-            update: { $set: action }, // 更新内容
+            replacement: action, // 更新内容
             upsert: false, // ドキュメントが存在しない場合は挿入しない
           },
         };
       });
 
-      Debugger.getInstance().debugLog(
-        'MongoDB',
-        'updateAction',
-        'Bulk update operations:' + JSON.stringify(bulkOps),
-      );
       if (bulkOps.length > 0) {
         const result = await collection.bulkWrite(bulkOps);
-        console.log('Bulk update result:', result);
+        console.log("Bulk update result:", result);
       } else {
-        console.log('No operations to perform.');
+        console.log("No operations to perform.");
       }
     } catch (error) {
-      console.error('Error performing bulk update:', error);
+      console.error("Error performing bulk update:", error);
       throw error; // 必要に応じてエラーを再スロー
     }
   };
@@ -279,12 +299,12 @@ export class MongoDB {
     try {
       const result = await this.db
         .collection(this.COL_ACTION)
-        .updateOne({ id: actionData.id }, { $set: actionData });
+        .replaceOne({ id: actionData.id }, actionData);
       console.log(
-        `${result.matchedCount} action(s) matched, ${result.modifiedCount} action(s) updated successfully.`,
+        `${result.matchedCount} action(s) matched, ${result.modifiedCount} action(s) updated successfully.`
       );
     } catch (err) {
-      console.error('Error updating action:', err);
+      console.error("Error updating action:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -294,12 +314,12 @@ export class MongoDB {
       const deviceId = deviceData.device_id;
       const result = await this.db
         .collection(this.COL_DEVICE)
-        .updateOne({ device_id: deviceId }, { $set: deviceData });
+        .replaceOne({ device_id: deviceId }, deviceData);
       console.log(
-        `${result.matchedCount} device(s) matched, ${result.modifiedCount} device(s) updated successfully.`,
+        `${result.matchedCount} device(s) matched, ${result.modifiedCount} device(s) updated successfully.`
       );
     } catch (err) {
-      console.error('Error updating device:', err);
+      console.error("Error updating device:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -315,7 +335,7 @@ export class MongoDB {
       });
       return dataWithoutId as IDBNode[];
     } catch (err) {
-      console.error('Error fetching all nodes:', err);
+      console.error("Error fetching all nodes:", err);
     }
   };
   getNodes = async (nodeIds: string[]): Promise<IDBNode[]> => {
@@ -327,12 +347,12 @@ export class MongoDB {
       const nodesArray = await nodesCursor.toArray(); // 結果を配列に変換
 
       const sanitizedNodes = nodesArray.map(
-        ({ _id, ...node }) => node as IDBNode,
+        ({ _id, ...node }) => node as IDBNode
       );
 
       return sanitizedNodes;
     } catch (err) {
-      console.error('Error fetching nodes:', err);
+      console.error("Error fetching nodes:", err);
       return [];
     }
   };
@@ -343,7 +363,7 @@ export class MongoDB {
       await this.db.collection(this.COL_NODE).insertMany(nodeArr);
       return true;
     } catch (err) {
-      console.error('Error adding node:', err);
+      console.error("Error adding node:", err);
       throw err;
     }
   };
@@ -355,38 +375,58 @@ export class MongoDB {
       // bulkWrite 用の操作配列を作成
       const bulkOps = nodes.map((node) => {
         return {
-          updateOne: {
+          replaceOne: {
             filter: { id: node.id }, // 更新対象のフィルタ
-            update: { $set: node }, // 更新内容
+            replacement: node, // 更新内容
             upsert: false, // ドキュメントが存在しない場合は挿入しない
           },
         };
       });
 
       Debugger.getInstance().debugLog(
-        'MongoDB',
-        'updateNodes',
-        'Bulk update operations:' + JSON.stringify(bulkOps),
+        "MongoDB",
+        "updateNodes",
+        "Bulk update operations:" + JSON.stringify(bulkOps)
       );
       if (bulkOps.length > 0) {
         const result = await collection.bulkWrite(bulkOps);
-        console.log('Bulk update result:', result);
+        console.log("Bulk update result:", result);
       } else {
-        console.log('No operations to perform.');
+        console.log("No operations to perform.");
       }
     } catch (error) {
-      console.error('Error performing bulk update:', error);
+      console.error("Error performing bulk update:", error);
       throw error; // 必要に応じてエラーを再スロー
     }
   };
 
-  deleteNode = async (nodeId: string): Promise<boolean> => {
+  deleteNodes = async (node_ids: string[]): Promise<void> => {
     try {
-      await this.db.collection(this.COL_NODE).deleteOne({ id: nodeId });
-      return true;
-    } catch (err) {
-      console.error('Error deleting node:', err);
-      throw err;
+      const collection = this.db.collection(this.COL_NODE); // コレクション名は適宜変更してください
+
+      // bulkWrite 用の操作配列を作成
+      const bulkOps = node_ids.map((node_id) => {
+        return {
+          deleteOne: {
+            filter: { id: node_id }, // 削除対象のフィルタ
+          },
+        };
+      });
+
+      Debugger.getInstance().debugLog(
+        "MongoDB",
+        "deleteNodes",
+        "Bulk delete operations:" + JSON.stringify(bulkOps)
+      );
+      if (bulkOps.length > 0) {
+        const result = await collection.bulkWrite(bulkOps);
+        console.log("Bulk delete result:", result);
+      } else {
+        console.log("No operations to perform.");
+      }
+    } catch (error) {
+      console.error("Error performing bulk delete:", error);
+      throw error; // 必要に応じてエラーを再スロー
     }
   };
 
@@ -398,7 +438,7 @@ export class MongoDB {
         .toArray();
       return edgesData.map(({ _id, ...edge }) => edge) as IDBNode[]; // _idを除外
     } catch (err) {
-      console.error('Error fetching edges:', err);
+      console.error("Error fetching edges:", err);
       throw err; //
     }
   };
@@ -412,7 +452,7 @@ export class MongoDB {
       const { _id, ...edge } = edgeData; // _idを除外
       return edge as IDBNode; // エッジデータを返す
     } catch (err) {
-      console.error('Error fetching edge:', err);
+      console.error("Error fetching edge:", err);
       throw err; // エラーを再スロー
     }
   };
@@ -425,7 +465,7 @@ export class MongoDB {
         .insertMany(edgeArray);
       console.log(`edge(s) added successfully.`);
     } catch (err) {
-      console.error('Error adding edge:', err);
+      console.error("Error adding edge:", err);
     }
   };
 
@@ -434,12 +474,12 @@ export class MongoDB {
       const edgeId = edge.id;
       const result = await this.db
         .collection(this.COL_EDGE)
-        .updateOne({ id: edgeId }, { $set: edge });
+        .replaceOne({ id: edgeId }, edge);
       console.log(
-        `${result.matchedCount} edge(s) matched, ${result.modifiedCount} edge(s) updated successfully.`,
+        `${result.matchedCount} edge(s) matched, ${result.modifiedCount} edge(s) updated successfully.`
       );
     } catch (err) {
-      console.error('Error updating edge:', err);
+      console.error("Error updating edge:", err);
     }
   };
 
@@ -450,7 +490,7 @@ export class MongoDB {
         .deleteOne({ id: edgeId });
       console.log(`${result.deletedCount} edge(s) deleted successfully.`);
     } catch (err) {
-      console.error('Error deleting edge:', err);
+      console.error("Error deleting edge:", err);
     }
   };
 }

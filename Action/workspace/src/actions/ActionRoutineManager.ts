@@ -1,5 +1,6 @@
-import { MongoDB } from '@/database-connector/mongodb';
-import ActionRoutine from './ActionRoutine';
+import { MongoDB } from "@/database-connector/mongodb";
+import ActionRoutine from "./ActionRoutine";
+import { IRoutineData } from "@/types/ActionBlockInterfaces";
 
 export default class ActionRoutineManager {
   private routineIdMap: Map<string, ActionRoutine> = new Map();
@@ -7,10 +8,13 @@ export default class ActionRoutineManager {
   getRoutineIdMap() {
     return this.routineIdMap;
   }
-  async getRunnningRoutines() {
-    const runningRoutines = Array.from(this.routineIdMap.values()).filter(
-      (actionRoutine) => actionRoutine.getIsRunning(),
-    );
+  async getRunnningRoutines(): Promise<IRoutineData[]> {
+    const runningRoutines: IRoutineData[] = [];
+    this.routineIdMap.forEach((actionRoutine) => {
+      if (actionRoutine.getIsRunning()) {
+        runningRoutines.push(actionRoutine.getRoutineData());
+      }
+    });
     return runningRoutines;
   }
 
@@ -25,7 +29,7 @@ export default class ActionRoutineManager {
       const startRoutine = async (actionRoutine: ActionRoutine) => {
         try {
           await actionRoutine.startRoutine();
-          return { status: 'ok', msg: 'Successfully started routine' };
+          return { status: "ok", msg: "Successfully started routine" };
         } catch (error) {
           console.error(`Routine ${actionRoutine.name} failed:`, error);
           console.log(`Restarting routine ${actionRoutine.name}...`);
@@ -34,14 +38,14 @@ export default class ActionRoutineManager {
       };
 
       const routinePromises = Array.from(this.routineIdMap.values()).map(
-        (actionRoutine) => startRoutine(actionRoutine),
+        (actionRoutine) => startRoutine(actionRoutine)
       );
 
       const results = await Promise.all(routinePromises);
-      return { status: 'ok', msg: 'Successfully started all routines' };
+      return { status: "ok", msg: "Successfully started all routines" };
     } catch (error) {
-      console.error('Error starting routines:', error);
-      return { status: 'fail', msg: 'Failed to start routines' };
+      console.error("Error starting routines:", error);
+      return { status: "fail", msg: "Failed to start routines" };
     }
   }
 
@@ -54,10 +58,10 @@ export default class ActionRoutineManager {
   async startRoutine(routineId: string) {
     const routine = await MongoDB.getInstance().getRoutine(routineId);
     if (routine === null) {
-      return { status: 'fail', msg: 'Routine not found' };
+      return { status: "fail", msg: "Routine not found" };
     }
     if (this.routineIdMap.has(routine.id))
-      return { status: 'fail', msg: 'Routine already running' };
+      return { status: "fail", msg: "Routine already running" };
     const actionRoutine = new ActionRoutine(routine);
     this.routineIdMap.set(routine.id, actionRoutine);
 
@@ -66,7 +70,7 @@ export default class ActionRoutineManager {
     } catch (error) {
       console.error(`Routine ${actionRoutine.name} failed:`, error);
       return {
-        status: 'fail',
+        status: "fail",
         msg: `Failed to start routine ${actionRoutine.name}`,
       };
     }
@@ -74,10 +78,10 @@ export default class ActionRoutineManager {
 
   async stopRoutine(routineId: string) {
     // 余分な引用符を削除
-    routineId = routineId.replace(/^"|"$/g, '');
+    routineId = routineId.replace(/^"|"$/g, "");
 
     const keys = Array.from(this.routineIdMap.keys());
-    keys.forEach((key) => console.log('Key:', key, 'Type:', typeof key));
+    keys.forEach((key) => console.log("Key:", key, "Type:", typeof key));
 
     // キーの比較を詳細に行う
     keys.forEach((key) => {
@@ -87,18 +91,18 @@ export default class ActionRoutineManager {
     const actionRoutine = this.routineIdMap.get(routineId);
 
     if (!actionRoutine) {
-      return { status: 'fail', msg: 'Routine not found' };
+      return { status: "fail", msg: "Routine not found" };
     }
 
     try {
       const result = await actionRoutine.stopRoutine();
       this.routineIdMap.delete(routineId);
 
-      return { status: 'ok', msg: 'Successfully stopped routine' };
+      return { status: "ok", msg: "Successfully stopped routine" };
     } catch (error) {
       console.error(`Routine ${actionRoutine.name} failed:`, error);
       return {
-        status: 'fail',
+        status: "fail",
         msg: `Failed to stop routine ${actionRoutine.name}`,
       };
     }
@@ -107,26 +111,26 @@ export default class ActionRoutineManager {
   async isRoutineRunning(routineId: string) {
     const actionRoutine = this.routineIdMap.get(routineId);
     if (!actionRoutine) {
-      return { status: 'error' };
+      return { status: "error" };
     }
 
-    return { status: 'ok', running: actionRoutine.getIsRunning() };
+    return { status: "ok", running: actionRoutine.getIsRunning() };
   }
 
   async restartRoutine(routineId: string) {
     const actionRoutine = this.routineIdMap.get(routineId);
     if (!actionRoutine) {
-      return { status: 'fail', msg: 'Routine not found' };
+      return { status: "fail", msg: "Routine not found" };
     }
 
     try {
       await this.stopRoutine(routineId);
       await this.startRoutine(routineId);
-      return { status: 'ok', msg: 'Successfully restarted routine' };
+      return { status: "ok", msg: "Successfully restarted routine" };
     } catch (error) {
       console.error(`Routine ${actionRoutine.name} failed:`, error);
       return {
-        status: 'fail',
+        status: "fail",
         msg: `Failed to restart routine ${actionRoutine.name}`,
       };
     }

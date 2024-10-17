@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { Handle, Position } from "@xyflow/svelte";
+  import { Handle, Position, type NodeProps } from "@xyflow/svelte";
   import LogicNode from "./LogicNode.svelte"; // 親コンポーネント
   import type { ISimpleComparatorLogicBlock } from "@/type/ActionBlockInterface";
+  import { handleStyle } from "@/utils/FlowManager";
+  import NodeContent from "../NodeContent.svelte";
 
   export let data: { action_data: ISimpleComparatorLogicBlock };
 
@@ -11,19 +13,19 @@
 
   $: {
     data.action_data.value = selectedValue;
-    data.action_data.operator = operators[0];
+
+    if (data.action_data) data.action_data.operator = operators[0] as any;
   }
 </script>
 
-<LogicNode label="Simple Comparator">
-  <main style="display: flex; flex-direction: row; gap:20px;">
-    <select name="" id="" bind:value={selectedOperator}>
-      {#each operators as operator}
-        <option value={operator}>{operator}</option>
-      {/each}
-    </select>
-    <input type="number" bind:value={selectedValue} />
-  </main>
-  <Handle type="target" position={Position.Left} />
-  <Handle type="source" position={Position.Right} />
+<LogicNode label="Simple Comparator" action_data={data.action_data}>
+  <select name="" id="" bind:value={selectedOperator}>
+    {#each operators as operator}
+      <option value={operator}>{operator}</option>
+    {/each}
+  </select>
+  <input type="number" bind:value={selectedValue} />
+
+  <Handle type="target" position={Position.Left} style={handleStyle} />
+  <Handle type="source" position={Position.Right} style={handleStyle} />
 </LogicNode>

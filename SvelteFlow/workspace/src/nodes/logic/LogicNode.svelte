@@ -1,16 +1,15 @@
 <script lang="ts">
   import NodeWrapper from "@/components/NodeWrapper.svelte";
-  import { NodeToolbar } from "@xyflow/svelte";
+  import type { IActionBlock } from "@/type/ActionBlockInterface";
 
+  import NodeContent from "../NodeContent.svelte";
   export let label: string;
+
+  export let action_data: IActionBlock | null;
 </script>
 
 <NodeWrapper {label} style="background-color: #dedede;">
-  <slot></slot>
+  <NodeContent {action_data}>
+    <slot></slot>
+  </NodeContent>
 </NodeWrapper>
-
-<style>
-  .logic-node {
-    background-color: #dedede;
-  }
-</style>

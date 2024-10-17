@@ -1,14 +1,14 @@
-import path from 'path';
-import fs from 'fs';
-import { Subject } from 'rxjs';
-import MqttBridge from '../device-bridge/MqttBridge';
+import path from "path";
+import fs from "fs";
+import { Subject } from "rxjs";
+import MqttBridge from "../device-bridge/MqttBridge";
 
 interface IDeviceData {
   device_id: string;
   device_name: string;
   device_type: string;
   mqtt_topic: string;
-  device_location: {
+  device_position: {
     x: number;
     y: number;
     z: number;
@@ -27,12 +27,12 @@ interface IDeviceBlock extends IActionBlock {
 }
 
 interface IComparatorLogicBlock extends IActionBlock {
-  action_type: 'comparator';
+  action_type: "comparator";
   threshold: number;
 }
 
 interface ITimerLogicBlock extends IActionBlock {
-  action_type: 'timer';
+  action_type: "timer";
   waitTime: number;
 }
 
@@ -155,75 +155,75 @@ interface ITimerLogicBlock extends IActionBlock {
 const routine = [
   {
     first: true,
-    currentId: '1',
-    next_id: '2',
+    currentId: "1",
+    next_id: "2",
   },
   {
-    currentId: '2',
-    next_id: '3',
+    currentId: "2",
+    next_id: "3",
   },
   {
     first: true,
-    currentId: '8',
-    next_id: '3',
+    currentId: "8",
+    next_id: "3",
   },
 ];
 
 const actions = [
   {
-    id: '1',
+    id: "1",
     action: {
-      action_type: 'on-button-sensor',
-      topic: 'on-button-sensor',
+      action_type: "on-button-sensor",
+      topic: "on-button-sensor",
     },
   },
   {
-    id: '2',
+    id: "2",
     action: {
-      action_type: 'timer',
+      action_type: "timer",
       waitTime: 2000,
     },
   },
   {
-    id: '3',
+    id: "3",
     action: {
-      action_type: 'light-actuator',
-      topic: 'light-actuator',
+      action_type: "light-actuator",
+      topic: "light-actuator",
     },
   },
   {
-    id: '4',
+    id: "4",
     action: {
-      action_type: 'thermometer-sensor',
-      topic: 'thermometer-sensor',
+      action_type: "thermometer-sensor",
+      topic: "thermometer-sensor",
     },
   },
   {
-    id: '5',
+    id: "5",
     action: {
-      action_type: 'compare',
+      action_type: "compare",
       threshold: 30,
     },
   },
   {
-    id: '6',
+    id: "6",
     action: {
-      action_type: 'toggle-button-sensor',
-      topic: 'toggle-button-sensor',
+      action_type: "toggle-button-sensor",
+      topic: "toggle-button-sensor",
     },
   },
   {
-    id: '7',
+    id: "7",
     action: {
-      action_type: 'light-actuator',
-      topic: 'light-actuator',
+      action_type: "light-actuator",
+      topic: "light-actuator",
     },
   },
   {
-    id: '8',
+    id: "8",
     action: {
-      action_type: 'off-button-sensor',
-      topic: 'off-button-sensor',
+      action_type: "off-button-sensor",
+      topic: "off-button-sensor",
     },
   },
 ];
@@ -256,33 +256,33 @@ const actions = [
 //   });
 // }
 
-import { ActionType } from '../types/ActionType';
+import { ActionType } from "../types/ActionType";
 export function test() {
   const testToggleDeviceData: IDeviceData = {
-    device_id: 'device-1',
-    device_name: 'Toggle Button Sensor',
-    device_type: 'toggle-button-sensor',
-    mqtt_topic: 'toggle-button-sensor',
-    device_location: {
+    device_id: "device-1",
+    device_name: "Toggle Button Sensor",
+    device_type: "toggle-button-sensor",
+    mqtt_topic: "toggle-button-sensor",
+    device_position: {
       x: 0,
       y: 0,
       z: 0,
     },
   };
   const toggleButtonDeviceBlock: IDeviceBlock = {
-    id: 'toggle-1',
-    name: 'Toggle Button Sensor',
-    description: 'Toggle Button Sensor',
-    action_type: 'toggle-button-sensor',
+    id: "toggle-1",
+    name: "Toggle Button Sensor",
+    description: "Toggle Button Sensor",
+    action_type: "toggle-button-sensor",
     device_data: testToggleDeviceData,
   };
 
   const lightActuatorDeviceData: IDeviceData = {
-    device_id: 'device-2',
-    device_name: 'Light Actuator',
-    device_type: 'light-actuator',
-    mqtt_topic: 'light-actuator',
-    device_location: {
+    device_id: "device-2",
+    device_name: "Light Actuator",
+    device_type: "light-actuator",
+    mqtt_topic: "light-actuator",
+    device_position: {
       x: 0,
       y: 0,
       z: 0,
@@ -290,40 +290,40 @@ export function test() {
   };
 
   const lightActuatorDeviceBlock: IDeviceBlock = {
-    id: 'light-1',
-    name: 'Light Actuator',
-    description: 'Light Actuator',
-    action_type: 'light-actuator',
+    id: "light-1",
+    name: "Light Actuator",
+    description: "Light Actuator",
+    action_type: "light-actuator",
     device_data: lightActuatorDeviceData,
   };
 
   const timerBlock: ITimerLogicBlock = {
-    id: 'timer-1',
-    name: 'Timer',
-    description: 'Timer',
-    action_type: 'timer',
+    id: "timer-1",
+    name: "Timer",
+    description: "Timer",
+    action_type: "timer",
     waitTime: 5000,
   };
 
   const comparatorBlock: IComparatorLogicBlock = {
-    id: 'comparator-1',
-    name: 'Comparator',
-    description: 'Comparator',
-    action_type: 'comparator',
+    id: "comparator-1",
+    name: "Comparator",
+    description: "Comparator",
+    action_type: "comparator",
     threshold: 30,
   };
 
-  let test = 'ToggleButtonSensorBlock';
+  let test = "ToggleButtonSensorBlock";
 
   switch (test) {
     case ActionType.ToggleButtonSensor:
-      console.log('ToggleButtonSensorBlock');
+      console.log("ToggleButtonSensorBlock");
       break;
     case ActionType.ThermometerSensor:
-      console.log('ThermometerSensorBlock');
+      console.log("ThermometerSensorBlock");
       break;
     default:
-      console.log('Default');
+      console.log("Default");
   }
 
   // const toggleButtonSensorBlock = new ToggleButtonSensorBlock(
