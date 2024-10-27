@@ -10,11 +10,11 @@ public class FlowStore
     public static FlowStore Instance => _instance ?? (_instance = new FlowStore());
  
 
-    public ReactiveCollection<List<Node>> nodes = new ReactiveCollection<List<Node>>();
+    // public ReactiveCollection<List<Node>> nodes = new ReactiveCollection<List<Node>>();
 
-    // public ReactiveCollection<List<Edge>> edges = new ReactiveCollection<List<Edge>>();
+    // // public ReactiveCollection<List<Edge>> edges = new ReactiveCollection<List<Edge>>();
 
-    public ReactiveCollection<List<Node>> nodeList = new ReactiveCollection<List<Node>>();
+    // public ReactiveCollection<List<Node>> nodeList = new ReactiveCollection<List<Node>>();
 
     public ReactiveCollection<RoutineEdge> edgeList = new ReactiveCollection<RoutineEdge>();
 

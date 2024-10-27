@@ -9,17 +9,22 @@ public class TestInputManager : MonoBehaviour
 
     void Update()
     {
+        Ray testRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(testRay.origin, testRay.direction * 10, Color.red); 
+
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Left Mouse Button Clicked");
+          
             
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if(Physics.Raycast(ray, out RaycastHit hit))
             {
+             
                 if(hit.transform.TryGetComponent(out NodeHandler nodeHandler))
                 {
-                    EdgeManager.Instance.SelectHandlerDown(nodeHandler);
+
+                    EdgeManager.Instance.SetSelectHandler(nodeHandler);
                 }
 
                 
@@ -29,7 +34,7 @@ public class TestInputManager : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("Left Mouse Button Released");
+       
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -38,15 +43,21 @@ public class TestInputManager : MonoBehaviour
 
              if(Physics.Raycast(ray, out RaycastHit hit))
             {
+
+
                 if(hit.transform.TryGetComponent(out NodeHandler nodeHandler))
-                {
+                { 
+                    
                     hitHandler = nodeHandler;
                 }
                 
             }
 
-            EdgeManager.Instance.SelectHandlerUp(hitHandler);
+            EdgeManager.Instance.SetSelectHandler(hitHandler);
             
         }
     }
+
+
+
 }

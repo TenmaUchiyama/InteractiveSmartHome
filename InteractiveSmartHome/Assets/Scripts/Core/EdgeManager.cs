@@ -7,6 +7,7 @@ using MRFlow.Component;
 using NodeTypes;
 using Unity.VisualScripting;
 using System.Linq;
+using UnityEditor.Search;
 
 namespace MRFlow.Core
 {
@@ -14,43 +15,64 @@ namespace MRFlow.Core
 public class EdgeManager : Singleton<EdgeManager>
 {     
     [SerializeField] private GameObject edgePrefab;
-    private NodeHandler holdingHandler = null;
-    private List<MREdgeData> mrEdgeDatas = new List<MREdgeData>();
+    [SerializeField] private SelectingLine selectingLine;
+    [SerializeField] private RayInspector rayInspector;
+
+
+    private MRRoutineEdgeData currentMRRoutineEdgeData; 
     
-        public void SelectHandlerDown(NodeHandler nodeHandler)
+
+
+    private NodeHandler holdingHandler = null;
+    
+    
+
+        private void Start() {
+            this.currentMRRoutineEdgeData = new MRRoutineEdgeData(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                "unity-routine-test",
+                new List<Guid>(), 
+                 new List<MREdgeData>()
+            ); 
+        }
+   
+        public MRRoutineEdgeData GetCurrentRoutineEdge() 
         {
-            if(!this.holdingHandler) this.holdingHandler = nodeHandler;
-                    
+            return this.currentMRRoutineEdgeData;
         }
 
-        public void SelectHandlerUp(NodeHandler nodeHandler)
+        public void SetSelectHandler(NodeHandler nodeHandler)
         {
-           
             if(!nodeHandler) {
-                this.holdingHandler = null;
+                ClearHoldingNode();
+                return;
+            };
+
+            if(!this.holdingHandler) {
+                this.holdingHandler = nodeHandler;
+                
+                selectingLine.SetNodeHandler(nodeHandler);
                 return;
             }
-            if(!holdingHandler) return; 
             if(this.holdingHandler.GetHandlerType() == nodeHandler.GetHandlerType()){
-                this.holdingHandler= null; 
+                Debug.LogError("Cannot connect the same type of node");
+                           ClearHoldingNode();
                 return;
             }
-
-
+            
             if(this.holdingHandler.GetHandlerType() == HandlerType.HANDLER_OUT)
             {
                 CreateEdge(this.holdingHandler, nodeHandler);
             }else{
                 CreateEdge(nodeHandler, this.holdingHandler);
             }
-        
         }
-
 
         private void CreateEdge(NodeHandler selectedNodeOut, NodeHandler selectedNodeIn)
         {   
 
-           
+         
             // if the edge already exists, return
             if(IsEdgeExist(selectedNodeOut, selectedNodeIn)) return;
 
@@ -59,35 +81,67 @@ public class EdgeManager : Singleton<EdgeManager>
             MREdge newEdge = edgeObj.GetComponent<MREdge>();
             newEdge.setNodes(selectedNodeOut, selectedNodeIn);  
 
-            selectedNodeOut.SetConnectedEdge(newEdge);
+           
+
+
             selectedNodeIn.SetConnectedEdge(newEdge);
+            selectedNodeOut.SetConnectedEdge(newEdge);
+            selectedNodeOut.SetConnectedNode(selectedNodeIn.GetNode());
+            selectedNodeIn.SetConnectedNode(selectedNodeOut.GetNode());
 
-
+            Debug.Log($"<color=yellow>out{selectedNodeOut.GetNodeData() != null} {selectedNodeIn.GetNodeData().id != null}</color>");
             MREdgeData edgeData = new MREdgeData(
                 Guid.NewGuid(),
                 selectedNodeOut.GetNodeData().id,
                 selectedNodeIn.GetNodeData().id 
             );
 
+            UpdateNodeList(selectedNodeIn.GetNode()); 
+            UpdateNodeList(selectedNodeOut.GetNode()); 
             
-            this.mrEdgeDatas.Append(edgeData);
-            
+            this.currentMRRoutineEdgeData.edges.Add(edgeData);
 
-            this.holdingHandler = null;
+
+        
+
+           ClearHoldingNode();
         }
 
+  
         private bool IsEdgeExist(NodeHandler selectedNodeOut, NodeHandler selectedNodeIn)
         {
             
-            bool isExists =this.mrEdgeDatas.Any(edge => edge.node_out == selectedNodeOut.GetNodeData().id && edge.node_in == selectedNodeIn.GetNodeData().id);
+            bool isExists = selectedNodeIn.IsAlreadyConnected(selectedNodeOut.GetNode()) || selectedNodeOut.IsAlreadyConnected(selectedNodeIn.GetNode());
             if(isExists) Debug.LogError("Edge already exists");
+            ClearHoldingNode();
             return isExists;
         }
 
+        private void ClearHoldingNode() 
+        {
+            this.holdingHandler = null;
+            selectingLine.SetNodeHandler(null);
 
-        private void Update() {
-            
-            // Debug.Log(this.holdingHandler);
         }
+      
+
+        private void UpdateNodeList(MRNode newNode)
+        {
+            HashSet<Guid> uniqueNodeIds = new HashSet<Guid>(){newNode.GetMRNodeData().id};
+
+            Debug.Log($"<color=yellow>{this.currentMRRoutineEdgeData != null }</color>");
+            foreach (var node in this.currentMRRoutineEdgeData.nodes)
+            {
+                uniqueNodeIds.Add(node);
+            }
+            this.currentMRRoutineEdgeData.nodes = uniqueNodeIds.ToList();
+
+        }
+    
+        
+
+    
     }
+
+
 }

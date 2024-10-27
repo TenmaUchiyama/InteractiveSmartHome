@@ -9,15 +9,15 @@ public class TestFlowStore : MonoBehaviour
 
     private IDisposable _subscription;
     
-    void Start()
-    {
-        var flowStore = FlowStore.Instance; 
+    // void Start()
+    // {
+    //     var flowStore = FlowStore.Instance; 
 
-         _subscription = flowStore.nodes.ObserveAdd().Subscribe(x => {
-            List<Node> nodes = FlowStore.GetStore(FlowStore.Instance.nodes);
-            Debug.Log(JsonConvert.SerializeObject(nodes));
-         });
-    }
+    //      _subscription = flowStore.nodes.ObserveAdd().Subscribe(x => {
+    //         List<Node> nodes = FlowStore.GetStore(FlowStore.Instance.nodes);
+    //         Debug.Log(JsonConvert.SerializeObject(nodes));
+    //      });
+    // }
 
 
     
