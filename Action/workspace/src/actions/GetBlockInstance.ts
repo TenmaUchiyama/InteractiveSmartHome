@@ -1,7 +1,7 @@
-import { IDBDeviceBlock, IDeviceBlock } from '@/types/ActionBlockInterfaces';
-import { MongoDB } from '@database';
-import { ActionType, DeviceType } from '@/types/ActionType';
-import ActionBlock from '@block/ActionBlock';
+import { IDBDeviceBlock, IDeviceBlock } from "@/types/ActionBlockInterfaces";
+import { MongoDB } from "@database";
+import { ActionType, DeviceType } from "@/types/ActionType";
+import ActionBlock from "@block/ActionBlock";
 import {
   SimpleComparatorLogicBlock,
   RangeComparatorLogicBlock,
@@ -9,14 +9,14 @@ import {
   GateLogicBlock,
   NotGateLogicBlock,
   ScheduleLogicBlock,
-} from '@block/logic';
+} from "@block/logic";
 import {
   ToggleButtonSensorBlock,
   ThermometerSensorBlock,
   MotionSensorBlock,
-} from '@block/device/sensor';
-import TestBlock from '@block/test/TestBlock';
-import { LightActuatorBlock } from '@block/device/actuator';
+} from "@block/device/sensor";
+import TestBlock from "@block/test/TestBlock";
+import { LightActuatorBlock } from "@block/device/actuator";
 
 const actionBlockMap = {
   [ActionType.Logic_Timer]: TimerLogicBlock,
@@ -37,7 +37,7 @@ const deviceBlockMap = {
 };
 
 export default async function getActionBlock(
-  actionBlockData: any,
+  actionBlockData: any
 ): Promise<ActionBlock> {
   const actionBlockConstructor = actionBlockMap[actionBlockData.action_type];
 
@@ -52,7 +52,7 @@ export default async function getActionBlock(
 }
 
 async function getDeviceBlock(
-  actionBlockData: IDBDeviceBlock,
+  actionBlockData: IDBDeviceBlock
 ): Promise<ActionBlock> {
   const device_id = actionBlockData.device_data_id;
   const device_data = await MongoDB.getInstance().getDevice(device_id);
@@ -70,8 +70,8 @@ async function getDeviceBlock(
       `[GetBlockInstance] DeviceData not found for: ${JSON.stringify(
         actionBlockData,
         null,
-        2,
-      )}`,
+        2
+      )}`
     );
   }
 
@@ -82,6 +82,6 @@ async function getDeviceBlock(
   }
 
   console.error(
-    `[GetBlockInstance] ActionBlock not found for: ${actionBlockData.device_type}`,
+    `[GetBlockInstance] ActionBlock not found for: ${actionBlockData.device_type}`
   );
 }

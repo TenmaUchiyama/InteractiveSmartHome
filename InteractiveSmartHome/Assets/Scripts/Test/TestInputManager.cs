@@ -24,7 +24,7 @@ public class TestInputManager : MonoBehaviour
                 if(hit.transform.TryGetComponent(out NodeHandler nodeHandler))
                 {
 
-                    EdgeManager.Instance.SetSelectHandler(nodeHandler);
+                    // EdgeManager.Instance.SetSelectHandler(nodeHandler);
                 }
 
                 
@@ -53,7 +53,7 @@ public class TestInputManager : MonoBehaviour
                 
             }
 
-            EdgeManager.Instance.SetSelectHandler(hitHandler);
+            // EdgeManager.Instance.SetSelectHandler(hitHandler);
             
         }
     }

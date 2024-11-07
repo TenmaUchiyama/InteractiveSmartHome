@@ -38,12 +38,14 @@ export default class ActionRoutine implements IRoutineData {
 
     for (const blockId of uniqueBlockIds) {
       const block = await MongoDB.getInstance().getAction(blockId);
+
       if (block === null) {
         console.error(`Block not found for ID: ${blockId}`);
         continue;
       }
 
       const newBlock = await getActionBlock(block);
+
       if (newBlock) {
         newBlock.setRoutineId(this.id);
       } else {

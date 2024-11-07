@@ -64,7 +64,7 @@ private void Update()
     Vector2 sizeInWorld = Vector2.Scale(nodeInRect.rect.size, new Vector2(scaleIn.x, scaleIn.y));
     Vector2 sizeOutWorld = Vector2.Scale(nodeOutRect.rect.size, new Vector2(scaleOut.x, scaleOut.y));
 
-     Vector2 halfSizeInWorld = sizeInWorld * 0.5f;
+    Vector2 halfSizeInWorld = sizeInWorld * 0.5f;
     Vector2 halfSizeOutWorld = sizeOutWorld * 0.5f;
 
     // 各ノードから線をどれだけ短くするか計算
@@ -81,15 +81,21 @@ private void Update()
     lineRenderer.SetPosition(1, nodeOutPosition);
 
 
-
-        
-
-
-
 }
 
-}
 
+    public void DestroyEdge() 
+    {
+        Destroy(this.gameObject);
+    }
+
+    public MREdgeData GetMREdgeData()
+    {
+        return this._mrEdgeData;
+
+    }
+
+}
 }
 
 

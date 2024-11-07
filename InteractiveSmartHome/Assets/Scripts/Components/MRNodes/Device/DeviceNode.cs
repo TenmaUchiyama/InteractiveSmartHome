@@ -1,32 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using ActionDataTypes;
 using ActionDataTypes.Device;
 using MRFlow.Component;
 using NodeTypes;
 using UnityEngine;
 
-public class DeviceNode : MRNode
+namespace MRFlow.Component 
+{
+   
+   public class DeviceNode : MRNode
 {
 
    [SerializeField] string device_name = "Device Node";
    [SerializeField] string description = "Just a Simple Device";
+   [SerializeField] NodeType nodeType;
+   [SerializeField] ActionDataTypes.DeviceType deviceType;
    
    [SerializeField] string device_data_id = "";
 
-    private void Awake() {
-         ActionBlock deviceBlock = new DeviceBlockData(
+
+
+    public override void InitNewNode() {
+         IActionBlock deviceBlock = new DeviceBlockData(
             Guid.NewGuid(),
             this.device_name,
             this.description  ,
-            BlockActionTypeMap.GetActionType(ActionBlockType.Device),
+            BlockActionTypeMap.GetDeviceTypeString(deviceType),
             this.device_data_id
          );
 
          MRNodeData newNode = new MRNodeData(
                 Guid.NewGuid(),
-                BlockActionTypeMap.GetActionType(ActionBlockType.Device),
+                NodeTypeMap.GetNodeTypeString(nodeType),
                 deviceBlock,
                 this.transform.position
          );
@@ -37,4 +42,5 @@ public class DeviceNode : MRNode
 
 
 
+}
 }

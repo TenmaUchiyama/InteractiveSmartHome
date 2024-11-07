@@ -26,6 +26,7 @@ private void Update() {
 
 private void OpenCloseMenu() 
 {
+    Debug.Log("Open the Menu");
     if(menuGroup.activeSelf){
         menuGroup.SetActive(false);
         return;

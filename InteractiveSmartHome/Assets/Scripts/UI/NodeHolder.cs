@@ -14,15 +14,25 @@ public class NodeHolder : MonoBehaviour
       public void SetHoldNodeType(NodeType nodeType)
       {
           holdingNodeType = nodeType;
-          rayInteractor.enabled = false;
+        
       }
 
       public void CancelHoldNode()
       {
             holdingNodeType = NodeType.None;
-            rayInteractor.enabled = true;
+            // rayInteractor.enabled = true;
       }
 
+      public void Test() 
+      {
+            Debug.Log("<color=red>Test</color>");
+      }
+      private void Update() {
+            if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+            {
+                
+            }
+      }
 
 
 

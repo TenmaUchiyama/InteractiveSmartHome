@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using ActionDataTypes.Device;
+using ActionDataTypes.Logic;
+using MRFlow.Component;
 
 namespace ActionDataTypes
 {
@@ -39,6 +43,8 @@ public class BlockActionTypeMap
     };
 
 
+
+
     private static Dictionary<DeviceType, string> deviceTypeMap = new Dictionary<DeviceType, string>
     {
         {DeviceType.Light, "actuator-light"},
@@ -47,15 +53,42 @@ public class BlockActionTypeMap
         {DeviceType.Scheduler, "api-scheduler"}
     };
 
-    public static string GetActionType(ActionBlockType actionBlockType)
+
+   private static readonly Dictionary<ActionBlockType, Type> actionDataMap = new Dictionary<ActionBlockType, Type>
+{
+    { ActionBlockType.Logic_Timer , typeof(TimerBlockData)},
+    { ActionBlockType.Device , typeof(DeviceBlockData)},
+
+
+};
+
+
+    public static string GetActionTypeString(ActionBlockType actionBlockType)
     {
         return actionTypeMap[actionBlockType];
     }
+    
+    public static ActionBlockType GetStringTypeFromActionType(string actionType)
+    {
+        return actionTypeMap.FirstOrDefault(x => x.Value == actionType).Key;
+    }
 
-    public static string GetDeviceType(DeviceType deviceType)
+    public static string GetDeviceTypeString(DeviceType deviceType)
     {
         return deviceTypeMap[deviceType];
     }
+
+      public static Type GetActionDataType(ActionBlockType actionBlockType)
+    {
+        if (actionDataMap.TryGetValue(actionBlockType, out var dataType))
+        {
+            return dataType;
+        }
+
+        return null;
+    }
+
+
 
 
 }
@@ -64,13 +97,13 @@ public record Routine
 {
     public bool? first { get; set; }
     public bool? last { get; set; }
-    public Guid currentBlockId { get; set; }
-    public Guid nextBlockId { get; set; }
+    public Guid current_block_id { get; set; }
+    public Guid next_block_id { get; set; }
 
     public Routine (Guid currentBlockId, Guid nextBlockId)
     {
-        this.currentBlockId = currentBlockId;
-        this.nextBlockId = nextBlockId;
+        this.current_block_id = currentBlockId;
+        this.next_block_id = nextBlockId;
     }
 }
 [Serializable]
@@ -78,28 +111,28 @@ public record RoutineData
 {
     public Guid id { get; set; }
     public string name { get; set; }
-    public List<Routine> actionRoutine { get; set; }
+    public List<Routine> action_routine { get; set; }
+
+    public RoutineData(Guid id, string name, List<Routine> actionRoutine)
+    {
+        this.id = id;
+        this.name = name;
+        this.action_routine = actionRoutine;
+    }
 }
 
 
 
 
 
-[Serializable]
-public record ActionBlock 
+public interface IActionBlock 
 {
     public Guid id { get; set; }
     public string name { get; set; }
     public string description { get; set; }
     public string action_type { get; set; }
 
-    public ActionBlock(Guid id, string name, string description, string action_type)
-    {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.action_type = action_type;
-    }
+ 
 }
 
 
@@ -121,7 +154,6 @@ public record DevicePosition
 {
     public float x { get; set; }
     public float y { get; set; }
-
 }
 
 

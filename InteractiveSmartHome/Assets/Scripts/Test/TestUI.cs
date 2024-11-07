@@ -2,12 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-using System;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting.FullSerializer;
-public class TestUI : MonoBehaviour
+namespace MRFlow.Test 
+{public class TestUI : MonoBehaviour
 {
     [SerializeField] Button startAllRoutineButton; 
 
@@ -22,4 +18,4 @@ public class TestUI : MonoBehaviour
 private void OnStartAllRoutineClicked(){
     Debug.Log("StartAllRoutine");
 }
-}
+}}

@@ -16,13 +16,12 @@ public class NodeHandler : MonoBehaviour
     [SerializeField] HandlerType handlerType;
     
     private  List<MRNode> connectedMrNodes = new List<MRNode>();
+    private  List<MREdge> connectedEdge = new List<MREdge>();
 
 
 
 
-    
-    private MREdge connectedEdge; 
-    
+ 
 
 
 
@@ -32,7 +31,7 @@ public MRNode GetNode()
 }
 public MRNodeData GetNodeData()
 {
-return parentNode.GetMRNodeData();
+    return parentNode.GetMRNodeData();
 }
 
 public void SetNode(MRNode node)
@@ -60,7 +59,8 @@ public void SetConnectedNode(MRNode node)
 
 public void SetConnectedEdge(MREdge edge)
 {
-    this.connectedEdge = edge;
+    this.parentNode.SetConnectedEdge(edge);
+    this.connectedEdge.Add(edge);
 }
 
 public bool IsAlreadyConnected(MRNode node)

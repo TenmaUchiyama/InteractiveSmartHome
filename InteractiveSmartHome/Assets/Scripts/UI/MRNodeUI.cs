@@ -4,6 +4,7 @@ using NodeTypes;
 using Oculus.Interaction;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MRNodeUI : MonoBehaviour
@@ -23,8 +24,10 @@ public class MRNodeUI : MonoBehaviour
     [SerializeField, Interface(typeof(IInteractableView))]
     private UnityEngine.Object _interactableView;
     private IInteractableView InteractableView;
-    [SerializeField] Image backgroundImage;
+    [SerializeField] private RayInteractable rayInteractable;
 
+    [SerializeField] Image backgroundImage;
+    [SerializeField] Button button;
 
     public UnityEvent onClickEvent;
     private UITheme uiTheme;
@@ -36,11 +39,22 @@ public class MRNodeUI : MonoBehaviour
         InteractableView = _interactableView as IInteractableView;
         uiTheme = nodeThemeMapSO.GetUITheme(themeType);
     }
+
+
     void OnValidate()
     {
        
-        backgroundImage.color = nodeThemeMapSO.GetUITheme(themeType).backplateColor;
-
+        // backgroundImage.color = nodeThemeMapSO.GetUITheme(themeType).backplateColor;
+        Debug.Log("OnValidate");
+        ColorBlock colorBlock = new ColorBlock();
+        colorBlock.normalColor = nodeThemeMapSO.GetUITheme(themeType).backplateColor;
+        colorBlock.highlightedColor = nodeThemeMapSO.GetUITheme(themeType).sectionPlateColor;
+        colorBlock.pressedColor = nodeThemeMapSO.GetUITheme(themeType).sectionPlateColor;
+        colorBlock.selectedColor = nodeThemeMapSO.GetUITheme(themeType).sectionPlateColor;
+        colorBlock.disabledColor = nodeThemeMapSO.GetUITheme(themeType).backplateColor;
+        colorBlock.colorMultiplier = 1;
+        colorBlock.fadeDuration = 0.1f;
+        this.button.colors = colorBlock;
     }
     
 
@@ -54,7 +68,9 @@ public class MRNodeUI : MonoBehaviour
 
 
 
-
+    private void Start() {
+        InteractableView = _interactableView as IInteractableView;
+    }
     
 
       protected virtual void OnEnable()
@@ -73,27 +89,24 @@ public class MRNodeUI : MonoBehaviour
         }
       private void HandleStateChanged(InteractableStateChangeArgs args)
     {
+
          switch(args.NewState)
          {
            case InteractableState.Normal:
-          
+               
                 backgroundImage.color = uiTheme.backplateColor;
             break;
             case InteractableState.Hover:
+              
                 backgroundImage.color = uiTheme.sectionPlateColor;
             break;
             case InteractableState.Select:
                    onClickEvent.Invoke();
                 backgroundImage.color = uiTheme.sectionPlateColor;
             break;
-            
-
+        
 
          }
     }
-
-
-
-
 
 }

@@ -23,6 +23,8 @@ export class MongoDB {
   private COL_NODE = "flow-node";
   private COL_EDGE = "flow-edge";
 
+  private upsert: boolean = false;
+
   constructor() {
     // MongoDB接続URI
     // "mongodb://mongodb:27017" はDockerコンテナ内でのMongoDBのURI
@@ -37,7 +39,7 @@ export class MongoDB {
         console.error("[MONGODB] Failed to connect to MongoDB", err);
       });
 
-    this.db = this.client.db("InteractiveSmartHome");
+    this.db = this.client.db("DebugInteractiveSmartHome");
   }
   public static getInstance(): MongoDB {
     if (!MongoDB.instance) {
@@ -162,14 +164,20 @@ export class MongoDB {
   // アクションを追加するメソッド
   addActions = async (actions: object | object[]): Promise<void> => {
     try {
-      const actionArray = Array.isArray(actions) ? actions : [actions]; // 配列に変換
-      const result = await this.db
-        .collection(this.COL_ACTION)
-        .insertMany(actionArray);
-      console.log(`${result.insertedCount} action(s) added successfully.`);
+      const actionArray = Array.isArray(actions) ? actions : [actions];
+
+      if (actionArray.length === 1) {
+        // 単一のオブジェクトがある場合は insertOne を使用
+        await this.db.collection(this.COL_ACTION).insertOne(actionArray[0]);
+      } else if (actionArray.length > 1) {
+        // 配列の場合は insertMany を使用
+        await this.db.collection(this.COL_ACTION).insertMany(actionArray);
+      }
+
+      console.log(`${actionArray.length} action(s) processed successfully.`);
     } catch (err) {
-      console.error("Error adding actions:", err);
-      throw err; // エラーを再スロー
+      console.error("Error adding/updating actions:", err);
+      throw err;
     }
   };
 
@@ -233,6 +241,7 @@ export class MongoDB {
         return {
           deleteOne: {
             filter: { id: actionId },
+            upsert: this.upsert,
           },
         };
       });
@@ -257,13 +266,35 @@ export class MongoDB {
       const routineId = routineData.id;
       const result = await this.db
         .collection(this.COL_ROUTINE)
-        .replaceOne({ id: routineId }, routineData);
+        .replaceOne({ id: routineId }, routineData, { upsert: this.upsert });
       console.log(
         `${result.matchedCount} routine(s) matched, ${result.modifiedCount} routine(s) updated successfully.`
       );
     } catch (err) {
       console.error("Error updating routine:", err);
       throw err; // エラーを再スロー
+    }
+  };
+
+  updateRoutineById = async (
+    routine_id: string,
+    actionRoutineData: IRoutine[]
+  ): Promise<void> => {
+    try {
+      console.log("Receive Data from updateRoutineById");
+      const result = await this.db
+        .collection(this.COL_ROUTINE)
+        .updateOne(
+          { id: routine_id },
+          { $set: { action_routine: actionRoutineData } }
+        );
+
+      console.log(
+        `${result.matchedCount} routine(s) matched, ${result.modifiedCount} routine(s) updated successfully.`
+      );
+    } catch (err) {
+      console.error("Error updating action_routine:", err);
+      throw err;
     }
   };
 
@@ -277,8 +308,8 @@ export class MongoDB {
         return {
           replaceOne: {
             filter: { id: action.id }, // 更新対象のフィルタ
-            replacement: action, // 更新内容
-            upsert: false, // ドキュメントが存在しない場合は挿入しない
+            replacement: action, // 更新内容z
+            upsert: this.upsert, // ドキュメントが存在しない場合は挿入しない
           },
         };
       });
@@ -378,7 +409,7 @@ export class MongoDB {
           replaceOne: {
             filter: { id: node.id }, // 更新対象のフィルタ
             replacement: node, // 更新内容
-            upsert: false, // ドキュメントが存在しない場合は挿入しない
+            upsert: this.upsert, // ドキュメントが存在しない場合は挿入しない
           },
         };
       });
@@ -474,7 +505,7 @@ export class MongoDB {
       const edgeId = edge.id;
       const result = await this.db
         .collection(this.COL_EDGE)
-        .replaceOne({ id: edgeId }, edge);
+        .replaceOne({ id: edgeId }, edge, { upsert: this.upsert });
       console.log(
         `${result.matchedCount} edge(s) matched, ${result.modifiedCount} edge(s) updated successfully.`
       );

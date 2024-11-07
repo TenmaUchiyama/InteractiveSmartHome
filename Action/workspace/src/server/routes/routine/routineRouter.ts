@@ -11,6 +11,7 @@ import {
   stopRoutineApi,
   stopAllRoutinesApi,
   updateRoutineApi,
+  updateRoutineByIdApi,
 } from "./routineController";
 
 const routineRouter = Router();
@@ -28,9 +29,12 @@ routineRouter.get("/get-running", getRunningRoutineApi);
 routineRouter.get("/get/:id", getRoutineApi);
 
 routineRouter.get("/stop-all", stopAllRoutinesApi);
+
 routineRouter.get("/stop/:id", stopRoutineApi);
 
 routineRouter.post("/add", addRoutineApi);
+
+routineRouter.put("/update/:id", updateRoutineByIdApi);
 
 routineRouter.put("/update", updateRoutineApi);
 

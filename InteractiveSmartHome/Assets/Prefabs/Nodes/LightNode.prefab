@@ -239,7 +239,7 @@ PrefabInstance:
     - target: {fileID: 5775167265744176657, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: parentNode
       value: 
-      objectReference: {fileID: 897770768757771062}
+      objectReference: {fileID: 770110754603203856}
     - target: {fileID: 5936208533484463130, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -367,7 +367,7 @@ PrefabInstance:
     - target: {fileID: 8582593563317834192, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: _mrNode
       value: 
-      objectReference: {fileID: 897770768757771062}
+      objectReference: {fileID: 770110754603203856}
     - target: {fileID: 8624951996315836220, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_Controller
       value: 
@@ -396,36 +396,68 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.7254902
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1514783046502463274, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
     m_RemovedGameObjects:
     - {fileID: 5577360299039366315, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2820210750354437446, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3172114758071839970, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 897770768757771062}
+      addedObject: {fileID: 770110754603203856}
+    - targetCorrespondingSourceObject: {fileID: 3172114758071839970, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3913370532013529545}
   m_SourcePrefab: {fileID: 100100000, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
---- !u!1 &3686706106468730401 stripped
+--- !u!1 &4039505146683416453 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 2820210750354437446, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3172114758071839970, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
   m_PrefabInstance: {fileID: 1444152549019497319}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &897770768757771062
+--- !u!114 &770110754603203856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3686706106468730401}
+  m_GameObject: {fileID: 4039505146683416453}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f32a988fa017cba41b324b70fe6a241f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rootCanvas: {fileID: 6996625675867311918}
+  nodeInHandler: {fileID: 4913195266115204470}
+  nodeOutHandler: {fileID: 0}
   device_name: Unity Test Light Node
   description: Just a Simple Unity Test Light NOde
-  device_data_id: led-light-actuator
+  nodeType: 7
+  device_data_id: led-sample-1
+--- !u!114 &3913370532013529545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039505146683416453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd9b08636cc1ad147aa7b59f6ddc392c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectThemeType: 2
+  nodeThemeMapSO: {fileID: 11400000, guid: 5b85e8aad8ebac34891a8414412a12f6, type: 2}
+--- !u!114 &4913195266115204470 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5775167265744176657, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+  m_PrefabInstance: {fileID: 1444152549019497319}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52275eed94e2b6429d637ba41e405da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!223 &6996625675867311918 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 8436272258589850697, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}

@@ -1,146 +1,131 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using MRFlow.Component;
 using NodeTypes;
-using Unity.VisualScripting;
 using System.Linq;
-using UnityEditor.Search;
+using UnityEditor.Experimental.GraphView;
 
 namespace MRFlow.Core
 {
 
+
+
+/**
+このクラスは、全体のRoutineEdgeの管理を行うクラス。RoutineEdgeは、Routineに紐づけられたActionの流れ（Edge）。
+EdgeとはどのActionがどのActionに繋がっているかを示す。
+*/
 public class EdgeManager : Singleton<EdgeManager>
 {     
+
+
+    //　現在のRoutineEdgeのEdgeリスト
+    private List<MREdge> edgesInCurrentRoutine = new List<MREdge>();
+
     [SerializeField] private GameObject edgePrefab;
-    [SerializeField] private SelectingLine selectingLine;
-    [SerializeField] private RayInspector rayInspector;
 
 
+
+    //今開いているRoutineEdgeのデータ
     private MRRoutineEdgeData currentMRRoutineEdgeData; 
     
 
 
     private NodeHandler holdingHandler = null;
     
-    
 
-        private void Start() {
-            this.currentMRRoutineEdgeData = new MRRoutineEdgeData(
-                Guid.NewGuid(),
-                Guid.NewGuid(),
-                "unity-routine-test",
-                new List<Guid>(), 
-                 new List<MREdgeData>()
-            ); 
+
+
+        public void SetCurrentMRRoutineEdgeData(MRRoutineEdgeData currentMRRoutineEdgeData)
+        {
+            this.currentMRRoutineEdgeData = currentMRRoutineEdgeData;
         }
-   
+        
         public MRRoutineEdgeData GetCurrentRoutineEdge() 
         {
             return this.currentMRRoutineEdgeData;
         }
 
-        public void SetSelectHandler(NodeHandler nodeHandler)
-        {
-            if(!nodeHandler) {
-                ClearHoldingNode();
-                return;
-            };
 
-            if(!this.holdingHandler) {
-                this.holdingHandler = nodeHandler;
-                
-                selectingLine.SetNodeHandler(nodeHandler);
-                return;
-            }
-            if(this.holdingHandler.GetHandlerType() == nodeHandler.GetHandlerType()){
-                Debug.LogError("Cannot connect the same type of node");
-                           ClearHoldingNode();
-                return;
-            }
-            
-            if(this.holdingHandler.GetHandlerType() == HandlerType.HANDLER_OUT)
-            {
-                CreateEdge(this.holdingHandler, nodeHandler);
-            }else{
-                CreateEdge(nodeHandler, this.holdingHandler);
-            }
-        }
-
-        private void CreateEdge(NodeHandler selectedNodeOut, NodeHandler selectedNodeIn)
+     
+        // Edgeを作成する。
+        public void CreateEdge(NodeHandler selectedNodeOut, NodeHandler selectedNodeIn, MREdgeData mrEdgeData = null)
         {   
-
-         
-            // if the edge already exists, return
+            
+   
             if(IsEdgeExist(selectedNodeOut, selectedNodeIn)) return;
-
-
+            
             GameObject edgeObj = Instantiate(edgePrefab, this.transform);
             MREdge newEdge = edgeObj.GetComponent<MREdge>();
             newEdge.setNodes(selectedNodeOut, selectedNodeIn);  
-
-           
-
-
+            
             selectedNodeIn.SetConnectedEdge(newEdge);
             selectedNodeOut.SetConnectedEdge(newEdge);
             selectedNodeOut.SetConnectedNode(selectedNodeIn.GetNode());
             selectedNodeIn.SetConnectedNode(selectedNodeOut.GetNode());
 
-            Debug.Log($"<color=yellow>out{selectedNodeOut.GetNodeData() != null} {selectedNodeIn.GetNodeData().id != null}</color>");
-            MREdgeData edgeData = new MREdgeData(
-                Guid.NewGuid(),
+          
+
+            UpdateNodeListToCurrentEdge(selectedNodeIn.GetNode()); 
+            UpdateNodeListToCurrentEdge(selectedNodeOut.GetNode()); 
+
+
+            if(mrEdgeData == null)
+            {
+                mrEdgeData = new MREdgeData(
+                Guid.NewGuid().ToString(),
                 selectedNodeOut.GetNodeData().id,
                 selectedNodeIn.GetNodeData().id 
             );
 
-            UpdateNodeList(selectedNodeIn.GetNode()); 
-            UpdateNodeList(selectedNodeOut.GetNode()); 
             
-            this.currentMRRoutineEdgeData.edges.Add(edgeData);
+            this.currentMRRoutineEdgeData.edges.Add(mrEdgeData);
+            }
+            
 
-
-        
-
-           ClearHoldingNode();
         }
 
-  
+
+        public void RemoveEdge(MREdge edge)
+        {
+            this.currentMRRoutineEdgeData.edges.Remove(edge.GetMREdgeData());
+            edge.DestroyEdge();
+        }
+
+        // すでに同じActionのペアがEdgeに存在するかどうかを確認する。
         private bool IsEdgeExist(NodeHandler selectedNodeOut, NodeHandler selectedNodeIn)
         {
             
             bool isExists = selectedNodeIn.IsAlreadyConnected(selectedNodeOut.GetNode()) || selectedNodeOut.IsAlreadyConnected(selectedNodeIn.GetNode());
             if(isExists) Debug.LogError("Edge already exists");
-            ClearHoldingNode();
+       
             return isExists;
         }
 
-        private void ClearHoldingNode() 
-        {
-            this.holdingHandler = null;
-            selectingLine.SetNodeHandler(null);
 
-        }
-      
 
-        private void UpdateNodeList(MRNode newNode)
+        // 現在のRoutineEdgeの中のNodeを更新する。
+        public void UpdateNodeListToCurrentEdge(MRNode newNode)
         {
+
             HashSet<Guid> uniqueNodeIds = new HashSet<Guid>(){newNode.GetMRNodeData().id};
 
-            Debug.Log($"<color=yellow>{this.currentMRRoutineEdgeData != null }</color>");
-            foreach (var node in this.currentMRRoutineEdgeData.nodes)
+                foreach (var node in this.currentMRRoutineEdgeData.nodes)
             {
                 uniqueNodeIds.Add(node);
             }
             this.currentMRRoutineEdgeData.nodes = uniqueNodeIds.ToList();
-
         }
-    
-        
 
-    
+
+
+        public async void CreateRoutineEdgeData()
+        {
+            // RoutineEdgeからnodeのIDを取得してUpdateする。
+            List<Guid> guids = this.currentMRRoutineEdgeData.nodes;
+            await NodeManager.Instance.UpdateNodeListDBById(guids);
+            // EdgeからRoutineを作成する。
+        }
     }
 
 

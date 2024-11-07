@@ -19,7 +19,7 @@ export default class MqttBridge extends EventEmitter {
   // Singleton instance accessor with optional broker URL parameter
   public static getInstance(
     //mqtt://mqtt-broker:1883
-    brokerUrl: string = "mqtt://192.168.10.102:1883"
+    brokerUrl: string = "mqtt://192.168.10.103:1883"
   ): MqttBridge {
     if (!MqttBridge.instance) {
       MqttBridge.instance = new MqttBridge(brokerUrl);

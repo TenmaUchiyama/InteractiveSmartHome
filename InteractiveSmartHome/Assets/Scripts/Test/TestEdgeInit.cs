@@ -18,10 +18,5 @@ public class TestEdgeInit : MonoBehaviour
 
     private void Start() {
        
-        EdgeManager.Instance.SetSelectHandler(btnNodeOut); 
-        EdgeManager.Instance.SetSelectHandler(timerNodeIn);
-
-        EdgeManager.Instance.SetSelectHandler(timerNodeOut);
-        EdgeManager.Instance.SetSelectHandler(lightIn);
     }
 }

@@ -88,6 +88,10 @@ public class UIThemeSetter : MonoBehaviour
 
             foreach (var image in images)
             {
+                 if(image.CompareTag("ThemeException"))
+                {
+                    continue; 
+                }
                 if (image.CompareTag("QDSUIIcon"))
                 {
                     // Apply the text color to the icons as well

@@ -3,6 +3,7 @@ import ActionRoutine from "./ActionRoutine";
 import { IRoutineData } from "@/types/ActionBlockInterfaces";
 
 export default class ActionRoutineManager {
+  // Routine ID と ActionRoutine のマップとして複数のRoutineを管理する
   private routineIdMap: Map<string, ActionRoutine> = new Map();
 
   getRoutineIdMap() {
@@ -56,6 +57,7 @@ export default class ActionRoutineManager {
   }
 
   async startRoutine(routineId: string) {
+    console.log("Starting Routine");
     const routine = await MongoDB.getInstance().getRoutine(routineId);
     if (routine === null) {
       return { status: "fail", msg: "Routine not found" };

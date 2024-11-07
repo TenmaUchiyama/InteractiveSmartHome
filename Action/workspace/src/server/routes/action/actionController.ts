@@ -73,7 +73,7 @@ export const deleteActionApi = async (req: Request, res: Response) => {
       return res.status(400).send("Action ID is required");
     }
     await MongoDB.getInstance().deleteAction(actionId);
-    return res.status(204).send("Action deleted");
+    return res.status(200).send("Action deleted");
   } catch (error) {
     console.error(error); // エラー内容をログに記録
     return res.status(500).send("Failed to delete action: " + error.message);
@@ -90,7 +90,7 @@ export const deleteActionsApi = async (req: Request, res: Response) => {
     }
 
     await MongoDB.getInstance().deleteActions(actionIds); // 複数のアクションを削除するメソッドを呼び出し
-    return res.status(204).send("Actions deleted");
+    return res.status(200).send("Actions deleted");
   } catch (error) {
     console.error(error); // エラー内容をログに記録
     return res.status(500).send("Failed to delete actions: " + error.message);

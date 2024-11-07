@@ -3,9 +3,7 @@
 using System;
 using System.Collections.Generic;
 using ActionDataTypes;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace NodeTypes
 {
@@ -37,17 +35,7 @@ namespace NodeTypes
 
 
 
-//       Timer = "node-timer",
-//   SimpleComparator = "node-simple-comparator",
-//   RangeComparator = "node-range-comparator",
-//   GateLogic = "node-gate-logic",
-//   NotGate = "node-not-gate",
 
-//   Light = "node-light",
-//   ToggleButton = "node-toggle-button",
-//   Thermometer = "node-thermo-sensor",
-
-//   Scheduler = "node-scheduler",
 
 public record NodeTypeMap{
        private static Dictionary<NodeType, string> nodeTypeMap = new Dictionary<NodeType, string>
@@ -68,7 +56,20 @@ public record NodeTypeMap{
     };
 
 
-    public static string GetNodeType(NodeType nodeType)
+    public static NodeType GetNodeType(string nodeType)
+    {
+        foreach (KeyValuePair<NodeType, string> entry in nodeTypeMap)
+        {
+            if (entry.Value == nodeType)
+            {
+                return entry.Key;
+            }
+        }
+        return NodeType.None;
+    }
+
+
+    public static string GetNodeTypeString(NodeType nodeType)
     {
         return nodeTypeMap[nodeType];
     }
@@ -97,6 +98,7 @@ public record NodeTypeMap{
         {
             this.id = id;
             this.routine_id = routine_id;
+            this.routine_name = routine_name;
             this.nodes = nodes;
             this.edges = edges;
             
@@ -107,11 +109,11 @@ public record NodeTypeMap{
     [Serializable]
     public record MREdgeData
     {
-        public Guid id { get; set; }
+        public string id { get; set; }
         public Guid node_out { get; set; }
         public Guid node_in { get; set; }
 
-        public MREdgeData(Guid id, Guid node_out, Guid node_in)
+        public MREdgeData(string id, Guid node_out, Guid node_in)
         {
             this.id = id;
             this.node_out = node_out;
@@ -127,13 +129,12 @@ public record NodeTypeMap{
     {
         public Guid id { get; set; }
         public string type { get; set; }
-        public ActionBlock action_data { get; set; }
+        public IActionBlock action_data { get; set; }
         public Vector3 position { get; set; }
 
-        public Guid mrAnchorId { get; set; }
 
 
-        public  MRNodeData(Guid id, string type,  ActionBlock action_data, Vector3 position)
+        public  MRNodeData(Guid id, string type,  IActionBlock action_data, Vector3 position)
         {
             this.id = id;
             this.type = type;
@@ -144,79 +145,73 @@ public record NodeTypeMap{
       
     }
 
+
+
+  
+
+
+
+
+  /// <summary>
+  /// ここからはデータベースに保存されている形
+  /// </summary>
+  /// <value></value>
     [Serializable]
-    public record DBNode 
-    {
-        public Guid id { get; set; }
-        public string type { get; set; }
-        public string data_action_id { get; set; }
-        public Guid mrAnchorId { get; set; }
-        public Vector3 position { get; set; }
-
-
-       public DBNode(Guid id, string type, string dataActionId, Guid mrAnchorId , Vector3 position)
-    {
-        this.id = id;
-        this.type = type;
-        this.data_action_id = dataActionId;
-        this.mrAnchorId = mrAnchorId;
-        this.position = position;
-    }
-
-        
-    }
-
-
-
-    [Serializable]
-    public record NodePosition
-    {
-        public float x { get; set; }
-        public float y { get; set; }
-
-        public NodePosition(float x, float y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-    }
-
-
-    // [Serializable]
-    // public record Edge
-    // {
-    //     public string id { get; set; }
-    //     public string source { get; set; }
-    //     public string target { get; set; }
-    //     public string type { get; set; }
-
-    //     public Edge(string id, string source, string target, string type)
-    //     {
-    //         this.id = id;
-    //         this.source = source;
-    //         this.target = target;
-    //         this.type = type;
-            
-    //     }
-    // }
-
-    [Serializable]
-    public record RoutineEdge
+    public record DBRoutineEdge
     {
         public string id {get; set;}
         public string associated_routine_id {get; set;}
-        public Edge[] edges {get; set;}
+        public string routine_name {get; set;}
+        public DBEdge[] edges {get; set;}
         public string[] nodes {get; set;}
 
-        public RoutineEdge(string id, string associatedRoutineId, Edge[] edges, string[] nodes)
+        public DBRoutineEdge(string id, string associatedRoutineId, string routine_name, DBEdge[] edges, string[] nodes)
         {
             this.id = id;
             this.associated_routine_id = associatedRoutineId;
+            this.routine_name = routine_name;
             this.edges = edges;
             this.nodes = nodes;
 
         }
         
     }
+
+    [Serializable]
+    public record DBNode 
+    {
+        public string id { get; set; }
+        public string type { get; set; }
+        public string data_action_id { get; set; }
+        public Vector3 mr_position { get; set; }
+
+
+       public DBNode(string id, string type, string dataActionId,  Vector3 mr_position)
+    {
+        this.id = id;
+        this.type = type;
+        this.data_action_id = dataActionId;
+        this.mr_position = mr_position;
+    }
+
+        
+    }
+
+
+
+    [Serializable]
+    public record DBEdge
+    {
+        public string id {get; set;}
+        public string source {get; set;}
+        public string target {get; set;}
+
+        public DBEdge(string id, string source, string target)
+        {
+            this.id = id;
+            this.source = source;
+            this.target = target;
+        }
+    }
+
 }

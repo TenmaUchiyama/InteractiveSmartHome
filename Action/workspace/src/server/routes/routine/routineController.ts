@@ -34,7 +34,6 @@ export const startRoutineApi = async (req: Request, res: Response) => {
     console.log(routineManager.getRoutineIdMap());
 
     const routineId = req.params.id;
-    console.log("starting routine", routineId);
     const isRunning = await routineManager.isRoutineRunning(routineId);
 
     if (isRunning.status === "ok" && isRunning.running) {
@@ -114,7 +113,7 @@ export const getRoutineApi = async (req: Request, res: Response) => {
     const routineId = req.params.id;
     const routine = await MongoDB.getInstance().getRoutine(routineId);
     if (routine === null) {
-      return res.status(404).send("Routine not found");
+      return res.status(200).send(null);
     }
     return res.status(200).send(routine);
   } catch (error: unknown) {
@@ -182,6 +181,35 @@ export const updateRoutineApi = async (req: Request, res: Response) => {
     } else {
       console.error("Unexpected error:", error);
       return res.status(500).send("Failed to start routine: Unknown error");
+    }
+  }
+};
+
+export const updateRoutineByIdApi = async (req: Request, res: Response) => {
+  try {
+    const routine_id = req.params.id as string; // クエリパラメータからIDを取得
+    const action_routine = req.body; // リクエストボディからactionRoutineDataを取得
+
+    if (!routine_id) {
+      return res.status(400).send("Routine ID is required.");
+    }
+
+    console.log("Updating routine action_routine:", {
+      routine_id,
+      action_routine,
+    });
+
+    // MongoDBインスタンスの updateRoutineById メソッドを呼び出して更新
+    await MongoDB.getInstance().updateRoutineById(routine_id, action_routine);
+
+    return res.status(200).send("Routine action_routine updated successfully");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error); // エラー内容をログに記録
+      return res.status(500).send("Failed to update routine: " + error.message);
+    } else {
+      console.error("Unexpected error:", error);
+      return res.status(500).send("Failed to update routine: Unknown error");
     }
   }
 };

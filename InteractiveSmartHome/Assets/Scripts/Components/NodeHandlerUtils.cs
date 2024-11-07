@@ -29,8 +29,9 @@ public class NodeHandlerUtils : MonoBehaviour
 
     public UnityEvent onClickEvent;
 
+    private UITheme thisTheme;
 
-    private Animator animator;
+
 
    
 
@@ -38,17 +39,26 @@ public class NodeHandlerUtils : MonoBehaviour
 
 
 
-    protected virtual void OnDisable()
+    void OnDisable()
         {
            
-                InteractableView.WhenStateChanged -= HandleStateChanged;
+        InteractableView.WhenStateChanged -= HandleStateChanged;
            
         }
 
-    private void Start() {
-        animator = GetComponent<Animator>();
+    void Start()
+    {
+        thisTheme = _mrNode.GetUITheme();
+
+    }
+
+    protected virtual void OnEnable()
+    {
+     
+        InteractableView.WhenStateChanged += HandleStateChanged;
+    }
+    private void Awake() {
         InteractableView = _interactableView as IInteractableView;
-         InteractableView.WhenStateChanged += HandleStateChanged;
 
     }
 
@@ -60,19 +70,24 @@ public class NodeHandlerUtils : MonoBehaviour
         
          switch(args.NewState)
          {
-           case InteractableState.Normal:
-                 
-                 animator.SetTrigger(NORMAL);
-            break;
-            case InteractableState.Hover:
-            Debug.Log("<color=green>Hover</color>");
-                animator.SetTrigger(HIGHLIGHTED);
-            break;
-            case InteractableState.Select:
-                Debug.Log("<color=green>Selected</color>");
-                   onClickEvent.Invoke();
-                animator.SetTrigger(PRESSED);
-            break;
+        //    case InteractableState.Normal:
+        //         Color color = backgroundImage.color;
+        //         color.a = 0.5f; // デフォルトの透明度を0.5に設定
+        //         backgroundImage.color = color;
+        //         break;
+
+            // case InteractableState.Hover:
+            //     Debug.Log("<color=red>Hover</color>");
+            //     Color colorHover = this.thisTheme.sectionPlateColor; // sectionPlateColorから直接取得
+            //     colorHover.a = 1f; // Hoverの透明度を1に設定
+            //     backgroundImage.color = colorHover;
+            //     break;
+
+            // case InteractableState.Select:
+            //     Color colorSelect = this.thisTheme.sectionPlateColor; // sectionPlateColorから直接取得
+            //     colorSelect.a = 1f; // Selectの透明度を1に設定
+            //     backgroundImage.color = colorSelect;
+            //     break;
             
 
 
@@ -80,8 +95,4 @@ public class NodeHandlerUtils : MonoBehaviour
     }
 
    
-
-
-
-    
 }
