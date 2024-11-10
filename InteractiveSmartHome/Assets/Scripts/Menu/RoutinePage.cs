@@ -19,7 +19,7 @@ public class RoutinePage : MonoBehaviour
 
 
 
-    void OnEnable()
+    void Start()
     {
         List<MRRoutineEdgeData> mrRoutineEdgeDatas = RoutineEdgeManager.Instance.GetMRROutineEdgeDatas();
         AddRoutineRows(mrRoutineEdgeDatas);

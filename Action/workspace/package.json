@@ -5,13 +5,13 @@
   "scripts": {
     "start": "npx nodemon --watch src --ext ts,json --exec ts-node src/index.ts",
     "test": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn ",
-    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn src/index.ts"
+    "dev": "cross-env NODE_ENV=development  ts-node-dev -r tsconfig-paths/register --respawn src/index.ts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.9.0",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
     "eslint": "^9.11.1",
@@ -29,6 +29,7 @@
     "@types/mongodb": "^4.0.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
     "mqtt": "^5.9.0",

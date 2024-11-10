@@ -7,12 +7,9 @@ services:
     ports:
       - "4049:4049"
     volumes:
-      - ./Action/workspace:/action_workspace
-    working_dir: /action_workspace
-    command: sleep infinity
-
-    environment:
-      CHOKIDAR_USEPOLLING: 1
+      - ./Action/workspace:/action_workspace:cached
+    env_file:
+      - ./Action/.env.docker
 
   svelte-flow:
     build:
@@ -21,8 +18,7 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - ./SvelteFlow/workspace:/svelte-flow
-    command: sleep infinity
+      - ./SvelteFlow/workspace:/svelte_flow_workspace
 
   mqtt-broker:
     image: eclipse-mosquitto

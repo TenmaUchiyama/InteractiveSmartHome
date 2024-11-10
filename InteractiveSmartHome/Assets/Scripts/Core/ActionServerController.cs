@@ -13,12 +13,15 @@ using UnityEngine;
 
 
 
-namespace MRFlow.ServerController{
+namespace MRFlow.Network{
 public class ActionServerController : Singleton<ActionServerController>
 {
+
+
+  [SerializeField] ActionServerConnector actionServerConnector;
   public async Task<List<MRNodeData>> GetMRNodeDatas() 
    {
-     List<DBNode> DBNodes = await ActionServerConnector.Instance.GetAllNodes();
+     List<DBNode> DBNodes = await actionServerConnector.GetAllNodes();
        
     List<MRNodeData> mrNodeDatas = await DBNodeToMRNodeData(DBNodes);
 
@@ -30,7 +33,7 @@ public class ActionServerController : Singleton<ActionServerController>
 
    public async Task<RoutineData> GetRoutineData(Guid routineId)
    {
-         RoutineData routineData = await ActionServerConnector.Instance.GetRoutine(routineId.ToString());
+         RoutineData routineData = await actionServerConnector.GetRoutine(routineId.ToString());
          return routineData;
    }
 
@@ -41,7 +44,7 @@ public class ActionServerController : Singleton<ActionServerController>
               mrRtoutineEdgeData.routine_name,
               new List<Routine>()
        );
-       await ActionServerConnector.Instance.AddNewRoutineDataFromNewRoutineEdge(newRoutineData);
+       await actionServerConnector.AddNewRoutineDataFromNewRoutineEdge(newRoutineData);
    }
 
 
@@ -53,7 +56,7 @@ public class ActionServerController : Singleton<ActionServerController>
         foreach (DBNode dbNode in dbNodes)
         {   
             // actionBlockのオブジェクトを取得する
-            var actionBlock = await ActionServerConnector.Instance.GetAction(dbNode.data_action_id);
+            var actionBlock = await actionServerConnector.GetAction(dbNode.data_action_id);
 
             // actionBlockのオブジェクトからactionTypeを取得する
             string actionType = actionBlock["action_type"].ToString();
@@ -117,8 +120,8 @@ public class ActionServerController : Singleton<ActionServerController>
             dbNodes.Add(dbNode);
         }
 
-        await ActionServerConnector.Instance.AddNode(dbNodes);
-        await ActionServerConnector.Instance.AddActionBlock(actionBlocks);
+        await actionServerConnector.AddNode(dbNodes);
+        await actionServerConnector.AddActionBlock(actionBlocks);
       
 
       
@@ -128,8 +131,8 @@ public class ActionServerController : Singleton<ActionServerController>
    public async Task RemoveNode(MRNodeData mRNodeData)
     {
         
-       await ActionServerConnector.Instance.DeleteNode(mRNodeData.id);
-       await ActionServerConnector.Instance.DeleteActionBlock(mRNodeData.action_data.id);
+       await actionServerConnector.DeleteNode(mRNodeData.id);
+       await actionServerConnector.DeleteActionBlock(mRNodeData.action_data.id);
     }
     
 
@@ -146,13 +149,13 @@ public class ActionServerController : Singleton<ActionServerController>
             mrRoutineEdgeData.nodes.Select(nodeId => nodeId.ToString()).ToArray()
         );
 
-        await ActionServerConnector.Instance.AddRoutineEdge(dbRoutineEdge);
+        await actionServerConnector.AddRoutineEdge(dbRoutineEdge);
    }
 
 
    public async Task<List<MRRoutineEdgeData>> GetMRRoutineEdgeData()
    {
-        List<DBRoutineEdge> dBRoutineEdges = await ActionServerConnector.Instance.GetAllRoutineEdges();
+        List<DBRoutineEdge> dBRoutineEdges = await actionServerConnector.GetAllRoutineEdges();
         
 
         List<MRRoutineEdgeData> mrRoutineEdgeDatas = dBRoutineEdges.Select(dbEdge => {
@@ -208,14 +211,14 @@ public class ActionServerController : Singleton<ActionServerController>
             mrRoutineEdgeData.nodes.Select(nodeId => nodeId.ToString()).ToArray()
         );
 
-        await ActionServerConnector.Instance.UpdateRoutineEdge(dbRoutineEdge);
+        await actionServerConnector.UpdateRoutineEdge(dbRoutineEdge);
    }
 
 
    public async Task UpdateNodeListByNodeData(List<MRNodeData> mrNodeDatas)
    {
         List<DBNode> dbNodes = mrNodeDatas.Select(mrNodeData => CreateDBNodeFromMRNodeData(mrNodeData)).ToList();
-        await ActionServerConnector.Instance.UpdateMultipleNodes(dbNodes);
+        await actionServerConnector.UpdateMultipleNodes(dbNodes);
    }
    public async Task UpdateNodeListById(List<Guid> nodeIds)
    {
@@ -241,7 +244,7 @@ public class ActionServerController : Singleton<ActionServerController>
         string json = JsonConvert.SerializeObject(actionBlocks);
         Debug.Log($"<color=yellow>UpdateNodeList: {json}</color>");
 
-       await ActionServerConnector.Instance.UpdateMultipleNodes(dbNodes);
+       await actionServerConnector.UpdateMultipleNodes(dbNodes);
    }
 
 
@@ -268,19 +271,19 @@ public class ActionServerController : Singleton<ActionServerController>
 
    public async Task UpdateRoutineData(RoutineData routineData)
    {
-    await ActionServerConnector.Instance.UpdateRoutineData(routineData);
+    await actionServerConnector.UpdateRoutineData(routineData);
     await UpdateRoutineById(routineData.action_routine, routineData.id.ToString());
    }
 
 
    public async Task UpdateRoutineById(List<Routine> routine,string routineId)
    {
-    await ActionServerConnector.Instance.UpdateRoutineById(routine,routineId);
+    await actionServerConnector.UpdateRoutineById(routine,routineId);
    }
 
     public async Task StartRoutine(Guid routineId)
     {
-        await ActionServerConnector.Instance.StartRoutine(routineId.ToString());
+        await actionServerConnector.StartRoutine(routineId.ToString());
     }
 }
 }

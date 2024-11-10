@@ -65,7 +65,7 @@ export default class ActionRoutine implements IRoutineData {
 
   async startRoutine() {
     this.actionIdMap = await this.createActionIdMap();
-
+    console.log(`Action ID Map: ${JSON.stringify(this.actionIdMap, null, 2)}`);
     Debugger.getInstance().debugLog(
       this.id,
       "ActionRoutine",

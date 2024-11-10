@@ -100,7 +100,7 @@ private void OnNullHit()
  public void SetSelectHandler(NodeHandler nodeHandler)
         {
             if(!nodeHandler) {
-                ClearHoldingNode();
+                ClearSelectingLine();
                 return;
             };
 
@@ -110,9 +110,12 @@ private void OnNullHit()
                 selectingLine.SetNodeHandler(nodeHandler);
                 return;
             }
+
+
+            
             if(this.currentSelectedHandler.GetHandlerType() == nodeHandler.GetHandlerType()){
                 Debug.LogError("Cannot connect the same type of node");
-                           ClearHoldingNode();
+                ClearSelectingLine();
                 return;
             }
             
@@ -124,10 +127,10 @@ private void OnNullHit()
                  EdgeManager.Instance.CreateEdge(nodeHandler, this.currentSelectedHandler);
             }
 
-            ClearHoldingNode();
+            ClearSelectingLine();
         }
 
-    private void ClearHoldingNode()
+    private void ClearSelectingLine()
     {
        this.currentSelectedHandler = null;
         selectingLine.SetNodeHandler(null);

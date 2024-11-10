@@ -1,7 +1,9 @@
-import { ActionType } from '@/types/ActionType';
-import { IRxData, ITimerLogicBlock } from '@/types/ActionBlockInterfaces';
-import ActionBlock from '../ActionBlock';
-import Debugger from '@debugger/Debugger';
+import { ActionType } from "@/types/ActionType";
+import { IRxData, ITimerLogicBlock } from "@/types/ActionBlockInterfaces";
+import ActionBlock from "../ActionBlock";
+import Debugger from "@debugger/Debugger";
+import MqttBridge from "@/device-bridge/MqttBridge";
+import { IMqttDataType } from "@/types/MqttDataType";
 export default class TimerLogicBlock
   extends ActionBlock
   implements ITimerLogicBlock
@@ -25,15 +27,39 @@ export default class TimerLogicBlock
   }
 
   onReceiveDataFromPreviousBlock(data: IRxData): void {
-    this.timerId = setTimeout(() => {
+    let sendingData: IMqttDataType = {
+      value_type: "number",
+      value: this.waitTime,
+    };
+
+    const interval = setInterval(() => {
+      // 残りの秒数をMQTTで配信
+      MqttBridge.getInstance().publishMessage(
+        "mrflow/" + this.id,
+        JSON.stringify(sendingData)
+      );
+
       Debugger.getInstance().debugLog(
         this.getRoutineId(),
-        'TIMER',
-        'pass the data to next block ' + data,
+        "TIMER",
+        "Sending data to MQTT " + JSON.stringify(sendingData)
       );
-      data.action_id = this.id;
-      this.startNextActionBlock();
-      this.senderDataStream?.next(data);
-    }, this.waitTime * 1000);
+
+      // 残り秒数をデクリメント
+      (sendingData.value as number) -= 1;
+
+      // 0に達した場合に次のブロックに進む
+      if ((sendingData.value as number) < 0) {
+        clearInterval(interval); // カウントダウン終了後にインターバルを停止
+        Debugger.getInstance().debugLog(
+          this.getRoutineId(),
+          "TIMER",
+          "pass the data to next block " + JSON.stringify(data)
+        );
+        data.action_id = this.id;
+        this.startNextActionBlock();
+        this.senderDataStream?.next(data);
+      }
+    }, 1000);
   }
 }

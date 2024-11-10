@@ -14,9 +14,9 @@ using System;
 using System.Linq;
 
 
-namespace MRFlow.ServerController
+namespace MRFlow.Network
 {
-public class ActionServerConnector : Singleton<ActionServerConnector>
+public class ActionServerConnector : MonoBehaviour
 {
      private  string baseUrl = "http://localhost:4049";
     private  string deviceUrl = "/device";

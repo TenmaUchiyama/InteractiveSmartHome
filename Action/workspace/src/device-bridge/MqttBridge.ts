@@ -2,27 +2,26 @@ import Debugger from "@/debugger/Debugger";
 import { IRxData } from "@/types/ActionBlockInterfaces";
 import { EventEmitter } from "events";
 import mqtt, { MqttClient } from "mqtt";
-
+import dotenv from "dotenv";
 export default class MqttBridge extends EventEmitter {
   private static instance: MqttBridge;
+  private brokerUrl: string = "mqtt://192.168.10.103:1883";
   private subscribedTopicsMap: Map<string, Set<(data: string) => void>> =
     new Map();
   private mqttClient: MqttClient;
 
   // Constructor is now private to enforce the singleton pattern
-  private constructor(brokerUrl: string) {
+  private constructor() {
     super();
-    this.mqttClient = mqtt.connect(brokerUrl);
+
+    this.mqttClient = mqtt.connect(this.brokerUrl);
     this.setupMqtt();
   }
 
   // Singleton instance accessor with optional broker URL parameter
-  public static getInstance(
-    //mqtt://mqtt-broker:1883
-    brokerUrl: string = "mqtt://192.168.10.103:1883"
-  ): MqttBridge {
+  public static getInstance(): MqttBridge {
     if (!MqttBridge.instance) {
-      MqttBridge.instance = new MqttBridge(brokerUrl);
+      MqttBridge.instance = new MqttBridge();
     }
     return MqttBridge.instance;
   }

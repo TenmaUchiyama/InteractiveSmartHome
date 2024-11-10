@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 using NodeTypes;
 using Unity.VisualScripting;
 using UnityEngine;
-using MRFlow.ServerController; 
+using MRFlow.Network; 
 
 
 
@@ -22,10 +22,11 @@ public class TestServerConnector : Singleton<TestServerConnector>
 
       
     bool debug = false;
+    [SerializeField] ActionServerConnector actionServerConnector;
 
    public async Task<List<MRNodeData>> GetMRNodeDatas() 
    {
-     List<DBNode> DBNodes = await ActionServerConnector.Instance.GetAllNodes();
+    List<DBNode> DBNodes = await actionServerConnector.GetAllNodes();
        
     List<MRNodeData> mrNodeDatas = await DBNodeToMRNodeData(DBNodes);
 
@@ -42,7 +43,7 @@ public class TestServerConnector : Singleton<TestServerConnector>
         foreach (DBNode dbNode in dbNodes)
         {   
             // actionBlockのオブジェクトを取得する
-            var actionBlock = await ActionServerConnector.Instance.GetAction(dbNode.data_action_id);
+            var actionBlock = await actionServerConnector.GetAction(dbNode.data_action_id);
 
             // actionBlockのオブジェクトからactionTypeを取得する
             string actionType = actionBlock["action_type"].ToString();
@@ -102,8 +103,8 @@ public class TestServerConnector : Singleton<TestServerConnector>
       
 
       IActionBlock actionBlock = mRNodeData.action_data; 
-    //   await ActionServerConnector.Instance.AddActionBlock(actionBlock);
-    //   await ActionServerConnector.Instance.AddNode(dbNode);
+    //   await actionServerConnector.AddActionBlock(actionBlock);
+    //   await actionServerConnector.AddNode(dbNode);
     
         
     }
@@ -112,8 +113,8 @@ public class TestServerConnector : Singleton<TestServerConnector>
     {
         if(debug)return;
         
-       await ActionServerConnector.Instance.DeleteNode(mRNodeData.id);
-       await ActionServerConnector.Instance.DeleteActionBlock(mRNodeData.action_data.id);
+       await actionServerConnector.DeleteNode(mRNodeData.id);
+       await actionServerConnector.DeleteActionBlock(mRNodeData.action_data.id);
     }
 
 

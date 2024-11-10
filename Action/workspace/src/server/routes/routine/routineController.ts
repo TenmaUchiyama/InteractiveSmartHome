@@ -31,8 +31,6 @@ export const startAllRoutineApi = async (req: Request, res: Response) => {
 
 export const startRoutineApi = async (req: Request, res: Response) => {
   try {
-    console.log(routineManager.getRoutineIdMap());
-
     const routineId = req.params.id;
     const isRunning = await routineManager.isRoutineRunning(routineId);
 
@@ -87,7 +85,10 @@ export const stopAllRoutinesApi = async (req: Request, res: Response) => {
     const result = await routineManager.stopAllRoutines();
 
     await castRunningRoutine();
-    res.status(200).send("Stopping all routines");
+    res.status(200).send({
+      msg: "Stopping all routines",
+      result: JSON.stringify(routineManager.getRunnningRoutines()),
+    });
   } catch {
     return res.status(500).send("Failed to stop all routines");
   }

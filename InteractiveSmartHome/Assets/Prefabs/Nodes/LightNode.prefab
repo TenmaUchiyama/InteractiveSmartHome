@@ -77,6 +77,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3136525652073047659, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 926.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3136525652073047659, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -164,6 +168,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4714413218729471491, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_Spacing
+      value: 216
+      objectReference: {fileID: 0}
     - target: {fileID: 5286097970340186698, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -177,6 +185,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5286097970340186698, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305589911768164862, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305589911768164862, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305589911768164862, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 630.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305589911768164862, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5305589911768164862, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -235,6 +263,10 @@ PrefabInstance:
     - target: {fileID: 5770129459310039693, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4281543452
+      objectReference: {fileID: 0}
+    - target: {fileID: 5770129459310039693, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_enableWordWrapping
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5775167265744176657, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: parentNode
@@ -396,6 +428,22 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.7254902
       objectReference: {fileID: 0}
+    - target: {fileID: 9176915159652090190, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9176915159652090190, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9176915159652090190, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9176915159652090190, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1514783046502463274, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
     m_RemovedGameObjects:
@@ -427,11 +475,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootCanvas: {fileID: 6996625675867311918}
+  editButton: {fileID: 0}
   nodeInHandler: {fileID: 4913195266115204470}
   nodeOutHandler: {fileID: 0}
   device_name: Unity Test Light Node
   description: Just a Simple Unity Test Light NOde
   nodeType: 7
+  deviceType: 0
   device_data_id: led-sample-1
 --- !u!114 &3913370532013529545
 MonoBehaviour:

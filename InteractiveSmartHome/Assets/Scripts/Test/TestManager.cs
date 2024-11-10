@@ -18,12 +18,25 @@ public class TestManager : Singleton<TestManager>
 
 
 
-    public void Start()
-    {
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            AddAllNodes();
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            LoadAndSpawnNodes();
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RemoveAllNodes();
+        }
 
-        AddButton.onClick.AddListener(AddAllNodes);
-        SpawnButton.onClick.AddListener(LoadAndSpawnNodes);
-        RemoveButton.onClick.AddListener(RemoveAllNodes);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            NodeManager.Instance.SpawnNewNode(NodeType.Logic_Timer, Vector3.zero);
+        }
     }
  JsonSerializerSettings settings = new JsonSerializerSettings
         {

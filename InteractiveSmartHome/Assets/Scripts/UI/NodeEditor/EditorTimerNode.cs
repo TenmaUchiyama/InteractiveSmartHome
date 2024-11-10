@@ -1,67 +1,90 @@
 using System.Collections;
 using System.Collections.Generic;
 using ActionDataTypes.Logic;
+using MRFlow.Component;
 using NodeTypes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditorTimerNode : MonoBehaviour
+public class EditorTimerNode : MonoBehaviour, INodeEditor
 {
+  [SerializeField] private Button closeButton;
   [SerializeField] private InputField nameInputField; 
-
   [SerializeField] private InputField descriptionInputField;
   [SerializeField] private InputField durationInputField; 
 
 
 
- private MRNodeData mrNodeData;
+    private MRNode mrNode;
 
-    public void SetMRNodeData(MRNodeData newMRNodeData)
+
+    void Start()
     {
-        mrNodeData = newMRNodeData;
 
-        if (mrNodeData != null)
+
+        Debug.Log($"<color=yellow>[EditorTimerNode] Start {nameInputField != null}</color>");
+        Debug.Log($"<color=yellow>[EditorTimerNode] Start {descriptionInputField != null}</color>");
+        Debug.Log($"<color=yellow>[EditorTimerNode] Start {durationInputField != null}</color>");
+        nameInputField.onValueChanged.AddListener(OnNameChanged);
+        descriptionInputField.onValueChanged.AddListener(OnDescriptionChanged);
+        durationInputField.onValueChanged.AddListener(OnDurationChanged);
+
+
+        closeButton.onClick.AddListener(() =>
         {
-            // 初期値を UI に表示
-            nameInputField.text = mrNodeData.action_data.name;
-            descriptionInputField.text = mrNodeData.action_data.description;
-            durationInputField.text = (mrNodeData.action_data as TimerBlockData).waitTime.ToString();
+            NodeEditor.Instance.CloseEditor();
+        });
+    }
 
-            // InputField の onEndEdit イベントにリスナーを追加
-            nameInputField.onEndEdit.AddListener(OnNameChanged);
-            descriptionInputField.onEndEdit.AddListener(OnDescriptionChanged);
-            durationInputField.onEndEdit.AddListener(OnDurationChanged);
-        }
+    public void SetMRNode(MRNode newMRNode)
+    {
+        this.mrNode = newMRNode;
     }
 
     private void OnNameChanged(string newName)
     {
-        if (mrNodeData != null)
+        if (mrNode != null)
         {
+            MRNodeData mrNodeData = mrNode.GetMRNodeData();
             mrNodeData.action_data.name = newName;
+            mrNode.SetMRNodeData(mrNodeData);
+            Debug.Log($"<color=yellow>[EditorTimerNode]Node Name Changed: {newName}</color>");
+
         }
     }
 
     private void OnDescriptionChanged(string newDescription)
     {
-        if (mrNodeData != null)
+        if (mrNode != null)
         {
+            MRNodeData mrNodeData = mrNode.GetMRNodeData();
             mrNodeData.action_data.description = newDescription;
+            mrNode.SetMRNodeData(mrNodeData);
+            Debug.Log($"<color=yellow>[EditorTimerNode]Node Description Changed: {newDescription}</color>");
         }
     }
 
     private void OnDurationChanged(string newDuration)
     {
-        if (mrNodeData != null && int.TryParse(newDuration, out int duration))
+      
+        if(mrNode != null && float.TryParse(newDuration, out float duration))
         {
+
+            if(newDuration == "")
+            {
+                duration = 0;
+            }
+            durationInputField.text = duration.ToString();
+            MRNodeData mrNodeData = mrNode.GetMRNodeData();
             (mrNodeData.action_data as TimerBlockData).waitTime = duration;
+            mrNode.SetMRNodeData(mrNodeData);
+            Debug.Log($"<color=yellow>[EditorTimerNode]Node Duration Changed: {duration}</color>");
+            
         }
+        
+      
     }
-    
 
-
-
-
-  
 
 }

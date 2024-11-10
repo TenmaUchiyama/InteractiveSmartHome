@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MRFlow.Component;
 using MRFlow.Core;
-using MRFlow.ServerController;
+using MRFlow.Network;
 using Newtonsoft.Json;
 using NodeTypes;
 using UnityEngine;
@@ -39,7 +39,7 @@ public class TestWithKeyboard : MonoBehaviour
     public void Start()
     {
         
-      
+        
         AddButton.onClick.AddListener(AddAllNodes);
         SpawnButton.onClick.AddListener(LoadAndSpawnNodes);
         RemoveButton.onClick.AddListener(RemoveAllNodes);
@@ -47,13 +47,11 @@ public class TestWithKeyboard : MonoBehaviour
 
 
 
-    private async void Update() {
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            
-            LoadAndSpawnNodes();
-        }
+    private  void Update() {
+       
 
         if(Input.GetKeyDown(KeyCode.T)) { 
+            Debug.Log("<color=yellow>Test</color>");
             AddAllNodes();
         }
 
@@ -65,6 +63,12 @@ public class TestWithKeyboard : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.U)) { 
             Debug.Log("UpdateAllNodes");
            UpdateAllNodes();
+        }
+        
+
+        if(Input.GetKeyDown(KeyCode.Q)) { 
+            Debug.Log("LoadAndSpawnNodes");
+            LoadAndSpawnNodes();
         }
 
 
@@ -78,10 +82,12 @@ public class TestWithKeyboard : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.C)) { 
 
-
+      
         NodeManager.Instance.AddNode(node1);
         NodeManager.Instance.AddNode(node2);
         NodeManager.Instance.AddNode(node3);
+
+        
              
         NodeHandler nodeHandler1Out = node1.GetNodeHandler(HandlerType.HANDLER_OUT);
         NodeHandler nodeHandler2In = node2.GetNodeHandler(HandlerType.HANDLER_IN);
@@ -92,7 +98,7 @@ public class TestWithKeyboard : MonoBehaviour
         
 
         EdgeManager.Instance.CreateEdge(nodeHandler1Out, nodeHandler2In);
-            EdgeManager.Instance.CreateEdge(nodeHandler2Out, nodeHandler3In);
+        EdgeManager.Instance.CreateEdge(nodeHandler2Out, nodeHandler3In);
 
         RoutineEdgeManager.Instance.TestUpdateRoutineEdge();
 
@@ -131,9 +137,13 @@ public class TestWithKeyboard : MonoBehaviour
 
        
         Debug.Log("AddAllNodes");
-
+        
         MRNode[] nodes = GameObject.FindObjectsOfType<MRNode>();
-        List<MRNodeData> nodeDatas = nodes.Select(node => node.GetMRNodeData()).ToList();
+      
+        List<MRNodeData> nodeDatas = nodes.Select(node => {
+            node.InitNewNode();
+            return node.GetMRNodeData();}).ToList();
+        Debug.Log(nodeDatas.Count);
         await ActionServerController.Instance.AddNodes(nodeDatas);
     }
 
@@ -157,7 +167,7 @@ public class TestWithKeyboard : MonoBehaviour
     public async void LoadAndSpawnNodes() 
     {
         Debug.Log("LoadAndSpawnNodes");
-        List<MRNodeData>  mrNodeDatas = await TestServerConnector.Instance.GetMRNodeDatas();
+        List<MRNodeData>  mrNodeDatas = await ActionServerController.Instance.GetMRNodeDatas();
         
         NodeManager.Instance.SpawnNodes(mrNodeDatas);
     }

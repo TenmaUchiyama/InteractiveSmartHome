@@ -1,50 +1,68 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MRFlow.Component;
 using MRFlow.UI;
 using NodeTypes;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class NodeEditor : Singleton<NodeEditor>
 {
-    [SerializeField] private GameObject canvasParent;
-    [SerializeField] private GameObject contentParent; 
-
-    [SerializeField] private UIInputComponentSO nodeEditorComponentSO;
-    [SerializeField] private GameObject testInputComponent;
-    
+   
+    [SerializeField] private GameObject editorParent;
+    [SerializeField] private NodeEditorMapSO nodeEditorMapSO;
+    private GameObject currentlyEditingNode;
     
 
-    bool testValue = false;
 
-      public void SetMRNodeData(MRNodeData mrNodeData)
+ 
+
+      public void OpenEditor(MRNode mrNode)
     {
-        // UIエディタをインスタンス化し、MRNodeDataをバインド
-        EditorTimerNode timerNodeEditor = testInputComponent.GetComponent<EditorTimerNode>();
-        timerNodeEditor.SetMRNodeData(mrNodeData);
+
+        if(currentlyEditingNode != null)
+        {
+            CloseEditor();
+        }
+        NodeType nodeType = mrNode.GetNodeType(); 
+        GameObject nodeEditor = nodeEditorMapSO.GetNodeEditor(nodeType);
+        currentlyEditingNode = Instantiate(nodeEditor, editorParent.transform);
+        
+        EditorTimerNode timerNodeEditor = currentlyEditingNode.GetComponent<EditorTimerNode>();
+        timerNodeEditor.SetMRNode(mrNode);
+        Transform cameraTransform = Camera.main.transform;
+        currentlyEditingNode.transform.position = cameraTransform.position + cameraTransform.forward * 1.5f;
+        currentlyEditingNode.transform.LookAt(cameraTransform);
+        currentlyEditingNode.transform.Rotate(0, 180, 0);
+        editorParent.SetActive(true);
+    
     }
 
-// public void AddInputComponent<T>(string title, UIInputComponentType inputComponentType, T initialValue, Action<T> setter)
-//     {
-//         Debug.Log($"Adding Input Component: {title} Type: {inputComponentType} Value: {initialValue}");
-//         GameObject nodeEditorInputPrefab = nodeEditorComponentSO.GetUIInputComponentPrefab(inputComponentType);
-//         Debug.Log($"<color=red>NodeEditorInputPrefab: {nodeEditorInputPrefab}</color>");
-//         NodeEditInputComponent nodeEditInputComponentScript = nodeEditorInputPrefab.GetComponent<NodeEditInputComponent>();
-        
-//         nodeEditInputComponentScript.SetNodeEditorComponent(title,  newVal =>{ setter.Invoke(newVal); Debug.Log("<color=red>FOIERJOFJEOIJEFIOJ</color>");}, initialValue);
-//         Instantiate(nodeEditorInputPrefab, contentParent.transform);
-//     }
-    // public void SetNodeEditor(GameObject nodeEditInputComponent)
-    // {
 
-        
-    //     Instantiate(nodeEditInputComponent, contentParent.transform);
+    public void CloseEditor() 
+    {
+        editorParent.SetActive(false);
+        Destroy(currentlyEditingNode);
+        this.currentlyEditingNode = null;
+    }
 
-    //     canvasParent.SetActive(true);
-    // }
 
-    
+
+    public void OpenAndCloseEditor()
+    {
+        if (currentlyEditingNode.activeSelf)
+        {
+            currentlyEditingNode.SetActive(false);
+        }
+        else
+        {
+            currentlyEditingNode.SetActive(true);
+        }
+    }
+
+
 
 
 

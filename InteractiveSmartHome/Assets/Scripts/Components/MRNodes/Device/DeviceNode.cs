@@ -19,6 +19,7 @@ namespace MRFlow.Component
    [SerializeField] string device_data_id = "";
 
 
+   
 
     public override void InitNewNode() {
          IActionBlock deviceBlock = new DeviceBlockData(

@@ -38,8 +38,6 @@ private void OpenCloseMenu()
     menuGroup.transform.Rotate(0, 180, 0);
     menuGroup.SetActive(true);
 
-
-
 }
     
 }

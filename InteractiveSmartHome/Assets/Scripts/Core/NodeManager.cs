@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MRFlow.Component;
 using MRFlow.Core;
-using MRFlow.ServerController;
+using MRFlow.Network;
 using MRFlow.SpatialAnchors;
 using Newtonsoft.Json;
 using NodeTypes;
@@ -13,6 +13,7 @@ using Oculus.Interaction;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Lumin;
+using uPLibrary.Networking.M2Mqtt;
 
 
 
@@ -81,7 +82,7 @@ public class NodeManager : Singleton<NodeManager>
          MRNode mrNode = newNode.GetComponent<MRNode>();
          mrNode.InitNewNode();
          nodeList.Add(mrNode);
-         await ActionServerController.Instance.AddNodes(new List<MRNodeData>{mrNode.GetMRNodeData()});
+        //  await ActionServerController.Instance.AddNodes(new List<MRNodeData>{mrNode.GetMRNodeData()});
          
     }
 
@@ -110,6 +111,7 @@ public class NodeManager : Singleton<NodeManager>
             mrNode.SetMRNodeData(nodeData);
             nodeList.Add(mrNode);
             EdgeManager.Instance.UpdateNodeListToCurrentEdge(mrNode);
+            
         }
 
 

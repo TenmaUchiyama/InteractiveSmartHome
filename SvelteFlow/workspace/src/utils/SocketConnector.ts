@@ -24,6 +24,7 @@ export default class SocketConnector {
     };
 
     this.socket.onmessage = (message) => {
+      console.log("Received message: ", message.data);
       const socketMsg = JSON.parse(message.data) as SocketMessageData;
       this.handleSocketMsg(socketMsg);
     };
