@@ -1,9 +1,8 @@
 import { ActionType } from "@/types/ActionType";
-import { IRxData, ITimerLogicBlock } from "@/types/ActionBlockInterfaces";
+import { ISignalData, ITimerLogicBlock } from "@/types/ActionBlockInterfaces";
 import ActionBlock from "../ActionBlock";
 import Debugger from "@debugger/Debugger";
 import MqttBridge from "@/device-bridge/MqttBridge";
-import { IMqttDataType } from "@/types/MqttDataType";
 export default class TimerLogicBlock
   extends ActionBlock
   implements ITimerLogicBlock
@@ -26,9 +25,10 @@ export default class TimerLogicBlock
     super.exitAction();
   }
 
-  onReceiveDataFromPreviousBlock(data: IRxData): void {
-    let sendingData: IMqttDataType = {
-      value_type: "number",
+  onReceiveDataFromPreviousBlock(data: ISignalData): void {
+    let sendingData: ISignalData = {
+      action_id: this.id,
+      data_type: "number",
       value: this.waitTime,
     };
 

@@ -82,7 +82,7 @@ public class NodeManager : Singleton<NodeManager>
          MRNode mrNode = newNode.GetComponent<MRNode>();
          mrNode.InitNewNode();
          nodeList.Add(mrNode);
-        //  await ActionServerController.Instance.AddNodes(new List<MRNodeData>{mrNode.GetMRNodeData()});
+         await ActionServerController.Instance.AddNodes(new List<MRNodeData>{mrNode.GetMRNodeData()});
          
     }
 

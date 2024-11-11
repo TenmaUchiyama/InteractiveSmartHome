@@ -1,15 +1,15 @@
 import {
   ISimpleComparatorLogicBlock as ISimpleComparatorLogicBlock,
-  IRxData,
-} from '@/types/ActionBlockInterfaces';
-import ActionBlock from '@block/ActionBlock';
-import Debugger from '@debugger/Debugger';
+  ISignalData,
+} from "@/types/ActionBlockInterfaces";
+import ActionBlock from "@block/ActionBlock";
+import Debugger from "@debugger/Debugger";
 
 export default class SimpleComparatorLogicBlock
   extends ActionBlock
   implements ISimpleComparatorLogicBlock
 {
-  operator: '>' | '<' | '=' | '!=' | '>=' | '<=';
+  operator: ">" | "<" | "=" | "!=" | ">=" | "<=";
   value: number;
   constructor(comparatorBlockInitializers: ISimpleComparatorLogicBlock) {
     super(comparatorBlockInitializers);
@@ -18,38 +18,38 @@ export default class SimpleComparatorLogicBlock
     this.value = comparatorBlockInitializers.value;
   }
 
-  onReceiveDataFromPreviousBlock(data: IRxData): void {
+  onReceiveDataFromPreviousBlock(data: ISignalData): void {
     const isValid = this.compare(data);
     Debugger.getInstance().debugLog(
       this.getRoutineId(),
-      'SIMPLE COMPARATOR',
-      `Received data from previous block: ${data.value}, isValid: ${isValid}`,
+      "SIMPLE COMPARATOR",
+      `Received data from previous block: ${data.value}, isValid: ${isValid}`
     );
     this.startNextActionBlock();
 
     this.senderDataStream?.next({
       action_id: this.id,
-      data_type: 'boolean',
+      data_type: "boolean",
       value: isValid,
     });
   }
 
   // 比較関数
-  private compare(data: IRxData): boolean {
+  private compare(data: ISignalData): boolean {
     const dataValue = data.value as number; // 受信したデータの値を取得
 
     switch (this.operator) {
-      case '>':
+      case ">":
         return dataValue > this.value;
-      case '<':
+      case "<":
         return dataValue < this.value;
-      case '=':
+      case "=":
         return dataValue === this.value;
-      case '!=':
+      case "!=":
         return dataValue !== this.value;
-      case '>=':
+      case ">=":
         return dataValue >= this.value;
-      case '<=':
+      case "<=":
         return dataValue <= this.value;
       default:
         return false;

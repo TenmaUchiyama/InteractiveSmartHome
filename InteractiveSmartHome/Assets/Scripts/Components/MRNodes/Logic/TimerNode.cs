@@ -26,22 +26,29 @@ public class TimerNode : MRNode
     [SerializeField] private TextMeshProUGUI timerText;
 
 
-    
-    
-    public override void SetMRNodeData(MRNodeData mRNodeData)
+
+
+
+
+
+
+
+        public override void SetMRNodeData(MRNodeData mRNodeData)
     {
-
-        Debug.Log($"<color=yellow>[TimerNode]SetMRNodeData: {mRNodeData}</color>");
+        
+        this.waitTime = (mRNodeData.action_data as TimerBlockData).waitTime;
+        string timeText = this.waitTime.ToString();
+        this.timerText.text = timeText;
+        Debug.Log($"<color=yellow>[TimerNode] SetMRNodeData: {timeText}</color>");
         base.SetMRNodeData(mRNodeData);
-
-        this.timerText.text = (mRNodeData.action_data as TimerBlockData).waitTime.ToString();
+        
         
     }
 
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
         timerText.text = waitTime.ToString();
-     
     }
 
     
@@ -80,27 +87,29 @@ public class TimerNode : MRNode
         // base.InitNewNode();
     }
 
-        private void OnReceiveMsgFromServer(string arg0)
+    protected override void OnReceiveMsgFromServer(string payload)
+    {
+        
+        MqttDataType mqttData = JsonConvert.DeserializeObject<MqttDataType>(payload);
+        int intValue; 
+       if (int.TryParse(mqttData.value, out intValue))
         {
-            Debug.Log($"<color=yellow>[TimerNode] OnReceiveMsgFromServer: {arg0}</color>");
-            MqttDataType mqttData = JsonConvert.DeserializeObject<MqttDataType>(arg0);
-            Debug.Log($"<color=yellow>[TimerNode] OnReceiveMsgFromServer: {mqttData.value}</color>");
+          
+            string outputText = intValue == 0 ? this.waitTime.ToString() : mqttData.value;
+            this.timerText.text = outputText;
         }
+
+    }
 
         public override NodeType GetNodeType()
         {
             return base.GetNodeType();
         }
-
-
-
         public void UpdateActionBlockData(MRNodeData mRNode) 
     {
         string jsonify = JsonConvert.SerializeObject(mRNode);
         Debug.Log($"<color=yellow>UpdateActionBlockData: {jsonify}</color>");
     }
-
-
 
 
 

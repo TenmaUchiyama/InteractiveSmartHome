@@ -12,6 +12,7 @@
   } from "@type/ActionBlockInterface";
   import NodeContent from "../NodeContent.svelte";
   import { handleStyle } from "@/utils/FlowManager";
+
   export let id: string;
   export let data: { action_data: ITimerLogicBlock };
 

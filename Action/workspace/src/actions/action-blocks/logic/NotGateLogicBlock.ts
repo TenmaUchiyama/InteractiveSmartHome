@@ -1,28 +1,28 @@
-import { ActionType } from '@/types/ActionType';
+import { ActionType } from "@/types/ActionType";
 import {
-  IRxData,
+  ISignalData,
   IGateLogicBlock,
   INotGateLogicBlock,
-} from '@/types/ActionBlockInterfaces';
-import ActionBlock from '../ActionBlock';
-import Debugger from '@debugger/Debugger';
+} from "@/types/ActionBlockInterfaces";
+import ActionBlock from "../ActionBlock";
+import Debugger from "@debugger/Debugger";
 
 export default class GateLogicBlock
   extends ActionBlock
   implements INotGateLogicBlock
 {
-  logic_operator: 'NOT';
+  logic_operator: "NOT";
 
   constructor(gateLogicInit: INotGateLogicBlock) {
     super(gateLogicInit);
     this.logic_operator = gateLogicInit.logic_operator;
   }
 
-  onReceiveDataFromPreviousBlock(data: IRxData): void {
+  onReceiveDataFromPreviousBlock(data: ISignalData): void {
     const value = data.value;
     const dataType = data.data_type;
 
-    if (dataType === 'boolean') {
+    if (dataType === "boolean") {
       const passToNextBlock = !value;
       data.action_id = this.id;
       data.value = passToNextBlock;

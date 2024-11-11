@@ -1,13 +1,13 @@
-import { ActionType } from '@/types/ActionType';
-import { IRxData, IGateLogicBlock } from '@/types/ActionBlockInterfaces';
-import ActionBlock from '../ActionBlock';
-import Debugger from '@debugger/Debugger';
+import { ActionType } from "@/types/ActionType";
+import { ISignalData, IGateLogicBlock } from "@/types/ActionBlockInterfaces";
+import ActionBlock from "../ActionBlock";
+import Debugger from "@debugger/Debugger";
 
 export default class GateLogicBlock
   extends ActionBlock
   implements IGateLogicBlock
 {
-  logic_operator: 'AND' | 'OR';
+  logic_operator: "AND" | "OR";
 
   state_map: Map<string, boolean> = new Map<string, boolean>();
 
@@ -21,26 +21,26 @@ export default class GateLogicBlock
     this.state_map.set(action_id, false);
   }
 
-  onReceiveDataFromPreviousBlock(data: IRxData): void {
+  onReceiveDataFromPreviousBlock(data: ISignalData): void {
     const value = data.value;
     const actionId = data.action_id;
     const dataType = data.data_type;
 
-    if (dataType === 'boolean') {
+    if (dataType === "boolean") {
       this.state_map.set(actionId, value as boolean);
     }
     const gateLogicResult = this.checkGateLogic();
 
-    console.log('===============================');
+    console.log("===============================");
     this.state_map.forEach((value, key) => {
       console.log(key, value);
     });
-    console.log('===============================');
+    console.log("===============================");
     if (gateLogicResult) {
       Debugger.getInstance().debugLog(
         this.routineId,
-        'GATE LOGIC',
-        'Gate logic is true',
+        "GATE LOGIC",
+        "Gate logic is true"
       );
       data.action_id = this.id;
       this.startNextActionBlock();
@@ -50,7 +50,7 @@ export default class GateLogicBlock
 
   checkGateLogic(): boolean {
     switch (this.logic_operator) {
-      case 'AND':
+      case "AND":
         let allTrue = true;
         this.state_map.forEach((value, key) => {
           allTrue = allTrue && value;
@@ -58,7 +58,7 @@ export default class GateLogicBlock
 
         return allTrue;
 
-      case 'OR':
+      case "OR":
         let oneTrue = false;
         this.state_map.forEach((value, key) => {
           oneTrue = oneTrue || value;

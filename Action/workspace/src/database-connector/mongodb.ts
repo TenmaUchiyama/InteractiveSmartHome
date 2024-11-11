@@ -9,8 +9,10 @@ import Debugger from "@debugger/Debugger";
 import { ActionType } from "@/types/ActionType";
 import { deleteActionApi } from "@/server/routes/action/actionController";
 import { IDBEdge, IDBNode } from "@/types/FlowNodeType";
-import dotenv from "dotenv";
-
+import * as dotenv from "dotenv";
+const envFile =
+  process.env.NODE_ENV === "docker" ? ".env.docker" : ".env.development";
+dotenv.config({ path: envFile });
 export class MongoDB {
   public static instance: MongoDB = new MongoDB();
 
@@ -29,8 +31,9 @@ export class MongoDB {
   constructor() {
     // MongoDB接続URI
     // "mongodb://mongodb:27017" はDockerコンテナ内でのMongoDBのURI
-
-    const uri = "mongodb://192.168.10.103:27017";
+    console.log("ENV ==========================" + process.env.NODE_ENV);
+    console.log("===================" + process.env.MONGO_URL);
+    const uri = process.env.MONGO_URL || "mongodb://localhost:27017";
     this.client = new MongoClient(uri);
     this.client
       .connect()

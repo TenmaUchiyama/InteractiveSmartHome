@@ -1,8 +1,11 @@
-import { ActionType } from '@/types/ActionType';
-import { IRxData, IScheduleLogicBlock } from '@/types/ActionBlockInterfaces';
-import ActionBlock from '../ActionBlock';
-import Debugger from '@debugger/Debugger';
-import cron, { ScheduledTask } from 'node-cron';
+import { ActionType } from "@/types/ActionType";
+import {
+  ISignalData,
+  IScheduleLogicBlock,
+} from "@/types/ActionBlockInterfaces";
+import ActionBlock from "../ActionBlock";
+import Debugger from "@debugger/Debugger";
+import cron, { ScheduledTask } from "node-cron";
 
 export default class ScheduleLogicBlock
   extends ActionBlock
@@ -20,9 +23,9 @@ export default class ScheduleLogicBlock
   startAction(): void {
     super.startAction();
     this.scheduledTask = cron.schedule(this.cronExpression, () => {
-      const data: IRxData = {
+      const data: ISignalData = {
         action_id: this.id,
-        data_type: 'trigger',
+        data_type: "trigger",
         value: null,
       };
       this.senderDataStream?.next(data);
@@ -30,8 +33,8 @@ export default class ScheduleLogicBlock
 
     Debugger.getInstance().debugLog(
       this.routineId,
-      'SCHEDULE',
-      `Schedule started with cron expression: ${this.cronExpression}`,
+      "SCHEDULE",
+      `Schedule started with cron expression: ${this.cronExpression}`
     );
   }
 

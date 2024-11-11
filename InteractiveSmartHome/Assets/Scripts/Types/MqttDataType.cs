@@ -8,7 +8,8 @@ namespace MRFlow.Types
 
     public record MqttDataType 
     {
-        public string value_type; 
+        public string action_id;
+        public string data_type; 
         public string value; 
     }
 

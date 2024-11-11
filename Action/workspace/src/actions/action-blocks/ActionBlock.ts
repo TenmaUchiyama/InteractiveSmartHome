@@ -1,5 +1,5 @@
 import { Subject } from "rxjs";
-import { IActionBlock, IRxData } from "@/types/ActionBlockInterfaces";
+import { IActionBlock, ISignalData } from "@/types/ActionBlockInterfaces";
 import { ActionType } from "@/types/ActionType";
 import Debugger from "@/debugger/Debugger";
 
@@ -10,11 +10,11 @@ export default class ActionBlock implements IActionBlock {
   description: string;
   isActionBlockActive: boolean;
   nextActionBlock: ActionBlock[] | undefined;
-  senderDataStream: Subject<IRxData> | undefined;
-  receiverDataStream: Subject<IRxData>[] = [];
+  senderDataStream: Subject<ISignalData> | undefined;
+  receiverDataStream: Subject<ISignalData>[] = [];
 
   routineId: string;
-  onReceiveDataFromPreviousBlock(data: IRxData) {}
+  onReceiveDataFromPreviousBlock(data: ISignalData) {}
 
   constructor(actionBlockInitializers: IActionBlock) {
     this.id = actionBlockInitializers.id;
@@ -84,7 +84,7 @@ export default class ActionBlock implements IActionBlock {
   }
   setReceiverDataStream(
     action_id: string,
-    dataStream: Subject<IRxData> | undefined
+    dataStream: Subject<ISignalData> | undefined
   ): void {
     if (dataStream && !this.receiverDataStream.includes(dataStream)) {
       this.receiverDataStream.push(dataStream);

@@ -8,8 +8,6 @@ services:
       - "4049:4049"
     volumes:
       - ./Action/workspace:/action_workspace:cached
-    env_file:
-      - ./Action/.env.docker
 
   svelte-flow:
     build:

@@ -16,7 +16,7 @@ export interface IRoutineData {
 
 /////////////Action Block/////////////////////
 
-export interface IRxData {
+export interface ISignalData {
   action_id: string;
   data_type: "string" | "number" | "boolean" | "json" | "trigger";
   value: string | number | boolean | object | null;

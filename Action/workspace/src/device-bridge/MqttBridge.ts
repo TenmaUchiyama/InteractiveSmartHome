@@ -1,11 +1,15 @@
 import Debugger from "@/debugger/Debugger";
-import { IRxData } from "@/types/ActionBlockInterfaces";
+import { ISignalData } from "@/types/ActionBlockInterfaces";
 import { EventEmitter } from "events";
 import mqtt, { MqttClient } from "mqtt";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
+const envFile =
+  process.env.NODE_ENV === "docker" ? ".env.docker" : ".env.development";
+dotenv.config({ path: envFile });
 export default class MqttBridge extends EventEmitter {
   private static instance: MqttBridge;
-  private brokerUrl: string = "mqtt://192.168.10.103:1883";
+
+  private brokerUrl: string = process.env.MQTT_URL || "mqtt://localhost:1883";
   private subscribedTopicsMap: Map<string, Set<(data: string) => void>> =
     new Map();
   private mqttClient: MqttClient;

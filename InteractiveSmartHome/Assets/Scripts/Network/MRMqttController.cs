@@ -85,7 +85,7 @@ namespace MRFlow.Network
     protected override void DecodeMessage(string topic, byte[] message)
         {
             string msg = System.Text.Encoding.UTF8.GetString(message);
-            Debug.Log($"<color=red>[MqttConnector] Received: {msg}</color>");   
+          
 
               if (topicSubscribers.ContainsKey(topic))
             {
@@ -132,13 +132,20 @@ namespace MRFlow.Network
         }
         }
 
-      
-
-        protected override void UnsubscribeTopics()
+        public void UnsubscribeTopic(string action_id)
         {
-            client.Unsubscribe(new string[] { "unity/test" });
+            string topic = "mrflow/" + action_id; 
+            if (topicSubscribers.ContainsKey(topic))
+            {
+                topicSubscribers.Remove(topic);
+                client.Unsubscribe(new string[] { topic });
+                Debug.Log($"<color=yellow>[MqttConnector] Unsubscribed from {topic}</color>");
+            }else{
+                Debug.Log($"<color=red>[MqttConnector] Topic {topic} not subscribed</color>");
+            }
         }
-        
+
+    
 
     }
 }

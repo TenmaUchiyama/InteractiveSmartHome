@@ -1,17 +1,17 @@
 import {
   IRangeComparatorLogicBlock,
-  IRxData,
-} from '@/types/ActionBlockInterfaces';
-import { ActionType } from '@/types/ActionType';
-import ActionBlock from '@block/ActionBlock';
-import Debugger from '@debugger/Debugger';
+  ISignalData,
+} from "@/types/ActionBlockInterfaces";
+import { ActionType } from "@/types/ActionType";
+import ActionBlock from "@block/ActionBlock";
+import Debugger from "@debugger/Debugger";
 
 export default class RangeComparatorLogicBlock
   extends ActionBlock
   implements IRangeComparatorLogicBlock
 {
-  operatorFrom: '>' | '<' | '>=' | '<=';
-  operatorTo: '>' | '<' | '>=' | '<=';
+  operatorFrom: ">" | "<" | ">=" | "<=";
+  operatorTo: ">" | "<" | ">=" | "<=";
   from: number;
   to: number;
 
@@ -28,14 +28,14 @@ export default class RangeComparatorLogicBlock
     const isValid = this.compare(data);
     Debugger.getInstance().debugLog(
       this.getRoutineId(),
-      'RANGE COMPARATOR',
-      `Received data from previous block: ${data.value}, isValid: ${isValid}`,
+      "RANGE COMPARATOR",
+      `Received data from previous block: ${data.value}, isValid: ${isValid}`
     );
     if (isValid) {
       this.startNextActionBlock();
       this.senderDataStream?.next({
         action_id: this.id,
-        data_type: 'boolean',
+        data_type: "boolean",
         value: true,
       });
     }
@@ -55,20 +55,20 @@ export default class RangeComparatorLogicBlock
   private evaluate(
     value: number,
     boundary: number,
-    operator: '>' | '<' | '=' | '!=' | '>=' | '<=',
+    operator: ">" | "<" | "=" | "!=" | ">=" | "<="
   ): boolean {
     switch (operator) {
-      case '>':
+      case ">":
         return value > boundary;
-      case '<':
+      case "<":
         return value < boundary;
-      case '=':
+      case "=":
         return value === boundary;
-      case '!=':
+      case "!=":
         return value !== boundary;
-      case '>=':
+      case ">=":
         return value >= boundary;
-      case '<=':
+      case "<=":
         return value <= boundary;
       default:
         return false;

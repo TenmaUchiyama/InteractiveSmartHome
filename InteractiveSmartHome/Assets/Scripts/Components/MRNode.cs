@@ -25,13 +25,15 @@ public class MRNode : MonoBehaviour
     [SerializeField] private NodeHandler nodeOutHandler = null;
 
 
-    public void Awake()
+    protected virtual void Start()
     {
         editButton.onClick.AddListener(OpenEditor);
     }
 
     
     public virtual void InitNewNode(){}
+
+  
 
     public virtual NodeType GetNodeType()
     {
@@ -69,7 +71,6 @@ public class MRNode : MonoBehaviour
     public MRNodeData GetMRNodeData() 
     {
         // Vector3 currentPosition = MRSpatialAnchorManager.Instance.ConvertToAnchorRelativePosition(this.transform.position);
-        Debug.Log($"<color=yellow>GetMRNodeData: {this._mrNodeData}</color>");
         this._mrNodeData.position = this.transform.position;
         return this._mrNodeData;
     }
@@ -88,17 +89,18 @@ public class MRNode : MonoBehaviour
 
     public virtual void SetMRNodeData(MRNodeData mRNodeData)
     {
-        this._mrNodeData = mRNodeData;
+       if(this._mrNodeData != null)
+        {
+            string action_id = this._mrNodeData.action_data.id.ToString();
+            MRMqttController.Instance.UnsubscribeTopic(action_id);
+        }
+        this._mrNodeData = mRNodeData;   
+        MRMqttController.Instance.SubscribeTopic(this._mrNodeData.action_data.id.ToString(), OnReceiveMsgFromServer);
     }
 
-
-
-
-
-
-    
-
-    public NodeHandler GetNodeHandler(HandlerType  handlerType)
+        protected virtual void OnReceiveMsgFromServer(string payload){}
+        
+        public NodeHandler GetNodeHandler(HandlerType  handlerType)
     {
         if(handlerType == HandlerType.HANDLER_IN)
         {
