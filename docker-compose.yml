@@ -7,7 +7,9 @@ services:
     ports:
       - "4049:4049"
     volumes:
-      - ./Action/workspace:/action_workspace:cached
+      - ./Action/workspace:/action_workspace
+    stdin_open: true
+    tty: true
 
   svelte-flow:
     build:
@@ -17,6 +19,8 @@ services:
       - "5173:5173"
     volumes:
       - ./SvelteFlow/workspace:/svelte_flow_workspace
+    stdin_open: true
+    tty: true
 
   mqtt-broker:
     image: eclipse-mosquitto

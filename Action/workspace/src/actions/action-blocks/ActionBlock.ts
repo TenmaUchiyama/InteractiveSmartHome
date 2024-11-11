@@ -2,6 +2,7 @@ import { Subject } from "rxjs";
 import { IActionBlock, ISignalData } from "@/types/ActionBlockInterfaces";
 import { ActionType } from "@/types/ActionType";
 import Debugger from "@/debugger/Debugger";
+import MqttBridge from "@/device-bridge/MqttBridge";
 
 export default class ActionBlock implements IActionBlock {
   name: string;
@@ -14,7 +15,7 @@ export default class ActionBlock implements IActionBlock {
   receiverDataStream: Subject<ISignalData>[] = [];
 
   routineId: string;
-  onReceiveDataFromPreviousBlock(data: ISignalData) {}
+  protected onReceiveDataFromPreviousBlock(data: ISignalData) {}
 
   constructor(actionBlockInitializers: IActionBlock) {
     this.id = actionBlockInitializers.id;
@@ -25,6 +26,12 @@ export default class ActionBlock implements IActionBlock {
     this.isActionBlockActive = false;
 
     this.senderDataStream = new Subject();
+  }
+
+  protected SendSignalDataToNodeFlow(sendingData: ISignalData) {
+    let topic: string = "mrflow/" + this.id;
+    let bodyData: string = JSON.stringify(sendingData);
+    MqttBridge.getInstance().publishMessage(topic, bodyData);
   }
 
   startAction(): void {

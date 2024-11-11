@@ -136,6 +136,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4688796486719738359, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4688796486719738359, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4688796486719738359, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 602.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 4688796486719738359, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4688796486719738359, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4749943546291401283, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -204,6 +224,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5322194545853027850, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_Spacing
+      value: 225.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6387036992812673668, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
       propertyPath: m_text
       value: Toggle Button
@@ -211,6 +235,10 @@ PrefabInstance:
     - target: {fileID: 6387036992812673668, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4281543452
+      objectReference: {fileID: 0}
+    - target: {fileID: 6387036992812673668, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_enableWordWrapping
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6544126427949308947, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
       propertyPath: m_AnchorMax.y
@@ -308,6 +336,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8640786809516996935, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640786809516996935, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640786809516996935, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640786809516996935, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8832300594603395237, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -363,11 +407,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootCanvas: {fileID: 5235653802217522654}
+  editButton: {fileID: 7203929249121641968}
+  nodeInHandler: {fileID: 0}
+  nodeOutHandler: {fileID: 8094375521166284638}
+  deviceStatusText: {fileID: 0}
   device_name: Unity Test Toggle Button
   description: Just a simple toggle button
+  nodeType: 0
+  deviceType: 0
   device_data_id: toggle-sensor
 --- !u!223 &5235653802217522654 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 9053192418440709184, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
   m_PrefabInstance: {fileID: 3822326749382984094}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7203929249121641968 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6265314770547860590, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+  m_PrefabInstance: {fileID: 3822326749382984094}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8094375521166284638 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4998817790871312064, guid: 618ebfb209f195f4fbcc61f99187f6a0, type: 3}
+  m_PrefabInstance: {fileID: 3822326749382984094}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52275eed94e2b6429d637ba41e405da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

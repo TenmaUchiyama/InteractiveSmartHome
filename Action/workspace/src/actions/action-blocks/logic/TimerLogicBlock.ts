@@ -26,7 +26,7 @@ export default class TimerLogicBlock
   }
 
   onReceiveDataFromPreviousBlock(data: ISignalData): void {
-    let sendingData: ISignalData = {
+    let singalData: ISignalData = {
       action_id: this.id,
       data_type: "number",
       value: this.waitTime,
@@ -34,22 +34,19 @@ export default class TimerLogicBlock
 
     const interval = setInterval(() => {
       // 残りの秒数をMQTTで配信
-      MqttBridge.getInstance().publishMessage(
-        "mrflow/" + this.id,
-        JSON.stringify(sendingData)
-      );
+      super.SendSignalDataToNodeFlow(singalData);
 
       Debugger.getInstance().debugLog(
         this.getRoutineId(),
         "TIMER",
-        "Sending data to MQTT " + JSON.stringify(sendingData)
+        "Sending data to MQTT " + JSON.stringify(singalData)
       );
 
       // 残り秒数をデクリメント
-      (sendingData.value as number) -= 1;
+      (singalData.value as number) -= 1;
 
       // 0に達した場合に次のブロックに進む
-      if ((sendingData.value as number) < 0) {
+      if ((singalData.value as number) < 0) {
         clearInterval(interval); // カウントダウン終了後にインターバルを停止
         Debugger.getInstance().debugLog(
           this.getRoutineId(),

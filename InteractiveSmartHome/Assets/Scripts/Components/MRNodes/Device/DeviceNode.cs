@@ -7,6 +7,7 @@ using MRFlow.Types;
 using NodeTypes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MRFlow.Component 
 {
@@ -15,9 +16,11 @@ namespace MRFlow.Component
 {
    
    [SerializeField] TextMeshProUGUI deviceStatusText;
+   [SerializeField] Image nodeBackgroundImage;
+
+   
    [SerializeField] string device_name = "Device Node";
    [SerializeField] string description = "Just a Simple Device";
-   [SerializeField] NodeType nodeType;
    [SerializeField] ActionDataTypes.DeviceType deviceType;
 
    

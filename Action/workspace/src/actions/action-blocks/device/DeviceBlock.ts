@@ -1,7 +1,7 @@
-import ActionBlock from '@block/ActionBlock';
-import { IDeviceBlock, IDeviceData } from '@/types/ActionBlockInterfaces';
-import MqttBridge from '@mqtt-bridge';
-import Debugger from '@debugger/Debugger';
+import ActionBlock from "@block/ActionBlock";
+import { IDeviceBlock, IDeviceData } from "@/types/ActionBlockInterfaces";
+import MqttBridge from "@mqtt-bridge";
+import Debugger from "@debugger/Debugger";
 
 export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
   device_data: IDeviceData;
@@ -25,7 +25,7 @@ export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
     super.exitAction();
     MqttBridge.getInstance().unsubscribeFromTopic(
       this.topic,
-      this.data_handler,
+      this.data_handler
     );
   }
 

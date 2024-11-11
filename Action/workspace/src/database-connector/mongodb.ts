@@ -18,7 +18,7 @@ export class MongoDB {
 
   private client: MongoClient;
   private db: Db;
-
+  private DATABASE = "DebugInteractionSmartHome";
   private COL_ROUTINE = "routine";
   private COL_ACTION = "action";
   private COL_DEVICE = "device";
@@ -31,8 +31,8 @@ export class MongoDB {
   constructor() {
     // MongoDB接続URI
     // "mongodb://mongodb:27017" はDockerコンテナ内でのMongoDBのURI
-    console.log("ENV ==========================" + process.env.NODE_ENV);
-    console.log("===================" + process.env.MONGO_URL);
+    console.log("ENV:" + process.env.NODE_ENV);
+    console.log("MONGO_URL: " + process.env.MONGO_URL);
     const uri = process.env.MONGO_URL || "mongodb://localhost:27017";
     this.client = new MongoClient(uri);
     this.client
@@ -44,7 +44,7 @@ export class MongoDB {
         console.error("[MONGODB] Failed to connect to MongoDB", err);
       });
 
-    this.db = this.client.db("DebugInteractiveSmartHome");
+    this.db = this.client.db(this.DATABASE);
   }
   public static getInstance(): MongoDB {
     if (!MongoDB.instance) {

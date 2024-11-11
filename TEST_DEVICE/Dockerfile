@@ -24,7 +24,6 @@ COPY ./workspace .
 # 環境変数を設定
 ENV NODE_ENV=docker
 
-RUN echo "test ======================================================"
 
 # ts-node-devでアプリを起動
 CMD ["npx", "ts-node-dev", "--respawn", "-r", "tsconfig-paths/register", "--poll", "src/index.ts"]

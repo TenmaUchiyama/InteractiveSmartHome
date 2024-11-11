@@ -16,11 +16,12 @@ export default class ToggleButtonSensorBlock extends DeviceBlock {
     this.startNextActionBlock();
 
     const jsonData = JSON.parse(data);
-    const rxData: ISignalData = {
+    const signalData: ISignalData = {
       action_id: this.id,
       data_type: jsonData.data_type,
       value: jsonData.value,
     };
-    this.senderDataStream?.next(rxData);
+    this.senderDataStream?.next(signalData);
+    super.SendSignalDataToNodeFlow(signalData);
   }
 }

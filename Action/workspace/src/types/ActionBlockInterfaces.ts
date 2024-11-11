@@ -18,7 +18,7 @@ export interface IRoutineData {
 
 export interface ISignalData {
   action_id: string;
-  data_type: "string" | "number" | "boolean" | "json" | "trigger";
+  data_type: "string" | "number" | "boolean" | "json" | "trigger" | "request";
   value: string | number | boolean | object | null;
 }
 export interface IActionBlock {
