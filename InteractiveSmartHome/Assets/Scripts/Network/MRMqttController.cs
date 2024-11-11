@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using M2MqttUnity;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using uPLibrary.Networking.M2Mqtt.Messages;
@@ -10,6 +11,8 @@ namespace MRFlow.Network
 {
     public class MRMqttController : M2MqttUnityClient
     {
+
+    public UnityAction OnConnectionCompleted; 
     private static MRMqttController instance;
     public static MRMqttController Instance 
     {
@@ -101,6 +104,7 @@ namespace MRFlow.Network
         {
             base.OnConnected();
             Debug.Log($"<color=yellow>[MqttConnector] Connected to broker on {brokerAddress}</color>");
+            OnConnectionCompleted?.Invoke();
         }
 
 

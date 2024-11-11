@@ -1,142 +1,33 @@
-[
-  {
-    "_id": {
-      "$oid": "66fa14c3ccfb6f3566cedad1"
-    },
-    "id": "toggle-1",
-    "name": "Toggle Sensor",
-    "description": "Toggle Sensor",
-    "action_type": "device",
-    "device_type": "sensor-toggle-button",
-    "device_data_id": "toggle-device-1"
+[{
+  "_id": {
+    "$oid": "6730c07c0488912f21d85edf"
   },
-  {
-    "_id": {
-      "$oid": "66fa14c3ccfb6f3566cedad2"
-    },
-    "id": "thermo-1",
-    "name": "Thermometer Sensor",
-    "description": "Thermometer Sensor",
-    "action_type": "device",
-    "device_type": "sensor-thermometer",
-    "device_data_id": "thermo1"
+  "device_type": "actuator-light",
+  "device_data_id": "led-sample-1",
+  "id": "15901eed-0c28-4241-ab4f-1fb235229054",
+  "name": "Unity Test Light Node",
+  "description": "Just a Simple Unity Test Light NOde",
+  "action_type": "device"
+},
+{
+  "_id": {
+    "$oid": "6730c07c0488912f21d85ee0"
   },
-  {
-    "_id": {
-      "$oid": "66fa14c3ccfb6f3566cedad3"
-    },
-    "id": "thermo-101",
-    "name": "Thermometer Sensor",
-    "description": "Thermometer Sensor",
-    "action_type": "device",
-    "device_type": "sensor-thermometer",
-    "device_data_id": "thermo1"
+  "waitTime": 5,
+  "id": "45c22d15-5468-427c-864c-768faa282d30",
+  "name": "Unity Test Timer",
+  "description": "Unity Test Timer Description",
+  "type": null,
+  "action_type": "logic-timer"
+},
+{
+  "_id": {
+    "$oid": "6730c07c0488912f21d85ee1"
   },
-  {
-    "_id": {
-      "$oid": "66fa14c3ccfb6f3566cedad4"
-    },
-    "id": "timer-1",
-    "name": "Timer",
-    "description": "Timer",
-    "action_type": "logic-timer",
-    "waitTime": 2
-  },
-  {
-    "_id": {
-      "$oid": "66fa14c3ccfb6f3566cedad5"
-    },
-    "id": "light-1",
-    "name": "Light Actuator",
-    "description": "Light Actuator",
-    "action_type": "device",
-    "device_type": "actuator-light",
-    "device_data_id": "device-2"
-  },
-  {
-    "_id": {
-      "$oid": "66fa14c3ccfb6f3566cedad7"
-    },
-    "id": "timer-101",
-    "name": "Timer",
-    "description": "Timer",
-    "action_type": "logic-timer",
-    "waitTime": 5000
-  },
-  {
-    "_id": {
-      "$oid": "66fa14c3ccfb6f3566cedad8"
-    },
-    "id": "light-101",
-    "name": "Light Actuator",
-    "description": "Light Actuator",
-    "action_type": "device",
-    "device_type": "actuator-light",
-    "device_data_id": "device-201"
-  },
-  {
-    "_id": {
-      "$oid": "66fa43df2e4dbf0b4cb38f97"
-    },
-    "id": "motion-action-1",
-    "name": "motion sensor",
-    "description": "motion sensor",
-    "action_type": "device",
-    "device_data_id": "motion-device-1",
-    "device_type": "sensor-motion"
-  },
-  {
-    "_id": {
-      "$oid": "66fc0b57ad444bf8a5cae198"
-    },
-    "id": "comparator-101",
-    "name": "Comparator",
-    "description": "Comparator",
-    "action_type": "logic-simple-comparator",
-    "operator": ">",
-    "value": 20
-  },
-  {
-    "_id": {
-      "$oid": "66fc12e0cc63f2e795123121"
-    },
-    "id": "comparator-range-101",
-    "name": "Comparator",
-    "description": "Comparator",
-    "action_type": "logic-range-comparator",
-    "operatorFrom": ">",
-    "operatorTo": "<",
-    "from": 20,
-    "to": 30
-  },
-  {
-    "_id": {
-      "$oid": "66fd3b24c4085bd013ebe6aa"
-    },
-    "logic_operator": "AND",
-    "id": "gate-sample",
-    "name": "gate-sample",
-    "description": "gate",
-    "action_type": "logic-gate"
-  },
-  {
-    "_id": {
-      "$oid": "66fd3b24c4085bd013ebe6ab"
-    },
-    "logic_operator": "NOT",
-    "id": "notGate-sample",
-    "name": "notGate-sample",
-    "description": "notGate",
-    "action_type": "logic-not-gate"
-  },
-  {
-    "_id": {
-      "$oid": "66fd67f4a30c59d60194c947"
-    },
-    "cronExpression": "*/2 * * * * *",
-    "id": "shcedule-test",
-    "name": "schedule-test",
-    "description": "shcedule",
-    "action_type": "logic-schedule"
-  }
-]
+  "device_type": "sensor-toggle-button",
+  "device_data_id": "toggle-device-1",
+  "id": "4dfe54e9-aa0d-4cde-9a04-91f6988b5701",
+  "name": "Unity Test Toggle Button",
+  "description": "Unity test toggle button description",
+  "action_type": "device"
+}]

@@ -30,7 +30,18 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
     {
         return routineEdgeDatas;
     }
-    private async void Start() {    
+
+
+    private void Start() {
+        MRMqttController.Instance.OnConnectionCompleted += InitRoutineEdge;
+    }
+    void OnDestroy()
+    {
+        MRMqttController.Instance.OnConnectionCompleted -= InitRoutineEdge;
+    }
+    private async void InitRoutineEdge() {    
+
+    
 
             //　RoutineEdgeの初期化。データベースが空の場合は新規作成、そうでなければ既存のデータを取得する。
             Debug.Log("<color=yellow>[RoutineEdgeManager] Start</color>");
