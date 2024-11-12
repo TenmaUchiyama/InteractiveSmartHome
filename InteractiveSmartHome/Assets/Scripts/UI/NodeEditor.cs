@@ -30,8 +30,8 @@ public class NodeEditor : Singleton<NodeEditor>
         GameObject nodeEditor = nodeEditorMapSO.GetNodeEditor(nodeType);
         currentlyEditingNode = Instantiate(nodeEditor, editorParent.transform);
         
-        EditorTimerNode timerNodeEditor = currentlyEditingNode.GetComponent<EditorTimerNode>();
-        timerNodeEditor.SetMRNode(mrNode);
+        INodeEditor componentEditor = currentlyEditingNode.GetComponent<INodeEditor>();
+        componentEditor.SetMRNode(mrNode);
         Transform cameraTransform = Camera.main.transform;
         currentlyEditingNode.transform.position = cameraTransform.position + cameraTransform.forward * 1.5f;
         currentlyEditingNode.transform.LookAt(cameraTransform);

@@ -47,7 +47,7 @@ public class TestWithKeyboard : MonoBehaviour
 
 
 
-    private  void Update() {
+    private  async void Update() {
        
 
         if(Input.GetKeyDown(KeyCode.T)) { 
@@ -76,7 +76,7 @@ public class TestWithKeyboard : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.S)) { 
       
-            RoutineEdgeManager.Instance.StartRoutine(EdgeManager.Instance.GetCurrentRoutineEdge());
+           await RoutineEdgeManager.Instance.UpdateRoutine(EdgeManager.Instance.GetCurrentRoutineEdge());
         }
 
 

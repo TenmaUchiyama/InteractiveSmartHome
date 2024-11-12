@@ -119,20 +119,25 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
     public async void StartRoutine(MRRoutineEdgeData mrRoutineEdgeData)
     {
     
-        // ノードをIDからUpdateする。
+        
+
+
+        await UpdateRoutine(mrRoutineEdgeData);
+        await ActionServerController.Instance.StartRoutine(mrRoutineEdgeData.routine_id);
+
+        
+    }
+    public async Task UpdateRoutine(MRRoutineEdgeData mrRoutineEdgeData)
+    {
+
+// ノードをIDからUpdateする。
         List<Guid> nodeIds = mrRoutineEdgeData.nodes;
 
 
         // EdgeからRoutineを作成する。
         List<MREdgeData> edges = mrRoutineEdgeData.edges;
         List<MRNodeData> nodes = NodeManager.Instance.GetMRNodeDataFromNodeIds(nodeIds); 
-
-
-
         List<Routine> routines = ConvertEdgesToRoutines(edges, nodes);
-
-
-
         RoutineData routineData = new RoutineData(
             mrRoutineEdgeData.routine_id, 
             mrRoutineEdgeData.routine_name,
@@ -145,31 +150,6 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
         await NodeManager.Instance.UpdateNodeListDBById(nodeIds);
         await ActionServerController.Instance.UpdateRoutineData(routineData);
         await ActionServerController.Instance.UpdateRoutineEdge(mrRoutineEdgeData);
-        await ActionServerController.Instance.StartRoutine(mrRoutineEdgeData.routine_id);
-
-        
-    }
-    public void UpdateRoutine(MRRoutineEdgeData mrRoutineEdgeData)
-    {
-
-
-       
-        MRRoutineEdgeData routineEdge = EdgeManager.Instance.GetCurrentRoutineEdge(); 
-
-
-        List<MRNode> nodes = NodeManager.Instance.NodeList; 
-
-        List<MRNodeData> nodeDatasInRoutineEdge = nodes
-            .Where(node => routineEdge.nodes.Contains(node.GetMRNodeData().id))
-            .Select(node => node.GetMRNodeData())
-            .ToList();
-
-        
-        List<Routine> routines = ConvertEdgesToRoutines(routineEdge.edges, nodeDatasInRoutineEdge);
-
-        string json = JsonConvert.SerializeObject(routines, settings);
-
-        Debug.Log(json); 
         
     }
 

@@ -61,11 +61,7 @@ public class TimerNode : MRNode
             "Unity Test Timer Description",
             this.waitTime
         );
-
-
-
         string nodeTypeName = NodeTypeMap.GetNodeTypeString(NodeType.Logic_Timer);
-
 
         // Define Node Data
         this._mrNodeData = new MRNodeData(
@@ -74,12 +70,10 @@ public class TimerNode : MRNode
             timerActionBlock,
             this.transform.position
         );
-
-        
-        MRMqttController.Instance.SubscribeTopic(this._mrNodeData.action_data.id.ToString(), OnReceiveMsgFromServer);
-      
         Debug.Log($"<color=yellow>[TimerNode] InitNewNode: {this._mrNodeData}</color>");
-        // base.InitNewNode();
+
+      
+        base.InitNewNode();
     }
 
     protected override void OnReceiveMsgFromServer(string payload)
@@ -96,10 +90,10 @@ public class TimerNode : MRNode
 
     }
 
-        public override NodeType GetNodeType()
-        {
-            return base.GetNodeType();
-        }
+    public override NodeType GetNodeType()
+    {
+        return base.GetNodeType();
+    }
         public void UpdateActionBlockData(MRNodeData mRNode) 
     {
         string jsonify = JsonConvert.SerializeObject(mRNode);

@@ -38,7 +38,7 @@ namespace MRFlow.Component
             this.device_data_id
          );
 
-         MRNodeData newNode = new MRNodeData(
+         this._mrNodeData = new MRNodeData(
                 Guid.NewGuid(),
                 NodeTypeMap.GetNodeTypeString(nodeType),
                 deviceBlock,
@@ -46,7 +46,7 @@ namespace MRFlow.Component
          );
 
 
-            this._mrNodeData = newNode;
+       
     }
 
 
@@ -65,10 +65,10 @@ namespace MRFlow.Component
             MqttDataType mqttData = JsonUtility.FromJson<MqttDataType>(payload);
             if(mqttData.data_type == "boolean")
             {
-                  Debug.Log($"<color=green>Data Type: {mqttData.data_type}</color>");
-                  Debug.Log($"<color=green>DeviceNode: {mqttData.value}</color>");
-                  this.deviceStatusText.text = mqttData.value == "true" ? "ON" : "OFF";
-                  this.deviceStatusText.color = mqttData.value == "true" ? Color.green : Color.black;
+                  Debug.Log($"<color=green>[{this.device_name}]DeviceNode: {mqttData.value}</color>");
+                  Debug.Log($"<color=yellow>[{this.device_name}]It Should Be: {mqttData.value.ToLower() == "true" }</color>");
+                  this.deviceStatusText.text = mqttData.value.ToLower() == "true" ? "ON" : "OFF";
+                  this.deviceStatusText.color = mqttData.value.ToLower() == "true" ? Color.green : Color.black;
             }
 
             if(mqttData.data_type == "string")
