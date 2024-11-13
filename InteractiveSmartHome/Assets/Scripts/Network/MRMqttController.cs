@@ -121,15 +121,15 @@ namespace MRFlow.Network
            
             string topic = "mrflow/" + action_id; 
             if (!topicSubscribers.ContainsKey(topic))
-        {
-            topicSubscribers[topic] = callback;
-            Debug.Log($"<color=yellow>[MqttConnector] {this.client != null}</color>");
-            client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-            Debug.Log($"<color=yellow>[MqttConnector] Subscribed to {topic}</color>");
-          
-        }else{
-            Debug.Log($"<color=red>[MqttConnector] Topic {topic} already subscribed</color>");
-        }
+            {
+                topicSubscribers[topic] = callback;
+                // Debug.Log($"<color=yellow>[MqttConnector] {this.client != null}</color>");
+                client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+                // Debug.Log($"<color=yellow>[MqttConnector] Subscribed to {topic}</color>");
+            
+            }else{
+                Debug.Log($"<color=red>[MqttConnector] Topic {topic} already subscribed</color>");
+            }
         }
 
         public void UnsubscribeTopic(string action_id)

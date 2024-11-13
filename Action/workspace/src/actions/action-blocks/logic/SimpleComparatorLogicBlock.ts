@@ -25,8 +25,14 @@ export default class SimpleComparatorLogicBlock
       "SIMPLE COMPARATOR",
       `Received data from previous block: ${data.value}, isValid: ${isValid}`
     );
-    this.startNextActionBlock();
+    //比較の結果をNodeに知らせる
+    super.SendSignalDataToNodeFlow({
+      action_id: this.id,
+      data_type: "boolean",
+      value: isValid,
+    });
 
+    this.startNextActionBlock();
     this.senderDataStream?.next({
       action_id: this.id,
       data_type: "boolean",

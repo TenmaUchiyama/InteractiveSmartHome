@@ -40,9 +40,9 @@ public class TestWithKeyboard : MonoBehaviour
     {
         
         
-        AddButton.onClick.AddListener(AddAllNodes);
-        SpawnButton.onClick.AddListener(LoadAndSpawnNodes);
-        RemoveButton.onClick.AddListener(RemoveAllNodes);
+        //     AddButton.onClick.AddListener(AddAllNodes);
+        // SpawnButton.onClick.AddListener(LoadAndSpawnNodes);
+        // RemoveButton.onClick.AddListener(RemoveAllNodes);
     }
 
 

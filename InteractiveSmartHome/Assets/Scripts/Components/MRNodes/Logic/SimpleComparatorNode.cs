@@ -10,7 +10,7 @@ using NodeTypes;
 using TMPro;
 using UnityEngine;
 namespace MRFlow.Component{
-public class SimpleComparator : MRNode
+public class SimpleComparatorNode : MRNode
 {
     private string node_name = "Simple Comparator";
     private string description = "Simple Comparator Description";
@@ -23,20 +23,22 @@ public class SimpleComparator : MRNode
         GreaterOrEqual, // ">="
         LessOrEqual    // "<="
     }
-    [SerializeField] private float waitTime = 1.0f;
 
     [SerializeField] private float comparatingValue = 0.0f;
 
     [SerializeField] private TextMeshProUGUI statusText;
-
+    [SerializeField] private TextMeshProUGUI valueText;
     
 
     private OperatorType operatorType = OperatorType.Equal;
 
 
+
    protected override void Start(){
         base.Start();
        SetDisplayText(operatorType, comparatingValue);
+  
+
     }
 
 
@@ -60,11 +62,7 @@ public class SimpleComparator : MRNode
                 this.transform.position
             );
 
-            this._mrNodeData = newNode;
-
-
-
-            base.InitNewNode();
+            this.SetMRNodeData(newNode);
         }
 
 
@@ -125,7 +123,7 @@ public class SimpleComparator : MRNode
     private void SetDisplayText(OperatorType operatorType, float comparatingValue)
     {
         string symbol = GetOperatorSymbol(operatorType);
-        statusText.text = $"{symbol} {comparatingValue}";
+        valueText.text = $"{symbol} {comparatingValue}";
     }
 
 

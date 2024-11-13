@@ -1,8 +1,6 @@
 using System;
 using ActionDataTypes;
 using ActionDataTypes.Device;
-using MRFlow.Component;
-using MRFlow.Network;
 using MRFlow.Types;
 using NodeTypes;
 using TMPro;
@@ -26,7 +24,10 @@ namespace MRFlow.Component
    
    [SerializeField] string device_data_id = "";
 
+   [SerializeField] bool isDebug = false;
 
+    override protected void Start() {
+    }
    
 
     public override void InitNewNode() {
@@ -38,15 +39,16 @@ namespace MRFlow.Component
             this.device_data_id
          );
 
-         this._mrNodeData = new MRNodeData(
+        this.nodeType = NodeType.Sensor_Thermometer;
+         MRNodeData mrNodeData= new MRNodeData(
                 Guid.NewGuid(),
-                NodeTypeMap.GetNodeTypeString(nodeType),
+                NodeTypeMap.GetNodeTypeString(this.nodeType),
                 deviceBlock,
                 this.transform.position
          );
 
 
-       
+        this.SetMRNodeData(mrNodeData);
     }
 
 
@@ -81,10 +83,13 @@ namespace MRFlow.Component
             {
                   Debug.Log($"<color=green>Data Type: {mqttData.data_type}</color>");
                   Debug.Log($"<color=green>DeviceNode: {mqttData.value}</color>");
+                
+                  if(float.TryParse(mqttData.value, out float value))
+                  {
+                        deviceStatusText.text = value.ToString();
+                  }
             }
-
-
-        }
+        }   
 
 
 

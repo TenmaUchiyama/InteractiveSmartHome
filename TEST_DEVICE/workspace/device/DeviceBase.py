@@ -37,6 +37,11 @@ class DeviceBase:
             }
             self.client.publish(msg.get("value"), json.dumps(led_status_data))
             self.debug_log(f"Send LED status to {msg.get('value')}")    
+    
+
+
+    def send_data(self,input_data):
+        self.debug_log("No item to send")
 
 
    

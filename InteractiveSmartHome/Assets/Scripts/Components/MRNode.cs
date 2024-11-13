@@ -31,7 +31,9 @@ public class MRNode : MonoBehaviour
     }
 
     
-    public virtual void InitNewNode(){}
+    public virtual void InitNewNode(){
+        
+    }
 
   
 
@@ -71,7 +73,7 @@ public class MRNode : MonoBehaviour
     public MRNodeData GetMRNodeData() 
     {
         // Vector3 currentPosition = MRSpatialAnchorManager.Instance.ConvertToAnchorRelativePosition(this.transform.position);
-        this._mrNodeData.position = this.transform.position;
+            this._mrNodeData.position = this.transform.position;
         return this._mrNodeData;
     }
 
@@ -89,11 +91,6 @@ public class MRNode : MonoBehaviour
 
     public virtual void SetMRNodeData(MRNodeData mRNodeData)
     {
-       if(this._mrNodeData != null)
-        {
-            string action_id = this._mrNodeData.action_data.id.ToString();
-            MRMqttController.Instance.UnsubscribeTopic(action_id);
-        }
         this._mrNodeData = mRNodeData;   
         MRMqttController.Instance.SubscribeTopic(this._mrNodeData.action_data.id.ToString(), OnReceiveMsgFromServer);
     }

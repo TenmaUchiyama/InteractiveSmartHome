@@ -314,7 +314,7 @@ export class MongoDB {
           replaceOne: {
             filter: { id: action.id }, // 更新対象のフィルタ
             replacement: action, // 更新内容z
-            upsert: this.upsert, // ドキュメントが存在しない場合は挿入しない
+            upsert: true, // ドキュメントが存在しない場合は挿入しない
           },
         };
       });

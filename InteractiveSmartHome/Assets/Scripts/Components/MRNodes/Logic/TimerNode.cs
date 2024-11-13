@@ -34,7 +34,7 @@ public class TimerNode : MRNode
         this.waitTime = (mRNodeData.action_data as TimerBlockData).waitTime;
         string timeText = this.waitTime.ToString();
         this.timerText.text = timeText;
-        Debug.Log($"<color=yellow>[TimerNode] SetMRNodeData: {timeText}</color>");
+        // Debug.Log($"<color=yellow>[TimerNode] SetMRNodeData: {timeText}</color>");
         base.SetMRNodeData(mRNodeData);
         
         
@@ -64,16 +64,16 @@ public class TimerNode : MRNode
         string nodeTypeName = NodeTypeMap.GetNodeTypeString(NodeType.Logic_Timer);
 
         // Define Node Data
-        this._mrNodeData = new MRNodeData(
+        MRNodeData newMrNodeData = new MRNodeData(
             Guid.NewGuid(),
             nodeTypeName,
             timerActionBlock,
             this.transform.position
         );
-        Debug.Log($"<color=yellow>[TimerNode] InitNewNode: {this._mrNodeData}</color>");
+        Debug.Log($"<color=yellow>[TimerNode] InitNewNode: {newMrNodeData}</color>");
 
       
-        base.InitNewNode();
+        this.SetMRNodeData(newMrNodeData);
     }
 
     protected override void OnReceiveMsgFromServer(string payload)

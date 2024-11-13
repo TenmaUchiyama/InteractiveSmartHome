@@ -1,19 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MRFlow.Component;
-using MRFlow.Core;
 using MRFlow.Network;
-using MRFlow.SpatialAnchors;
 using Newtonsoft.Json;
 using NodeTypes;
-using Oculus.Interaction;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Lumin;
-using uPLibrary.Networking.M2Mqtt;
 
 
 
@@ -82,6 +75,7 @@ public class NodeManager : Singleton<NodeManager>
          MRNode mrNode = newNode.GetComponent<MRNode>();
          mrNode.InitNewNode();
          nodeList.Add(mrNode);
+         Debug.Log("[NODE MANAGER] Spawining New Node");
          await ActionServerController.Instance.AddNodes(new List<MRNodeData>{mrNode.GetMRNodeData()});
          
     }
@@ -104,7 +98,7 @@ public class NodeManager : Singleton<NodeManager>
             NodeType nodeType = NodeTypeMap.GetNodeType(nodeData.type);
             GameObject selectedNodeObject = nodeObjectMapSO.GetNodeObject(nodeType);
             // Vector3 spawnPosition = MRSpatialAnchorManager.Instance.ConvertAnchorPositionToTargetRelativePosition(nodeData.position, this.transform);
-       
+            Debug.Log($"POSITION: {nodeData.position}");
             GameObject newNode = Instantiate(selectedNodeObject, nodeData.position, Quaternion.identity, this.transform); 
             newNode.transform.SetParent(this.transform); 
             MRNode mrNode = newNode.GetComponent<MRNode>();

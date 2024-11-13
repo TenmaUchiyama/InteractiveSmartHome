@@ -283,7 +283,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0.10980392, g: 0.16862746, b: 0.2, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -352,6 +352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4227115299876371610}
   - component: {fileID: 1285225877958993540}
+  - component: {fileID: 1946124385153314402}
   m_Layer: 0
   m_Name: NodePrefab
   m_TagString: Untagged
@@ -391,6 +392,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab31f0711b6b4bf4a9a2fc7cdadbb015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1946124385153314402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3172114758071839970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd9b08636cc1ad147aa7b59f6ddc392c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectThemeType: 1
+  nodeThemeMapSO: {fileID: 11400000, guid: 5b85e8aad8ebac34891a8414412a12f6, type: 2}
 --- !u!1 &3195352051143367609
 GameObject:
   m_ObjectHideFlags: 0

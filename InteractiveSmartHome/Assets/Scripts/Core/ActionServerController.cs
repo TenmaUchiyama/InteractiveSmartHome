@@ -22,7 +22,8 @@ public class ActionServerController : Singleton<ActionServerController>
   public async Task<List<MRNodeData>> GetMRNodeDatas() 
    {
      List<DBNode> DBNodes = await actionServerConnector.GetAllNodes();
-       
+   
+    
     List<MRNodeData> mrNodeDatas = await DBNodeToMRNodeData(DBNodes);
 
 
@@ -51,6 +52,10 @@ public class ActionServerController : Singleton<ActionServerController>
 // DBからのデータをMRNodeDataに変換する
  private async Task<List<MRNodeData>> DBNodeToMRNodeData(List<DBNode> dbNodes)
     {
+
+        
+    int c = dbNodes.Count; 
+    Debug.Log($"<color=red>DBNodes {c}</color>");
         List<MRNodeData> mrNodeDatas = new List<MRNodeData>();
 
         foreach (DBNode dbNode in dbNodes)
@@ -69,23 +74,33 @@ public class ActionServerController : Singleton<ActionServerController>
             Debug.Log("Deserializing with type: " + dataCastType);
 
             // 正しい型でデシリアライズを実行
-            var actionData = JsonConvert.DeserializeObject(actionBlock.ToString(), dataCastType) as IActionBlock;
+            var actionData = JsonConvert.DeserializeObject(actionBlock.ToString(), dataCastType);
 
             if (actionData == null)
             {
-                Console.WriteLine("Failed to deserialize actionBlock to expected type.");
+                Debug.LogError("Failed to deserialize actionBlock to expected type.");
                 continue; // 次のdbNodeに移動
             }
 
             // actionDataの内容を出力して確認
             Debug.Log("Deserialized actionData: " + actionData);
 
+
+            Vector3 spawnMRNodePosition; 
+
+            if(dbNode.mr_position != null)
+            {
+                spawnMRNodePosition = dbNode.mr_position;
+            }else{
+                spawnMRNodePosition = new Vector3(0,0,0);
+            }
+
             // MRNodeDataを作成
             MRNodeData mRNodeData = new MRNodeData(
                 new Guid(dbNode.id),
                 dbNode.type,
-                actionData,
-                dbNode.mr_position
+                actionData as IActionBlock,
+                spawnMRNodePosition
             );
 
             mrNodeDatas.Add(mRNodeData);

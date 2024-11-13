@@ -73,17 +73,22 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
 
             RoutineData routineData = await ActionServerController.Instance.GetRoutineData(currentMRRoutineEdgeData.routine_id);
             
+
+
+            // Generate Routine From Routine Edge
             if(routineData == null)
             {
                 await ActionServerController.Instance.CreateNewRoutineDataFromNewRoutineEdge(currentMRRoutineEdgeData);
             }else{
+            // if routine already exists, it updates the data
                 await ActionServerController.Instance.UpdateRoutineData(routineData);
             }
 
 
         
             EdgeManager.Instance.SetCurrentMRRoutineEdgeData(currentMRRoutineEdgeData);
-
+            
+            
 
 
 
@@ -91,12 +96,27 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
             // ノードデータを取得する。
             List<MRNodeData> mrNodeDatas = await ActionServerController.Instance.GetMRNodeDatas();
             entireMRNodeData = mrNodeDatas;
+            
+            int coun = entireMRNodeData.Count; 
+            Debug.Log($"<color=red>{coun}</color>");
 
             List<Guid> currentNodes = currentMRRoutineEdgeData.nodes;
-            List<MRNodeData> nodes = mrNodeDatas.Where(node => currentNodes.Contains(node.id)).ToList();
+           
+            List<MRNodeData> nodes = mrNodeDatas.Where(node =>{
+                if(currentNodes.Contains(node.id))
+                {
+                    return true; 
+                    
+                }else{
+                    Guid id = node.id;
+                    Debug.Log($"<color=red>{id}</color>");
+                    return false;
+                }
+
+            }).ToList();
             List<MRNode> mrNode = NodeManager.Instance.SpawnNodes(nodes);
 
-        
+ 
             // //　ノード間でエッジを作成する。
             List<MREdgeData> edges = currentMRRoutineEdgeData.edges;
 
@@ -104,8 +124,6 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
             string nodeJ = JsonConvert.SerializeObject(nodes, settings); 
             
             ConnectEdges(edges, mrNode);      
-
-
 
     }
    JsonSerializerSettings settings = new JsonSerializerSettings

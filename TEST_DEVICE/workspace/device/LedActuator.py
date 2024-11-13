@@ -11,7 +11,7 @@ class LedActuator(DeviceBase):
     
     def on_connect(self, client, userdata, flags, rc):
         self.debug_log("Connected to MQTT broker")
-        self.client.subscribe("led-sensor")
+        self.client.subscribe("led-actuator")
 
     def on_message(self, client, userdata, msg):
         msg_data = json.loads(msg.payload.decode())
