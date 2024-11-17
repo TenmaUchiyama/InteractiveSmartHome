@@ -7,11 +7,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditorTimerNode : MonoBehaviour, INodeEditor
+
+
+
+namespace MRFlow.Editor{
+public class EditorTimerNode : BaseEditor, INodeEditor
 {
-  [SerializeField] private Button closeButton;
-  [SerializeField] private InputField nameInputField; 
-  [SerializeField] private InputField descriptionInputField;
+  
   [SerializeField] private InputField durationInputField; 
 
 
@@ -19,51 +21,23 @@ public class EditorTimerNode : MonoBehaviour, INodeEditor
     private MRNode mrNode;
 
 
-    void Start()
+    protected override void Start()
     {
 
 
-        Debug.Log($"<color=yellow>[EditorTimerNode] Start {nameInputField != null}</color>");
-        Debug.Log($"<color=yellow>[EditorTimerNode] Start {descriptionInputField != null}</color>");
-        Debug.Log($"<color=yellow>[EditorTimerNode] Start {durationInputField != null}</color>");
-        nameInputField.onValueChanged.AddListener(OnNameChanged);
-        descriptionInputField.onValueChanged.AddListener(OnDescriptionChanged);
+        base.Start();
+       
         durationInputField.onValueChanged.AddListener(OnDurationChanged);
 
 
-        closeButton.onClick.AddListener(() =>
-        {
-            NodeEditor.Instance.CloseEditor();
-        });
+       
     }
 
-    public void SetMRNode(MRNode newMRNode)
-    {
-        this.mrNode = newMRNode;
+    public override void SetMRNode(MRNode newMRNode)
+    {   
+        base.SetMRNode(newMRNode);
     }
 
-    private void OnNameChanged(string newName)
-    {
-        if (mrNode != null)
-        {
-            MRNodeData mrNodeData = mrNode.GetMRNodeData();
-            mrNodeData.action_data.name = newName;
-            mrNode.SetMRNodeData(mrNodeData);
-            Debug.Log($"<color=yellow>[EditorTimerNode]Node Name Changed: {newName}</color>");
-
-        }
-    }
-
-    private void OnDescriptionChanged(string newDescription)
-    {
-        if (mrNode != null)
-        {
-            MRNodeData mrNodeData = mrNode.GetMRNodeData();
-            mrNodeData.action_data.description = newDescription;
-            mrNode.SetMRNodeData(mrNodeData);
-            Debug.Log($"<color=yellow>[EditorTimerNode]Node Description Changed: {newDescription}</color>");
-        }
-    }
 
     private void OnDurationChanged(string newDuration)
     {
@@ -87,4 +61,5 @@ public class EditorTimerNode : MonoBehaviour, INodeEditor
     }
 
 
+}
 }

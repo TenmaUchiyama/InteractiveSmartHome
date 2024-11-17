@@ -116,7 +116,7 @@ namespace MRFlow.Network
 
 
 
-        public void SubscribeTopic(string action_id, UnityAction<string> callback)
+        public void SubscribeTopic(string node_name, string action_id, UnityAction<string> callback)
         {
            
             string topic = "mrflow/" + action_id; 
@@ -125,10 +125,10 @@ namespace MRFlow.Network
                 topicSubscribers[topic] = callback;
                 // Debug.Log($"<color=yellow>[MqttConnector] {this.client != null}</color>");
                 client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-                // Debug.Log($"<color=yellow>[MqttConnector] Subscribed to {topic}</color>");
+                Debug.Log($"<color=yellow>[MqttConnector {node_name}] Subscribed to {topic}</color>");
             
             }else{
-                Debug.Log($"<color=red>[MqttConnector] Topic {topic} already subscribed</color>");
+                Debug.Log($"<color=red>[MqttConnector {node_name}] Topic {topic} already subscribed</color>");
             }
         }
 

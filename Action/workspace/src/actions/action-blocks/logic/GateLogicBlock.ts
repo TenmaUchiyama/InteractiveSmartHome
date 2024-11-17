@@ -33,37 +33,56 @@ export default class GateLogicBlock
 
     console.log("===============================");
     this.state_map.forEach((value, key) => {
-      console.log(key, value);
-    });
-    console.log("===============================");
-    if (gateLogicResult) {
       Debugger.getInstance().debugLog(
         this.routineId,
         "GATE LOGIC",
-        "Gate logic is true"
+        "Received data: " + key + " : " + value
       );
-      data.action_id = this.id;
-      this.startNextActionBlock();
-      this.senderDataStream?.next(data);
-    }
+    });
+    console.log("===============================");
+    let nextData: ISignalData = {
+      action_id: this.id,
+      data_type: "boolean",
+      value: gateLogicResult,
+    };
+
+    super.SendSignalDataToNodeFlow(nextData);
+    data.action_id = this.id;
+    this.startNextActionBlock();
+    this.senderDataStream?.next(nextData);
   }
 
   checkGateLogic(): boolean {
+    let okCount: number = 0;
     switch (this.logic_operator) {
       case "AND":
         let allTrue = true;
         this.state_map.forEach((value, key) => {
           allTrue = allTrue && value;
+          if (value) okCount++;
         });
 
-        return allTrue;
+        let sendSignal: ISignalData = {
+          action_id: this.id,
+          data_type: "number",
+          value: okCount,
+        };
 
+        super.SendSignalDataToNodeFlow(sendSignal);
+        return allTrue;
       case "OR":
         let oneTrue = false;
         this.state_map.forEach((value, key) => {
           oneTrue = oneTrue || value;
+          if (value) okCount++;
         });
+        let sendSignalOr: ISignalData = {
+          action_id: this.id,
+          data_type: "number",
+          value: okCount,
+        };
 
+        super.SendSignalDataToNodeFlow(sendSignalOr);
         return oneTrue;
     }
   }

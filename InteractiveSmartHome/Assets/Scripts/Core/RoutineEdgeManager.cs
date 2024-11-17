@@ -79,11 +79,8 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
             if(routineData == null)
             {
                 await ActionServerController.Instance.CreateNewRoutineDataFromNewRoutineEdge(currentMRRoutineEdgeData);
-            }else{
-            // if routine already exists, it updates the data
-                await ActionServerController.Instance.UpdateRoutineData(routineData);
             }
-
+            
 
         
             EdgeManager.Instance.SetCurrentMRRoutineEdgeData(currentMRRoutineEdgeData);
@@ -97,8 +94,7 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
             List<MRNodeData> mrNodeDatas = await ActionServerController.Instance.GetMRNodeDatas();
             entireMRNodeData = mrNodeDatas;
             
-            int coun = entireMRNodeData.Count; 
-            Debug.Log($"<color=red>{coun}</color>");
+   
 
             List<Guid> currentNodes = currentMRRoutineEdgeData.nodes;
            
@@ -114,6 +110,9 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
                 }
 
             }).ToList();
+
+
+  
             List<MRNode> mrNode = NodeManager.Instance.SpawnNodes(nodes);
 
  
@@ -145,6 +144,15 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
 
         
     }
+
+
+
+    public async Task AddNodeToRoutineEdge(MRNodeData mrNodeData)
+    {
+        MRRoutineEdgeData currentMRRoutineEdgeData = EdgeManager.Instance.GetCurrentRoutineEdge();
+        currentMRRoutineEdgeData.nodes.Add(mrNodeData.id);
+        await ActionServerController.Instance.UpdateRoutineEdge(currentMRRoutineEdgeData);
+    }
     public async Task UpdateRoutine(MRRoutineEdgeData mrRoutineEdgeData)
     {
 
@@ -163,8 +171,8 @@ public class RoutineEdgeManager : Singleton<RoutineEdgeManager>
         );
 
 
-        string jsonify = JsonConvert.SerializeObject(routines, settings);
-        Debug.Log($"<color=yellow>Routines: {jsonify}</color>");
+        Debug.Log($"<color=yellow>[RoutineEdgeManager] {nodes.Count}</color> ");
+        Debug.Log($"<color=yellow>[RoutineEdgeManager] {routines.Count}</color> ");
         await NodeManager.Instance.UpdateNodeListDBById(nodeIds);
         await ActionServerController.Instance.UpdateRoutineData(routineData);
         await ActionServerController.Instance.UpdateRoutineEdge(mrRoutineEdgeData);

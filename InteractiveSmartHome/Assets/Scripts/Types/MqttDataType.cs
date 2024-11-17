@@ -11,6 +11,8 @@ namespace MRFlow.Types
         public string action_id;
         public string data_type; 
         public string value; 
+
+        public object metadata;
     }
 
 

@@ -6,6 +6,7 @@ using NodeTypes;
 using Oculus.Interaction;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -17,6 +18,9 @@ public class NodeHandler : MonoBehaviour
     
     private  List<MRNode> connectedMrNodes = new List<MRNode>();
     private  List<MREdge> connectedEdge = new List<MREdge>();
+
+
+    public UnityEvent<NodeHandler> OnEdgeConnected = new UnityEvent<NodeHandler>();
 
 
 
@@ -34,10 +38,11 @@ public MRNodeData GetNodeData()
     return parentNode.GetMRNodeData();
 }
 
-public void SetNode(MRNode node)
+public int GetConnectedEdgeCount() 
 {
-    this.parentNode = node;
+    return this.connectedEdge.Count;
 }
+
 
 public void ClearConnection() 
 {
@@ -51,6 +56,11 @@ public HandlerType GetHandlerType()
 }
 
 
+
+
+
+
+
 public void SetConnectedNode(MRNode node)
 {
     connectedMrNodes.Add(node);
@@ -59,8 +69,11 @@ public void SetConnectedNode(MRNode node)
 
 public void SetConnectedEdge(MREdge edge)
 {
+
+  
     this.parentNode.SetConnectedEdge(edge);
     this.connectedEdge.Add(edge);
+    OnEdgeConnected.Invoke(this);
 }
 
 public bool IsAlreadyConnected(MRNode node)

@@ -45,7 +45,7 @@ public class MRNodeUI : MonoBehaviour
     {
        
         // backgroundImage.color = nodeThemeMapSO.GetUITheme(themeType).backplateColor;
-        Debug.Log("OnValidate");
+       
         ColorBlock colorBlock = new ColorBlock();
         colorBlock.normalColor = nodeThemeMapSO.GetUITheme(themeType).backplateColor;
         colorBlock.highlightedColor = nodeThemeMapSO.GetUITheme(themeType).sectionPlateColor;

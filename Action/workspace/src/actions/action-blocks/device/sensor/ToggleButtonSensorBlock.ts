@@ -21,7 +21,14 @@ export default class ToggleButtonSensorBlock extends DeviceBlock {
       data_type: jsonData.data_type,
       value: jsonData.value,
     };
-    this.senderDataStream?.next(signalData);
+
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      "TOGGLE",
+      "Sending data to next block: " + JSON.stringify(signalData)
+    );
+
     super.SendSignalDataToNodeFlow(signalData);
+    this.senderDataStream?.next(signalData);
   }
 }

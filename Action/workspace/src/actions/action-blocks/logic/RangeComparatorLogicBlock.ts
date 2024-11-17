@@ -31,14 +31,21 @@ export default class RangeComparatorLogicBlock
       "RANGE COMPARATOR",
       `Received data from previous block: ${data.value}, isValid: ${isValid}`
     );
-    if (isValid) {
-      this.startNextActionBlock();
-      this.senderDataStream?.next({
-        action_id: this.id,
-        data_type: "boolean",
-        value: true,
-      });
-    }
+
+    let sendingData: ISignalData = {
+      action_id: this.id,
+      data_type: "boolean",
+      value: isValid,
+    };
+
+    super.SendSignalDataToNodeFlow(sendingData);
+
+    this.startNextActionBlock();
+    this.senderDataStream?.next({
+      action_id: this.id,
+      data_type: "boolean",
+      value: isValid,
+    });
   }
 
   // 比較関数

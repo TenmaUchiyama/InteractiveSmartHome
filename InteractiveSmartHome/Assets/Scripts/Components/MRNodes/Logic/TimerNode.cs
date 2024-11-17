@@ -9,6 +9,7 @@ using Meta.WitAi.Json;
 using TMPro;
 using MRFlow.Network;
 using MRFlow.Types;
+using Unity.VisualScripting;
 
 namespace MRFlow.Component{
 public class TimerNode : MRNode
@@ -30,7 +31,7 @@ public class TimerNode : MRNode
 
         public override void SetMRNodeData(MRNodeData mRNodeData)
     {
-        
+       
         this.waitTime = (mRNodeData.action_data as TimerBlockData).waitTime;
         string timeText = this.waitTime.ToString();
         this.timerText.text = timeText;

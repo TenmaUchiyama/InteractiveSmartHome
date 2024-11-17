@@ -20,6 +20,7 @@ namespace MRFlow.Component
    [SerializeField] string device_name = "Device Node";
    [SerializeField] string description = "Just a Simple Device";
    [SerializeField] ActionDataTypes.DeviceType deviceType;
+   [SerializeField] NodeTypes.NodeType deviceNodetype;
 
    
    [SerializeField] string device_data_id = "";
@@ -39,7 +40,7 @@ namespace MRFlow.Component
             this.device_data_id
          );
 
-        this.nodeType = NodeType.Sensor_Thermometer;
+        this.nodeType = this.deviceNodetype;
          MRNodeData mrNodeData= new MRNodeData(
                 Guid.NewGuid(),
                 NodeTypeMap.GetNodeTypeString(this.nodeType),
@@ -56,9 +57,7 @@ namespace MRFlow.Component
         public override void SetMRNodeData(MRNodeData mRNodeData)
         {
       
-            base.SetMRNodeData(mRNodeData);
-
-
+        base.SetMRNodeData(mRNodeData);
         }
 
 
@@ -75,14 +74,14 @@ namespace MRFlow.Component
 
             if(mqttData.data_type == "string")
             {
-                  Debug.Log($"<color=green>Data Type: {mqttData.data_type}</color>");
-                  Debug.Log($"<color=green>DeviceNode: {mqttData.value}</color>");
+                  Debug.Log($"<color=green>[{this.device_name}]Data Type: {mqttData.data_type}</color>");
+                  Debug.Log($"<color=green>[{this.device_name}]DeviceNode: {mqttData.value}</color>");
             }
 
             if(mqttData.data_type == "number")
             {
-                  Debug.Log($"<color=green>Data Type: {mqttData.data_type}</color>");
-                  Debug.Log($"<color=green>DeviceNode: {mqttData.value}</color>");
+                  Debug.Log($"<color=green>[{this.device_name}]Data Type: {mqttData.data_type}</color>");
+                  Debug.Log($"<color=green>[{this.device_name}]DeviceNode: {mqttData.value}</color>");
                 
                   if(float.TryParse(mqttData.value, out float value))
                   {

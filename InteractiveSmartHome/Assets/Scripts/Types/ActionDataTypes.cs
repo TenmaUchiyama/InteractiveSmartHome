@@ -12,7 +12,6 @@ namespace ActionDataTypes
 
     public enum ActionBlockType
     { 
-        Block_Logic_Timer, 
         Logic_Timer,
         Logic_SimpleComparator,
         Logic_RangeComparator,
@@ -58,8 +57,11 @@ public class BlockActionTypeMap
 {
     { ActionBlockType.Logic_Timer , typeof(TimerBlockData)},
     { ActionBlockType.Device , typeof(DeviceBlockData)},
-
-
+    { ActionBlockType.Logic_SimpleComparator, typeof(SimpleComparatorBlockData)},
+    { ActionBlockType.Logic_Gate, typeof(GateLogicBlockData)},   
+    { ActionBlockType.Logic_NotGate, typeof(NotGateLogicBlockData)},
+    { ActionBlockType.Logic_RangeComparator, typeof(RangeComparatorBlockData)},
+    
 };
 
 

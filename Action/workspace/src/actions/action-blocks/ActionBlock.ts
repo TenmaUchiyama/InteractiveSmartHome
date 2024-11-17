@@ -31,6 +31,12 @@ export default class ActionBlock implements IActionBlock {
   protected SendSignalDataToNodeFlow(sendingData: ISignalData) {
     let topic: string = "mrflow/" + this.id;
     let bodyData: string = JSON.stringify(sendingData);
+
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      this.name,
+      "MQTT Sending data " + bodyData
+    );
     MqttBridge.getInstance().publishMessage(topic, bodyData);
   }
 

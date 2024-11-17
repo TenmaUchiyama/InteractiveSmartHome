@@ -11,7 +11,8 @@ class ToggleButton(DeviceBase):
     
     def on_connect(self, client, userdata, flags, rc):
         self.debug_log("Connected to MQTT broker")
-        self.client.subscribe("toggle-button-sensor")
+        self.topic = "toggle-button-sensor"
+        self.client.subscribe(self.topic)
 
     def on_message(self, client, userdata, msg):
         
@@ -20,6 +21,18 @@ class ToggleButton(DeviceBase):
         super().on_message(msg_data,self.status)
         self.debug_log(f"Received message on {msg.topic}: {msg_data}") 
 
+
+        if(msg_data.get("data_type") == "init"):
+                    
+            device_status = {
+                "action_id": msg_data.get("action_id"),
+                "data_type": "boolean",
+                "value": self.status,
+            }
+
+
+            self.debug_log("Init message received. Sending LED status to bridge value: " + json.dumps(device_status))
+            self.client.publish("bridge/" + self.topic, json.dumps(device_status))
         
         # dtype = msg_data.get("data_type")
         # if(dtype == "trigger"):
@@ -43,8 +56,8 @@ class ToggleButton(DeviceBase):
                 "data_type": "boolean",
                 "value": self.status,
             }
-            self.client.publish("bridge/toggle-button-sensor", json.dumps(data))
-            self.debug_log("Send toggle signal to bridge/toggle-button-actuator")
+            self.client.publish("bridge/" + self.topic , json.dumps(data))
+            self.debug_log("Send toggle signal to bridge/toggle-button-actuator. Value: " + json.dumps(data))
         else:
             self.debug_log("Invalid Input")
         

@@ -29,7 +29,7 @@ class DeviceBase:
     
 
     def on_message(self,msg,value):
-         if(msg.get("data_type") == "request"):
+        if(msg.get("data_type") == "request"):
             led_status_data = {
                 "action_id": msg.get("action_id"),
                 "data_type": "boolean",
@@ -37,6 +37,8 @@ class DeviceBase:
             }
             self.client.publish(msg.get("value"), json.dumps(led_status_data))
             self.debug_log(f"Send LED status to {msg.get('value')}")    
+        
+       
     
 
 

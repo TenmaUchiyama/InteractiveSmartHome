@@ -65,16 +65,26 @@ public class ActionServerController : Singleton<ActionServerController>
 
             // actionBlockのオブジェクトからactionTypeを取得する
             string actionType = actionBlock["action_type"].ToString();
+
+            // action_typeの文字列からActionBlockTypeを取得する
             ActionBlockType actionBlockType = BlockActionTypeMap.GetStringTypeFromActionType(actionType);
 
             // ActionBlockTypeから正確な型を取得する
             Type dataCastType = BlockActionTypeMap.GetActionDataType(actionBlockType);
 
             // デシリアライズ前に確認のために出力
-            Debug.Log("Deserializing with type: " + dataCastType);
-
+            if(dataCastType == null)
+            {
+                Debug.LogError("Failed to get dataCastType from actionBlockType: " + actionBlockType);
+                
+            }{
+            Debug.Log($"[Action Server Controller] Deserializing with type: {dataCastType} Data: {actionBlock.ToString()}");
+            }
             // 正しい型でデシリアライズを実行
             var actionData = JsonConvert.DeserializeObject(actionBlock.ToString(), dataCastType);
+
+
+            
 
             if (actionData == null)
             {
@@ -103,6 +113,7 @@ public class ActionServerController : Singleton<ActionServerController>
                 spawnMRNodePosition
             );
 
+           
             mrNodeDatas.Add(mRNodeData);
         }
 
@@ -121,8 +132,11 @@ public class ActionServerController : Singleton<ActionServerController>
         List<DBNode> dbNodes = new List<DBNode>();
         foreach (MRNodeData mRNodeData in mRNodeDatas)
         {
+
+
+            
             string json = JsonConvert.SerializeObject(mRNodeData, settings);
-          
+            Debug.Log($"<color=yellow>Adding Node: {json}</color>");
             DBNode dbNode = new DBNode(
                 mRNodeData.id.ToString(),
                 mRNodeData.type,

@@ -36,6 +36,10 @@ PrefabInstance:
       propertyPath: selectThemeType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1946124385153314402, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
+      propertyPath: selectThemeType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2820210750354437446, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_Name
       value: ToggleButton
@@ -74,7 +78,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3172114758071839970, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_Name
-      value: ToggleButton
+      value: ToggleButtonSensorNode
       objectReference: {fileID: 0}
     - target: {fileID: 3796502723365225074, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -425,9 +429,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3172114758071839970, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1965112903392646320}
-    - targetCorrespondingSourceObject: {fileID: 3172114758071839970, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8678714955688594826}
   m_SourcePrefab: {fileID: 100100000, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}
 --- !u!114 &847333932626745950 stripped
 MonoBehaviour:
@@ -462,25 +463,13 @@ MonoBehaviour:
   nodeInHandler: {fileID: 0}
   nodeOutHandler: {fileID: 8311234096085518155}
   deviceStatusText: {fileID: 847333932626745950}
+  nodeBackgroundImage: {fileID: 0}
   device_name: Unity Test Toggle Button
   description: Unity test toggle button description
-  nodeType: 8
   deviceType: 2
+  deviceNodetype: 8
   device_data_id: toggle-device-1
---- !u!114 &8678714955688594826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1350344172459509088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd9b08636cc1ad147aa7b59f6ddc392c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectThemeType: 0
-  nodeThemeMapSO: {fileID: 11400000, guid: 5b85e8aad8ebac34891a8414412a12f6, type: 2}
+  isDebug: 0
 --- !u!223 &5452548127425320395 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 8436272258589850697, guid: c8b7aca2ce3de7d48b8598635313e3f3, type: 3}

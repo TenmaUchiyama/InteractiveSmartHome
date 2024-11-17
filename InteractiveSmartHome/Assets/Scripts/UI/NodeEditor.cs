@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MRFlow.Component;
+using MRFlow.Editor;
 using MRFlow.UI;
 using NodeTypes;
 using Unity.VisualScripting;
@@ -27,9 +28,11 @@ public class NodeEditor : Singleton<NodeEditor>
             CloseEditor();
         }
         NodeType nodeType = mrNode.GetNodeType(); 
+        Debug.Log($"<color=yellow>[NodeEditor] NodeType: {nodeType}</color>");
         GameObject nodeEditor = nodeEditorMapSO.GetNodeEditor(nodeType);
-        currentlyEditingNode = Instantiate(nodeEditor, editorParent.transform);
         
+        Debug.Log($"<color=yellow>[NodeEditor] OpenEditor: {nodeType} nodeEditor: {nodeEditor !=null}</color>");
+        currentlyEditingNode = Instantiate(nodeEditor, editorParent.transform);
         INodeEditor componentEditor = currentlyEditingNode.GetComponent<INodeEditor>();
         componentEditor.SetMRNode(mrNode);
         Transform cameraTransform = Camera.main.transform;

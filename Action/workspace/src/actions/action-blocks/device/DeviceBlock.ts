@@ -19,13 +19,32 @@ export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
     this.device_data = deviceBlockInitializers.device_data;
     this.topic = this.device_data.mqtt_topic;
     this.data_handler = this.onReceiveDataFromSensor.bind(this);
-
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      "DEVICE",
+      `Block initialized : ${this.device_data.device_name}`
+    );
     this.sendRequestStatus();
   }
 
   startAction(): void {
     super.startAction();
     MqttBridge.getInstance().subscribeToTopic(this.topic, this.data_handler);
+
+    let initData: ISignalData = {
+      action_id: this.id,
+      data_type: "init",
+      value: null,
+    };
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      "DEVICE",
+      "Sending init data to device: " + JSON.stringify(initData)
+    );
+    MqttBridge.getInstance().publishMessage(
+      this.topic,
+      JSON.stringify(initData)
+    );
   }
 
   exitAction(): void {
@@ -56,6 +75,15 @@ export default class DeviceBlock extends ActionBlock implements IDeviceBlock {
 
   onReceiveDataFromPreviousBlock(data: ISignalData): void {
     data.action_id = this.id;
+
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      "DEVICE",
+      "Received data from previous block: " +
+        JSON.stringify(data) +
+        " Sending to device: " +
+        this.topic
+    );
     MqttBridge.getInstance().publishMessage(this.topic, JSON.stringify(data));
     // if (data.data_type === "trigger") {
     //   let request: ISignalData = {

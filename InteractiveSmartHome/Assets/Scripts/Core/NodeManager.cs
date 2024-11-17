@@ -77,7 +77,8 @@ public class NodeManager : Singleton<NodeManager>
          nodeList.Add(mrNode);
          Debug.Log("[NODE MANAGER] Spawining New Node");
          await ActionServerController.Instance.AddNodes(new List<MRNodeData>{mrNode.GetMRNodeData()});
-         
+         await RoutineEdgeManager.Instance.AddNodeToRoutineEdge(mrNode.GetMRNodeData());
+
     }
 
     

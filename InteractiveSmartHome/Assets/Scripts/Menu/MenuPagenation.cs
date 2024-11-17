@@ -10,7 +10,7 @@ public class MenuPagenation : MonoBehaviour
 
 
     private void Start() {
-        OpenRoutinePage();
+        OpenActionPage();
     }
 
 

@@ -75,7 +75,6 @@ public class TestWithKeyboard : MonoBehaviour
 
 
         if(Input.GetKeyDown(KeyCode.S)) { 
-      
            await RoutineEdgeManager.Instance.UpdateRoutine(EdgeManager.Instance.GetCurrentRoutineEdge());
         }
 

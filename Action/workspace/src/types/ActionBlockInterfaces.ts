@@ -18,8 +18,16 @@ export interface IRoutineData {
 
 export interface ISignalData {
   action_id: string;
-  data_type: "string" | "number" | "boolean" | "json" | "trigger" | "request";
+  data_type:
+    | "string"
+    | "number"
+    | "boolean"
+    | "json"
+    | "trigger"
+    | "request"
+    | "init";
   value: string | number | boolean | object | null;
+  metadata?: object;
 }
 export interface IActionBlock {
   id: string;
@@ -52,8 +60,17 @@ export interface IDeviceBlock extends IActionBlock {
 
 /////////////Logic Block/////////////////////
 
+export enum Comparator {
+  GREATER_THAN = ">",
+  LESS_THAN = "<",
+  EQUAL = "=",
+  NOT_EQUAL = "!=",
+  GREATER_THAN_OR_EQUAL = ">=",
+  LESS_THAN_OR_EQUAL = "<=",
+}
+
 export interface ISimpleComparatorLogicBlock extends IActionBlock {
-  operator: ">" | "<" | "=" | "!=" | ">=" | "<=";
+  comparator: Comparator;
   value: number;
 }
 

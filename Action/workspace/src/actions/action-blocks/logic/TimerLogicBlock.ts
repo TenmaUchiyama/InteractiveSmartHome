@@ -3,6 +3,7 @@ import { ISignalData, ITimerLogicBlock } from "@/types/ActionBlockInterfaces";
 import ActionBlock from "../ActionBlock";
 import Debugger from "@debugger/Debugger";
 import MqttBridge from "@/device-bridge/MqttBridge";
+
 export default class TimerLogicBlock
   extends ActionBlock
   implements ITimerLogicBlock

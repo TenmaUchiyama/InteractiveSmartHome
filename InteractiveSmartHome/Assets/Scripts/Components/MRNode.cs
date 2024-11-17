@@ -21,8 +21,8 @@ public class MRNode : MonoBehaviour
 
     private List<MREdge> connectedEdges = new List<MREdge>();
 
-    [SerializeField] private NodeHandler nodeInHandler = null; 
-    [SerializeField] private NodeHandler nodeOutHandler = null;
+    [SerializeField] protected  NodeHandler nodeInHandler = null; 
+    [SerializeField] protected  NodeHandler nodeOutHandler = null;
 
 
     protected virtual void Start()
@@ -39,6 +39,7 @@ public class MRNode : MonoBehaviour
 
     public virtual NodeType GetNodeType()
     {
+        Debug.Log($"<color=yellow>GetNodeType: {this.nodeType} this object: {this.gameObject.name}</color>");
         return this.nodeType;
     }
 
@@ -73,7 +74,7 @@ public class MRNode : MonoBehaviour
     public MRNodeData GetMRNodeData() 
     {
         // Vector3 currentPosition = MRSpatialAnchorManager.Instance.ConvertToAnchorRelativePosition(this.transform.position);
-            this._mrNodeData.position = this.transform.position;
+        this._mrNodeData.position = this.transform.position;
         return this._mrNodeData;
     }
 
@@ -92,7 +93,9 @@ public class MRNode : MonoBehaviour
     public virtual void SetMRNodeData(MRNodeData mRNodeData)
     {
         this._mrNodeData = mRNodeData;   
-        MRMqttController.Instance.SubscribeTopic(this._mrNodeData.action_data.id.ToString(), OnReceiveMsgFromServer);
+        this.nodeType = NodeTypeMap.GetNodeType(mRNodeData.type);
+        Debug.Log($"<color=red>SetMRNodeData: {this.nodeType} string type: {mRNodeData.type}</color>");
+        MRMqttController.Instance.SubscribeTopic(this.gameObject.name, this._mrNodeData.action_data.id.ToString(), OnReceiveMsgFromServer);
     }
 
         protected virtual void OnReceiveMsgFromServer(string payload){}
