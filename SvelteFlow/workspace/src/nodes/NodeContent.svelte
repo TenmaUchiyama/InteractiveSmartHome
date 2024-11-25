@@ -1,8 +1,20 @@
 <script lang="ts">
   import { ActionType, type IActionBlock } from "@/type/ActionBlockInterface";
+  import MqttBridge from "@/utils/MqttConnector";
+  import { onMount } from "svelte";
 
   export let action_data: IActionBlock | null;
+  export let onReceiveMqttMessage : (payload : string) => void;
+
   let editableName: string = ""; // 編集対象の名前
+
+
+  onMount(() => {
+
+
+     MqttBridge.getInstance().subscribeToTopic("mrflow/" + action_data!.id, onReceiveMqttMessage )
+  })
+
   let isEditing: boolean = false; // 編集モードのフラグ
 
   // ダブルクリックで編集モードに入る

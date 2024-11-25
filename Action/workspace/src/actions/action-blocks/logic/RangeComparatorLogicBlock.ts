@@ -10,26 +10,33 @@ export default class RangeComparatorLogicBlock
   extends ActionBlock
   implements IRangeComparatorLogicBlock
 {
-  operatorFrom: ">" | "<" | ">=" | "<=";
-  operatorTo: ">" | "<" | ">=" | "<=";
+  comparatorFrom: ">" | "<" | ">=" | "<=";
+  comparatorTo: ">" | "<" | ">=" | "<=";
   from: number;
   to: number;
 
   constructor(comparatorBlockInitializers: IRangeComparatorLogicBlock) {
     super(comparatorBlockInitializers);
 
-    this.operatorFrom = comparatorBlockInitializers.operatorFrom;
-    this.operatorTo = comparatorBlockInitializers.operatorTo;
+    this.comparatorFrom = comparatorBlockInitializers.comparatorFrom;
+    this.comparatorTo = comparatorBlockInitializers.comparatorTo;
     this.from = comparatorBlockInitializers.from;
     this.to = comparatorBlockInitializers.to;
   }
 
   onReceiveDataFromPreviousBlock(data: any): void {
     const isValid = this.compare(data);
+
     Debugger.getInstance().debugLog(
       this.getRoutineId(),
       "RANGE COMPARATOR",
       `Received data from previous block: ${data.value}, isValid: ${isValid}`
+    );
+
+    Debugger.getInstance().debugLog(
+      this.getRoutineId(),
+      "RANGE COMPARATOR",
+      `${this.from} ${this.comparatorFrom} ${data.value} ${this.comparatorTo} ${this.to}`
     );
 
     let sendingData: ISignalData = {
@@ -52,8 +59,12 @@ export default class RangeComparatorLogicBlock
   private compare(data: any): boolean {
     const dataValue = data.value; // 受信したデータの値を取得
 
-    const isValidFrom = this.evaluate(dataValue, this.from, this.operatorFrom);
-    const isValidTo = this.evaluate(dataValue, this.to, this.operatorTo);
+    const isValidFrom = this.evaluate(
+      this.from,
+      dataValue,
+      this.comparatorFrom
+    );
+    const isValidTo = this.evaluate(dataValue, this.to, this.comparatorTo);
 
     return isValidFrom && isValidTo;
   }

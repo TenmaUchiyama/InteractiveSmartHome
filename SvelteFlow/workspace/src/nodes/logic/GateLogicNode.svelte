@@ -19,20 +19,46 @@
   export let data: { action_data: IGateLogicBlock };
 
   let operators: string[] = ["AND", "OR"];
-  let currentOperator: string = data.action_data.logic_operator;
+
+  
+  let logic_status : string = "";
+  let status_color : string = "black";
+  let onReceiveMqttMessage = (payload:string) => {
+  let jsonData = JSON.parse(payload);
+
+  if(jsonData.data_type === "boolean")
+{
+  logic_status = jsonData.value ? "ON" : "OFF"
+  status_color = jsonData.value ?  "#00FF00" : "#FF0000"
+}
+
+}; 
+
+  
 </script>
 
-<LogicNode label="Not Gate Logic" action_data={data.action_data}>
-  <select class="form-select" bind:value={currentOperator}>
+<LogicNode label="Not Gate Logic" action_data={data.action_data} {onReceiveMqttMessage}>
+    <div style = "display:flex; flex-direction: column;">
+
+    <h1 style="color: {status_color}; text-align:center;">{logic_status}</h1>
+
+
+
+    <div style = "display:flex; flex-direction: row; align-items:center; gap: 10px; ">
+  <select class="form-select" style="max-height:40px; "bind:value={data.action_data.logic_operator}>
     {#each operators as operator}
       <option value={operator}>{operator}</option>
     {/each}
   </select>
   <img
     class="main-img"
-    src="/public/{currentOperator === 'AND' ? 'and' : 'or'}-gate.png"
+    src="/public/assets/{data.action_data.logic_operator === 'AND' ? 'and' : 'or'}-gate.png"
     alt=""
   />
+        </div>
+
+  </div>
+
   <Handle type="target" position={Position.Left} style={handleStyle} />
   <Handle type="source" position={Position.Right} style={handleStyle} />
 </LogicNode>
