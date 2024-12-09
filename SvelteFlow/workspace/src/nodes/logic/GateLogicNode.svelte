@@ -30,7 +30,7 @@
   </select>
   <img
     class="main-img"
-    src="/public/{currentOperator === 'AND' ? 'and' : 'or'}-gate.png"
+    src="/{currentOperator === 'AND' ? 'and' : 'or'}-gate.png"
     alt=""
   />
   <Handle type="target" position={Position.Left} style={handleStyle} />

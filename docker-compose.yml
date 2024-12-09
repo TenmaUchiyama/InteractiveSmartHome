@@ -2,12 +2,12 @@ version: "3.8"
 services:
   action:
     build:
-      context: ./Action
+      context: ./Routine
       dockerfile: Dockerfile
     ports:
       - "4049:4049"
     volumes:
-      - ./Action/workspace:/action_workspace
+      - ./Routine/workspace:/routine_workspace
     stdin_open: true
     tty: true
 
@@ -21,6 +21,16 @@ services:
       - ./SvelteFlow/workspace:/svelte_flow_workspace
     stdin_open: true
     tty: true
+
+  llm-app-server:
+    image: python:alpine
+    container_name: llm-app-server
+    command: python -m http.server 8000 # シンプルな HTTP サーバを立ち上げる
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app # 必要に応じてアプリケーションコードをマウントする
+      - ./llm-app/config:/app/config # 構成ファイルのマウント (必要に応じて)
 
   mqtt-broker:
     image: eclipse-mosquitto

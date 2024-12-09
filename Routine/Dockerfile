@@ -9,7 +9,7 @@ ENV TERM xterm-256color
 RUN echo "PS1='\e[92m\u\e[0m@\e[94m\h\e[0m:\e[35m\w\e[0m# '" >> ~/.bashrc
 
 # 作業ディレクトリを設定
-WORKDIR /action_workspace
+WORKDIR /routine_workspace
 
 # package.json を先にコピーして、依存関係をインストール
 COPY ./workspace/package*.json .
@@ -21,10 +21,10 @@ RUN npm install
 # ソースコードをコピー（node_modulesは上書きされない）
 COPY ./workspace .
 
+
+
 # 環境変数を設定
 ENV NODE_ENV=docker
-
-RUN echo "test ======================================================"
 
 # ts-node-devでアプリを起動
 CMD ["npx", "ts-node-dev", "--respawn", "-r", "tsconfig-paths/register", "--poll", "src/index.ts"]

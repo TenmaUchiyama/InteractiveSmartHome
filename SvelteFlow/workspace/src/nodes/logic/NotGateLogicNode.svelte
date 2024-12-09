@@ -24,7 +24,7 @@
 </script>
 
 <LogicNode label="Not Gate Logic" action_data={data.action_data}>
-  <img class="main-img" src="/public/not-gate.png" alt="" />
+  <img class="main-img" src="/not-gate.png" alt="" />
 
   <Handle
     type="target"
