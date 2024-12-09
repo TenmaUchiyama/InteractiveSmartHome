@@ -22,8 +22,6 @@ mr_server_url = "http://localhost:7070"
 
 set_debug(False)
 
-os.environ["OPENAI_API_KEY"] = ""
-
 
 
 class CustomCallbackHandler(BaseCallbackHandler):
