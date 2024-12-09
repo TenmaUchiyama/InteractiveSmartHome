@@ -3,22 +3,22 @@ export default class Debugger {
 
   // 色の定義
   private colors: { [key: string]: string } = {
-    yellow: '\u001b[33m',
-    magenta: '\u001b[35m',
-    cyan: '\u001b[36m',
-    white: '\u001b[37m',
-    brightYellow: '\u001b[93m', // 明るい黄
-    brightMagenta: '\u001b[95m', // 明るい紫
-    brightCyan: '\u001b[96m', // 明るい水色
-    brightWhite: '\u001b[97m', // 明るい白
-    bgYellow: '\u001b[43m', // 背景黄
-    bgMagenta: '\u001b[45m', // 背景紫
-    bgCyan: '\u001b[46m', // 背景水色
-    bgWhite: '\u001b[47m',
+    yellow: "\u001b[33m",
+    magenta: "\u001b[35m",
+    cyan: "\u001b[36m",
+    white: "\u001b[37m",
+    brightYellow: "\u001b[93m", // 明るい黄
+    brightMagenta: "\u001b[95m", // 明るい紫
+    brightCyan: "\u001b[96m", // 明るい水色
+    brightWhite: "\u001b[97m", // 明るい白
+    bgYellow: "\u001b[43m", // 背景黄
+    bgMagenta: "\u001b[45m", // 背景紫
+    bgCyan: "\u001b[46m", // 背景水色
+    bgWhite: "\u001b[47m",
   };
 
-  private standard: string = '\u001b[0m'; // 標準のシーケンス
-  private reset: string = '\u001b[0m'; // リセットシーケンス
+  private standard: string = "\u001b[0m"; // 標準のシーケンス
+  private reset: string = "\u001b[0m"; // リセットシーケンス
   private routineIdColorMap: { [routineId: string]: string } = {};
 
   public static getInstance(): Debugger {
@@ -31,15 +31,32 @@ export default class Debugger {
   public debugLog(routineName: string, caller: string, debugMsg: string) {
     const color = this.getColor(routineName);
     console.log(
-      `${color}${routineName}  [${caller}]: ${debugMsg}${this.reset}`,
+      `${color}${routineName}  [${caller}]: ${debugMsg}${this.reset}`
+    );
+  }
+
+  public debugLogOneshot(
+    routineName: string,
+    caller: string,
+    debugMsg: string
+  ) {
+    const color = this.getColor(routineName);
+    console.log(
+      "=============================================================="
+    );
+    console.log(
+      `${color}${routineName}  [${caller}]: ${debugMsg}${this.reset}`
+    );
+    console.log(
+      "=============================================================="
     );
   }
 
   public debugError(routineName: string, caller: string, debugMsg: string) {
     const color = this.getColor(routineName);
-    const errorColor = '\u001b[31m';
+    const errorColor = "\u001b[31m";
     console.log(
-      `${color}${routineName} ${errorColor} ERROR ${color} [${caller}]: ${debugMsg}${this.reset}`,
+      `${color}${routineName} ${errorColor} ERROR ${color} [${caller}]: ${debugMsg}${this.reset}`
     );
   }
 

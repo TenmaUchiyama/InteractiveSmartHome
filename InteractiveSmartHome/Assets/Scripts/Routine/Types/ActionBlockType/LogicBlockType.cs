@@ -127,8 +127,8 @@ namespace ActionDataTypes.Logic
 
         public  class RangeComparatorTempData
         {
-            public string operatorFrom {get; set;}
-            public string operatorTo {get; set;}
+            public string comperatorFrom {get; set;}
+            public string comperatorTo {get; set;}
             public float from {get; set;}
             public float to {get; set;}
         }
@@ -139,22 +139,22 @@ namespace ActionDataTypes.Logic
             {
                 case ComparatorType.InsideRange:
                     return new RangeComparatorTempData{
-                        operatorFrom = ">=",
-                        operatorTo = "<=",
+                        comperatorFrom = ">=",
+                        comperatorTo = "<=",
                         from = from,
                         to = to
                     };
                 case ComparatorType.OutsideRange:
                     return new RangeComparatorTempData{
-                        operatorFrom = "<=",
-                        operatorTo = ">=",
+                        comperatorFrom = "<=",
+                        comperatorTo = ">=",
                         from = from,
                         to = to
                     };
                 default:
                     return new RangeComparatorTempData{
-                        operatorFrom = ">=",
-                        operatorTo = "<=",
+                        comperatorFrom = ">=",
+                        comperatorTo = "<=",
                         from = from,
                         to = to
                     };
@@ -163,13 +163,13 @@ namespace ActionDataTypes.Logic
 
 
 
-        public static ComparatorType GetComparatorType(string operatorFrom, string operatorTo)
+        public static ComparatorType GetComparatorType(string comperatorFrom, string comperatorTo)
         {
-                    if (operatorFrom == ">=" && operatorTo == "<=")
+                    if (comperatorFrom == ">=" && comperatorTo == "<=")
                     {
                         return ComparatorType.InsideRange;
                     }
-                    else if (operatorFrom == "<=" && operatorTo == ">=")
+                    else if (comperatorFrom == "<=" && comperatorTo == ">=")
                     {
                         return ComparatorType.OutsideRange;
                     }else{

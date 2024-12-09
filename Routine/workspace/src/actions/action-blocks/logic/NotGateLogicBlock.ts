@@ -45,9 +45,9 @@ export default class GateLogicBlock
         "Sending Data: " + JSON.stringify(outputData)
       );
 
+      super.SendSignalDataToNodeFlow(outputData);
       this.startNextActionBlock();
       this.senderDataStream?.next(data);
-      super.SendSignalDataToNodeFlow(outputData);
     }
   }
 }

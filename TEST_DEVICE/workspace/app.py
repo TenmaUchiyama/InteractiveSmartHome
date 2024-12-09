@@ -7,7 +7,7 @@ from device.ThermometerSensor import ThermometerSensor
 if __name__ == "__main__": 
 
     devices = {
-        "led" : LedActuator() ,
+        # "led" : LedActuator() ,
         "toggle" : ToggleButton(), 
         "thermo" : ThermometerSensor()
     }

@@ -69,8 +69,8 @@ public class EditorRangeComparator :  BaseEditor, INodeEditor
         {
             MRNodeData mrNodeData = mrNode.GetMRNodeData();
             RangeComparatorUtil.RangeComparatorTempData rangeComparatorBlock = RangeComparatorUtil.GetRangeComparatorData(this.operatorType, this.fromValue, this.toValue);
-            (mrNodeData.action_data as RangeComparatorBlockData).operatorFrom = rangeComparatorBlock.operatorFrom;
-            (mrNodeData.action_data as RangeComparatorBlockData).operatorTo = rangeComparatorBlock.operatorTo;
+            (mrNodeData.action_data as RangeComparatorBlockData).operatorFrom = rangeComparatorBlock.comperatorFrom;
+            (mrNodeData.action_data as RangeComparatorBlockData).operatorTo = rangeComparatorBlock.comperatorTo;
             (mrNodeData.action_data as RangeComparatorBlockData).from = rangeComparatorBlock.from;
             (mrNodeData.action_data as RangeComparatorBlockData).to = rangeComparatorBlock.to;
 

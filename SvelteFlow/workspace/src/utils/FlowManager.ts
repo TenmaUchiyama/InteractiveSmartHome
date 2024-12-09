@@ -12,6 +12,7 @@ import type { RoutineEdge, IDBNode, IEdge } from "@/type/NodeType";
 import { DBConnector } from "./DBConnector";
 import { get } from "svelte/store";
 import type { IRoutine, IRoutineData } from "@/type/ActionBlockInterface";
+import { addPositionsToNodes } from "./PositionGenerateUtil";
 
 export const handleStyle = "width: 20px; height: 20px;";
 
@@ -42,11 +43,13 @@ export default class FlowManager {
 
   async initScene() {
     const allEdge = get(edgeList);
+
     if (allEdge.length === 0) return;
     const firstEdge = allEdge[0];
     selectedEdge.set(firstEdge.id);
-    const { nodeInEdge, edgeData } = await this.getFlowData(firstEdge);
-
+    let { nodeInEdge, edgeData } = await this.getFlowData(firstEdge);
+    if (edgeData) nodeInEdge = addPositionsToNodes(nodeInEdge, edgeData.edges);
+    console.log(nodeInEdge);
     nodes.set(nodeInEdge);
     if (edgeData) edges.set(this.extractEdge(edgeData));
   }
@@ -149,7 +152,9 @@ export default class FlowManager {
 
     if (edge_id === null) return;
 
-    const { nodeInEdge, edgeData } = await this.getFlowData(edge_id);
+    let { nodeInEdge, edgeData } = await this.getFlowData(edge_id);
+
+    if (edgeData) nodeInEdge = addPositionsToNodes(nodeInEdge, edgeData.edges);
 
     nodes.set(nodeInEdge);
 
