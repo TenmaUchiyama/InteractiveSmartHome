@@ -17,11 +17,6 @@ export default class SimpleComparatorLogicBlock
 
     this.comparator = comparatorBlockInitializers.comparator;
     this.value = Number(comparatorBlockInitializers.value);
-    Debugger.getInstance().debugLogOneshot(
-      this.getRoutineId(),
-      "SIMPLE COMPARATOR",
-      `Comparing Operator: ${JSON.stringify(comparatorBlockInitializers, null, 2)}, Comparing Value: ${this.value}`
-    );
   }
 
   onReceiveDataFromPreviousBlock(data: ISignalData): void {
@@ -57,17 +52,17 @@ export default class SimpleComparatorLogicBlock
 
     switch (this.comparator) {
       case Comparator.GREATER_THAN:
-        return this.value > dataValue;
+        return dataValue > this.value;
       case Comparator.LESS_THAN:
-        return this.value < dataValue;
+        return dataValue < this.value;
       case Comparator.EQUAL:
-        return this.value === dataValue;
+        return dataValue === this.value;
       case Comparator.NOT_EQUAL:
-        return this.value !== dataValue;
+        return dataValue !== this.value;
       case Comparator.GREATER_THAN_OR_EQUAL:
-        return this.value >= dataValue;
+        return dataValue >= this.value;
       case Comparator.LESS_THAN_OR_EQUAL:
-        return this.value <= dataValue;
+        return dataValue <= this.value;
       default:
         return false;
     }

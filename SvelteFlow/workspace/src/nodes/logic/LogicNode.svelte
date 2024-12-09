@@ -6,13 +6,10 @@
   export let label: string;
 
   export let action_data: IActionBlock | null;
-
-
-  export let onReceiveMqttMessage : (payload:string) => void; 
 </script>
 
 <NodeWrapper {label} style="background-color: #dedede;">
-  <NodeContent {action_data} {onReceiveMqttMessage}>
+  <NodeContent {action_data}>
     <slot></slot>
   </NodeContent>
 </NodeWrapper>

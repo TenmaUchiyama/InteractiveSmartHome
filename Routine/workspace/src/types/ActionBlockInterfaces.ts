@@ -75,8 +75,8 @@ export interface ISimpleComparatorLogicBlock extends IActionBlock {
 }
 
 export interface IRangeComparatorLogicBlock extends IActionBlock {
-  comparatorFrom: ">" | "<" | ">=" | "<=";
-  comparatorTo: ">" | "<" | ">=" | "<=";
+  operatorFrom: ">" | "<" | ">=" | "<=";
+  operatorTo: ">" | "<" | ">=" | "<=";
   from: number;
   to: number;
 }

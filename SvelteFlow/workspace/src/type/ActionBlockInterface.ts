@@ -81,13 +81,13 @@ export interface IDeviceBlock extends IActionBlock {
 /////////////Logic Block/////////////////////
 
 export interface ISimpleComparatorLogicBlock extends IActionBlock {
-  comparator: ">" | "<" | "=" | "!=" | ">=" | "<=";
+  operator: ">" | "<" | "=" | "!=" | ">=" | "<=";
   value: number;
 }
 
 export interface IRangeComparatorLogicBlock extends IActionBlock {
-  comparatorFrom: ">" | "<" | ">=" | "<=";
-  comparatorTo: ">" | "<" | ">=" | "<=";
+  operatorFrom: ">" | "<" | ">=" | "<=";
+  operatorTo: ">" | "<" | ">=" | "<=";
   from: number;
   to: number;
 }

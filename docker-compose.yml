@@ -6,7 +6,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4049:4049"
-      - "8080:8080"
     volumes:
       - ./Routine/workspace:/routine_workspace
     stdin_open: true
@@ -20,7 +19,6 @@ services:
       - "5173:5173"
     volumes:
       - ./SvelteFlow/workspace:/svelte_flow_workspace
-      - /svelte_flow_workspace/node_modules
     stdin_open: true
     tty: true
 

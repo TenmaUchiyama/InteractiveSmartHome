@@ -14,7 +14,6 @@
     useDnD,
     selectedEdge,
     rightClicked,
-    nodeList,
   } from "@/store/flowStore";
   import { NodeType, type IEdge } from "@type/NodeType";
   import { onMount } from "svelte";
@@ -29,10 +28,6 @@
   let selectedNode: Node | null = null;
   const type = useDnD();
   const { screenToFlowPosition } = useSvelteFlow();
-
-
-
-
 
   const onStartRoutine = async () => {
     let currentSelectedEdge = $selectedEdge;
@@ -49,8 +44,6 @@
   onMount(async () => {
     window.addEventListener("keydown", handleKeydown);
   });
-
-  
 
   const onDragOver = (event: DragEvent) => {
     event.preventDefault();

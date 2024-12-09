@@ -32,17 +32,3 @@ export interface RoutineEdge {
   edges: IEdge[];
   nodes: string[];
 }
-
-export interface ISignalData {
-  action_id: string;
-  data_type:
-    | "string"
-    | "number"
-    | "boolean"
-    | "json"
-    | "trigger"
-    | "request"
-    | "init";
-  value: string | number | boolean | object | null;
-  metadata?: object;
-}

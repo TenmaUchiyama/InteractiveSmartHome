@@ -16,7 +16,7 @@ const actionDataTemplate: any = {
     action_type: ActionType.Logic_Timer,
   },
   [NodeType.SimpleComparator]: {
-    comperator: ">",
+    operator: ">",
     value: 0,
     id: crypto.randomUUID(),
     name: "Simple Comparator Template",
@@ -24,8 +24,8 @@ const actionDataTemplate: any = {
     action_type: ActionType.Logic_SimpleComparator,
   },
   [NodeType.RangeComparator]: {
-    comparatorFrom: ">",
-    comparatorTo: "<",
+    operatorFrom: ">",
+    operatorTo: "<",
     from: 0,
     to: 0,
     id: crypto.randomUUID(),

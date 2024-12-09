@@ -48,8 +48,8 @@ namespace MRFlow.Component
                 Guid.NewGuid(), 
                 "Unity Test Range Comparator",
                 "Range Comparator Description",
-                rangeComparatorBlock.comperatorFrom,
-                rangeComparatorBlock.comperatorTo,
+                rangeComparatorBlock.operatorFrom,
+                rangeComparatorBlock.operatorTo,
                 rangeComparatorBlock.from,
                 rangeComparatorBlock.to
                 
