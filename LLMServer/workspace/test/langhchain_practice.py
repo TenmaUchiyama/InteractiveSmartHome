@@ -22,7 +22,7 @@ mr_server_url = "http://localhost:7070"
 
 set_debug(False)
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 
 
 
