@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  action:
+  routine:
     build:
       context: ./Action
       dockerfile: Dockerfile
@@ -24,6 +24,18 @@ services:
     stdin_open: true
     tty: true
 
+<<<<<<< Updated upstream
+=======
+  llm-app-server:
+    image: python:alpine
+    container_name: llm-app-server
+    ports:
+      - "8800:8800"
+    volumes:
+      - ./app:/app # 必要に応じてアプリケーションコードをマウントする
+      - ./llm-app/config:/app/config # 構成ファイルのマウント (必要に応じて)
+
+>>>>>>> Stashed changes
   mqtt-broker:
     image: eclipse-mosquitto
     container_name: mqtt-broker
