@@ -145,6 +145,40 @@ namespace MRFlow.Network
             }
         }
 
+
+
+
+
+
+          public void SubscribeDeviceTopic(string node_name, string device_topic, UnityAction<string> callback)
+        {
+           
+            string topic = device_topic; 
+            if (!topicSubscribers.ContainsKey(topic))
+            {
+                topicSubscribers[topic] = callback;
+                // Debug.Log($"<color=yellow>[MqttConnector] {this.client != null}</color>");
+                client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+                Debug.Log($"<color=yellow>[MqttConnector {node_name}] Subscribed to {topic}</color>");
+            
+            }else{
+                Debug.Log($"<color=red>[MqttConnector {node_name}] Topic {topic} already subscribed</color>");
+            }
+        }
+
+        public void UnsubscribeDeviceTopic(string device_topic)
+        {
+            string topic = device_topic; 
+            if (topicSubscribers.ContainsKey(topic))
+            {
+                topicSubscribers.Remove(topic);
+                client.Unsubscribe(new string[] { topic });
+                Debug.Log($"<color=yellow>[MqttConnector] Unsubscribed from {topic}</color>");
+            }else{
+                Debug.Log($"<color=red>[MqttConnector] Topic {topic} not subscribed</color>");
+            }
+        }
+
     
 
     }

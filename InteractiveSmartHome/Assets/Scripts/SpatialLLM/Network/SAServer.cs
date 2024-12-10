@@ -6,22 +6,34 @@ using ActionDataTypes;
 using Meta.WitAi.Json;
 using SpatialLLM.Core;
 using SpatialLLM.Network;
+using SpatialLLM.Type;
 using UnityEngine;
 using UnityEngine.Rendering.Universal.Internal;
-using static DirectionUtil;
 using static SpatialLLM.Network.NetworkDataType;
 using static SpatialLLM.Network.NetworkDataType.LLMServerDataUtil;
+using static SpatialLLM.Type.DirectionUtil;
 
 public class SAServer : HttpServer
 {
     [SerializeField] private string host = "localhost";
     [SerializeField] private int port = 7070;
-    void Start()
+
+
+    
+
+   private void Start()
     {
+
+
+
         InitServer(host, port);
 
 
+        Get("/", async (context) => {
 
+            Debug.Log("<color=red>Receive TEST</color>");
+            await context.Respond(200, "Hello from Quest 3");
+        });
 
 
         Post("/", async (context) => {
@@ -30,6 +42,9 @@ public class SAServer : HttpServer
 
         if(data.function == "direction")
         {
+
+
+            Debug.Log("<color=yellow>DIRECTION</color>");
             string direction = data.args[0];
             Direction dir = DirectionUtil.GetDirection(direction);
             List<Device> devices = SpatialAwarnessProvider.Instance.GetDeviceInDirection(dir); 
@@ -51,7 +66,10 @@ public class SAServer : HttpServer
 
         if(data.function == "sight")
         {
-            List<Device> devices = SpatialAwarnessProvider.Instance.GetDevicesInSight(data.args[0].ToLower() == "true"); 
+
+
+            Debug.Log($"<color=yellow>Sight {data.args[0]} Lower : {data.args[0].ToLower()} Result : {data.args[0].ToLower().Trim() == "true"}</color>");
+            List<Device> devices = SpatialAwarnessProvider.Instance.GetDevicesInSight(data.args[0].ToLower().Trim() == "true"); 
             List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
             devicePositionData.Sort((a, b) => a.distance_from_user.CompareTo(b.distance_from_user));
             
@@ -61,6 +79,8 @@ public class SAServer : HttpServer
             };
 
             var jsonData = JsonConvert.SerializeObject(sending);
+
+           await context.Respond(200,jsonData);
         }
         
         });

@@ -12,10 +12,13 @@ from typing_extensions import TypedDict
 from IPython.display import display, Image
 import json
 import os 
-from dotenv  import load_
+import dotenv
 from langchain.globals import set_debug
-
 from langchain.callbacks.base import BaseCallbackHandler
+
+
+
+dotenv.load_dotenv()
 
 mr_server_url = "http://localhost:7070"
 
