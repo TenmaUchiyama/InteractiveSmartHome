@@ -15,6 +15,7 @@ import os
 import dotenv
 from langchain.globals import set_debug
 from langchain.callbacks.base import BaseCallbackHandler
+from mqtt import MQTTPublisher
 
 
 
@@ -23,6 +24,8 @@ dotenv.load_dotenv()
 mr_server_url = "http://localhost:7070"
 db_server_url = "http://localhost:4049"
 
+
+mqtt_publisher =  MQTTPublisher("localhost") 
 
 set_debug(False)
 
@@ -110,6 +113,8 @@ def getDevicesInSights(in_sight: Annotated[bool, """
         if response.status_code == 200:
             response_data = response.json()
             print(f"Response from server: {response_data}")
+            for i in response_data:
+                mqtt_publisher.send_data(i.mqtt_topic, "True")
             
             if response_data["status"] == "success":
                 return response_data["status"]
