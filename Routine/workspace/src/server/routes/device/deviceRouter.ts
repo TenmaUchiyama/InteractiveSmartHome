@@ -1,23 +1,26 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   addDeviceApi,
   connectionTest,
+  deleteAllDevicesApi,
   deleteDeviceApi,
   getAllDevicesApi,
   getDeviceApi,
-} from './deviceController';
+} from "./deviceController";
 
 const deviceRouter = Router();
 
-deviceRouter.get('/', connectionTest);
+deviceRouter.get("/", connectionTest);
 
-deviceRouter.get('/get-all', getAllDevicesApi);
+deviceRouter.get("/get-all", getAllDevicesApi);
 
-deviceRouter.get('/get/:id', getDeviceApi);
+deviceRouter.get("/get/:id", getDeviceApi);
 
-deviceRouter.post('/add', addDeviceApi);
+deviceRouter.post("/add", addDeviceApi);
 
-deviceRouter.put('/update', addDeviceApi);
+deviceRouter.put("/update", addDeviceApi);
 
-deviceRouter.delete('/delete/:id', deleteDeviceApi);
+deviceRouter.delete("/delete/:id", deleteDeviceApi);
+
+deviceRouter.get("/delete/all-device", deleteAllDevicesApi);
 export default deviceRouter;

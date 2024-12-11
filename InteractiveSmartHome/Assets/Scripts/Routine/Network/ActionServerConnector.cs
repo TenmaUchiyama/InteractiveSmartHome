@@ -12,6 +12,7 @@ using UnityEngine.UIElements;
 using NodeTypes;
 using System;
 using System.Linq;
+using SpatialLLM.Type;
 
 
 namespace MRFlow.Network
@@ -199,6 +200,16 @@ public async Task AddNewRoutineDataFromNewRoutineEdge(RoutineData routineData)
     string result = await PostRequest(routineUrl, jsonRoutine);
 }
 
+
+
+public async Task AddDevices(List<DBDeviceData> deviceData)
+{
+    string jsonDevice = JsonConvert.SerializeObject(deviceData,settings);
+    string deviceUrl = this.deviceUrl + "/add";
+
+    string resutl = await PostRequest(deviceUrl, jsonDevice);
+}
+
 #endregion
 
 
@@ -303,6 +314,14 @@ public async Task DeleteActionBlock(Guid id)
 }
 
 
+public async Task DeleteAllDevices() 
+{
+    string url = nodeUrl + "/delete/all-devices";
+
+    string result = await GetRequest(url);
+}
+
+
 #endregion
 
 
@@ -310,6 +329,7 @@ public async Task DeleteActionBlock(Guid id)
 
     private async Task<string> GetRequest(string url)
         {
+            Debug.Log($"[ActionServerConnector] Sending GET request to {url}");        
         using (UnityWebRequest request = UnityWebRequest.Get(url))
             {
                 var operation = request.SendWebRequest();
@@ -327,12 +347,15 @@ public async Task DeleteActionBlock(Guid id)
 
     private async Task<string> PostRequest(string url, string jsonBody)
         {
-        
+
+            Debug.Log($"[ActionServerConnector] Sending POST request to {url}");        
             using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
             {
                 byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
                 request.uploadHandler = new UploadHandlerRaw(bodyRaw);
                 request.downloadHandler = new DownloadHandlerBuffer();
+
+
                 request.SetRequestHeader("Content-Type", "application/json");
 
                 var operation = request.SendWebRequest();
@@ -348,8 +371,12 @@ public async Task DeleteActionBlock(Guid id)
             }
         }
 
+
 public async Task<string> PutRequest(string url, string jsonBody, Dictionary<string, string> queryParams = null)
 {
+
+
+    Debug.Log($"[ActionServerConnector] Sending PUT request to {url}");        
     // クエリパラメータが存在する場合、URLに追加
     if (queryParams != null && queryParams.Count > 0)
     {
@@ -384,6 +411,11 @@ public async Task<string> PutRequest(string url, string jsonBody, Dictionary<str
 
     private async Task<string> DeleteRequest(string url, string jsonBody)
         {
+
+
+            Debug.Log($"[ActionServerConnector] Sending DELETE request to {url}");        
+
+
             using (UnityWebRequest request = UnityWebRequest.Delete(url))
             {
                 byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);

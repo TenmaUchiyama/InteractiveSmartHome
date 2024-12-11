@@ -19,9 +19,11 @@ public class LLMQueryRequest : MonoBehaviour
     [SerializeField] private string host = "localhost";
     [SerializeField] private int port = 8800;
 
+    [SerializeField] public bool speechRequired = true;
+
 
     private void Start() {
-        SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+        if(speechRequired) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
     }
 
     private void OnVoiceRecognized(string recognizedText)

@@ -5,7 +5,7 @@ using SpatialLLM.Core;
 public class FOVVisualizer : MonoBehaviour
 {
     public Transform userCameraTransform; // ユーザーのカメラのTransform
-    public List<Device> devices; // デバイスのリスト
+    public List<TestDevice> devices; // デバイスのリスト
 
     public GameObject parentObject;
     // FOVの設定
@@ -19,7 +19,7 @@ public class FOVVisualizer : MonoBehaviour
     {
         if (parentObject != null)
         {
-            devices = new List<Device>(parentObject.GetComponentsInChildren<Device>());
+            devices = new List<TestDevice>(parentObject.GetComponentsInChildren<TestDevice>());
         }
         else
         {

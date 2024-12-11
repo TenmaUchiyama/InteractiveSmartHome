@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using ActionDataTypes;
 using Meta.WitAi.Json;
+using Newtonsoft.Json.Linq;
 using SpatialLLM.Core;
 using SpatialLLM.Network;
 using SpatialLLM.Type;
@@ -19,12 +21,19 @@ public class SAServer : HttpServer
     [SerializeField] private int port = 7070;
 
 
+
+
+
+    Dictionary<string, Func<string, string>> functionMap = new Dictionary<string, Func<string, string>>();
     
+
+
+
 
    private void Start()
     {
 
-
+      
 
         InitServer(host, port);
 
@@ -37,59 +46,74 @@ public class SAServer : HttpServer
 
 
         Post("/", async (context) => {
-            // リクエストボディを読み込む
-        FunctionMsgType data = await context.ReadBodyAsJsonAsync<FunctionMsgType>(); 
+          
+        JObject data = await context.ReadBodyAsJsonAsync<JObject>(); 
 
-        if(data.function == "direction")
+        string function = data["function"]?.ToString();
+
+        Debug.Log($"<color=yellow>[SAServer] Function: {function}</color>");
+        switch(function)
         {
+            case "all-device":
+                
+                string allOrder = data["order"]?.ToString();
+                string allRange = data["range"]?.ToString();
 
+                List<DevicePositionalData> allResult = SpatialAwarnessProvider.Instance.AllDevice(allOrder,allRange);
+                string sendingData = this.SendingDeviceData(allResult);
+                await context.Respond(200, sendingData);
+            break; 
+            case "direction":
+               
+                string dir = data["dir"]?.ToString();
+                string dirOrder = data["order"]?.ToString();
+                string dirRange = data["range"]?.ToString();
 
-            Debug.Log("<color=yellow>DIRECTION</color>");
-            string direction = data.args[0];
-            Direction dir = DirectionUtil.GetDirection(direction);
-            List<Device> devices = SpatialAwarnessProvider.Instance.GetDeviceInDirection(dir); 
-            List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
-            devicePositionData.Sort((a, b) => a.distance_from_user.CompareTo(b.distance_from_user));
-            
-            var sending = new {
-                status = "success",
-                data = devicePositionData
-            };
+                 List<DevicePositionalData> dirResult = SpatialAwarnessProvider.Instance.DirectionFunction(dir, dirOrder,dirRange); 
+                string sendingDirData = this.SendingDeviceData(dirResult);
+                await context.Respond(200, sendingDirData);
+            break; 
+            case "sight":
+              string isInFov = data["isInFov"]?.ToString();
 
-            var jsonData = JsonConvert.SerializeObject(sending);
+                string sightOrder = data["order"]?.ToString();
+                string rangeOrder = data["range"]?.ToString();
+                 List<DevicePositionalData> sightResult = SpatialAwarnessProvider.Instance.SightFunction(isInFov , sightOrder, rangeOrder);
+                string sendingSightData = this.SendingDeviceData(sightResult);
+                await context.Respond(200, sendingSightData);
+            break; 
+            case "reset":
+                TestDeviceManager.Instance.ResetAllColor();
+            break; 
 
-
-            // JSON形式でレスポンスを返す   
-            await context.Respond(200, jsonData);
+            default:
+            break; 
         }
 
 
-        if(data.function == "sight")
-        {
-
-
-            Debug.Log($"<color=yellow>Sight {data.args[0]} Lower : {data.args[0].ToLower()} Result : {data.args[0].ToLower().Trim() == "true"}</color>");
-            List<Device> devices = SpatialAwarnessProvider.Instance.GetDevicesInSight(data.args[0].ToLower().Trim() == "true"); 
-            List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
-            devicePositionData.Sort((a, b) => a.distance_from_user.CompareTo(b.distance_from_user));
-            
-            var sending = new {
-                status = "success",
-                data = devicePositionData
-            };
-
-            var jsonData = JsonConvert.SerializeObject(sending);
-
-           await context.Respond(200,jsonData);
-        }
-        
+  
         });
 
+
+
+    
     }
 
 
 
-   
+private string  SendingDeviceData(List<DevicePositionalData> devicePositionalDatas)
+{
+    var sending = new
+    {
+        status = "success",
+        data = devicePositionalDatas
+    };
+    
+    var jsonData = JsonConvert.SerializeObject(sending);
+    return jsonData;
+}
+
+
 }
 
 

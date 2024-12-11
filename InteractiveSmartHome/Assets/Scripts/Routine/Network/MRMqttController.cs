@@ -9,8 +9,14 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace MRFlow.Network
 {
+
+
+    
     public class MRMqttController : M2MqttUnityClient
     {
+    /**
+        Startで操作したいときはサブスクライブするときは、OnConnectionCompletedでコネクションを待ってから操作するように。
+    **/
 
     public UnityAction OnConnectionCompleted; 
     private static MRMqttController instance;
@@ -123,7 +129,8 @@ namespace MRFlow.Network
             if (!topicSubscribers.ContainsKey(topic))
             {
                 topicSubscribers[topic] = callback;
-                // Debug.Log($"<color=yellow>[MqttConnector] {this.client != null}</color>");
+                Debug.Log($"<color=yellow>[MqttConnector] {this.client != null}</color>");  
+            
                 client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
                 Debug.Log($"<color=yellow>[MqttConnector {node_name}] Subscribed to {topic}</color>");
             
@@ -150,8 +157,12 @@ namespace MRFlow.Network
 
 
 
-          public void SubscribeDeviceTopic(string node_name, string device_topic, UnityAction<string> callback)
+          public void SubscribeDeviceTopic(string device_name, string device_topic, UnityAction<string> callback)
         {
+
+
+          
+
            
             string topic = device_topic; 
             if (!topicSubscribers.ContainsKey(topic))
@@ -159,10 +170,10 @@ namespace MRFlow.Network
                 topicSubscribers[topic] = callback;
                 // Debug.Log($"<color=yellow>[MqttConnector] {this.client != null}</color>");
                 client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-                Debug.Log($"<color=yellow>[MqttConnector {node_name}] Subscribed to {topic}</color>");
+                Debug.Log($"[MqttConnector {device_name}] Subscribed to {topic}");
             
             }else{
-                Debug.Log($"<color=red>[MqttConnector {node_name}] Topic {topic} already subscribed</color>");
+                Debug.Log($"<color=red>[MqttConnector {device_name}] Topic {topic} already subscribed</color>");
             }
         }
 

@@ -8,17 +8,26 @@ using MRFlow.Component;
 using MRFlow.Core;
 using Newtonsoft.Json;
 using NodeTypes;
+using SpatialLLM.Type;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
 
 namespace MRFlow.Network{
+
+
+[RequireComponent(typeof(ActionServerConnector))]
 public class ActionServerController : Singleton<ActionServerController>
 {
 
 
-  [SerializeField] ActionServerConnector actionServerConnector;
+  private ActionServerConnector actionServerConnector;
+
+
+  private void Start() {
+      actionServerConnector = GetComponent<ActionServerConnector>();
+  }
   public async Task<List<MRNodeData>> GetMRNodeDatas() 
    {
      List<DBNode> DBNodes = await actionServerConnector.GetAllNodes();
@@ -313,6 +322,19 @@ public class ActionServerController : Singleton<ActionServerController>
     public async Task StartRoutine(Guid routineId)
     {
         await actionServerConnector.StartRoutine(routineId.ToString());
+    }
+
+
+
+    public async Task AddDevices(List<DBDeviceData> dBDeviceDatas)
+    {
+        await actionServerConnector.AddDevices(dBDeviceDatas);
+    }
+
+
+    public async Task DeleteAllDevice()
+    {
+        await actionServerConnector.DeleteAllDevices();
     }
 }
 }

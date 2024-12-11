@@ -227,6 +227,16 @@ export class MongoDB {
     }
   };
 
+  deleteAllDevices = async (): Promise<void> => {
+    try {
+      const result = await this.db.collection(this.COL_DEVICE).deleteMany({}); // フィルタ条件なしで全削除
+      console.log(`${result.deletedCount} device(s) deleted successfully.`);
+    } catch (err) {
+      console.error("Error deleting all devices:", err);
+      throw err; // エラーを再スロー
+    }
+  };
+
   // アクションを削除するメソッド
   deleteAction = async (actionId: string): Promise<void> => {
     try {

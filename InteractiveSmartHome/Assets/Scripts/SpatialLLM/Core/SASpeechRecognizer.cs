@@ -86,14 +86,14 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
         }
 
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Debug.Log("<color=green>Space Button Pressed </color>");
-                ToggleVoiceActivation();
-            }
-        }
+        // private void Update()
+        // {
+        //     if (Input.GetKeyDown(KeyCode.Space))
+        //     {
+        //         Debug.Log("<color=green>Space Button Pressed </color>");
+        //         ToggleVoiceActivation();
+        //     }
+        // }
 
    
         public void ToggleVoiceActivation()

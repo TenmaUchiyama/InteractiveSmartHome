@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using SpatialLLM.Type;
 using UnityEngine;
+using static SpatialLLM.Network.NetworkDataType;
+using static SpatialLLM.Type.DirectionUtil;
 
 
 
@@ -17,7 +20,7 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     [SerializeField] private Camera frustalCamera; // 使用するカメラ
     public GameObject parentObject; // 親オブジェクト
 
-    private List<Device> devices; // Deviceコンポーネントを持つオブジェクトのリスト
+    private List<TestDevice> devices; // Deviceコンポーネントを持つオブジェクトのリスト
 
     
 public const float verticalFOV = 86f;
@@ -32,12 +35,19 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
     void Start()
     {
      
-        devices = new List<Device>(parentObject.GetComponentsInChildren<Device>());
+        devices = new List<TestDevice>(parentObject.GetComponentsInChildren<TestDevice>());
+    }
+
+
+
+    public List<TestDevice> GetAllDevices()
+    {
+        return this.devices; 
     }
 
  
 
- public List<Device> GetDeviceInDirection(DirectionUtil.Direction direction)
+ public List<TestDevice> GetDeviceInDirection(DirectionUtil.Direction direction)
     {
         Vector3 directionVector = Vector3.zero;
 
@@ -68,15 +78,15 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
         frustalCamera.transform.rotation = targetRotation;
 
-        List<Device> visibleDevices = GetObjectsInFrustum();
+        List<TestDevice> visibleDevices = GetObjectsInFrustum();
 
      
        return visibleDevices;
     }
    
- public List<Device> GetDevicesInSight(bool getInFov = true)
+ public List<TestDevice> GetDevicesInSight(bool getInFov = true)
     {
-        List<Device> returnDevice = new List<Device>();  // 条件に合致するデバイスを格納するリスト
+        List<TestDevice> returnDevice = new List<TestDevice>();  // 条件に合致するデバイスを格納するリスト
 
      
 
@@ -138,15 +148,14 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
             if (getInFov)
             {
 
-                Debug.Log("<color=red>True</color>");
                 if (isWithinFov)
                 {
                     returnDevice.Add(device);
-                    device.ChangeColor();
+               
                 }
                 else
                 {
-                    device.ResetColor(); // 視野外の場合の処理（必要に応じて）
+                    
                 }
             }
             else
@@ -188,9 +197,9 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
 
     // 視野内にあるオブジェクトのリストを取得するメソッド
-    public List<Device> GetObjectsInFrustum()
+    public List<TestDevice> GetObjectsInFrustum()
     {
-        List<Device> visibleDevices = new List<Device>();  // 視野内のオブジェクトを格納するリスト
+        List<TestDevice> visibleDevices = new List<TestDevice>();  // 視野内のオブジェクトを格納するリスト
 
         foreach (var device in devices.ToArray())
         {
@@ -202,9 +211,9 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
                 viewportPosition.z > 0)  // zが正ならカメラの前にある
             {
                 visibleDevices.Add(device);  // 視野内のオブジェクトをリストに追加
-                device.ChangeColor(); 
+              
             }else{
-                device.ResetColor();
+                
             }
         }
 
@@ -212,33 +221,152 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
     }
 
 
-    private void  SetFrustalCameraFOV()
-{
-    if (frustalCamera == null)
-    {
-        Debug.LogError("FrustalCameraが設定されていません。");
-        return;
-    }
 
+
+
+
+    
+     public  List<DevicePositionalData> AllDevice(string direction, string order = "proximity", string rangeStr = "")
+{
 
             
-    Quaternion targetRotation = Quaternion.LookRotation(userCameraTransform.transform.forward); 
-    frustalCamera.transform.rotation = targetRotation;
 
-    // 実際のFOV値
-    float verticalFOV = 96f;
-    float horizontalFOV = 110f;
+    List<TestDevice> devices = SpatialAwarnessProvider.Instance.GetAllDevices();
+    List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
 
-    // カメラの垂直FOVを設定
-    frustalCamera.fieldOfView = verticalFOV;
+    devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr);
+    
 
-    // アスペクト比を計算して設定
-    float aspectRatio = Mathf.Sin(horizontalFOV * 0.5f * Mathf.Deg2Rad) / Mathf.Sin(verticalFOV * 0.5f * Mathf.Deg2Rad);
-    frustalCamera.aspect = aspectRatio;
+       
+    return devicePositionData;
 
-    // クリッピングプレーンの設定（必要に応じて調整）
-    frustalCamera.nearClipPlane = 0.1f;
-    frustalCamera.farClipPlane = 1000f;
 }
+
+
+
+   public  List<DevicePositionalData> DirectionFunction(string direction, string order = "proximity", string rangeStr = "")
+{
+
+    Direction dir = DirectionUtil.GetDirection(direction);
+    
+
+    List<TestDevice> devices = SpatialAwarnessProvider.Instance.GetDeviceInDirection(dir);
+    
+
+    List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
+
+
+    
+
+    devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr);
+    
+
+       
+    return devicePositionData;
+    
+}
+
+
+public  List<DevicePositionalData> SightFunction(string isWithinFov, string order = "proximity", string rangeStr = "")
+{
+  
+    bool withinFov = isWithinFov.ToLower().Trim() == "true";
+    
+ 
+    List<TestDevice> devices = SpatialAwarnessProvider.Instance.GetDevicesInSight(withinFov);
+    
+
+    List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
+    
+
+    devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr); 
+    
+
+    return devicePositionData;
+    
+}
+
+
+
+
+private  List<DevicePositionalData> FilterDeviceData (List<DevicePositionalData> devicePositionData, string order, string rangeStr)
+{
+     
+      if (float.TryParse(rangeStr, out float range))
+    {
+        // Filter based on range and convert the result to a List
+        devicePositionData = devicePositionData
+            .Where(device => device.distance_from_user < range)
+            .ToList();
+    }
+
+    devicePositionData = SortDevices(devicePositionData, order);
+
+    return devicePositionData;
+}
+
+    private float ComputeAngle(Vector3 devicePosition)
+    {
+        // デバイスの相対位置を計算（ユーザーから見たデバイスの位置）
+        Vector3 directionToDevice = devicePosition - userCameraTransform.position;
+        directionToDevice.y = 0; // 水平面での角度を計算するためにY軸を無視
+
+        // ユーザーの前方方向を取得
+        Vector3 forward = userCameraTransform.forward;
+        forward.y = 0; // 水平面での方向
+
+        // ユーザーの前方からデバイスへの方向の角度を計算
+        float angle = Vector3.SignedAngle(forward, directionToDevice, Vector3.up);
+
+        // 角度を -180〜180 度の範囲に保持
+        return angle;
+    }
+private List<DevicePositionalData> SortDevices(List<DevicePositionalData> devices, string order)
+{
+    // 各デバイスに角度を計算して追加
+    foreach (var device in devices)
+    {
+        Vector3 devicePos = new Vector3(device.position.x, device.position.y, device.position.z);
+        device.angle = ComputeAngle(devicePos);
+    }
+
+    // ソートロジック
+    switch (order.ToLower())
+    {
+        case "right":
+            // 右から左へ（角度が小さい順）
+            devices = devices.OrderBy(d => d.angle).ToList();
+            break;
+        case "left":
+            // 左から右へ（角度が大きい順）
+            devices = devices.OrderByDescending(d => d.angle).ToList();
+            break;
+        case "down":
+            // 高さの低い順
+            devices = devices.OrderBy(d => d.position.y).ToList();
+            break;
+        case "high":
+            // 高さの高い順
+            devices = devices.OrderByDescending(d => d.position.y).ToList();
+            break;
+        case "angle":
+            // 角度順
+            devices = devices.OrderBy(d => d.angle).ToList();
+            break;
+        case "proximity":
+        default:
+            // 距離の近い順（デフォルト）
+            devices = devices.OrderBy(d => d.distance_from_user).ToList();
+            break;
+    }
+
+    return devices;
+}
+
+   
+
+   
+
+
 }
 }

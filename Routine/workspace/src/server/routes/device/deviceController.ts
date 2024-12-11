@@ -39,19 +39,7 @@ export const addDeviceApi = async (req: Request, res: Response) => {
   try {
     const device = req.body;
     console.log("Adding device:", device);
-
-    // デバイスが配列かどうかを確認し、必要に応じて配列に変換
-    const deviceArray = Array.isArray(device) ? device : [device];
-    for (const dev of deviceArray) {
-      const isValid = validateDevice(dev);
-      if (!isValid) {
-        return res
-          .status(400)
-          .send(`Invalid device data: ${JSON.stringify(dev)}`);
-      }
-    }
-
-    await MongoDB.getInstance().addDevices(deviceArray);
+    await MongoDB.getInstance().addDevices(device);
     return res.status(201).send("Device added");
   } catch (error) {
     console.error(error); // エラー内容をログに記録
@@ -64,6 +52,7 @@ export const updateDeviceApi = async (req: Request, res: Response) => {
     const device = req.body;
     console.log("Updating device:", device);
     await MongoDB.getInstance().updateDevice(device);
+
     return res.status(200).send("Device updated");
   } catch (error) {
     console.error(error);
@@ -83,6 +72,19 @@ export const deleteDeviceApi = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error); // エラー内容をログに記録
     return res.status(500).send("Failed to delete device: " + error.message);
+  }
+};
+
+export const deleteAllDevicesApi = async (req: Request, res: Response) => {
+  try {
+    console.log("Deleting all devices...");
+    await MongoDB.getInstance().deleteAllDevices();
+    return res.status(204).send("All devices deleted");
+  } catch (error) {
+    console.error(error); // エラー内容をログに記録
+    return res
+      .status(500)
+      .send("Failed to delete all devices: " + error.message);
   }
 };
 

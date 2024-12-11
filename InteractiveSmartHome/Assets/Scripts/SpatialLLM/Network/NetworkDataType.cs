@@ -29,13 +29,16 @@ public static class NetworkDataType
         public Position position; 
         public float distance_from_user;
 
+        public float angle;
 
-        public DevicePositionalData(string id , string name, Vector3 position, float distance_from_user)
+
+        public DevicePositionalData(string id , string name, Vector3 position, float distance_from_user, float angle = 0)
         {
             this.id = id;
             this.name = name;
             this.position = new Position(position);
             this.distance_from_user = distance_from_user;
+            this.angle = angle;
         }
    
 
