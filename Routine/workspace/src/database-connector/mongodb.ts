@@ -18,7 +18,7 @@ export class MongoDB {
 
   private client: MongoClient;
   private db: Db;
-  private DATABASE = "DebugInteractionSmartHome";
+  private DATABASE = "DebugInteractiveSmartHome";
   private COL_ROUTINE = "routine";
   private COL_ACTION = "action";
   private COL_DEVICE = "device";

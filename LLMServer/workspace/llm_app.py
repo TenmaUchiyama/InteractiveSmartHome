@@ -21,7 +21,7 @@ from langchain.callbacks.base import BaseCallbackHandler
 dotenv.load_dotenv()
 
 mr_server_url = "http://localhost:7070"
-
+db_server_url = "http://localhost:4049"
 
 
 set_debug(False)
@@ -103,23 +103,16 @@ def getDevicesInSights(in_sight: Annotated[bool, """
     """
     the function to get the devices based on the user's line of sight.
     """
-    # POSTリクエストのペイロードを作成
-    request_body = {
-        "function": "sight",
-        "args": [str(in_sight)]
-    }
-    
+  
     try:
-        print(f"Sending POST request to http://localhost:7070/ with body: {request_body}")
-        
-        response = httpx.post(mr_server_url, json=request_body)
+        response = httpx.get(db_server_url + "/device/get-all")
         
         if response.status_code == 200:
             response_data = response.json()
             print(f"Response from server: {response_data}")
             
             if response_data["status"] == "success":
-                return response_data
+                return response_data["status"]
             else:
                 return {"status": "error", "message": "Server responded with an error", "details": response_data}
         else:
