@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using SpatialLLM.Type;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
@@ -18,6 +19,7 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
    
     [SerializeField] private Transform userCameraTransform;
     [SerializeField] private Camera frustalCamera; // 使用するカメラ
+    [SerializeField] private GameObject aFurniture;
     public GameObject parentObject; // 親オブジェクト
 
     private List<TestDevice> devices; // Deviceコンポーネントを持つオブジェクトのリスト
@@ -36,6 +38,22 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
     {
      
         devices = new List<TestDevice>(parentObject.GetComponentsInChildren<TestDevice>());
+
+
+        List<TestDevice> devicePositionalDatas =  GetDevicesAroundFurniture(currentDirection);
+
+
+
+
+
+         
+
+        foreach (var device in devicePositionalDatas)
+        {
+           DevicePositionalData data = device.GetDevicePositionalData(); 
+
+           Debug.Log($"<color=red>{data.name}</color>");
+        }
     }
 
 
@@ -365,7 +383,70 @@ private List<DevicePositionalData> SortDevices(List<DevicePositionalData> device
 
    
 
-   
+
+
+public List<TestDevice> GetDevicesAroundFurniture(Direction userDirection)
+{
+    List<TestDevice> devicesInDirection = new List<TestDevice>();
+
+    if (aFurniture == null)
+    {
+        Debug.LogWarning("aFurniture is not assigned.");
+        return devicesInDirection;
+    }
+
+
+
+
+    foreach (var device in devices)
+    {
+        if (device == null) continue;
+
+        Vector3 devicePosition = device.transform.position;
+        Vector3 furniturePosition = aFurniture.transform.position;
+
+        // aFurniture からデバイスへのベクトル
+        Vector3 directionToDevice = devicePosition - furniturePosition;
+
+        // ユーザーのカメラ空間に変換
+        Vector3 localDirection = userCameraTransform.InverseTransformDirection(directionToDevice);
+
+        // 水平および垂直の角度を計算
+        float horizontalAngle = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
+        float verticalAngle = Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
+
+        // 指定された方向に基づいてフィルタリング
+        switch (userDirection)
+        {
+            case Direction.Front:
+                if (Mathf.Abs(horizontalAngle) < 45 && localDirection.z > 0)
+                    devicesInDirection.Add(device);
+                break;
+            case Direction.Back:
+                if (Mathf.Abs(horizontalAngle) < 45 && localDirection.z < 0)
+                    devicesInDirection.Add(device);
+                break;
+            case Direction.Left:
+                if (Mathf.Abs(horizontalAngle - (-90)) < 45)
+                    devicesInDirection.Add(device);
+                break;
+            case Direction.Right:
+                if (Mathf.Abs(horizontalAngle - 90) < 45)
+                    devicesInDirection.Add(device);
+                break;
+            case Direction.Up:
+                if (verticalAngle > 45)
+                    devicesInDirection.Add(device);
+                break;
+            case Direction.Down:
+                if (verticalAngle < -45)
+                    devicesInDirection.Add(device);
+                break;
+        }
+    }
+
+    return devicesInDirection;
+}
 
 
 }

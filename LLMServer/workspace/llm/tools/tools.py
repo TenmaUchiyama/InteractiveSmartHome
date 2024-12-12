@@ -205,7 +205,65 @@ def operateDevice(device_ids: Annotated[List[str],
     except Exception as e:
         print(f"エラーが発生しました: {e}")
         return "An error occurred during device operation."
+
+
+def getDevicesAroundFurniture(
+    direction: Annotated[str, """
+    - direction (str): Direction from furniture. You can select one from following：
+          - "Front" (one at user side)
+          - "Back" (one over the furniture from user's field of view)
+          - "Left" (left side from user's field of view)
+          - "Right" (right side from user's field of view)
+    """],
+   order: Annotated[str, """
+    - order (str): The sorting method for devices. Possible values are:
+          - "proximity" (closest first, default)
+          - "right" (right to left order).
+          - "high" (high to low order with y value) 
+    """] = "proximity",
+
+) -> Dict:
+    """
+    This function retrieves devices located around the specified furniture based on the user's perspective. The retrieved devices are sorted according to the specified sorting method and distance range.
+
+    The return value is a list of devices sorted according to the specified order.
+    """
+    request_body = {
+        "function": "furniture-direction",
+     
+        "direction": direction,
+        "order": order,
+
+    }
     
+    try:
+        print(f"Sending POST request to {MR_SERVER_URL}/ with body: {request_body}")
+        response = httpx.post(MR_SERVER_URL, json=request_body)
+        
+        if response.status_code == 200:
+            response_data = response.json()
+            print(f"Response from server: {response_data}")
+            response_data["order"] = order
+            
+            if response_data.get("status") == "success":
+                return response_data
+            else:
+                return {
+                    "status": "error",
+                    "message": "Server responded with an error",
+                    "details": response_data
+                }
+        else:
+            return {
+                "status": "error",
+                "message": f"HTTP Error {response.status_code}",
+                "details": response.text
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 # import httpx
 
