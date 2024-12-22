@@ -14,7 +14,7 @@ from typing import TypedDict
 
 
 
-llm = ChatOpenAI(model="gpt-4o-mini", callbacks=[CustomCallbackHandler()], verbose=True)
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0, callbacks=[CustomCallbackHandler()], verbose=True)
 
 @dataclass
 class State(TypedDict):

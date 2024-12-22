@@ -21,7 +21,10 @@ public class TestDeviceManager : Singleton<TestDeviceManager>
       // await ActionServerController.Instance.DeleteAllDevice(); 
 
         Debug.Log("<color=yellow>Starting TestDeviceManager</color>");
-      var allChildren = parentObject.GetComponentsInChildren<TestDevice>().ToList();
+
+
+        MRMqttController.Instance.OnConnectionCompleted += async () => {
+  var allChildren = parentObject.GetComponentsInChildren<TestDevice>().ToList();
         testDevices = allChildren;
         
         List<DBDeviceData> dbDatas = allChildren.Select(data => data.GetDBDeviceData()).ToList();   
@@ -33,6 +36,8 @@ public class TestDeviceManager : Singleton<TestDeviceManager>
 
        MRMqttController.Instance.OnConnectionCompleted += () => {
          MRMqttController.Instance.SubscribeDeviceTopic("Manager", "device/reset", (string data)=> {this.ResetAllColor();});
+        };
+    
        };
 
     }

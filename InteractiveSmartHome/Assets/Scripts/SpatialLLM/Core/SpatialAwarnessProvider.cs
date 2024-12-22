@@ -269,16 +269,16 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
 public  List<DevicePositionalData> SightFunction(string isWithinFov, string order = "proximity", string rangeStr = "")
 {
+    
   
     bool withinFov = isWithinFov.ToLower().Trim() == "true";
     
- 
-    List<TestDevice> devices = SpatialAwarnessProvider.Instance.GetDevicesInSight(withinFov);
-    
+    List<TestDevice> devices = this.GetDevicesInSight(withinFov);
 
+ 
     List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
     
-
+   
     devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr); 
     
 

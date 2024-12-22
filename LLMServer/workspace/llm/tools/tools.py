@@ -22,8 +22,8 @@ def getDevices(
     order: Annotated[str, """
     - order (str): The sorting method for devices. Possible values are:
           - "proximity" (closest first, default)
-          - "right" (right to left order)
-          - "high" (high to low order with y value)
+          - "right" (when you need to sort the devices from right to left)
+          - "high" (when you need to sort the devices from high to low with y value)
     """] = "proximity",
     range: Annotated[float, """
     - range (float): The distance range from user to search for devices (in meters). 
@@ -75,8 +75,8 @@ def getDevicesUserAngle(
     order: Annotated[str, """
     - order (str): The sorting method for devices. Possible values are:
           - "proximity" (closest first, default)
-          - "right" (right to left order)
-          - "high" (high to low order with y value) 
+          - "right" (when you need to sort the devices from right to left)
+          - "high" (when you need to sort the devices from high to low with y value)
     """] = "proximity",
     range: Annotated[float, """
     - range (float): The distance range from user to search for devices (in meters). 
@@ -126,8 +126,8 @@ def getDevicesInSights(
     order: Annotated[str, """
     - order (str): The sorting method for devices. Possible values are:
           - "proximity" (closest first, default)
-          - "right" (right to left order).
-          - "high" (high to low order with y value) 
+          - "right" (when you need to sort the devices from right to left)
+          - "high" (when you need to sort the devices from high to low with y value)
     """] = "proximity",
 
        range: Annotated[float, """
@@ -141,6 +141,7 @@ def getDevicesInSights(
     This function retrieves devices that are within the user's line of sight.
     return value is a list of devices in which its order is according to the argument.
     """
+    
     try:
         request_body = {
         "function": "sight",
@@ -148,6 +149,9 @@ def getDevicesInSights(
         "order": order ,
         "range" : range,
     }
+        
+
+        
         print(f"Sending POST request to {MR_SERVER_URL}/ with body: {request_body}")
         response = httpx.post(MR_SERVER_URL, json=request_body)
         

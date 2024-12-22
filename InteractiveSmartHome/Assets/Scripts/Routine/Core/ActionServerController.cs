@@ -25,7 +25,7 @@ public class ActionServerController : Singleton<ActionServerController>
   private ActionServerConnector actionServerConnector;
 
 
-  private void Start() {
+  void Start() {
       actionServerConnector = GetComponent<ActionServerConnector>();
   }
   public async Task<List<MRNodeData>> GetMRNodeDatas() 
