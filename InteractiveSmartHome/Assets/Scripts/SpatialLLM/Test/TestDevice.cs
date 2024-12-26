@@ -26,7 +26,7 @@ namespace SpatialLLM.Core{
     
         public DBDeviceData dbDeviceData;
         
-        public DevicePositionalData debugDeviceData;
+        public DeviceSpatialData debugDeviceData;
         public bool debug = false;
         private bool isVisible = false;
 
@@ -62,7 +62,7 @@ namespace SpatialLLM.Core{
             );
 
 
-            debugDeviceData = new DevicePositionalData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
+            debugDeviceData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
         
         }
 
@@ -88,7 +88,7 @@ namespace SpatialLLM.Core{
         }
 
 
-        public DevicePositionalData GetDevicePositionalData()
+        public DeviceSpatialData GetDevicePositionalData()
         {
             debugDeviceData.position = new Position(transform.position);
             debugDeviceData.distance_from_user = Vector3.Distance(transform.position, Camera.main.transform.position);

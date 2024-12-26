@@ -12,7 +12,7 @@ public class TestLLMUI : MonoBehaviour
     
     [SerializeField] public Button button; 
     [SerializeField] public TextMeshProUGUI inputText; 
-    [SerializeField] private LLMQueryRequest lLMQueryRequest;
+    [SerializeField] private LLMQueryRequest llmQueryRequest;
 
 
 
@@ -28,7 +28,7 @@ public class TestLLMUI : MonoBehaviour
     private void OnButtonClick()
     {
         TestDeviceManager.Instance.ResetAllColor();
-       lLMQueryRequest.SendQuery(inputText.text);
+       llmQueryRequest.SendQuery(inputText.text);
     }
 
 
@@ -37,6 +37,10 @@ public class TestLLMUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            Debug.Log("<color=green>[TestLLMUI] Enter Button Pressed </color>");
+             llmQueryRequest.SendQuery(inputText.text);
+        }
     }
 }

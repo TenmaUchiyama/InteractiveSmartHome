@@ -60,7 +60,7 @@ public class SAServer : HttpServer
                 string allRange = data["range"]?.ToString();
                 Debug.Log($"<color=yellow>[SAServer] Order: {allOrder}</color>");
                 Debug.Log($"<color=yellow>[SAServer] Range: {allRange}</color>");
-                List<DevicePositionalData> allResult = SpatialAwarnessProvider.Instance.AllDevice(allOrder,allRange);
+                List<DeviceSpatialData> allResult = SpatialAwarnessProvider.Instance.AllDevice(allOrder,allRange);
                 string sendingData = this.SendingDeviceData(allResult);
                 await context.Respond(200, sendingData);
             break; 
@@ -69,9 +69,11 @@ public class SAServer : HttpServer
                 string dir = data["dir"]?.ToString();
                 string dirOrder = data["order"]?.ToString();
                 string dirRange = data["range"]?.ToString();
-                Debug.Log($"<color=yellow>[SAServer] Order: {dirOrder}</color>");
+                
+                Debug.Log($"<color=yellow>[SAServer] Direction: {dir}</color>");   
+                Debug.Log($"<color=yellow>[SAServer] Order: {dirOrder}</color>"); 
                 Debug.Log($"<color=yellow>[SAServer] Range: {dirRange}</color>");
-                 List<DevicePositionalData> dirResult = SpatialAwarnessProvider.Instance.DirectionFunction(dir, dirOrder,dirRange); 
+                 List<DeviceSpatialData> dirResult = SpatialAwarnessProvider.Instance.DirectionFunction(dir, dirOrder,dirRange); 
 
 
 
@@ -88,7 +90,7 @@ public class SAServer : HttpServer
                 string rangeOrder = data["range"]?.ToString();
                 Debug.Log($"<color=yellow>[SAServer] Order: {sightOrder}</color>");
                 Debug.Log($"<color=yellow>[SAServer] Range: {rangeOrder}</color>");
-                 List<DevicePositionalData> sightResult = SpatialAwarnessProvider.Instance.SightFunction(isInFov , sightOrder, rangeOrder);
+                 List<DeviceSpatialData> sightResult = SpatialAwarnessProvider.Instance.SightFunction(isInFov , sightOrder, rangeOrder);
                  Debug.Log($"<color=blue>{sightResult.Count}</color>");
                 string sendingSightData = this.SendingDeviceData(sightResult);
                 Debug.Log($"<color=green>{sendingSightData}</color>");
@@ -113,12 +115,12 @@ public class SAServer : HttpServer
 
 
 
-private string  SendingDeviceData(List<DevicePositionalData> devicePositionalDatas)
+private string  SendingDeviceData(List<DeviceSpatialData> devicePositionalDatas)
 {
     var sending = new
     {
         status = "success",
-        data = devicePositionalDatas
+        devices = devicePositionalDatas
     };
     
     var jsonData = JsonConvert.SerializeObject(sending);

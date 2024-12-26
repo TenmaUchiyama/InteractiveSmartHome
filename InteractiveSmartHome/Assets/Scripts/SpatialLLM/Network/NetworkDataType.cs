@@ -19,7 +19,7 @@ public static class NetworkDataType
 
 
 [Serializable]
-  public class DevicePositionalData
+  public class DeviceSpatialData
     {
         public string id;
         public string name; 
@@ -32,7 +32,7 @@ public static class NetworkDataType
         public float angle;
 
 
-        public DevicePositionalData(string id , string name, Vector3 position, float distance_from_user, float angle = 0)
+        public DeviceSpatialData(string id , string name, Vector3 position, float distance_from_user, float angle = 0)
         {
             this.id = id;
             this.name = name;
@@ -181,14 +181,23 @@ public enum RequestType
 
 
 
-  
+[Serializable]
+public record ColorData
+{
+    public int r { get; set; }
+    public int g { get; set; }
+    public int b { get; set; }
+}
 
 
+    public record OperatingDeviceData
+    {
+        public string id;
+        public bool state;
+        public int? intensity;
+        public ColorData color;
 
-
-
-
-
+    }
 
 
     }

@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 using SpatialLLM.Core;
+using SpatialLLM.Device;
 
 public class FOVVisualizer : MonoBehaviour
 {
     public Transform userCameraTransform; // ユーザーのカメラのTransform
-    public List<TestDevice> devices; // デバイスのリスト
+    public List<SADevice> devices; // デバイスのリスト
 
     public GameObject parentObject;
     // FOVの設定
@@ -19,7 +20,7 @@ public class FOVVisualizer : MonoBehaviour
     {
         if (parentObject != null)
         {
-            devices = new List<TestDevice>(parentObject.GetComponentsInChildren<TestDevice>());
+            devices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>());
         }
         else
         {

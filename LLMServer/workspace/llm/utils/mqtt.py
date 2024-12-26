@@ -1,3 +1,4 @@
+import json
 import paho.mqtt.client as mqtt
 
 class MQTTPublisher:
@@ -47,10 +48,11 @@ class MQTTPublisher:
         :param payload: 送信するデータ
         """
         self.client.loop_start()  # 非同期でメインループを開始
-        result = self.client.publish(topic, payload)  # データの送信
+        result = self.client.publish(topic, json.dumps(payload))  # データの送信
         if result.rc != mqtt.MQTT_ERR_SUCCESS:
-            print("Error publishing message")
+            return False
         self.client.loop_stop()  # メインループを停止
+        return True
 
 
 

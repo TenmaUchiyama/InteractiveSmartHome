@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using SpatialLLM.Device;
 using SpatialLLM.Type;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
@@ -20,7 +21,7 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     [SerializeField] private Camera frustalCamera; // 使用するカメラ
     public GameObject parentObject; // 親オブジェクト
 
-    private List<TestDevice> devices; // Deviceコンポーネントを持つオブジェクトのリスト
+    private List<SADevice> devices; // Deviceコンポーネントを持つオブジェクトのリスト
 
     
 public const float verticalFOV = 86f;
@@ -34,59 +35,86 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
     void Start()
     {
-     
-        devices = new List<TestDevice>(parentObject.GetComponentsInChildren<TestDevice>());
+
+            devices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>());
     }
 
 
 
-    public List<TestDevice> GetAllDevices()
+    public List<SADevice> GetAllDevices()
     {
         return this.devices; 
     }
 
  
 
- public List<TestDevice> GetDeviceInDirection(DirectionUtil.Direction direction)
-    {
-        Vector3 directionVector = Vector3.zero;
+  public List<SADevice> GetDeviceInDirection(Direction direction)
+{
+    List<SADevice> devicesInDirection = new List<SADevice>();
 
-        // Enumに応じた方向を設定
+    foreach (SADevice device in devices)
+    {
+        // デバイスの位置をユーザーのローカル座標系に変換
+        Vector3 localPos = userCameraTransform.InverseTransformPoint(device.transform.position);
+
         switch (direction)
         {
-            case DirectionUtil.Direction.Front:
-                directionVector = userCameraTransform.transform.forward;
+            case Direction.Front:
+                // 自分の前にあるすべてのデバイス
+                if (localPos.z > 0)
+                {
+                    devicesInDirection.Add(device);
+                }
                 break;
-            case DirectionUtil.Direction.Back:
-                directionVector = -userCameraTransform.transform.forward;
+
+            case Direction.Back:
+                // 自分の後ろにあるすべてのデバイス
+                if (localPos.z < 0)
+                {
+                    devicesInDirection.Add(device);
+                }
                 break;
-            case DirectionUtil.Direction.Up:
-                directionVector = userCameraTransform.transform.up;
+
+            case Direction.Right:
+                // 自分の右側にあるすべてのデバイス
+                if (localPos.x > 0)
+                {
+                    devicesInDirection.Add(device);
+                }
                 break;
-            case DirectionUtil.Direction.Down:
-                directionVector = -userCameraTransform.transform.up;
+
+            case Direction.Left:
+                // 自分の左側にあるすべてのデバイス
+                if (localPos.x < 0)
+                {
+                    devicesInDirection.Add(device);
+                }
                 break;
-            case DirectionUtil.Direction.Right:
-                directionVector = userCameraTransform.transform.right;
+
+            case Direction.Up:
+                // 自分の上にあるすべてのデバイス
+                if (localPos.y > 0)
+                {
+                    devicesInDirection.Add(device);
+                }
                 break;
-            case DirectionUtil.Direction.Left:
-                directionVector = -userCameraTransform.transform.right;
+
+            case Direction.Down:
+                // 自分の下にあるすべてのデバイス
+                if (localPos.y < 0)
+                {
+                    devicesInDirection.Add(device);
+                }
                 break;
         }
-
-        Quaternion targetRotation = Quaternion.LookRotation(directionVector); 
-
-        frustalCamera.transform.rotation = targetRotation;
-
-        List<TestDevice> visibleDevices = GetObjectsInFrustum();
-
-     
-       return visibleDevices;
     }
+
+    return devicesInDirection;
+}
    
- public List<TestDevice> GetDevicesInSight(bool getInFov = true)
+ public List<SADevice> GetDevicesInSight(bool getInFov = true)
     {
-        List<TestDevice> returnDevice = new List<TestDevice>();  // 条件に合致するデバイスを格納するリスト
+            List<SADevice> returnDevice = new List<SADevice>();  // 条件に合致するデバイスを格納するリスト
 
      
 
@@ -101,7 +129,7 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
             Renderer renderer = device.GetComponent<Renderer>();
             if (renderer == null)
             {
-                Debug.LogWarning($"Device {device.name} does not have a Renderer component.");
+                    UnityEngine.Debug.LogWarning($"Device {device.name} does not have a Renderer component.");
                 continue;
             }
 
@@ -160,16 +188,16 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
             }
             else
             {
-            Debug.Log("<color=green>False</color>");
+                    Debug.Log("<color=green>False</color>");
 
                 if (!isWithinFov)
                 {
                     returnDevice.Add(device);
-                    device.ChangeColor();
+                    
                 }
                 else
                 {
-                    device.ResetColor(); // 視野内の場合の処理（必要に応じて）
+                   
                 }
             }
         }
@@ -197,9 +225,9 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
 
     // 視野内にあるオブジェクトのリストを取得するメソッド
-    public List<TestDevice> GetObjectsInFrustum()
+    public List<SADevice> GetObjectsInFrustum()
     {
-        List<TestDevice> visibleDevices = new List<TestDevice>();  // 視野内のオブジェクトを格納するリスト
+            List<SADevice> visibleDevices = new List<SADevice>();  // 視野内のオブジェクトを格納するリスト
 
         foreach (var device in devices.ToArray())
         {
@@ -226,13 +254,13 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
 
     
-     public  List<DevicePositionalData> AllDevice(string direction, string order = "proximity", string rangeStr = "")
+     public  List<DeviceSpatialData> AllDevice(string direction, string order = "proximity", string rangeStr = "")
 {
 
-            
 
-    List<TestDevice> devices = SpatialAwarnessProvider.Instance.GetAllDevices();
-    List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
+
+            List<SADevice> devices = SpatialAwarnessProvider.Instance.GetAllDevices();
+    List<DeviceSpatialData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
 
     devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr);
     
@@ -244,16 +272,16 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
 
 
-   public  List<DevicePositionalData> DirectionFunction(string direction, string order = "proximity", string rangeStr = "")
+   public  List<DeviceSpatialData> DirectionFunction(string direction, string order = "proximity", string rangeStr = "")
 {
 
     Direction dir = DirectionUtil.GetDirection(direction);
+
+
+            List<SADevice> devices = SpatialAwarnessProvider.Instance.GetDeviceInDirection(dir);
     
 
-    List<TestDevice> devices = SpatialAwarnessProvider.Instance.GetDeviceInDirection(dir);
-    
-
-    List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
+    List<DeviceSpatialData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
 
 
     
@@ -267,16 +295,16 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 }
 
 
-public  List<DevicePositionalData> SightFunction(string isWithinFov, string order = "proximity", string rangeStr = "")
+public  List<DeviceSpatialData> SightFunction(string isWithinFov, string order = "proximity", string rangeStr = "")
 {
     
   
     bool withinFov = isWithinFov.ToLower().Trim() == "true";
-    
-    List<TestDevice> devices = this.GetDevicesInSight(withinFov);
+
+            List<SADevice> devices = this.GetDevicesInSight(withinFov);
 
  
-    List<DevicePositionalData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
+    List<DeviceSpatialData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
     
    
     devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr); 
@@ -289,7 +317,7 @@ public  List<DevicePositionalData> SightFunction(string isWithinFov, string orde
 
 
 
-private  List<DevicePositionalData> FilterDeviceData (List<DevicePositionalData> devicePositionData, string order, string rangeStr)
+private  List<DeviceSpatialData> FilterDeviceData (List<DeviceSpatialData> devicePositionData, string order, string rangeStr)
 {
      
       if (float.TryParse(rangeStr, out float range))
@@ -321,7 +349,7 @@ private  List<DevicePositionalData> FilterDeviceData (List<DevicePositionalData>
         // 角度を -180〜180 度の範囲に保持
         return angle;
     }
-private List<DevicePositionalData> SortDevices(List<DevicePositionalData> devices, string order)
+private List<DeviceSpatialData> SortDevices(List<DeviceSpatialData> devices, string order)
 {
     // 各デバイスに角度を計算して追加
     foreach (var device in devices)

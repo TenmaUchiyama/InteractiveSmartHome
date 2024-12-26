@@ -316,7 +316,7 @@ public async Task DeleteActionBlock(Guid id)
 
 public async Task DeleteAllDevices() 
 {
-    string url = nodeUrl + "/delete/all-devices";
+    string url = deviceUrl + "/delete/all-device";
 
     string result = await GetRequest(url);
 }
