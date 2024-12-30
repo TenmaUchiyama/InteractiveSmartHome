@@ -20,21 +20,27 @@ received_devices = []
 
 @tool
 def getDevices(
+    device_type : Annotated[str, """
+    - specify device type to get. Possible devices are: 
+                            - Light
+                            - Curtain
+    """] = "Light",
     order: Annotated[str, """
     - order (str): The sorting method for devices. Possible values are:
           - "proximity" (closest first, default)
           - "right" (when you need to sort the devices from right to left)
-          - "high" (when you need to sort the devices from high to low with y value)
+          - "high" (when you need to sort the devices from high to low with z value)
     """] = "proximity",
     range: Annotated[float, """
     - range (float): The distance range from user to search for devices (in meters). 
           Optional, default is no range limitation.
-    """] = None
+    """] = None,
+
 ) -> Dict:
     
 
     """
-    This function retrieves all devices.
+    This function retrieves all devices in the room.
     return value is a list of devices in which its order is according to the argument.
     """
 
@@ -43,6 +49,7 @@ def getDevices(
 
     request_body = {
         "function": "all-device",
+        "device_type": device_type,
         "order": order,
         "range" : range
     }
@@ -53,12 +60,12 @@ def getDevices(
         print("=====================[TOOL] getDevices=====================")
         print(f"Sending POST request to {MR_SERVER_URL}/ with body: {request_body}")
         response = httpx.post(MR_SERVER_URL, json=request_body)
-        
+        global received_devices
         if response.status_code == 200:
             response_data = response.json()
             print(f"Response from server: {response_data}")
             response_data["order"] = order
-            
+            received_devices = response_data["devices"]
             if response_data.get("status") == "success":
                 print("===================================================")
                 print()
@@ -76,18 +83,23 @@ def getDevices(
 
 @tool
 def getDevicesUserAngle(
+    device_type : Annotated[str, """
+    - specify device type to get. Possible devices are: 
+                            - Light
+                            - Curtain
+    """] = "Light",
     direction: Annotated[str, """
     - direction (str): The direction to search for devices. Possible values are:
           - "Front" (devices in front of the user)
           - "Back" (devices behind the user)
           - "Left" (devices to the left of the user)
           - "Right" (devices to the right of the user)
-    """],
+    """] = "Front",
     order: Annotated[str, """
     - order (str): The sorting method for devices. Possible values are:
           - "proximity" (closest first, default)
           - "right" (when you need to sort the devices from right to left)
-          - "high" (when you need to sort the devices from high to low with y value)
+          - "high" (when you need to sort the devices from high to low with  z value)
     """] = "proximity",
     range: Annotated[float, """
     - range (float): The distance range from user to search for devices (in meters). 
@@ -107,6 +119,7 @@ def getDevicesUserAngle(
 
     request_body = {
         "function": "direction",
+        "device_type" : device_type,
         "dir": direction,
         "order": order,
         "range" : range
@@ -115,9 +128,11 @@ def getDevicesUserAngle(
     try:
         print(f"Sending POST request to {MR_SERVER_URL}/ with body: {request_body}")
         response = httpx.post(MR_SERVER_URL, json=request_body)
-        
+        global received_devices
         if response.status_code == 200:
             response_data = response.json()
+
+            received_devices = response_data["devices"]
             print(f"Response from server: {response_data}")
             response_data["order"] = order
             
@@ -138,14 +153,19 @@ def getDevicesUserAngle(
 
 @tool
 def getDevicesInSights(
+    device_type : Annotated[str, """
+    - specify device type to get. Possible devices are: 
+                            - Light
+                            - Curtain
+    """] = "Light",
     in_sight: Annotated[bool, """
     - in_sight (bool): If True, returns devices that are within the user's line of sight.
-    """],
+    """] = "True",
     order: Annotated[str, """
     - order (str): The sorting method for devices. Possible values are:
           - "proximity" (closest first, default)
           - "right" (when you need to sort the devices from right to left)
-          - "high" (when you need to sort the devices from high to low with y value)
+          - "high" (when you need to sort the devices from high to low with  z value)
     """] = "proximity",
 
        range: Annotated[float, """
@@ -165,6 +185,7 @@ def getDevicesInSights(
         print("=====================[TOOL] getDevicesInSights================")
         request_body = {
         "function": "sight",
+        "device_type" : device_type, 
         "isInFov" : in_sight,
         "order": order ,
         "range" : range,
@@ -174,11 +195,11 @@ def getDevicesInSights(
         
         print(f"Sending POST request to {MR_SERVER_URL}/ with body: {request_body}")
         response = httpx.post(MR_SERVER_URL, json=request_body)
-        
+        global received_devices
         if response.status_code == 200:
             response_data = response.json()
-            global received_devices
-            received_devices = response_data
+            
+            received_devices = response_data["devices"]
             response_data["order"] = order
             if response_data.get("status") == "success":
                 print(response_data)
@@ -196,12 +217,7 @@ def getDevicesInSights(
 
 @tool
 def sortDevices(
-    device_list: Annotated[List[Dict[str, Any]], """
-        A list of device dictionaries to be sorted.
-        Each dictionary must contain 'id', 'distance_from_user', and 'angle'.
-                       
-        e.g . [{'id': 'test_id', 'name': 'test_led', 'position': {'x': '0', 'y': '0', 'z': '0'}, 'distance_from_user': '0', 'angle': '0'}]
-    """],
+
     order: Annotated[str, """
       The sorting method for devices. Possible values are:
               - "proximity" (closest first, default)
@@ -218,6 +234,8 @@ def sortDevices(
     print()
     print("=====================[TOOL] sortDevices=====================")
     # Ensure `devices` is provided
+    global received_devices
+    device_list = received_devices
     if not device_list or not isinstance(device_list, list):
         return "The `device_list` argument is required and must be a list of device dictionaries."
 
@@ -274,9 +292,11 @@ def operateDevice(devices: Annotated[ Union[List[Dict[str, Any]], Dict[str, Any]
             "id": "test_fan_id",
             "state": true,
             "intensity": 100,
-           
         }
     ]
+
+
+    **For curtain, 0 = open, 100 = close    
     """
     try:
         print()

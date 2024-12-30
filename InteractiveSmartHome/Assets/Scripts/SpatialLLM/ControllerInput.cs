@@ -14,7 +14,7 @@ private void Start() {
 }
 
    private void Update() {
-        if(OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+        if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
         {
             Debug.Log("[ControllerInput] Pressed");
             
@@ -22,7 +22,7 @@ private void Start() {
         }
 
 
-        if(OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger))
+        if(OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
         {
              Debug.Log("[ControllerInput] Released");
     

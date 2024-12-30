@@ -9,6 +9,7 @@ using Oculus.VoiceSDK.UX;
 using System;
 using TMPro;
 using UnityEngine.Events;
+using SpatialLLM.Network;
 
 
 namespace SpatialLLM.Core
@@ -100,6 +101,9 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
         {
             if (!_isActive)
             {
+
+
+                if(LLMQueryRequest.Instance.IsRequesting) return;
                 Activate();
             }
             else
