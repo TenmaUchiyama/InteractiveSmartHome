@@ -73,7 +73,7 @@ Input and output JSON data includes:
 
 ### **Examples**
 1. **Command**: "Select the two closest devices."
-   - Sort devices by `distance_from_user` and return the top two.
+   - get devices with getAllDevices with order "proximity", and then pick two first element in the returned array is the two closest devices.
 
 2. **Command**: "Select the middle two devices."
    - Identify devices in the middle row based on `z` coordinates.
@@ -122,7 +122,7 @@ Input and output JSON data includes:
 class State(TypedDict):
     messages: List
 
-llm_with_tools = llm.bind_tools([getDevices, getDevicesUserAngle, getDevicesInSights,  operateDevice])
+llm_with_tools = llm.bind_tools([getDevices, getDevicesUserAngle, getDevicesInSights,  operateDevice ])
 
 tool_map = {
     "getDevices" : getDevices,
@@ -134,7 +134,7 @@ tool_map = {
 def llm_agent(state: State) -> State:
     print()
     print(">>>>>>>>>>>>>>>>[NODE] llm_agent <<<<<<<<<<<<<<<<")
-    print("MESSAGES: ", state["messages"])
+
 
     llm_res = llm_with_tools.invoke(state["messages"])
     state["messages"].append(llm_res)
@@ -146,22 +146,23 @@ def tool_node(state: State) -> State:
     print()
     print(">>>>>>>>>>>>>>>>[NODE] tool_node <<<<<<<<<<<<<<<<")
     last_state = state["messages"][-1]
-    tool_call = last_state.tool_calls[0]
-    tool_function = tool_map.get(tool_call["name"])
-    
-    if tool_function:
-        print("EXECUTING FUNCTION: ", tool_call["name"])
-        print("ARGS: ", tool_call["args"])
-       
 
-        tool_output = tool_function.invoke(tool_call["args"])  # 非同期呼び出し
-        print("OUTPUT: ", tool_output)
-        state["messages"].append(ToolMessage(content=tool_output, tool_call_id=tool_call["id"]))
+    # 全ての tool_calls を処理
+    for tool_call in last_state.tool_calls:
+        tool_function = tool_map.get(tool_call["name"])
 
-        
+        if tool_function:
+            print("EXECUTING FUNCTION: ", tool_call["name"])
+            print("ARGS: ", tool_call["args"])
+            
+            # 非同期呼び出しで関数を実行
+            tool_output = tool_function.invoke(tool_call["args"])
+            print("OUTPUT: ", tool_output)
 
-    else:
-        print(f"未定義のツールが呼び出されました: {tool_call['name']}")
+            # 対応する ToolMessage を生成
+            state["messages"].append(ToolMessage(content=tool_output, tool_call_id=tool_call["id"]))
+        else:
+            print(f"未定義のツールが呼び出されました: {tool_call['name']}")
     
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print()

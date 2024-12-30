@@ -22,24 +22,29 @@ public class DebugLightParent : MonoBehaviour
         
          foreach (Transform child in transform)
         {
-            // 子オブジェクトに DebugLight コンポーネントを追加
-            if (child.gameObject.GetComponent<DebugLight>() == null)
-            {
-                DebugLight comp = child.gameObject.AddComponent<DebugLight>();
-                    Debug.Log($"Added DebugLight to {child.gameObject.name}");
+            // // 子オブジェクトに DebugLight コンポーネントを追加
+            // if (child.gameObject.GetComponent<DebugLight>() == null)
+            // {
+            //     DebugLight comp = child.gameObject.AddComponent<DebugLight>();
+            //         Debug.Log($"Added DebugLight to {child.gameObject.name}");
 
         
-                comp.ExpandBounds(new Vector3(0.1f, 0.3f, 0.1f));
-            }else{
-                DebugLight comp = child.gameObject.GetComponent<DebugLight>();
-               comp.ExpandBounds(new Vector3(0.1f, 0.3f, 0.1f));
+            //     comp.ExpandBounds(new Vector3(0.1f, 0.3f, 0.1f));
+            // }else{
+            //     DebugLight comp = child.gameObject.GetComponent<DebugLight>();
+            //    comp.ExpandBounds(new Vector3(0.1f, 0.3f, 0.1f));
+            // }
+
+
+            if(!child.gameObject.GetComponent<SALight>())
+            {
+                child.gameObject.AddComponent<SALight>();
             }
 
-
-        //     if(!child.gameObject.GetComponent<SADevice>())
-        //     {
-        //         child.gameObject.AddComponent<SADevice>();
-        //     }
+            if(child.gameObject.GetComponent<SADevice>())
+            {
+                 Destroy(child.gameObject.GetComponent<SADevice>());
+            }
         }
 
     }

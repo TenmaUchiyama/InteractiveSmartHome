@@ -7,19 +7,27 @@ using SpatialLLM.Core;
 using System;
 using System.Text;
 using Meta.WitAi.Json;
+using UnityEngine.Events;
 
 
 
 
 namespace SpatialLLM.Network
 {
-public class LLMQueryRequest : MonoBehaviour
+public class LLMQueryRequest : Singleton<LLMQueryRequest>
 {
+
+
+    private bool _isRequesting = false; 
+    public bool IsRequesting => _isRequesting;
     // 任意のコマンドを指定
     [SerializeField] private string host = "localhost";
     [SerializeField] private int port = 8800;
 
     [SerializeField] public bool speechRequired = true;
+
+
+    public UnityEvent<string> OnReceiveResponseFromLLM;
 
 
     private void Start() {
@@ -40,7 +48,7 @@ public class LLMQueryRequest : MonoBehaviour
 
         var data = new  { llm_message = sending_text };
         string jsonData = JsonConvert.SerializeObject(data);
-
+        _isRequesting = true;
         StartCoroutine(PostRequest(url, jsonData));
     }
 
@@ -62,6 +70,8 @@ public class LLMQueryRequest : MonoBehaviour
                 webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError($"Error: {webRequest.error}");
+                OnReceiveResponseFromLLM.Invoke(webRequest.error);
+
             }
             else
             {
@@ -71,6 +81,8 @@ public class LLMQueryRequest : MonoBehaviour
                 
                 // 必要に応じてレスポンスを処理
                 // 例: JSONデータのパースなど
+                _isRequesting = false;
+                OnReceiveResponseFromLLM.Invoke(responseText);
             }
         }
     }

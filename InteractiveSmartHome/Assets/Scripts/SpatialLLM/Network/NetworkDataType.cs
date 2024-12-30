@@ -195,7 +195,7 @@ public record ColorData
         public string id;
         public bool state;
         public int? intensity;
-        public ColorData color;
+        public ColorData? color;
 
     }
 

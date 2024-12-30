@@ -6,6 +6,15 @@ using UnityEngine;
 
   namespace SpatialLLM.Type{
 
+
+
+
+    public enum SADeviceType 
+    {
+        Light, 
+        Curtain
+    }
+
 public static class DirectionUtil 
 {
     public enum Direction

@@ -58,9 +58,10 @@ public class SAServer : HttpServer
                 
                 string allOrder = data["order"]?.ToString();
                 string allRange = data["range"]?.ToString();
+                string allDeviceType = data["device_type"]?.ToString() ?? "";
                 Debug.Log($"<color=yellow>[SAServer] Order: {allOrder}</color>");
-                Debug.Log($"<color=yellow>[SAServer] Range: {allRange}</color>");
-                List<DeviceSpatialData> allResult = SpatialAwarnessProvider.Instance.AllDevice(allOrder,allRange);
+                Debug.Log($"<color=yellow>[SAServer] DeviceType: {allDeviceType}</color>");
+                List<DeviceSpatialData> allResult = SpatialAwarnessProvider.Instance.AllDevice(allDeviceType,allOrder,allRange);
                 string sendingData = this.SendingDeviceData(allResult);
                 await context.Respond(200, sendingData);
             break; 
@@ -69,11 +70,11 @@ public class SAServer : HttpServer
                 string dir = data["dir"]?.ToString();
                 string dirOrder = data["order"]?.ToString();
                 string dirRange = data["range"]?.ToString();
-                
+                string dirDeviceType =  data["device_type"]?.ToString() ?? "";
                 Debug.Log($"<color=yellow>[SAServer] Direction: {dir}</color>");   
                 Debug.Log($"<color=yellow>[SAServer] Order: {dirOrder}</color>"); 
-                Debug.Log($"<color=yellow>[SAServer] Range: {dirRange}</color>");
-                 List<DeviceSpatialData> dirResult = SpatialAwarnessProvider.Instance.DirectionFunction(dir, dirOrder,dirRange); 
+                Debug.Log($"<color=yellow>[SAServer] DeviceType: {dirDeviceType}</color>");
+                 List<DeviceSpatialData> dirResult = SpatialAwarnessProvider.Instance.DirectionFunction( dirDeviceType,dir, dirOrder,dirRange); 
 
 
 
@@ -88,9 +89,11 @@ public class SAServer : HttpServer
             
                 string sightOrder = data["order"]?.ToString();
                 string rangeOrder = data["range"]?.ToString();
+                string sightDeviceType =  data["device_type"]?.ToString() ?? "";
                 Debug.Log($"<color=yellow>[SAServer] Order: {sightOrder}</color>");
                 Debug.Log($"<color=yellow>[SAServer] Range: {rangeOrder}</color>");
-                 List<DeviceSpatialData> sightResult = SpatialAwarnessProvider.Instance.SightFunction(isInFov , sightOrder, rangeOrder);
+                Debug.Log($"<color=yellow>[SAServer] DeviceType: {sightDeviceType}</color>");
+                 List<DeviceSpatialData> sightResult = SpatialAwarnessProvider.Instance.SightFunction(sightDeviceType, isInFov , sightOrder, rangeOrder);
                  Debug.Log($"<color=blue>{sightResult.Count}</color>");
                 string sendingSightData = this.SendingDeviceData(sightResult);
                 Debug.Log($"<color=green>{sendingSightData}</color>");

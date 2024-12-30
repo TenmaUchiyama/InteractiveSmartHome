@@ -31,6 +31,10 @@ class Message(BaseModel):
 def llm_agent(message: Message):
     try:
         # LLMエージェントにメッセージを送信し、レスポンスを取得
+        print("\n\n")
+        print("INPUT: ", message.llm_message)
+        print("\n\n")
+        
         response = invoke_llm_agent(message.llm_message)
 
         # レスポンスをJSON形式で返す
