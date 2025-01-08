@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,12 +10,14 @@ public class PlayerMovement : MonoBehaviour
         public float gravity = -15f;
 
 
-        enum InputMode {
+        public enum InputMode {
             MetaQuest3, 
             Keyboard,
         }
 
         [SerializeField] private  InputMode inputMode = InputMode.Keyboard;
+        public InputMode SelectedInputMode => inputMode; 
+
 
         Vector3 velocity;
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Meta.WitAi.Json;
 using MRFlow.Network;
+using Oculus.Interaction;
 using SpatialLLM.Type;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
@@ -12,13 +13,26 @@ using static SpatialLLM.Network.NetworkDataType;
 namespace SpatialLLM.Device
 
 {
-    public class SADevice : MonoBehaviour
+
+
+   
+    public abstract class SADevice : MonoBehaviour
     {
          protected DBDeviceData deviceData; 
          protected DeviceSpatialData spatialData;
 
          protected SADeviceType saDeviceType;
 
+         protected OperatingDeviceData currentOperatingData = new OperatingDeviceData(); 
+
+
+
+
+    
+
+        public int HandleHover { get; private set; }
+
+        public abstract void OperateDevice(OperatingDeviceData operatingDeviceData);
 
 
         public DeviceSpatialData GetDevicePositionalData()
@@ -47,6 +61,12 @@ namespace SpatialLLM.Device
             return this.saDeviceType;
         }
 
+
+      
+        public OperatingDeviceData GetCurrentOperateData()
+        {
+            return this.currentOperatingData;
+        }
 
     }
 }

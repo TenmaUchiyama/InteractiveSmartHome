@@ -35,7 +35,6 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
 
 
 
-public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
 
 
@@ -44,7 +43,7 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
 
             allDevices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>(false));
 
-            Debug.Log($"<color=green>{allDevices.Count}</color>");
+      
 
     }
 
@@ -61,6 +60,11 @@ public DirectionUtil.Direction currentDirection = DirectionUtil.Direction.Front;
     public List<SADevice> GetAllDevices()
     {
         return this.allDevices; 
+    }
+
+    public SADevice GetDeviceById(string id)
+    {
+        return allDevices.Find(device => device.GetDBDeviceData().device_id == id);
     }
 
  
@@ -274,7 +278,7 @@ public List<SADevice> GetDevicesInSight(string device_type = "", bool getInFov =
 
 
             
-            List<SADevice> devices = SpatialAwarnessProvider.Instance.GetAllDevices().Where(
+            List<SADevice> devices = this.GetAllDevices().Where(
                 device => device.CompareDeviceType(device_type)
             ).ToList();
             
@@ -296,7 +300,7 @@ public List<SADevice> GetDevicesInSight(string device_type = "", bool getInFov =
     Direction dir = DirectionUtil.GetDirection(direction);
 
 
-            List<SADevice> devices = SpatialAwarnessProvider.Instance.GetDeviceInDirection(dir, device_type);
+            List<SADevice> devices = this.GetDeviceInDirection(dir, device_type);
     
 
     List<DeviceSpatialData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();

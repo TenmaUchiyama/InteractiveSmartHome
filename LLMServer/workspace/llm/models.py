@@ -15,5 +15,6 @@ class DBDeviceData:
     device_id: str
     device_name: str
     device_type: str
+    description: str    
     mqtt_topic: str
     device_position: Dict[str, float]

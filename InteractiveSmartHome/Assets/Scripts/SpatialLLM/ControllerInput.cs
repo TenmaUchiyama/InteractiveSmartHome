@@ -10,7 +10,6 @@ public class ControllerInput : MonoBehaviour
 
 
 private void Start() {
-    Debug.Log("<color=yellow>Hello</color>");
 }
 
    private void Update() {

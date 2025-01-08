@@ -49,6 +49,7 @@ class MQTTPublisher:
         """
         self.client.loop_start()  # 非同期でメインループを開始
         result = self.client.publish(topic, json.dumps(payload))  # データの送信
+        print("[RESULT]: ", result)
         if result.rc != mqtt.MQTT_ERR_SUCCESS:
             return False
         self.client.loop_stop()  # メインループを停止

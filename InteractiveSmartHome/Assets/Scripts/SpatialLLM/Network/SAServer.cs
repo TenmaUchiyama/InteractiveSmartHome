@@ -7,6 +7,7 @@ using ActionDataTypes;
 using Meta.WitAi.Json;
 using Newtonsoft.Json.Linq;
 using SpatialLLM.Core;
+using SpatialLLM.Device;
 using SpatialLLM.Network;
 using SpatialLLM.Type;
 using UnityEngine;
@@ -113,6 +114,25 @@ public class SAServer : HttpServer
 
 
 
+        Post("/operate", async (context) => {
+
+            List<OperatingDeviceData> operatingDeviceData = await context.ReadBodyAsJsonAsync<List<OperatingDeviceData>>();
+
+            foreach(OperatingDeviceData data in operatingDeviceData)
+            {
+                 SADevice saDevice = SpatialAwarnessProvider.Instance.GetDeviceById(data.id); 
+                saDevice.OperateDevice(data);
+            }
+
+              var sending = new
+                {
+                    status = "success",
+                    msg = "Operate Success"
+                };
+    
+            var jsonData = JsonConvert.SerializeObject(sending);
+              await context.Respond(200, sending);
+        });
     
     }
 

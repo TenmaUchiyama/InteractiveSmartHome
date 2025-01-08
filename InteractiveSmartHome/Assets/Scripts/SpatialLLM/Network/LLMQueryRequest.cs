@@ -1,19 +1,30 @@
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
-using Unity.VisualScripting;
-using TMPro;
 using SpatialLLM.Core;
-using System;
-using System.Text;
-using Meta.WitAi.Json;
 using UnityEngine.Events;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using SpatialLLM.Device;
+using static SpatialLLM.Network.NetworkDataType;
+using System.Linq;
+using Newtonsoft.Json;
 
 
 
 
 namespace SpatialLLM.Network
 {
+
+
+public enum LLMQueryMode
+{
+    Spatial, 
+    Pointing, 
+    Label,
+    Map
+}
+
+
 public class LLMQueryRequest : Singleton<LLMQueryRequest>
 {
 
@@ -23,66 +34,100 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     // 任意のコマンドを指定
     [SerializeField] private string host = "localhost";
     [SerializeField] private int port = 8800;
+    [SerializeField] private LLMQueryMode queryMode = LLMQueryMode.Spatial;
 
     [SerializeField] public bool speechRequired = true;
 
 
     public UnityEvent<string> OnReceiveResponseFromLLM;
+    private Dictionary<LLMQueryMode, string> queryModeUrl = new Dictionary<LLMQueryMode, string>(){
+    {LLMQueryMode.Spatial, "llm_agent"},
+    {LLMQueryMode.Pointing, "pointing_agent"},
+    {LLMQueryMode.Label, "label_agent"},
+};
 
 
     private void Start() {
         if(speechRequired) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
     }
 
-    private void OnVoiceRecognized(string recognizedText)
+    private async void OnVoiceRecognized(string recognizedText)
     {
-        SendQuery(recognizedText);
+        switch(queryMode)
+        {
+            case LLMQueryMode.Spatial:
+                await SendQuery(recognizedText);
+            break;
+            case LLMQueryMode.Label:
+                List<SADevice> devices = SpatialAwarnessProvider.Instance.GetAllDevices(); 
+                List<DeviceLabel> deviceLabels = devices.Select(device => {
+                    DeviceLabel deviceLabel = new DeviceLabel(); 
+                    deviceLabel.id = device.GetDBDeviceData().device_id;
+                    deviceLabel.name = device.GetDBDeviceData().device_name; 
+                    deviceLabel.type = device.GetDBDeviceData().device_type;
+
+                    return deviceLabel;
+                }).ToList(); 
+
+                LabelQueryDataType labelQueryData = new LabelQueryDataType();
+                labelQueryData.user_message = recognizedText;
+                labelQueryData.devices = deviceLabels;
+
+                JsonSerializerSettings settings = new JsonSerializerSettings(){
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+
+                string json = JsonConvert.SerializeObject(labelQueryData, settings);
+
+                Debug.Log($"<color=yellow>Send Query: {json}</color>");
+                await SendQuery(json);
+            break; 
+            default :
+            break;
+        }
     }
 
   
 
- public void SendQuery(string sending_text)
+ public async Task SendQuery(string sending_text)
     {
         Debug.Log($"<color=yellow>Sending Query: {sending_text}</color>");
-        string url = $"http://{host}:{port}/llm_agent";
+        string path = queryModeUrl[queryMode];
+        string url = $"http://{host}:{port}/{path}";
 
         var data = new  { llm_message = sending_text };
         string jsonData = JsonConvert.SerializeObject(data);
         _isRequesting = true;
-        StartCoroutine(PostRequest(url, jsonData));
+        await PostRequestAsync(url, jsonData);
     }
 
     // POSTリクエストを送信するコルーチン
-    IEnumerator PostRequest(string url, string json)
+    private async Task PostRequestAsync(string url, string jsonData)
     {
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
-        using (UnityWebRequest webRequest = new UnityWebRequest(url, "POST"))
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
         {
-            webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            webRequest.downloadHandler = new DownloadHandlerBuffer();
-            webRequest.SetRequestHeader("Content-Type", "application/json");
+            // リクエストヘッダーの設定
+            request.SetRequestHeader("Content-Type", "application/json");
 
-            // リクエストを送信し、レスポンスを待機
-            yield return webRequest.SendWebRequest();
+            // JSONデータをリクエストに追加
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
 
-            // エラーチェック
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
-                webRequest.result == UnityWebRequest.Result.ProtocolError)
+            // リクエストの送信と結果の取得
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Error: {webRequest.error}");
-                OnReceiveResponseFromLLM.Invoke(webRequest.error);
-
+                Debug.Log($"<color=green>Response: {request.downloadHandler.text}</color>");
+                OnReceiveResponseFromLLM?.Invoke(request.downloadHandler.text);
             }
             else
             {
-                // レスポンスデータを取得
-                string responseText = webRequest.downloadHandler.text;
-                Debug.Log($"Response: {responseText}");
-                
-                // 必要に応じてレスポンスを処理
-                // 例: JSONデータのパースなど
-                _isRequesting = false;
-                OnReceiveResponseFromLLM.Invoke(responseText);
+                Debug.LogError($"<color=red>Error: {request.error}</color>");
             }
         }
     }
