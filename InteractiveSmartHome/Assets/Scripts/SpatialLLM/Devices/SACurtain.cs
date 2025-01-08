@@ -40,6 +40,7 @@ public class SACurtain : SADevice
                 id,
                 this.gameObject.name,
                 "curtain",
+                "This is a curtain device. You need this when you want to open or close the curtain. You can specify the value of the curtain by specifying the value. 0 is fully open, 100 is closed.",
                 "device/" + id,
                 this.transform.position
             );
@@ -50,6 +51,9 @@ public class SACurtain : SADevice
         }
 
     private void Start() {
+
+
+        this.currentOperatingData.intensity = (int)value;
          MRMqttController.Instance.OnConnectionCompleted += () => {
             MRMqttController.Instance.SubscribeDeviceTopic(this.deviceData.device_name, this.deviceData.mqtt_topic,  OnReceiveMsgFromServer);
         };
@@ -61,10 +65,16 @@ public class SACurtain : SADevice
 
 
            if(operatingDeviceData.intensity.HasValue){
-            SetOpenCloseValue(operatingDeviceData.intensity.Value);
+            OperateDevice(operatingDeviceData);
            }
 
            
+        }
+
+          public override void OperateDevice(OperatingDeviceData operatingDeviceData )
+        {
+              this.currentOperatingData = operatingDeviceData;
+              SetOpenCloseValue(operatingDeviceData.intensity.Value);
         }
 
         public void SetOpenCloseValue(int value)
@@ -114,5 +124,7 @@ public class SACurtain : SADevice
         // 最終位置を設定
         curtainVisual.localPosition = end;
     }
-}
+
+      
+    }
 }

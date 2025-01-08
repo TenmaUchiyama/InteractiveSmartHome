@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SpatialLLM.Network.NetworkDataType;
 
 
-  namespace SpatialLLM.Type{
+namespace SpatialLLM.Type{
 
 
 
@@ -58,18 +59,20 @@ public record DBDeviceData
     public string device_id { get; set; }
     public string device_type { get; set;}
     public string device_name { get; set; }
+    public string description { get; set; }
     public string mqtt_topic { get; set; }
-    public Vector3 device_position { get; set; }
+    public Position device_position { get; set; }
 
 
 
-    public DBDeviceData(string devcie_id,  string device_name, string device_type,string mqtt_topic, Vector3 device_position)
+    public DBDeviceData(string devcie_id,  string device_name, string device_type, string description, string mqtt_topic, Vector3 device_position)
     {
         this.device_id = devcie_id;
         this.device_type = device_type;
         this.device_name = device_name;
+        this.description =description;
         this.mqtt_topic = mqtt_topic;
-        this.device_position = device_position;
+        this.device_position = new Position(device_position);
 
     }
 }

@@ -34,4 +34,15 @@ public class DeviceDebugger : MonoBehaviour
             Gizmos.DrawWireCube(bounds.center, bounds.size);
         }
     }
+
+
+
+    #if UNITY_EDITOR
+    void AttachComponents() 
+    {
+        // BoxColliderをアタッチ
+        //ColliderSurfaceをアタッチ
+        
+    }
+    #endif
 }

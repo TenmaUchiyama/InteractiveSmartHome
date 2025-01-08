@@ -57,6 +57,7 @@ namespace SpatialLLM.Core{
                 this.gameObject.name,
                 "test",
                 "device/" + this.gameObject.name,
+                "This is a test device. You can use this device to test the system.",
                 this.transform.position
 
             );

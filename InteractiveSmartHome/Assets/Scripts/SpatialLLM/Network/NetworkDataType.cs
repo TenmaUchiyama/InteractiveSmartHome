@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using SpatialLLM.Core;
+using SpatialLLM.Type;
 using UnityEngine;
+using uPLibrary.Networking.M2Mqtt.Internal;
 
 
 
@@ -196,10 +198,38 @@ public record ColorData
         public bool state;
         public int? intensity;
         public ColorData? color;
-
     }
 
 
+
+
+
+    [Serializable]
+    public record  PointingQueryDataType
+    {   
+        public string user_message; 
+        public DBDeviceData device;
     }
 
+
+    [Serializable]
+    public record DeviceLabel
+    {
+        public string id; 
+        public string name;
+        public string type;
+    }
+    
+    [Serializable]
+    public record LabelQueryDataType 
+    {
+        public string user_message;
+
+        public List<DeviceLabel> devices;
+    }
+
+
+
+
+}
 }
