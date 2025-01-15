@@ -305,6 +305,7 @@ def operateDevice(devices: Annotated[ Union[List[Dict[str, Any]], Dict[str, Any]
 
         
         response_data = response.json()
+        
         print(f"Response from server: {response_data}")
 
         if response.status_code != 200:

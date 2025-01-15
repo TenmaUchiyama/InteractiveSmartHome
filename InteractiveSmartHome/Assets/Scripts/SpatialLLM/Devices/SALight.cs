@@ -36,7 +36,7 @@ public class SALight : SADevice
             this.spatialData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
 
 
-
+      
 
 
 
@@ -52,8 +52,8 @@ public class SALight : SADevice
             
         light = GetComponentInChildren<Light>();
 
-        this.currentOperatingData.state = light.enabled;
-        this.currentOperatingData.intensity = GetLightIntensity();
+        if(light)this.currentOperatingData.state = light.enabled;
+        if(light)this.currentOperatingData.intensity = GetLightIntensity();
 
 
         if(isDebug)return;
