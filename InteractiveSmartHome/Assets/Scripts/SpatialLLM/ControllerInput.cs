@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using SpatialLLM.Core;
+using SpatialLLM.Network;
 using SpatialLLM.Type;
 using UnityEngine;
 
@@ -8,24 +9,24 @@ public class ControllerInput : MonoBehaviour
 {
   
 
-
-private void Start() {
-}
-
+private bool IsActive = false;
    private void Update() {
         if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
         {
             Debug.Log("[ControllerInput] Pressed");
-            
+            if(LLMQueryRequest.Instance.IsRequesting) return;
             SASpeechRecognizer.Instance.ActivateVoice();
+            IsActive = true;
         }
 
 
         if(OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
         {
              Debug.Log("[ControllerInput] Released");
-    
+
+            if(!IsActive) return;
             SASpeechRecognizer.Instance.DeactivateVoice();
+            IsActive = false;
         }
 
 

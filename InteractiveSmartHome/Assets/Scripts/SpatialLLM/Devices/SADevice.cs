@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Meta.WitAi.Json;
 using MRFlow.Network;
 using Oculus.Interaction;
+using SpatialLLM.Network;
 using SpatialLLM.Type;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
@@ -25,9 +26,10 @@ namespace SpatialLLM.Device
 
          protected OperatingDeviceData currentOperatingData = new OperatingDeviceData(); 
 
+         protected bool isDeviceSelected = false;
 
 
-
+ 
     
 
         public int HandleHover { get; private set; }
@@ -46,6 +48,17 @@ namespace SpatialLLM.Device
         public DBDeviceData GetDBDeviceData() 
         {
             return this.deviceData;
+        }
+
+
+        public bool IsDeviceSelected()
+        {
+            return this.isDeviceSelected;
+        }
+
+        public void SetIsSelected(bool isSelected)
+        {
+            this.isDeviceSelected = isSelected;
         }
 
         

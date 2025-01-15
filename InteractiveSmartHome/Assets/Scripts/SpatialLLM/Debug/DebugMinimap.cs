@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SpatialLLM.Minimap;
+
 
 
 #if UNITY_EDITOR
@@ -104,6 +106,42 @@ public class DebugMinimap : MonoBehaviour
         rectTransform.sizeDelta = Vector2.zero;
         rectTransform.localPosition = Vector3.zero;
     }
+
+
+
+
+    [ContextMenu("Minimapタイプを普通のタイプに変更")]
+    public void ChangeMinimapTo_NO_Voice()
+    {
+      //このオブジェクトのチャイルドオブジェクトからMinimapIconコンポーネントをforeachで取得
+
+        ChangeMinimapMode(false);
+    }
+
+
+    [ContextMenu("Minimapタイプを音声付きのタイプに変更")]
+    public void ChangeMinimapTo_Voice()
+    {
+      //このオブジェクトのチャイルドオブジェクトからMinimapIconコンポーネントをforeachで取得
+
+        ChangeMinimapMode(true);
+    }
+
+
+
+
+    private void ChangeMinimapMode(bool isWithVoiceMode)
+    {
+        foreach (Transform child in this.transform)
+        {
+            MiniMapIcon miniMapIcon = child.GetComponent<MiniMapIcon>();
+            if(miniMapIcon != null)
+            {
+              miniMapIcon.isWithVoiceMode = isWithVoiceMode;
+            }
+        }
+    }
+
 
 }
 #endif

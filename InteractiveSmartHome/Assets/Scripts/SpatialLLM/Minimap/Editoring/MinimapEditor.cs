@@ -5,6 +5,7 @@ using Meta.XR.MRUtilityKit;
 using SpatialLLM.Device;
 using TMPro;
 using Unity.PlasticSCM.Editor.WebApi;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.iOS;
@@ -46,16 +47,20 @@ public class MinimapEditor : MonoBehaviour
 
         GameObject editorPrefab = Instantiate(minimapEditorSO.editorPrefab, editorParent.transform);
 
-
+        int count = 0;
         foreach(Transform child in editorPrefab.transform)
         {
             IMinimapEditor minimapEditor = child.GetComponent<IMinimapEditor>();
             
+            
             if (minimapEditor != null)
             {
+                count++;
                 minimapEditor.OnUIValueChanged(device);
             }
         }
+
+        Debug.Log($"<color=green>Editor Spawned {count}</color>");
        
 
 

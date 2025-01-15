@@ -116,6 +116,9 @@ public class SAServer : HttpServer
 
         Post("/operate", async (context) => {
 
+
+            Debug.Log("<color=red>[SAServer]Operate</color>");
+
             List<OperatingDeviceData> operatingDeviceData = await context.ReadBodyAsJsonAsync<List<OperatingDeviceData>>();
 
             foreach(OperatingDeviceData data in operatingDeviceData)
