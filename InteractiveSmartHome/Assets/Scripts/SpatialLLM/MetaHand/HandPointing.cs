@@ -19,6 +19,12 @@ public class HandPointing : MonoBehaviour
     [SerializeField] RayInteractor rayInteractor;
 
 
+    [SerializeField] private float maxRayLength = 10f; // Ray の最大長さ
+    [SerializeField] private Color rayColor = Color.green; // Ray の色
+
+    private LineRenderer lineRenderer;
+
+
         // [SerializeField, Interface(typeof(ISelector))]
         // private UnityEngine.Object _selector;
         private ISelector Selector;   
@@ -34,6 +40,7 @@ public class HandPointing : MonoBehaviour
 
     private void Awake() {
         // // // Selector = _selector as ISelector;
+        CreateLineRenderer(); 
     }
 
 
@@ -48,8 +55,19 @@ public class HandPointing : MonoBehaviour
     }
 
 
+    private void Update() {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("<color=green>Space Button Pressed </color>");
+            OnVoiceRecognized("あれ取って。");
+        }
 
-    
+        Debug.Log($"<color=yellow>{rightHand.Bones.Count}</color>");
+        VisualizeRay();
+    }
+
+
+
 
     void OnDestroy()
     {
@@ -119,59 +137,35 @@ public class HandPointing : MonoBehaviour
         isStateActivated = true;
     }
 
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("<color=green>Space Button Pressed </color>");
-            OnVoiceRecognized("あれ取って。");
-        }
+
+
+
+      private void CreateLineRenderer()
+    {
+        // GameObject に LineRenderer を追加
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+
+        // LineRenderer の基本設定
+        lineRenderer.positionCount = 2; // 始点と終点
+        lineRenderer.startWidth = 0.005f; // 始点の幅
+        lineRenderer.endWidth = 0.005f;   // 終点の幅
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // シンプルなマテリアル
+        lineRenderer.startColor = rayColor; // 始点の色
+        lineRenderer.endColor = rayColor;   // 終点の色
+        lineRenderer.useWorldSpace = true;  // ワールド座標で描画
     }
-    // Update is called once per frame
-    // void Update()
-    // {
-        
-      
-    //     return;
-        
-    //     bool isRightHandVisible = rightHand.Bones.Count > 0 && isStateActivated; 
 
+    private void VisualizeRay()
+    {
+        if (rayInteractor == null || lineRenderer == null )
+            return;
 
+        // Ray の始点と方向を取得
+        Vector3 origin = rayInteractor.Origin;
+        Vector3 direction = rayInteractor.Forward;
 
-    //     if (isRightHandVisible != isVisibleStateChangedOnce)
-    //     {
-    //         isVisibleStateChangedOnce = isRightHandVisible;
-    //         beam.SetActive(isRightHandVisible);
-    //     }
-
-    //     if (!isRightHandVisible)
-    //     {
-    //         return;
-    //     }
-
-    //     Vector3 intermediatePhalanxPosition  = rightHand.Bones[7].Transform.position;
-    //     Vector3 indexTipPosition  = rightHand.Bones[(int)OVRSkeleton.BoneId.XRHand_IndexTip].Transform.position;
-
-
-    //     //まずはDirectionを見つけてNormalizeする
-    //     Vector3 direction = indexTipPosition - intermediatePhalanxPosition;
-    //     float distance = direction.magnitude;
-    //     direction.Normalize(); 
-
-
-    //     float beamLength = beam.transform.localScale.z;
-
-    //     //オブジェクトの位置を更新する。
-    //     beam.transform.position = intermediatePhalanxPosition + direction * (beamLength * 0.5f + distance);
-    //     beam.transform.rotation = Quaternion.LookRotation(direction);
-
-    //     Ray ray = new Ray(indexTipPosition , direction );
-
-    //     RaycastHit hit; 
-
-    //     if(Physics.Raycast(ray, out hit))
-    //     {
-    //         // Debug.Log($"Hit: {hit.collider.gameObject.name}");
-    //     }
-        
-    // }
+        // LineRenderer の始点と終点を設定
+        lineRenderer.SetPosition(0, origin); // 始点を設定
+        lineRenderer.SetPosition(1, origin + direction * maxRayLength); // 終点を設定
+    }
 }
