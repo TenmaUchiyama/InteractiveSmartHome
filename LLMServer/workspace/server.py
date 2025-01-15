@@ -12,6 +12,7 @@ dotenv.load_dotenv()
 from llm.apps.llm_app import invoke_llm_agent
 from llm.apps.pointing import invoke_pointing_agent
 from llm.apps.label import invoke_label_agent
+from llm.apps.multiple_selections import invoke_multiple_selection_agent
 
 app = FastAPI()
 
@@ -49,6 +50,21 @@ def pointing_agent(message : Message):
         print("INPUT: ", message.llm_message)
         print("\n\n")
         response = invoke_pointing_agent(message.llm_message)
+        return_value = {
+            "llm_response": response
+        }
+        return return_value
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    
+
+@app.post("/multiple_select_agent")
+def pointing_agent(message : Message):
+    try:
+        print("\n\n")
+        print("INPUT: ", message.llm_message)
+        print("\n\n")
+        response = invoke_multiple_selection_agent(message.llm_message)
         return_value = {
             "llm_response": response
         }
