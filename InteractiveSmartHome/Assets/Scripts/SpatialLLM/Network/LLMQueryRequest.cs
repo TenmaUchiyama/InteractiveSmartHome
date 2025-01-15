@@ -21,7 +21,9 @@ public enum LLMQueryMode
     Spatial, 
     Pointing, 
     Label,
-    Map
+    Map,
+    Multiple_Select,
+    Multiple_Select_Pointing,
 }
 
 
@@ -44,6 +46,10 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     {LLMQueryMode.Spatial, "llm_agent"},
     {LLMQueryMode.Pointing, "pointing_agent"},
     {LLMQueryMode.Label, "label_agent"},
+    
+    {LLMQueryMode.Multiple_Select, "multiple_select_agent"},
+    {LLMQueryMode.Multiple_Select_Pointing, "multiple_select_agent"},
+
 };
 
 
@@ -82,6 +88,37 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
                 Debug.Log($"<color=yellow>Send Query: {json}</color>");
                 await SendQuery(json);
             break; 
+            case LLMQueryMode.Multiple_Select_Pointing:
+
+                 List<SADevice> allDevices = SpatialAwarnessProvider.Instance.GetAllDevices(); 
+                List<DeviceLabel> selectedDeviceLabel = allDevices
+                .Where(device => device.IsDeviceSelected())
+                .Select(device => {
+                    DeviceLabel deviceLabel = new DeviceLabel(); 
+                    deviceLabel.id = device.GetDBDeviceData().device_id;
+                    deviceLabel.name = device.GetDBDeviceData().device_name; 
+                    deviceLabel.type = device.GetDBDeviceData().device_type;
+
+                    return deviceLabel;
+                }).ToList(); 
+
+
+                LabelQueryDataType multipleSelectQueryData = new LabelQueryDataType();
+                multipleSelectQueryData.user_message = recognizedText;
+
+                multipleSelectQueryData.devices = selectedDeviceLabel;
+
+                JsonSerializerSettings multipleSelectSettings = new JsonSerializerSettings(){
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+
+                string multipleSelectJson = JsonConvert.SerializeObject(multipleSelectQueryData, multipleSelectSettings);
+
+                Debug.Log($"<color=yellow>Send Query: {multipleSelectJson}</color>");
+                await SendQuery(multipleSelectJson);
+                
+
+            break;
             default :
             break;
         }
@@ -99,6 +136,8 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         string jsonData = JsonConvert.SerializeObject(data);
         _isRequesting = true;
         await PostRequestAsync(url, jsonData);
+        
+        _isRequesting = false;
     }
 
     // POSTリクエストを送信するコルーチン
