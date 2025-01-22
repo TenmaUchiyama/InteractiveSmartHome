@@ -143,5 +143,5 @@ public class DebugMinimap : MonoBehaviour
     }
 
 
-}
 #endif
+}

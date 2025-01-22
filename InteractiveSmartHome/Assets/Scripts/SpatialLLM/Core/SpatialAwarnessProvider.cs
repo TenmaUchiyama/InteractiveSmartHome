@@ -18,7 +18,7 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
 {
    
     [SerializeField] private Transform userCameraTransform;
-    [SerializeField] private Camera frustalCamera; // 使用するカメラ
+    // [SerializeField] private Camera frustalCamera; // 使用するカメラ
     public GameObject parentObject; // 親オブジェクト
 
     private List<SADevice> allDevices; // Deviceコンポーネントを持つオブジェクトのリスト
@@ -243,29 +243,29 @@ public List<SADevice> GetDevicesInSight(string device_type = "", bool getInFov =
     }
 
 
-    // 視野内にあるオブジェクトのリストを取得するメソッド
-    public List<SADevice> GetObjectsInFrustum()
-    {
-            List<SADevice> visibleDevices = new List<SADevice>();  // 視野内のオブジェクトを格納するリスト
+    // // 視野内にあるオブジェクトのリストを取得するメソッド
+    // public List<SADevice> GetObjectsInFrustum()
+    // {
+    //         List<SADevice> visibleDevices = new List<SADevice>();  // 視野内のオブジェクトを格納するリスト
 
-        foreach (var device in allDevices.ToArray())
-        {
-            Vector3 viewportPosition = frustalCamera.WorldToViewportPoint(device.transform.position);
+    //     foreach (var device in allDevices.ToArray())
+    //     {
+    //         Vector3 viewportPosition = frustalCamera.WorldToViewportPoint(device.transform.position);
 
-            // ビューポート座標が0〜1の範囲内に収まっている場合、視野内
-            if (viewportPosition.x >= 0 && viewportPosition.x <= 1 &&
-                viewportPosition.y >= 0 && viewportPosition.y <= 1 &&
-                viewportPosition.z > 0)  // zが正ならカメラの前にある
-            {
-                visibleDevices.Add(device);  // 視野内のオブジェクトをリストに追加
+    //         // ビューポート座標が0〜1の範囲内に収まっている場合、視野内
+    //         if (viewportPosition.x >= 0 && viewportPosition.x <= 1 &&
+    //             viewportPosition.y >= 0 && viewportPosition.y <= 1 &&
+    //             viewportPosition.z > 0)  // zが正ならカメラの前にある
+    //         {
+    //             visibleDevices.Add(device);  // 視野内のオブジェクトをリストに追加
               
-            }else{
+    //         }else{
                 
-            }
-        }
+    //         }
+    //     }
 
-        return visibleDevices;  // 視野内のオブジェクトを返す
-    }
+    //     return visibleDevices;  // 視野内のオブジェクトを返す
+    // }
 
 
 

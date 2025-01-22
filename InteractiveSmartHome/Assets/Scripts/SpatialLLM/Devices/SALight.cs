@@ -12,7 +12,8 @@ using static SpatialLLM.Network.NetworkDataType;
 namespace SpatialLLM.Device{
 public class SALight : SADevice
 {
-    
+
+        [SerializeField] private float intensityScale = 10.0f;
         private GameObject boundingBoxVisualizer;
          
         Light light;
@@ -75,7 +76,7 @@ public class SALight : SADevice
 
         public int GetLightIntensity()
         {
-            return (int)(light.intensity * 10.0f);
+            return (int)(light.intensity * intensityScale);
         }
         public override void OperateDevice(OperatingDeviceData operatingDeviceData )
         {
@@ -94,6 +95,9 @@ public class SALight : SADevice
                         Mathf.Clamp01(colorData.g / 255.0f),
                         Mathf.Clamp01(colorData.b / 255.0f)
                     );
+                }else{
+                    light.color = Color.white;
+
                 }
         }
 
