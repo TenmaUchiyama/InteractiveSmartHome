@@ -34,21 +34,10 @@ public class DrawOnHover : MonoBehaviour
         saDevice = GetComponent<SADevice>();
         InteractableUnityEventWrapper.WhenHover.AddListener(WhenHovered);
         InteractableUnityEventWrapper.WhenUnhover.AddListener(WhenUnHovered);
-        InteractableUnityEventWrapper.WhenSelect.AddListener(WhenSelected);
+        // InteractableUnityEventWrapper.WhenSelect.AddListener(WhenSelected);
 
-        // LineRendererコンポーネントを取得または追加
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // シェーダーを変更
-        lineRenderer.enabled = false;
-        lineRenderer.useWorldSpace = true;
-        lineRenderer.loop = false; // ループ設定を解除
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
 
-        // 初期色を設定
-        lineRenderer.startColor = hoverColor;
-        lineRenderer.endColor = hoverColor;
-
+        InitLineRenderer();
         DrawBoundingBox();
 
 
@@ -93,6 +82,26 @@ public class DrawOnHover : MonoBehaviour
         }
     }
 
+
+
+
+    private void InitLineRenderer()
+    {
+          // LineRendererコンポーネントを取得または追加
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // シェーダーを変更
+        lineRenderer.enabled = false;
+        lineRenderer.useWorldSpace = true;
+        lineRenderer.loop = false; // ループ設定を解除
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+
+        // 初期色を設定
+        lineRenderer.startColor = hoverColor;
+        lineRenderer.endColor = hoverColor;
+
+    }
+
     public void DrawSelect() 
     {
         if (saDevice.IsDeviceSelected())
@@ -121,8 +130,14 @@ public class DrawOnHover : MonoBehaviour
         lineRenderer.enabled = false;
     }
 
-    void DrawBoundingBox()
+    void DrawBoundingBox(Color color = default(Color))
     {
+        if(color != default(Color))
+        {
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+        }
+        
         BoxCollider boxCollider = GetComponent<BoxCollider>();
         if (boxCollider == null)
         {

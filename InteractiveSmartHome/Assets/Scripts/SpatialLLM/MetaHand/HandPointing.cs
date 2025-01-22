@@ -14,9 +14,11 @@ using static SpatialLLM.Network.NetworkDataType;
 
 public class HandPointing : MonoBehaviour
 {
-    [SerializeField] OVRSkeleton rightHand; 
+    [SerializeField] OVRHand rightHand; 
     // [SerializeField] GameObject beam;
     [SerializeField] RayInteractor rayInteractor;
+
+    private LineRenderer rayRenderer;
 
 
         // [SerializeField, Interface(typeof(ISelector))]
@@ -45,6 +47,8 @@ public class HandPointing : MonoBehaviour
 
 
         SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+
+        InitLineRenderer();
     }
 
 
@@ -60,56 +64,70 @@ public class HandPointing : MonoBehaviour
         SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
     }
 
-    private async void OnVoiceRecognized(string detected)
+  private async void OnVoiceRecognized(string detected)
+{
+    try
     {
+        // RayInteractor のヒット情報を取得
         SurfaceHit? hit = rayInteractor.CollisionInfo;
-        
+        if (!hit.HasValue) return;
 
+        // Raycast の正しい origin と direction を設定
+        Vector3 origin = hit.Value.Point + hit.Value.Normal * 0.01f; // 少しオフセットをつける
+        Vector3 direction = -hit.Value.Normal;
 
-        if (!hit.HasValue) return; 
-          // Raycastの結果を直接利用する場合
-            Ray ray = new Ray(hit.Value.Point - hit.Value.Normal * hit.Value.Distance, hit.Value.Normal);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit))
+        if (Physics.Raycast(origin, direction, out RaycastHit raycastHit, Mathf.Infinity))
+        {
+            string gameObjectName = raycastHit.collider.gameObject.name;
+            Debug.Log($"<color=yellow>Hit GameObject Name: {gameObjectName}</color>");
+
+            // 親オブジェクトも含めて SADevice を探す
+            SADevice device = raycastHit.collider.GetComponentInParent<SADevice>();
+            if (device != null)
             {
-
-
-                // ヒットしたオブジェクトの名前を取得
-                string gameObjectName = raycastHit.collider.gameObject.name;
-                Debug.Log($"<color=yellow>Hit GameObject Name: {gameObjectName}</color>");
-
-                // SADeviceコンポーネントを取得
-                SADevice device = raycastHit.collider.GetComponent<SADevice>();
-                if (device != null)
-                {
-                    Debug.Log("<color=yellow>SADevice component found on the hit object.</color>");
+                Debug.Log("<color=yellow>SADevice component found on the hit object.</color>");
                 DBDeviceData dBDeviceData = device.GetDBDeviceData();
                 Debug.Log($"<color=yellow>dBDeviceData: {dBDeviceData}</color>");
 
-          
-                  
-                PointingQueryDataType pointingQuery = new PointingQueryDataType(); 
-                pointingQuery.user_message = detected; 
-                pointingQuery.device = dBDeviceData; 
+                PointingQueryDataType pointingQuery = new PointingQueryDataType
+                {
+                    user_message = detected,
+                    device = dBDeviceData
+                };
 
-                JsonSerializerSettings settings = new JsonSerializerSettings(){
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
 
-                   string json = JsonConvert.SerializeObject(pointingQuery, settings);
-                     Debug.Log($"<color=yellow>Send Query: {json}</color>");
-                   await LLMQueryRequest.Instance.SendQuery(json);
+                string json = JsonConvert.SerializeObject(pointingQuery, settings);
+                Debug.Log($"<color=yellow>Send Query: {json}</color>");
 
-                }
-                else
+                // LLM クエリ送信時のエラーハンドリング
+                try
                 {
-                    Debug.Log("No SADevice component found on the hit object.");
+                    await LLMQueryRequest.Instance.SendQuery(json);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"LLMQueryRequest failed: {e.Message}");
                 }
             }
-
-
-        
+            else
+            {
+                Debug.Log("<color=red>No SADevice component found on the hit object.</color>");
+            }
+        }
+        else
+        {
+            Debug.Log("<color=red>Raycast did not hit any object.</color>");
+        }
     }
-    
+    catch (Exception e)
+    {
+        Debug.LogError($"OnVoiceRecognized encountered an error: {e.Message}");
+    }
+}
     private void HandleUnselected()
     {
         isStateActivated = false;
@@ -125,53 +143,41 @@ public class HandPointing : MonoBehaviour
             Debug.Log("<color=green>Space Button Pressed </color>");
             OnVoiceRecognized("あれ取って。");
         }
+
+
+        if(rightHand.IsPointerPoseValid)
+        {
+            DrawPointingLine();
+
+            Debug.Log("<color=green>Right Hand Pointer Pose Valid</color>");
+        }
+     
+            
+        
     }
-    // Update is called once per frame
-    // void Update()
-    // {
-        
-      
-    //     return;
-        
-    //     bool isRightHandVisible = rightHand.Bones.Count > 0 && isStateActivated; 
+    
 
 
 
-    //     if (isRightHandVisible != isVisibleStateChangedOnce)
-    //     {
-    //         isVisibleStateChangedOnce = isRightHandVisible;
-    //         beam.SetActive(isRightHandVisible);
-    //     }
-
-    //     if (!isRightHandVisible)
-    //     {
-    //         return;
-    //     }
-
-    //     Vector3 intermediatePhalanxPosition  = rightHand.Bones[7].Transform.position;
-    //     Vector3 indexTipPosition  = rightHand.Bones[(int)OVRSkeleton.BoneId.XRHand_IndexTip].Transform.position;
+    private void InitLineRenderer() 
+    {
+        rayRenderer = gameObject.AddComponent<LineRenderer>();
+        rayRenderer.startWidth = 0.01f;
+        rayRenderer.endWidth = 0.01f;
+        rayRenderer.material = new Material(Shader.Find("Unlit/Color"));
+        rayRenderer.material.color = Color.white;
+        rayRenderer.positionCount = 2;
+    }
 
 
-    //     //まずはDirectionを見つけてNormalizeする
-    //     Vector3 direction = indexTipPosition - intermediatePhalanxPosition;
-    //     float distance = direction.magnitude;
-    //     direction.Normalize(); 
+    private void DrawPointingLine() 
+    {
+        if(!rayRenderer) return;
 
+        Vector3 startPos = rayInteractor.Origin; 
+        Vector3 endPos =  rayInteractor.End; 
 
-    //     float beamLength = beam.transform.localScale.z;
-
-    //     //オブジェクトの位置を更新する。
-    //     beam.transform.position = intermediatePhalanxPosition + direction * (beamLength * 0.5f + distance);
-    //     beam.transform.rotation = Quaternion.LookRotation(direction);
-
-    //     Ray ray = new Ray(indexTipPosition , direction );
-
-    //     RaycastHit hit; 
-
-    //     if(Physics.Raycast(ray, out hit))
-    //     {
-    //         // Debug.Log($"Hit: {hit.collider.gameObject.name}");
-    //     }
-        
-    // }
+        rayRenderer.SetPosition(0, startPos);
+        rayRenderer.SetPosition(1, endPos);
+    }
 }
