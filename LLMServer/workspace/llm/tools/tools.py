@@ -299,7 +299,11 @@ def operateDevice(devices: Annotated[ Union[List[Dict[str, Any]], Dict[str, Any]
         print()
         print("=====================[TOOL] operateDevice=====================")
         # デバイスデータを取得
+
+        print("DEVICE DATA: ", devices)
         sending_data = json.dumps(devices)
+
+
         response = httpx.post(f"{MR_SERVER_URL}/operate", data=sending_data)
 
 
