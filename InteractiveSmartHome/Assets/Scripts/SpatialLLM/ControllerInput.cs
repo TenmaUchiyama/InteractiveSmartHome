@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using SpatialLLM.Core;
+using SpatialLLM.Experiment;
 using SpatialLLM.Network;
 using SpatialLLM.Type;
 using UnityEngine;
@@ -8,12 +9,28 @@ using UnityEngine;
 public class ControllerInput : MonoBehaviour
 {
   
+    [SerializeField] private SystemExecutor systemExecutor;
+    [SerializeField] private ExperimentManager experimentManager;
+    private bool IsActive = false;
+    private bool isControllable;
 
-private bool IsActive = false;
+
+
+    private void Start() {
+        if(systemExecutor) {
+            systemExecutor.onBeginOperation.AddListener(()=>{isControllable = true;});
+            systemExecutor.onCompleteOperation.AddListener(()=>{isControllable = false;});
+            }
+    }
    private void Update() {
+        if(!isControllable) return;
+
         if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
         {
+
+
             Debug.Log("[ControllerInput] Pressed");
+
             if(LLMQueryRequest.Instance.IsRequesting) return;
             SASpeechRecognizer.Instance.ActivateVoice();
             IsActive = true;
@@ -34,7 +51,7 @@ private bool IsActive = false;
        if (Input.GetKeyDown(KeyCode.T))
         {
 
-            Debug.Log("[ControllerInput] A Pressed");
+            Debug.Log("[ControllerInput] T Pressed");
             List<SpatialLLM.Network.NetworkDataType.DeviceSpatialData> data = SpatialAwarnessProvider.Instance.DirectionFunction(DirectionUtil.GetDirection(DirectionUtil.Direction.Right), "high"); 
 
 
@@ -50,13 +67,29 @@ private bool IsActive = false;
         }
 
 
-    if (Input.GetKeyDown(KeyCode.Space))
+        if(OVRInput.GetDown(OVRInput.RawButton.X))
         {
-
-            Debug.Log("[ControllerInput] Space Pressed");
-            SASpeechRecognizer.Instance.ToggleVoiceActivation(); 
-        
+            systemExecutor.CompleteOperation();
         }
+
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            systemExecutor.CompleteOperation();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("SPACEKEY PRESSED"); 
+             LLMQueryRequest.Instance.SendQueryForDebug("");
+        }
+
+    // if (Input.GetKeyDown(KeyCode.Space))
+    //     {
+
+    //         Debug.Log("[ControllerInput] Space Pressed");
+    //         SASpeechRecognizer.Instance.ToggleVoiceActivation(); 
+        
+    //     }
 
    }
 }

@@ -36,12 +36,21 @@ namespace SpatialLLM.Device
 
         public abstract void OperateDevice(OperatingDeviceData operatingDeviceData);
 
+        public abstract void Init();
+
 
         public DeviceSpatialData GetDevicePositionalData()
         {
             this.spatialData.position = new Position(new Vector3(this.transform.position.x, this.transform.position.z, this.transform.position.y));
             this.spatialData.distance_from_user = Vector3.Distance(transform.position, Camera.main.transform.position);
             return this.spatialData;
+        }
+
+
+
+        public string GetDeviceID() 
+        {
+            return this.deviceData.device_id;
         }
 
 

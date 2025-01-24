@@ -16,12 +16,12 @@ public class TestVoiceActivate : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-             if (Input.GetKeyDown(KeyCode.Space))
-             {
-                Debug.Log("Space Pressed");
-                onSpacePressed.Invoke();
-             }
-    }
+    // void Update()
+    // {
+    //          if (Input.GetKeyDown(KeyCode.Space))
+    //          {
+    //             Debug.Log("Space Pressed");
+    //             onSpacePressed.Invoke();
+    //          }
+    // }
 }

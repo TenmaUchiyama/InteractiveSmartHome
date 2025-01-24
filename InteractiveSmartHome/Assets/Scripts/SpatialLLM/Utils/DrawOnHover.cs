@@ -22,12 +22,9 @@ public class DrawOnHover : MonoBehaviour
 
     void  OnEnable()
     {
-     LLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener((string msg) => {
-            Debug.Log($"<color=red>Received: {msg}</color>");
-            ClearDrawing();
-
-            saDevice.SetIsSelected(false);
-        });
+ 
+        
+        InitLineRenderer();
     }
     void Start()
     {
@@ -37,7 +34,6 @@ public class DrawOnHover : MonoBehaviour
         // InteractableUnityEventWrapper.WhenSelect.AddListener(WhenSelected);
 
 
-        InitLineRenderer();
         DrawBoundingBox();
 
 
@@ -130,37 +126,39 @@ public class DrawOnHover : MonoBehaviour
         lineRenderer.enabled = false;
     }
 
-    void DrawBoundingBox(Color color = default(Color))
+
+    public void VisualizeTargetDevice(Color targetColor)
     {
-        if(color != default(Color))
-        {
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
-        }
-        
-        BoxCollider boxCollider = GetComponent<BoxCollider>();
+        lineRenderer.startColor = targetColor;
+        lineRenderer.endColor = targetColor;
+        lineRenderer.enabled = true;
+    }
+
+     public void DrawBoundingBox()
+    {
+       BoxCollider boxCollider = GetComponent<BoxCollider>();
         if (boxCollider == null)
         {
-            Debug.LogWarning("BoxColliderが見つかりません.");
+            Debug.LogWarning("BoxCollider が見つかりません.");
             return;
         }
 
-        // BoxColliderの中心とサイズを取得
+        // BoxCollider の中心とサイズを取得
         Vector3 center = boxCollider.center;
-        Vector3 size = boxCollider.size;
+        Vector3 size   = boxCollider.size;
 
         // ローカル空間でのコーナー座標を計算
         Vector3[] corners = new Vector3[8];
         Transform t = transform;
 
         corners[0] = center + new Vector3(-size.x, -size.y, -size.z) * 0.5f; // 左下前
-        corners[1] = center + new Vector3(size.x, -size.y, -size.z) * 0.5f;  // 右下前
-        corners[2] = center + new Vector3(size.x, size.y, -size.z) * 0.5f;   // 右上前
-        corners[3] = center + new Vector3(-size.x, size.y, -size.z) * 0.5f;  // 左上前
-        corners[4] = center + new Vector3(-size.x, -size.y, size.z) * 0.5f;  // 左下後
-        corners[5] = center + new Vector3(size.x, -size.y, size.z) * 0.5f;   // 右下後
-        corners[6] = center + new Vector3(size.x, size.y, size.z) * 0.5f;    // 右上後
-        corners[7] = center + new Vector3(-size.x, size.y, size.z) * 0.5f;   // 左上後
+        corners[1] = center + new Vector3( size.x, -size.y, -size.z) * 0.5f; // 右下前
+        corners[2] = center + new Vector3( size.x,  size.y, -size.z) * 0.5f; // 右上前
+        corners[3] = center + new Vector3(-size.x,  size.y, -size.z) * 0.5f; // 左上前
+        corners[4] = center + new Vector3(-size.x, -size.y,  size.z) * 0.5f; // 左下後
+        corners[5] = center + new Vector3( size.x, -size.y,  size.z) * 0.5f; // 右下後
+        corners[6] = center + new Vector3( size.x,  size.y,  size.z) * 0.5f; // 右上後
+        corners[7] = center + new Vector3(-size.x,  size.y,  size.z) * 0.5f; // 左上後
 
         // ワールド座標に変換
         for (int i = 0; i < corners.Length; i++)
@@ -168,22 +166,34 @@ public class DrawOnHover : MonoBehaviour
             corners[i] = t.TransformPoint(corners[i]);
         }
 
-        // 前面、背面、垂直の辺だけを描画
-        Vector3[] linePoints = new Vector3[]
+        // ボックスを構成する12本のエッジ（始点・終点）をインデックスで定義
+        int[] edgeIndices = new int[]
         {
-            // 前面
-            corners[0], corners[1], corners[2], corners[3], corners[0],
-            // 背面
-            corners[4], corners[5], corners[6], corners[7], corners[4],
-            // 垂直の辺
-            corners[0], corners[4], 
-            corners[1], corners[5], 
-            corners[2], corners[6], 
-            corners[3], corners[7]
+            // 前面(4本)
+            0, 1,  1, 2,  2, 3,  3, 0,
+            // 背面(4本)
+            4, 5,  5, 6,  6, 7,  7, 4,
+            // 垂直(4本)
+            0, 4,  1, 5,  2, 6,  3, 7
         };
 
-        lineRenderer.positionCount = 0; // 頂点リセット
-        lineRenderer.positionCount = linePoints.Length;
-        lineRenderer.SetPositions(linePoints);
+        // 「辺」を一本ずつ [start, end, end] としてリストに追加
+        List<Vector3> linePointsList = new List<Vector3>();
+        for (int i = 0; i < edgeIndices.Length; i += 2)
+        {
+            Vector3 start = corners[edgeIndices[i]];
+            Vector3 end   = corners[edgeIndices[i + 1]];
+
+            // ダミー頂点で線を切る: [start, end, end]
+            linePointsList.Add(start);
+            linePointsList.Add(end);
+            linePointsList.Add(end); // 終点の重複
+        }
+
+        // LineRenderer へ反映
+        lineRenderer.positionCount = linePointsList.Count;
+        lineRenderer.SetPositions(linePointsList.ToArray());
+
+      
     }
 }

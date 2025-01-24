@@ -28,7 +28,7 @@ class CustomCallbackHandler(BaseCallbackHandler):
 
 
 
-llm = ChatOpenAI(model="gpt-4o-mini", callbacks=[CustomCallbackHandler()], verbose="True")
+llm = ChatOpenAI(model="gpt-4o", callbacks=[CustomCallbackHandler()], verbose="True")
 
 system_msg = SystemMessage(content="""
 System:
@@ -55,8 +55,8 @@ Instructions:
 
 4. **Provide Feedback**:
    - Respond to the user with a message summarizing what was done or an error message if no devices were matched.
-   - Ensure the message is in the same language as the `user_message`.
 
+ YOUR ANSWER MESSAGE MUST BE IN ENGLISH
 ---
 
 """)
