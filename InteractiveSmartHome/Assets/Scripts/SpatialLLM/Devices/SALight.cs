@@ -14,9 +14,11 @@ public class SALight : SADevice
 {
 
         [SerializeField] private float intensityScale = 10.0f;
-        private GameObject boundingBoxVisualizer;
+    
          
         Light light;
+
+        DrawOnHover drawOnHover;
 
         public bool isDebug = false;
 
@@ -46,15 +48,12 @@ public class SALight : SADevice
 
 
         private void Start() {
-        boundingBoxVisualizer = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        boundingBoxVisualizer.transform.SetParent(this.transform);
-        boundingBoxVisualizer.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0.3f); // 半透明
-        boundingBoxVisualizer.SetActive(false);
+        drawOnHover = GetComponent<DrawOnHover>();
+       
             
         light = GetComponentInChildren<Light>();
 
-        if(light)this.currentOperatingData.state = light.enabled;
-        if(light)this.currentOperatingData.intensity = GetLightIntensity();
+       UpdateCurrentData();
 
 
         if(isDebug)return;
@@ -63,7 +62,29 @@ public class SALight : SADevice
         };
         }
 
- 
+
+        public override void Init() 
+        {
+
+
+
+
+            OperatingDeviceData initData = new OperatingDeviceData {
+                state = false,
+
+            };
+            OperateDevice(initData);
+            UpdateCurrentData();
+
+
+            this.drawOnHover.ClearDrawing();
+        }
+
+        private void UpdateCurrentData()
+        {
+        if(light)this.currentOperatingData.state = light.enabled;   
+        if(light)this.currentOperatingData.intensity = GetLightIntensity();
+        }
          void OnReceiveMsgFromServer(string payload)
         {
               Debug.Log($"<color=Blue>[{this.gameObject.name}] Received {payload}</color>");
@@ -85,7 +106,7 @@ public class SALight : SADevice
             Debug.Log($"<color=yellow>[{this.gameObject.name}] State {operatingDeviceData.state}, Intensity: {operatingDeviceData.intensity}</color>");
              light.enabled = operatingDeviceData.state;
              currentOperatingData = operatingDeviceData;
-                if(operatingDeviceData.intensity != null) light.intensity = Mathf.Clamp((float)operatingDeviceData.intensity / 10.0f, 0.0f, 10.0f);
+                if(operatingDeviceData.intensity != null) light.intensity = Mathf.Clamp((float)operatingDeviceData.intensity / 3.0f, 0.0f, 3.0f);
                 Debug.Log($"<color=yellow>intensity: {light.intensity} </color>");
 
                 if(operatingDeviceData.color != null){
@@ -99,27 +120,14 @@ public class SALight : SADevice
                     light.color = Color.white;
 
                 }
+
+
+                this.drawOnHover.VisualizeTargetDevice(Color.blue);
         }
 
 
 
 
-
-      private void VisualizeBoundingBox()
-    {
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            // バウンディングボックスのサイズと位置を設定
-            boundingBoxVisualizer.transform.position = renderer.bounds.center;
-            boundingBoxVisualizer.transform.localScale = renderer.bounds.size;
-            boundingBoxVisualizer.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning("Renderer not found. Cannot visualize bounding box.");
-        }
-    }
 
 
     }

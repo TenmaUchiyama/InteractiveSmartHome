@@ -3,16 +3,35 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Reflection;
 using UnityEngine;
+using SpatialLLM.Experiment;
 
-[CustomEditor(typeof(CustomizeEditor))]
+[CustomEditor(typeof(TaskGenerator))]
 public class CustomizeEditor : Editor
 {   public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        if (GUILayout.Button("ボタンの名前"))
+
+
+          TaskGenerator experimentSetup = (TaskGenerator)target;
+
+
+        if (GUILayout.Button("Add Task Data"))
         {
-            TaskGenerator experimentSetup = (TaskGenerator)target;
+            
+            experimentSetup.AddTaskData();
+        }
+
+        if (GUILayout.Button("Update Task Data"))
+        {
+           
             experimentSetup.UpdateTaskData();
+        }
+
+
+         if (GUILayout.Button("Load Task Data"))
+        {
+          
+            experimentSetup.LoadTaskData();
         }
     }
 }

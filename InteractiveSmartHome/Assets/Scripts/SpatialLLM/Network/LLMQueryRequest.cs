@@ -40,6 +40,8 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
     [SerializeField] public bool speechRequired = true;
 
+    [SerializeField] private string debugText = "";
+
 
     public UnityEvent<string> OnReceiveResponseFromLLM;
     private Dictionary<LLMQueryMode, string> queryModeUrl = new Dictionary<LLMQueryMode, string>(){
@@ -56,6 +58,15 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     private void Start() {
         if(speechRequired) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
     }
+
+
+    public void SendQueryForDebug(string text)
+    {
+
+        text = debugText == "" ? text : debugText; 
+        OnVoiceRecognized(text); 
+    }
+
 
     private async void OnVoiceRecognized(string recognizedText)
     {
@@ -89,7 +100,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
                 await SendQuery(json);
             break; 
             case LLMQueryMode.Multiple_Select_Pointing:
-
+                Debug.Log("================================================================");
                  List<SADevice> allDevices = SpatialAwarnessProvider.Instance.GetAllDevices(); 
                 List<DeviceLabel> selectedDeviceLabel = allDevices
                 .Where(device => device.IsDeviceSelected())

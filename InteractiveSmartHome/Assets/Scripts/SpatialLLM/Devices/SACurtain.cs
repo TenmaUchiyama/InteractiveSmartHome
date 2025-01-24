@@ -125,6 +125,9 @@ public class SACurtain : SADevice
         curtainVisual.localPosition = end;
     }
 
-      
+        public override void Init()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

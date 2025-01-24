@@ -14,15 +14,6 @@ public class SATextToSpeech : Singleton<SATextToSpeech>
   
 
     // Update is called once per frame
-    private void Update() 
-    {
-
-        
-       if(Input.GetKeyDown(KeyCode.Space))
-       {
-        Debug.Log("Clicked Space");
-         _speaker.Speak("hello");    
-       }
-    }
+    
 }
 }

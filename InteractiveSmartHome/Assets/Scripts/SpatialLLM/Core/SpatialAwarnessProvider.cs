@@ -47,13 +47,6 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
 
     }
 
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("Press M");
-            GetDevicesInSight("Curtain", true);
-        }
-    }
 
 
 

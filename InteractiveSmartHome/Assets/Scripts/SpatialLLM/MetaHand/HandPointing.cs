@@ -57,13 +57,7 @@ public class HandPointing : MonoBehaviour
 
 
     private void Update() {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("<color=green>Space Button Pressed </color>");
-            OnVoiceRecognized("あれ取って。");
-        }
 
-        Debug.Log($"<color=yellow>{rightHand.Bones.Count}</color>");
         VisualizeRay();
     }
 
@@ -162,6 +156,7 @@ public class HandPointing : MonoBehaviour
         // Ray の始点と方向を取得
         Vector3 origin = rayInteractor.Origin;
         Vector3 direction = rayInteractor.Forward;
+    }
 
     private void InitLineRenderer() 
     {
@@ -186,4 +181,3 @@ public class HandPointing : MonoBehaviour
     }
 }
 
-}
