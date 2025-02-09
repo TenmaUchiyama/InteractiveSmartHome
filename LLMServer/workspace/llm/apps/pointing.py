@@ -145,7 +145,16 @@ def invoke_pointing_agent(user_input:str) -> str:
 
     res = runner.invoke(state)
 
-    return res["messages"][-1].content
+
+    response = {
+        "response" : res["messages"][-1].content,
+        "log" : res["messages"]
+    }
+
+
+    
+    return response
+
 
 
 

@@ -68,8 +68,13 @@ x
    
    res = runner.invoke(state)
 
-   return res["messages"][-1].content
 
+
+   response = {
+        "response" : res["messages"][-1].content,
+        "log" : res["messages"]
+    }
+   return response
 
 
 

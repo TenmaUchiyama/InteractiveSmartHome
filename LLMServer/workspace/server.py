@@ -13,6 +13,8 @@ from llm.apps.llm_app import invoke_llm_agent
 from llm.apps.pointing import invoke_pointing_agent
 from llm.apps.label import invoke_label_agent
 from llm.apps.multiple_selections import invoke_multiple_selection_agent
+from log_writer import add_label_log, add_pointing_log, add_spatial_log
+
 
 app = FastAPI()
 
@@ -28,6 +30,7 @@ app.add_middleware(
 
 class Message(BaseModel):
     llm_message: str
+    task_id: str
 
 @app.post("/label_agent")
 def pointing_agent(message : Message):
@@ -35,10 +38,14 @@ def pointing_agent(message : Message):
         print("\n\n")
         print("INPUT: ", message.llm_message)
         print("\n\n")
-        response = invoke_label_agent(message.llm_message)
+        res = invoke_label_agent(message.llm_message)
         return_value = {
-            "llm_response": response
+            "llm_response": res["response"]
         }
+
+        add_label_log(message.task_id, res["messages"])
+
+
         return return_value
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
@@ -51,8 +58,10 @@ def pointing_agent(message : Message):
         print("\n\n")
         response = invoke_pointing_agent(message.llm_message)
         return_value = {
-            "llm_response": response
+            "llm_response": response["response"]
         }
+
+        add_pointing_log(message.task_id, response["messages"])
         return return_value
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
@@ -82,10 +91,11 @@ def llm_agent(message: Message):
         
         response = invoke_llm_agent(message.llm_message)
 
-        # レスポンスをJSON形式で返す
         return_value = {
-            "llm_response": response
+            "llm_response": response["response"]
         }
+
+        add_spatial_log(message.task_id, response["messages"])
         return return_value
 
     except Exception as e:
