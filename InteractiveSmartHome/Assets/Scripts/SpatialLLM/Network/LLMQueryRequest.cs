@@ -8,6 +8,7 @@ using SpatialLLM.Device;
 using static SpatialLLM.Network.NetworkDataType;
 using System.Linq;
 using Newtonsoft.Json;
+using SpatialLLM.Experiment;
 
 
 
@@ -37,6 +38,8 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     [SerializeField] private string host = "localhost";
     [SerializeField] private int port = 8800;
     [SerializeField] private LLMQueryMode queryMode = LLMQueryMode.Spatial;
+    [SerializeField] private ExperimentManager experimentManager;
+    [SerializeField] private ExperimentalDataManager experimentalDataManager;
 
     [SerializeField] public bool speechRequired = true;
 
@@ -73,6 +76,11 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         switch(queryMode)
         {
             case LLMQueryMode.Spatial:
+
+                var sendingData = new {
+                    taskId = experimentManager.GetCurrentTaskId(),
+                    user_message = recognizedText
+                }; 
                 await SendQuery(recognizedText);
             break;
             case LLMQueryMode.Label:
@@ -119,6 +127,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
                 multipleSelectQueryData.devices = selectedDeviceLabel;
 
+
                 JsonSerializerSettings multipleSelectSettings = new JsonSerializerSettings(){
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
@@ -143,10 +152,14 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         string path = queryModeUrl[queryMode];
         string url = $"http://{host}:{port}/{path}";
 
-        var data = new  { llm_message = sending_text };
+        var data = new  { llm_message = sending_text , task_id = "test_id" };
         string jsonData = JsonConvert.SerializeObject(data);
         _isRequesting = true;
+
+
+        experimentalDataManager.StartLLMTimer();
         await PostRequestAsync(url, jsonData);
+        experimentalDataManager.StopLLMTimer();
         
         _isRequesting = false;
     }

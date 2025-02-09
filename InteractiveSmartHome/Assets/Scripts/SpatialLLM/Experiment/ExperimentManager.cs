@@ -35,7 +35,7 @@ public class ExperimentManager : MonoBehaviour
     [SerializeField] private GameObject parentObject; 
     
 
-
+    private ExperimentalDataManager experimentalDataManager;
     private ExperimentFlowState currentState = ExperimentFlowState.NONE;
     private Stack<ExperimentFlowState> stateHistory = new Stack<ExperimentFlowState>(); 
 
@@ -48,7 +48,7 @@ public class ExperimentManager : MonoBehaviour
     //とりあえずデバイスの色をつける
 
     private void Start() {
-
+        experimentalDataManager = GetComponent<ExperimentalDataManager>();
         taskGenerator = GetComponent<TaskGenerator>();
 
         ReadTaskData();
@@ -116,8 +116,11 @@ private async UniTask Operation()
 {
     DebugLogging($"[{this.currentState.ToString()}] Operating"); 
     systemExecutor.BeginOperation(); 
+    experimentalDataManager.StartTaskTimer();
     await systemExecutor.WaitForExecution();
-     TransitionToState(ExperimentFlowState.DONE);
+    experimentalDataManager.StopTaskTimer();
+    TransitionToState(ExperimentFlowState.DONE);
+
 }
 
  
@@ -217,5 +220,14 @@ private async UniTask Operation()
     }
 
 
+    public TaskData GetCurrentTaskData() 
+    {
+        return this.currentTask;
+    }
+    
+    public string GetCurrentTaskId()
+    {
+        return this.currentTask.taskId; 
+    }
 }
 }

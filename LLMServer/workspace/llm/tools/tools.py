@@ -2,7 +2,8 @@
 import json
 import httpx
 from langchain.tools import tool
-from typing import Annotated, Any, Dict, List, Union
+from typing import Annotated, Any, Dict, List, Optional, Union
+from pydantic import BaseModel, Extra
 import os
 
 
@@ -269,8 +270,15 @@ def sortDevices(
         raise ValueError(f"An error occurred during sorting: {str(e)}")
 
 
+
+class DeviceControlData(BaseModel):
+    id: str
+    state: bool
+    intensity: int
+    color: Optional[Dict[str, int]]
+
 @tool
-def operateDevice(devices: Annotated[ Union[List[Dict[str, Any]], Dict[str, Any]],  
+def operateDevice(devices: Annotated[ Union[List[DeviceControlData]],  
     "A list of device control data. Each item should include 'id', 'state', 'intensity', and optionally 'color'."]) -> str:
     """
     This function operates devices based on provided control data.
@@ -301,7 +309,8 @@ def operateDevice(devices: Annotated[ Union[List[Dict[str, Any]], Dict[str, Any]
         # デバイスデータを取得
 
         print("DEVICE DATA: ", devices)
-        sending_data = json.dumps(devices)
+        sending_data = json.dumps([device.dict() for device in devices])
+
 
 
         response = httpx.post(f"{MR_SERVER_URL}/operate", data=sending_data)
@@ -321,8 +330,8 @@ def operateDevice(devices: Annotated[ Union[List[Dict[str, Any]], Dict[str, Any]
         return response_data
     
     except Exception as e:
-        print(f"エラーが発生しました: {e}")
-        return "An error occurred during device operation."
+
+        return f"エラーが発生しました: {e}"
 
 
 

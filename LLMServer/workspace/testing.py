@@ -1,29 +1,38 @@
 
-from dotenv import load_dotenv
-load_dotenv()
+import json
+import os
+import dotenv 
+from langchain_openai import ChatOpenAI
 
-from llm.apps.label import invoke_label_agent
-from llm.tools.tools import operateDevice
+dotenv.load_dotenv()
 
+LOG_FILE_PATH_LOCATION = os.getenv("PROJECT_PATH")
+LOG_DIR = os.path.join(LOG_FILE_PATH_LOCATION, "log", "test")
+LOG_FILE = os.path.join(LOG_DIR, "Label",  "TEST_test_id.json")
+
+
+
+# フォルダが存在しなければ作成
+os.makedirs(LOG_DIR, exist_ok=True)
 if __name__ == "__main__":
-    inp = "Turn on light1 with blue"
+    with open(LOG_FILE, "r") as f:
+        data = f.read()
+        data = json.loads(data)
+        output = json.loads(data['llm_output'])
+        print(output)
+
+    with open(".", "w") as f:
+        f.write()
+
+    
+    # llm = ChatOpenAI(model="gpt-4o-mini", verbose="True")
+    # response = llm.invoke("Hello, how are you?")
+    # print(response.dict())
 
 
-    test_device = [
-    {
-        "id": "3ecb69f3-8f64-4ba2-9991-6b603880663c",
-        "state": True,
-        "intensity": 100,
-        "color": {"r": 255, "g": 255, "b": 255}  # Optional
-    }
-]
-
-#     res = operateDevice(test_device)
-
-#     print(res)
-    res = invoke_label_agent(f""" 
-                            user_command: "{inp}", 
-                             device: {test_device}
-                             """)
 
 
+
+    
+
+    

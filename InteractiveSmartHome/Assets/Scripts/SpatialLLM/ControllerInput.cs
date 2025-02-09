@@ -23,6 +23,13 @@ public class ControllerInput : MonoBehaviour
             }
     }
    private void Update() {
+
+            if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("SPACEKEY PRESSED"); 
+             LLMQueryRequest.Instance.SendQueryForDebug("");
+        }
+
         if(!isControllable) return;
 
         if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
@@ -77,11 +84,6 @@ public class ControllerInput : MonoBehaviour
             systemExecutor.CompleteOperation();
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("SPACEKEY PRESSED"); 
-             LLMQueryRequest.Instance.SendQueryForDebug("");
-        }
 
     // if (Input.GetKeyDown(KeyCode.Space))
     //     {

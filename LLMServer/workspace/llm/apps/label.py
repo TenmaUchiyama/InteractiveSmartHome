@@ -1,4 +1,5 @@
 
+import json
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage ,SystemMessage, ToolMessage
 from langgraph.graph import StateGraph, END 
@@ -7,11 +8,10 @@ from langchain.callbacks.base import BaseCallbackHandler
 from typing import Annotated
 from typing_extensions import TypedDict 
 from llm.tools.tools import operateDevice
+from log_writer import add_label_log
 
 
 
-
-DB_SERVER_URL = "http://localhost:4049"
 
 
 class CustomCallbackHandler(BaseCallbackHandler):
@@ -28,7 +28,7 @@ class CustomCallbackHandler(BaseCallbackHandler):
 
 
 
-llm = ChatOpenAI(model="gpt-4o", callbacks=[CustomCallbackHandler()], verbose="True")
+llm = ChatOpenAI(model="gpt-4o-mini", callbacks=[CustomCallbackHandler()], verbose="True")
 
 system_msg = SystemMessage(content="""
 System:
@@ -108,7 +108,7 @@ def router(state : State) -> ["tool_node",END]:
     else:
 
         return END
-    
+
 
 
 g = StateGraph(State)
@@ -133,7 +133,14 @@ def invoke_label_agent(user_input:str) -> str:
 
     res = runner.invoke(state)
 
-    return res["messages"][-1].content
+    response = {
+        "response" : res["messages"][-1].content,
+        "log" : res["messages"]
+    }
+
+
+    
+    return response
 
 
 

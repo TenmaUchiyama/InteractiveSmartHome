@@ -224,7 +224,6 @@ public record ColorData
     public record LabelQueryDataType 
     {
         public string user_message;
-
         public List<DeviceLabel> devices;
     }
 
