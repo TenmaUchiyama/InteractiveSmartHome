@@ -26,19 +26,19 @@ public class ExperimentManager : MonoBehaviour
 {
 
 
-    private TaskGenerator taskGenerator;
-
-    private List<TaskData> taskDataList;
-    private TaskData currentTask;
-    [SerializeField]private  int currentTaskIndex;
+    private DeviceArrangementGenerator arrangementGenerator;
+    private List<DeviceArrangeData> arrangeDataList;
+    private DeviceArrangeData currentArrange;
+    [SerializeField]private  int currentArrangeIndex;
     [SerializeField] private SystemExecutor systemExecutor;
     [SerializeField] private GameObject parentObject; 
     
 
     private ExperimentalDataManager experimentalDataManager;
+    private ExperimentTask currentExperimentTask;
+    private int currentTaskId; 
     private ExperimentFlowState currentState = ExperimentFlowState.NONE;
     private Stack<ExperimentFlowState> stateHistory = new Stack<ExperimentFlowState>(); 
-
     private Dictionary<ExperimentFlowState, Func<UniTask>> stateActions; 
 
     
@@ -49,7 +49,7 @@ public class ExperimentManager : MonoBehaviour
 
     private void Start() {
         experimentalDataManager = GetComponent<ExperimentalDataManager>();
-        taskGenerator = GetComponent<TaskGenerator>();
+        arrangementGenerator = GetComponent<DeviceArrangementGenerator>();
 
         ReadTaskData();
         
@@ -80,7 +80,8 @@ public class ExperimentManager : MonoBehaviour
     private async UniTask StartTask()
     { 
 
-        this.currentTask = this.taskDataList[this.currentTaskIndex]; 
+        this.currentArrange = this.arrangeDataList[this.currentArrangeIndex]; 
+        this.currentExperimentTask.Initialize(this.currentArrange);
         TransitionToState(ExperimentFlowState.SHOW_DEVICE);
     }
 
@@ -90,9 +91,9 @@ public class ExperimentManager : MonoBehaviour
     private async UniTask ShowDevice()
     {
         DebugLogging("Show Device");
-        DisplayDevices(this.currentTask.devices);
+        DisplayDevices(this.currentArrange.devices);
 
-        foreach(SADevice device in this.currentTask.devices)
+        foreach(SADevice device in this.currentArrange.devices)
         {
             DebugLogging($"Device: {device.gameObject.name}");
         }
@@ -116,9 +117,9 @@ private async UniTask Operation()
 {
     DebugLogging($"[{this.currentState.ToString()}] Operating"); 
     systemExecutor.BeginOperation(); 
-    experimentalDataManager.StartTaskTimer();
+    this.currentExperimentTask.StartTaskTimer();
     await systemExecutor.WaitForExecution();
-    experimentalDataManager.StopTaskTimer();
+    this.currentExperimentTask.StopTaskTimer();
     TransitionToState(ExperimentFlowState.DONE);
 
 }
@@ -131,14 +132,16 @@ private async UniTask Operation()
 
         this.ClearDeviceVisual();
 
-        currentTaskIndex++; 
+        currentArrangeIndex++; 
 
-        if(currentTaskIndex >= this.taskDataList.Count)
+        if(currentArrangeIndex >= this.arrangeDataList.Count)
         {
             DebugLogging("$<color=yellow>All Process Done!</color>"); 
             return; 
         }
-  
+        await this.experimentalDataManager.WriteExperimentalDataAsync(this.currentExperimentTask);
+        this.currentExperimentTask.ClearAllData();
+
         TransitionToState(ExperimentFlowState.START_TASK);
 
 
@@ -200,7 +203,7 @@ private async UniTask Operation()
 
     private void ReadTaskData() 
     {
-       taskDataList = taskGenerator.ReadTaskData();
+       arrangeDataList = arrangementGenerator.ReadTaskData();
     }
 
     
@@ -216,18 +219,18 @@ private async UniTask Operation()
 
     private void DebugLogging(string message)
     {
-        Debug.Log($"<color=green>[{this.currentState.ToString()}{this.currentTaskIndex}] {message}</color>");
+        Debug.Log($"<color=green>[{this.currentState.ToString()}{this.currentArrangeIndex}] {message}</color>");
     }
 
 
-    public TaskData GetCurrentTaskData() 
+    public DeviceArrangeData GetCurrentTaskData() 
     {
-        return this.currentTask;
+        return this.currentArrange;
     }
     
     public string GetCurrentTaskId()
     {
-        return this.currentTask.taskId; 
+        return this.currentArrange.device_arrange_id; 
     }
 }
 }

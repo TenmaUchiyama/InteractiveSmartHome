@@ -28,7 +28,9 @@ namespace SpatialLLM.Device
 
          protected bool isDeviceSelected = false;
 
+        protected bool isDeviceOn = false; 
 
+        public bool IsDeviceOn => isDeviceOn;
  
     
 
