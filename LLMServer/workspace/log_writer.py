@@ -22,7 +22,7 @@ def add_label_log(task_id, data):
 def add_pointing_log(task_id, data):
     add_log("Pointing", task_id, data)
 
-def add_llm_log(task_id, data):
+def add_spatial_log(task_id, data):
     add_log("Spatial", task_id, data)
 
 

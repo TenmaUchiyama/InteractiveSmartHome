@@ -5,14 +5,14 @@ using System.Reflection;
 using UnityEngine;
 using SpatialLLM.Experiment;
 
-[CustomEditor(typeof(TaskGenerator))]
+[CustomEditor(typeof(DeviceArrangementGenerator))]
 public class CustomizeEditor : Editor
 {   public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
 
-          TaskGenerator experimentSetup = (TaskGenerator)target;
+          DeviceArrangementGenerator experimentSetup = (DeviceArrangementGenerator)target;
 
 
         if (GUILayout.Button("Add Task Data"))

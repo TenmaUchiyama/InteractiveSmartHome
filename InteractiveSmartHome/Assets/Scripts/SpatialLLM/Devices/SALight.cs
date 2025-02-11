@@ -22,6 +22,8 @@ public class SALight : SADevice
 
         public bool isDebug = false;
 
+
+        
         private void Awake() {
 
             this.saDeviceType = SADeviceType.Light;
@@ -71,7 +73,6 @@ public class SALight : SADevice
 
             OperatingDeviceData initData = new OperatingDeviceData {
                 state = false,
-
             };
             OperateDevice(initData);
             UpdateCurrentData();
@@ -105,6 +106,7 @@ public class SALight : SADevice
 
             Debug.Log($"<color=yellow>[{this.gameObject.name}] State {operatingDeviceData.state}, Intensity: {operatingDeviceData.intensity}</color>");
              light.enabled = operatingDeviceData.state;
+             isDeviceOn = operatingDeviceData.state;
              currentOperatingData = operatingDeviceData;
                 if(operatingDeviceData.intensity != null) light.intensity = Mathf.Clamp((float)operatingDeviceData.intensity / 3.0f, 0.0f, 3.0f);
                 Debug.Log($"<color=yellow>intensity: {light.intensity} </color>");
