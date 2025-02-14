@@ -29,19 +29,19 @@ public class ExperimentManager : MonoBehaviour
     private DeviceArrangementGenerator arrangementGenerator;
     private List<DeviceArrangeData> arrangeDataList;
     private DeviceArrangeData currentArrange;
+    
     [SerializeField]private  int currentArrangeIndex;
     [SerializeField] private SystemExecutor systemExecutor;
     [SerializeField] private GameObject parentObject; 
     
-
     private ExperimentalDataManager experimentalDataManager;
-    private ExperimentTask currentExperimentTask;
+    private ExperimentTask experimentTask;
     private int currentTaskId; 
     private ExperimentFlowState currentState = ExperimentFlowState.NONE;
     private Stack<ExperimentFlowState> stateHistory = new Stack<ExperimentFlowState>(); 
     private Dictionary<ExperimentFlowState, Func<UniTask>> stateActions; 
 
-    
+    public int CurrentArrangeIndex  => currentArrangeIndex;
 
     
 
@@ -50,6 +50,7 @@ public class ExperimentManager : MonoBehaviour
     private void Start() {
         experimentalDataManager = GetComponent<ExperimentalDataManager>();
         arrangementGenerator = GetComponent<DeviceArrangementGenerator>();
+        experimentTask = GetComponent<ExperimentTask>();
 
         ReadTaskData();
         
@@ -70,6 +71,7 @@ public class ExperimentManager : MonoBehaviour
 
     private async void Init()
     {
+        Debug.Log("[DEBUG] Press A to Init");
         await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.A));
         TransitionToState(ExperimentFlowState.START_TASK);
     }
@@ -81,7 +83,7 @@ public class ExperimentManager : MonoBehaviour
     { 
 
         this.currentArrange = this.arrangeDataList[this.currentArrangeIndex]; 
-        this.currentExperimentTask.Initialize(this.currentArrange);
+        this.experimentTask.Initialize(this.currentArrange);
         TransitionToState(ExperimentFlowState.SHOW_DEVICE);
     }
 
@@ -97,7 +99,10 @@ public class ExperimentManager : MonoBehaviour
         {
             DebugLogging($"Device: {device.gameObject.name}");
         }
-        await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y));
+
+
+        Debug.Log("[DEBUG] Press A to Init");
+        await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A));
         ClearDeviceVisual();
 
         TransitionToState(ExperimentFlowState.MOVING_TO_POINT);
@@ -117,9 +122,9 @@ private async UniTask Operation()
 {
     DebugLogging($"[{this.currentState.ToString()}] Operating"); 
     systemExecutor.BeginOperation(); 
-    this.currentExperimentTask.StartTaskTimer();
+    this.experimentTask.StartTaskTimer();
     await systemExecutor.WaitForExecution();
-    this.currentExperimentTask.StopTaskTimer();
+    this.experimentTask.StopTaskTimer();
     TransitionToState(ExperimentFlowState.DONE);
 
 }
@@ -131,6 +136,7 @@ private async UniTask Operation()
         
 
         this.ClearDeviceVisual();
+        this.experimentTask.CalculateScores(this.currentArrange);
 
         currentArrangeIndex++; 
 
@@ -139,12 +145,25 @@ private async UniTask Operation()
             DebugLogging("$<color=yellow>All Process Done!</color>"); 
             return; 
         }
-        await this.experimentalDataManager.WriteExperimentalDataAsync(this.currentExperimentTask);
-        this.currentExperimentTask.ClearAllData();
+        await this.experimentalDataManager.WriteExperimentalDataAsync(this.experimentTask);
+        this.experimentTask.ClearAllData();
 
         TransitionToState(ExperimentFlowState.START_TASK);
 
 
+    }
+
+
+
+    public void StartLLMResponse() 
+    {
+        this.experimentTask.StartLLMTimer(); 
+
+    }
+
+    public void  StopLLMResponse()
+    {
+        this.experimentTask.StopLLMTimer();
     }
 
 
@@ -203,7 +222,9 @@ private async UniTask Operation()
 
     private void ReadTaskData() 
     {
+        Debug.Log($"{arrangementGenerator.ReadTaskData().Count}");
        arrangeDataList = arrangementGenerator.ReadTaskData();
+       
     }
 
     
@@ -219,7 +240,7 @@ private async UniTask Operation()
 
     private void DebugLogging(string message)
     {
-        Debug.Log($"<color=green>[{this.currentState.ToString()}{this.currentArrangeIndex}] {message}</color>");
+        Debug.Log($"<color=green>[{this.currentState.ToString()}_{this.currentArrangeIndex}] {message}</color>");
     }
 
 

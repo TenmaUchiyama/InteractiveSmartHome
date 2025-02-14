@@ -104,12 +104,11 @@ public class SALight : SADevice
         {
 
 
-            Debug.Log($"<color=yellow>[{this.gameObject.name}] State {operatingDeviceData.state}, Intensity: {operatingDeviceData.intensity}</color>");
+            Debug.Log($"<color=blue>[{this.gameObject.name}] State {operatingDeviceData.state}, Intensity: {operatingDeviceData.intensity}</color>");
              light.enabled = operatingDeviceData.state;
              isDeviceOn = operatingDeviceData.state;
              currentOperatingData = operatingDeviceData;
                 if(operatingDeviceData.intensity != null) light.intensity = Mathf.Clamp((float)operatingDeviceData.intensity / 3.0f, 0.0f, 3.0f);
-                Debug.Log($"<color=yellow>intensity: {light.intensity} </color>");
 
                 if(operatingDeviceData.color != null){
                     ColorData colorData = operatingDeviceData.color;

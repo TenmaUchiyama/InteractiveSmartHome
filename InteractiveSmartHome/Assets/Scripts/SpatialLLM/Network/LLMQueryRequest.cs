@@ -157,9 +157,9 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         _isRequesting = true;
 
 
-        experimentalDataManager.StartLLMTimer();
+        this.experimentManager.StartLLMResponse();
         await PostRequestAsync(url, jsonData);
-        experimentalDataManager.StopLLMTimer();
+        this.experimentManager.StopLLMResponse();
         
         _isRequesting = false;
     }

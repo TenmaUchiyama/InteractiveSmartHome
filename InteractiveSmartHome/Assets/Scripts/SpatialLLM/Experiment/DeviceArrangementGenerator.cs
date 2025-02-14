@@ -76,13 +76,6 @@ public class DeviceArrangementGenerator : MonoBehaviour
     }
      
 
-     private void OnValidate()
-    {
-        if(arrangementDataList != null)
-        {
-            this.UpdateTaskData();
-        }
-    }
 
 
     [ContextMenu("Update Task Data")]

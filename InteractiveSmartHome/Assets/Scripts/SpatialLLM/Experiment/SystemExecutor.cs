@@ -19,6 +19,17 @@ public class SystemExecutor : MonoBehaviour
     public UnityEvent onCompleteOperation;
 
 
+
+        void Update()
+        {
+            //For Debug
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                CompleteOperation();
+            }
+        }
+
+
         public void BeginOperation(){
             onBeginOperation.Invoke();
             isStarted = true;
