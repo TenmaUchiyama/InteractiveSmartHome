@@ -18,10 +18,22 @@ public class ExperimentalDataManager : MonoBehaviour
 {
     
     [SerializeField] private string user_name; 
-    
+    private ExperimentManager experimentManager;
 
 
-    
+
+
+
+        void Start()
+        {
+            experimentManager = GetComponent<ExperimentManager>();
+        }
+
+
+        public string GetUserName() 
+    {
+        return user_name;
+    }
     
 
     public async Task WriteExperimentalDataAsync(ExperimentTask experimentalTask)
@@ -30,7 +42,7 @@ public class ExperimentalDataManager : MonoBehaviour
 
         string serialized = JsonConvert.SerializeObject(taskData, Formatting.Indented);
 
-        string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", user_name , $"experiment_task_data_{taskData.taskId}.json");
+        string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", user_name , $"{experimentManager.CurrentArrangeIndex}_task_{taskData.taskId}.json");
 
         if(!Directory.Exists(Path.Combine(Application.dataPath, "EXPERIMENT", user_name)))
         {
