@@ -5,199 +5,149 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using SpatialLLM.Device;
-using Unity.Collections;
 
-
-namespace SpatialLLM.Experiment{ 
-
-
- public enum SpatialType 
-    {
-        ViewpointBased,
-        PositionBased,
-        DistanceBased,
-        DirectionBased,
-        HeightBased
-
-    }
-
- 
-
- 
-
-     [Serializable]
-    public class DeviceArrangeData
-    {
-        
-        public string device_arrange_name; 
-
-        public string device_arrange_id;
-        public SpatialType device_arrange_type; 
-        public List<SADevice>  devices;
-    }
-
-
-public class DeviceArrangementGenerator : MonoBehaviour
+namespace SpatialLLM.Experiment
 {
 
-
-// taskId uuuuu
-// taskName
-// taskType 
-// devices: devicename[] 
-// condition
-
-   
-
-    public string arrangementName = null; 
-    public SpatialType arrangementType; 
-    public List<SADevice> inputTaskDevices;
-
-
-
-    public List<DeviceArrangeData> arrangementDataList;
-
-
-
-    public GameObject parentObject; 
-   
-
-
-
-
-
-
-  public class TaskDataJson
+    [Serializable]
+    public class DeviceArrangeData
     {
-        public string arrangementId;
-        public string arrangementName; 
-        public string arrangementType; 
-        public List<string> devices;
-    }
-     
-
-
-
-    [ContextMenu("Update Task Data")]
-    public void UpdateTaskData()
-    {
-
-        WriteTaskDataJson(this.arrangementDataList);
-     
-
+        public string device_arrange_name;
+        public string device_arrange_id;
+        public List<SpatialType> device_arrange_type;
+        public List<DeviceColorPair> devices;
     }
 
-
-    [ContextMenu("Add Task Data")]
-    public void AddTaskData()
+    public class DeviceArrangementGenerator : MonoBehaviour
     {
-        this.LoadTaskData();
+        public string arrangementName = null;
+        public List<SpatialType> arrangementType;
+        public List<DeviceColorPair> inputTaskDevices;
 
-        DeviceArrangeData arrangementData = new DeviceArrangeData();
-        arrangementData.device_arrange_id = Guid.NewGuid().ToString();
-        arrangementData.device_arrange_name = arrangementName;
-        arrangementData.device_arrange_type = arrangementType;
-        arrangementData.devices = inputTaskDevices;
+        [Header("──────────────────────────────────────────────────────")]
+        public List<DeviceArrangeData> arrangementDataList;
 
+        public GameObject parentObject;
 
-        arrangementDataList.Add(arrangementData);
-        UpdateTaskData();
-       
-        
-    }
-
-
-
-    [ContextMenu("Load Task Data")]
-    public void LoadTaskData()
-    {
-    
-        arrangementDataList = ReadTaskData();
-    
-      
-    }
-
-
-    public void WriteTaskDataJson(List<DeviceArrangeData> tasks)
-    {
-        List<TaskDataJson> serializableJsonData = tasks.Select(x => new TaskDataJson {
-            arrangementId = x.device_arrange_id,
-            arrangementName = x.device_arrange_name,
-            arrangementType = x.device_arrange_type.ToString(),
-            devices = x.devices.Select(x => x.gameObject.name).ToList()
-        }).ToList();
-        string serialized = JsonConvert.SerializeObject(serializableJsonData, Formatting.Indented);
-
-        string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "TaskDeviceData.json"); 
-
-        if(!Directory.Exists(Path.Combine(Application.dataPath, "EXPERIMENT")))
+        [Serializable]
+        public class TaskDataJson
         {
-            Directory.CreateDirectory(Path.Combine(Application.dataPath, "EXPERIMENT"));
-        }   
-
-
-        File.WriteAllText(filePath, serialized);
-
-        Debug.Log("JSON saved to:" + filePath);
-    }
-
-
-    public List<DeviceArrangeData> ReadTaskData() 
-    {
-         string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "TaskDeviceData.json"); 
-
-        if(!File.Exists(filePath))
-        {
-            Debug.LogError("File does not exist");
-            return new List<DeviceArrangeData>();
+            public string arrangementId;
+            public string arrangementName;
+            public List<string> arrangementType;
+            public List<DeviceJsonData> devices;
         }
 
-        string json = File.ReadAllText(filePath);
+        [Serializable]
+        public class DeviceJsonData
+        {
+            public string deviceName;
+            public string colorHex;
+        }
 
-        List<TaskDataJson> jsonDatas = JsonConvert.DeserializeObject<List<TaskDataJson>>(json);
+        [ContextMenu("Update Task Data")]
+        public void UpdateTaskData()
+        {
+            WriteTaskDataJson(this.arrangementDataList);
+        }
 
-        List<DeviceArrangeData> taskDatas =  jsonDatas.Select(x => new DeviceArrangeData{
-            device_arrange_id = x.arrangementId,
-            device_arrange_name = x.arrangementName,
-            device_arrange_type = (SpatialType)Enum.Parse(typeof(SpatialType) , x.arrangementType),
-           devices = x.devices.Select(deviceName =>
-                    {
-  
-                        foreach (Transform child in parentObject.transform)
-                        {
-                          
-                            SADevice saDevice = child.GetComponent<SADevice>();
-                            
-                            if (saDevice != null && saDevice.name == deviceName)
-                            {
-                                return saDevice;
-                            }
-                        }
-                        return null;
-                    }).Where(saDevice => saDevice != null).ToList() 
+        [ContextMenu("Add Task Data")]
+        public void AddTaskData()
+        {
+            this.LoadTaskData();
 
-        }).ToList();
+            DeviceArrangeData arrangementData = new DeviceArrangeData
+            {
+                device_arrange_id = Guid.NewGuid().ToString(),
+                device_arrange_name = arrangementName,
+                device_arrange_type = arrangementType,
+                devices = inputTaskDevices
+            };
 
+            arrangementDataList.Add(arrangementData);
+            UpdateTaskData();
+        }
 
-        return taskDatas;
-      
-    }
+        [ContextMenu("Load Task Data")]
+        public void LoadTaskData()
+        {
+            arrangementDataList = ReadTaskData();
+        }
 
+        public void WriteTaskDataJson(List<DeviceArrangeData> tasks)
+        {
+            List<TaskDataJson> serializableJsonData = tasks.Select(x => new TaskDataJson
+            {
+                arrangementId = x.device_arrange_id,
+                arrangementName = x.device_arrange_name,
+                arrangementType = x.device_arrange_type.Select(type => type.ToString()).ToList(),
+                devices = x.devices.Select(deviceColorPair => new DeviceJsonData
+                {
+                    deviceName = deviceColorPair.device.gameObject.name,
+                    colorHex = ColorUtility.ToHtmlStringRGB(deviceColorPair.GetFinalColor())
+                }).ToList()
+            }).ToList();
 
+            string serialized = JsonConvert.SerializeObject(serializableJsonData, Formatting.Indented);
+            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "TaskDeviceData.json");
 
-    void ClearInput() 
+            if (!Directory.Exists(Path.Combine(Application.dataPath, "EXPERIMENT")))
+            {
+                Directory.CreateDirectory(Path.Combine(Application.dataPath, "EXPERIMENT"));
+            }
+
+            File.WriteAllText(filePath, serialized);
+            Debug.Log("JSON saved to:" + filePath);
+        }
+
+        public List<DeviceArrangeData> ReadTaskData()
+        {
+            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "TaskDeviceData.json");
+
+            if (!File.Exists(filePath))
+            {
+                Debug.LogError("File does not exist");
+                return new List<DeviceArrangeData>();
+            }
+
+            string json = File.ReadAllText(filePath);
+            List<TaskDataJson> jsonDatas = JsonConvert.DeserializeObject<List<TaskDataJson>>(json);
+
+            List<DeviceArrangeData> taskDatas = jsonDatas.Select(x => new DeviceArrangeData
+            {
+                device_arrange_id = x.arrangementId,
+                device_arrange_name = x.arrangementName,
+                device_arrange_type = x.arrangementType.Select(type => (SpatialType)Enum.Parse(typeof(SpatialType), type)).ToList(),
+                devices = x.devices.Select(deviceJson =>
     {
-        arrangementName = null; 
-        arrangementType = SpatialType.ViewpointBased;
-        inputTaskDevices.Clear();
+            foreach (Transform child in parentObject.transform)
+            {
+                SADevice saDevice = child.GetComponent<SADevice>();
+
+                if (saDevice != null && saDevice.name == deviceJson.deviceName)
+                {
+                    // Enumに変換（エラー処理なしでOK）
+                    DeviceColor deviceColor = (DeviceColor)Enum.Parse(typeof(DeviceColor), deviceJson.color);
+
+                    return new DeviceColorPair
+                    {
+                        device = saDevice,
+                        presetColor = deviceColor
+                    };
+                }
+            }
+        return null;
+    }).Where(devicePair => devicePair != null).ToList()
+            }).ToList();
+
+            return taskDatas;
+        }
+
+        void ClearInput()
+        {
+            arrangementName = null;
+            arrangementType = new List<SpatialType>();
+            inputTaskDevices.Clear();
+        }
     }
-
-
-
-    
-
-    
-   
-
-}
 }
