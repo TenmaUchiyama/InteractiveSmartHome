@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using SpatialLLM.Device;
 using UnityEngine;
 namespace SpatialLLM.Experiment
@@ -190,7 +191,8 @@ private TaskScore taskScore = new TaskScore(){
 
     
     // arrangeData.devices は「オンになってほしい」デバイスのリストと仮定
-    List<SADevice> desiredDevices = arrangeData.devices;
+    List<SADevice> desiredDevices = arrangeData.devices.Select(x => x.device).ToList();
+    
     
 
     Debug.Log($"<color=yellow>{allDevices.Count}</color>");
