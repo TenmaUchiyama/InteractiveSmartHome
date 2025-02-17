@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
+using Cysharp.Threading.Tasks;
 using SpatialLLM.Device;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
-using Unity.Collections;
+
 
 
 namespace SpatialLLM.Experiment{
@@ -18,14 +18,11 @@ public enum ExperimentFlowState
     START_TASK,
     SHOW_DEVICE, 
     MOVING_TO_POINT, 
-
     OPERATION, 
     DONE
 }
 public class ExperimentManager : MonoBehaviour
 {
-
-
     private DeviceArrangementGenerator arrangementGenerator;
     private List<DeviceArrangeData> arrangeDataList;
     private DeviceArrangeData currentArrange;
@@ -81,7 +78,6 @@ public class ExperimentManager : MonoBehaviour
 // START TASK STATE
     private async UniTask StartTask()
     { 
-
         this.currentArrange = this.arrangeDataList[this.currentArrangeIndex]; 
         this.experimentTask.Initialize(this.currentArrange);
         TransitionToState(ExperimentFlowState.SHOW_DEVICE);
@@ -91,22 +87,27 @@ public class ExperimentManager : MonoBehaviour
 
 // SHOW DEVICE STATE
     private async UniTask ShowDevice()
+{
+    DebugLogging("Show Device");
+
+    // DeviceColorPair のリストから SADevice のリストに変換
+    List<SADevice> saDevices = this.currentArrange.devices.Select(x => x.device).ToList();
+    
+
+    // DisplayDevices は void を返すので、await しない
+    DisplayDevices(saDevices);
+
+    foreach (SADevice device in saDevices)
     {
-        DebugLogging("Show Device");
-        DisplayDevices(this.currentArrange.devices);
-
-        foreach(SADevice device in this.currentArrange.devices)
-        {
-            DebugLogging($"Device: {device.gameObject.name}");
-        }
-
-
-        Debug.Log("[DEBUG] Press A to Init");
-        await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A));
-        ClearDeviceVisual();
-
-        TransitionToState(ExperimentFlowState.MOVING_TO_POINT);
+        DebugLogging($"Device: {device.gameObject.name}");
     }
+
+    Debug.Log("[DEBUG] Press A to Init");
+    await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A));
+    ClearDeviceVisual();
+
+    TransitionToState(ExperimentFlowState.OPERATION);
+}
 
 // MOVE TO POINT STATE
     private async UniTask MoveToPoint()

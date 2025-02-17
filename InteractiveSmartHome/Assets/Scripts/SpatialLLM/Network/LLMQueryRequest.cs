@@ -45,6 +45,9 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
     [SerializeField] private string debugText = "";
 
+    [SerializeField] private bool isDebug;
+    
+
 
     public UnityEvent<string> OnReceiveResponseFromLLM;
     private Dictionary<LLMQueryMode, string> queryModeUrl = new Dictionary<LLMQueryMode, string>(){

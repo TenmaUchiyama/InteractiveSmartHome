@@ -18,32 +18,26 @@ namespace SpatialLLM.Experiment
         public List<DeviceColorPair> devices;
     }
 
-    public class DeviceArrangementGenerator : MonoBehaviour
+    [Serializable]
+public class DeviceArrangeDataSerializable
+{
+    public string device_arrange_id;
+    public string device_arrange_name;
+    public List<string> device_arrange_type;
+    public List<DeviceColorPairSerializable> devices;
+}
+
+ public class DeviceArrangementGenerator : MonoBehaviour
     {
         public string arrangementName = null;
-        public List<SpatialType> arrangementType;
-        public List<DeviceColorPair> inputTaskDevices;
+        public DeviceColor selectingDeviceColor= DeviceColor.White;
+        [SerializeField] public List<SpatialType> arrangementType;
+        [SerializeField] public List<DeviceColorPair> inputTaskDevices;
 
         [Header("──────────────────────────────────────────────────────")]
         public List<DeviceArrangeData> arrangementDataList;
 
         public GameObject parentObject;
-
-        [Serializable]
-        public class TaskDataJson
-        {
-            public string arrangementId;
-            public string arrangementName;
-            public List<string> arrangementType;
-            public List<DeviceJsonData> devices;
-        }
-
-        [Serializable]
-        public class DeviceJsonData
-        {
-            public string deviceName;
-            public string colorHex;
-        }
 
         [ContextMenu("Update Task Data")]
         public void UpdateTaskData()
@@ -61,10 +55,11 @@ namespace SpatialLLM.Experiment
                 device_arrange_id = Guid.NewGuid().ToString(),
                 device_arrange_name = arrangementName,
                 device_arrange_type = arrangementType,
-                devices = inputTaskDevices
+                devices = new List<DeviceColorPair>(inputTaskDevices)
             };
 
             arrangementDataList.Add(arrangementData);
+            this.inputTaskDevices.Clear();
             UpdateTaskData();
         }
 
@@ -74,21 +69,76 @@ namespace SpatialLLM.Experiment
             arrangementDataList = ReadTaskData();
         }
 
-        public void WriteTaskDataJson(List<DeviceArrangeData> tasks)
+        private List<DeviceColorPairSerializable> ConvertToSerializable(List<DeviceColorPair> devicePairs)
         {
-            List<TaskDataJson> serializableJsonData = tasks.Select(x => new TaskDataJson
+            return devicePairs.Select(d => new DeviceColorPairSerializable
             {
-                arrangementId = x.device_arrange_id,
-                arrangementName = x.device_arrange_name,
-                arrangementType = x.device_arrange_type.Select(type => type.ToString()).ToList(),
-                devices = x.devices.Select(deviceColorPair => new DeviceJsonData
+                deviceName = d.device.gameObject.name,
+                colorName = d.color.ToString()
+            }).ToList();
+        }
+
+        private List<DeviceColorPair> ConvertFromSerializable(List<DeviceColorPairSerializable> devicePairs)
+        {
+
+            List<SADevice>allDevices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>(false));
+            return devicePairs.Select(deviceJson =>
+            {
+                foreach (SADevice child in allDevices)
                 {
-                    deviceName = deviceColorPair.device.gameObject.name,
-                    colorHex = ColorUtility.ToHtmlStringRGB(deviceColorPair.GetFinalColor())
-                }).ToList()
+                    SADevice saDevice = child.GetComponent<SADevice>();
+
+                    if (saDevice != null && saDevice.name == deviceJson.deviceName)
+                    {
+                        if (!Enum.TryParse(deviceJson.colorName, out DeviceColor parsedColor))
+                        {
+                            parsedColor = DeviceColor.White;
+                        }
+
+                        return new DeviceColorPair
+                        {
+                            device = saDevice,
+                            color = parsedColor
+                        };
+                    }
+                }
+                return null;
+            }).Where(devicePair => devicePair != null).ToList();
+        }
+
+
+        private List<DeviceArrangeData> ConvertFromSerializable(List<DeviceArrangeDataSerializable> serializedData)
+{
+    List<DeviceArrangeData> taskDatas = serializedData.Select(x => new DeviceArrangeData
+    {
+        device_arrange_id = x.device_arrange_id,
+        device_arrange_name = x.device_arrange_name,
+        device_arrange_type = x.device_arrange_type.Select(type => (SpatialType)Enum.Parse(typeof(SpatialType), type)).ToList(),
+        devices = ConvertFromSerializable(x.devices) // ここを修正
+    }).ToList();
+
+    return taskDatas;
+}
+
+
+        private List<DeviceArrangeDataSerializable> ConvertToSerializable(List<DeviceArrangeData> arrangeData)
+        {
+            List<DeviceArrangeDataSerializable> serializedData =arrangeData.Select(x => new DeviceArrangeDataSerializable() 
+            {
+                device_arrange_id  = x.device_arrange_id,
+                device_arrange_name = x.device_arrange_name,
+                device_arrange_type = x.device_arrange_type.Select(x => x.ToString()).ToList(),
+                devices = ConvertToSerializable(x.devices)
             }).ToList();
 
-            string serialized = JsonConvert.SerializeObject(serializableJsonData, Formatting.Indented);
+            return serializedData; 
+
+        }
+        public void WriteTaskDataJson(List<DeviceArrangeData> tasks)
+        {
+            var serializableData = ConvertToSerializable(tasks);
+
+            string serialized = JsonConvert.SerializeObject(serializableData, Formatting.Indented);
             string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "TaskDeviceData.json");
 
             if (!Directory.Exists(Path.Combine(Application.dataPath, "EXPERIMENT")))
@@ -97,7 +147,7 @@ namespace SpatialLLM.Experiment
             }
 
             File.WriteAllText(filePath, serialized);
-            Debug.Log("JSON saved to:" + filePath);
+            Debug.Log("JSON saved to: " + filePath);
         }
 
         public List<DeviceArrangeData> ReadTaskData()
@@ -111,34 +161,12 @@ namespace SpatialLLM.Experiment
             }
 
             string json = File.ReadAllText(filePath);
-            List<TaskDataJson> jsonDatas = JsonConvert.DeserializeObject<List<TaskDataJson>>(json);
 
-            List<DeviceArrangeData> taskDatas = jsonDatas.Select(x => new DeviceArrangeData
-            {
-                device_arrange_id = x.arrangementId,
-                device_arrange_name = x.arrangementName,
-                device_arrange_type = x.arrangementType.Select(type => (SpatialType)Enum.Parse(typeof(SpatialType), type)).ToList(),
-                devices = x.devices.Select(deviceJson =>
-    {
-            foreach (Transform child in parentObject.transform)
-            {
-                SADevice saDevice = child.GetComponent<SADevice>();
 
-                if (saDevice != null && saDevice.name == deviceJson.deviceName)
-                {
-                    // Enumに変換（エラー処理なしでOK）
-                    DeviceColor deviceColor = (DeviceColor)Enum.Parse(typeof(DeviceColor), deviceJson.color);
+            Debug.Log($"{json}");
+            var jsonDataList = JsonConvert.DeserializeObject<List<DeviceArrangeDataSerializable>>(json);
 
-                    return new DeviceColorPair
-                    {
-                        device = saDevice,
-                        presetColor = deviceColor
-                    };
-                }
-            }
-        return null;
-    }).Where(devicePair => devicePair != null).ToList()
-            }).ToList();
+            List<DeviceArrangeData> taskDatas = ConvertFromSerializable(jsonDataList);
 
             return taskDatas;
         }
@@ -149,5 +177,7 @@ namespace SpatialLLM.Experiment
             arrangementType = new List<SpatialType>();
             inputTaskDevices.Clear();
         }
+
+    
     }
 }

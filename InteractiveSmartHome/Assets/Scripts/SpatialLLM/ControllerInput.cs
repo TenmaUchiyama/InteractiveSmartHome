@@ -6,7 +6,7 @@ using SpatialLLM.Network;
 using SpatialLLM.Type;
 using UnityEngine;
 
-public class ControllerInput : MonoBehaviour
+public class ControllerInput : Singleton<MonoBehaviour>
 {
   
     [SerializeField] private SystemExecutor systemExecutor;
@@ -22,6 +22,11 @@ public class ControllerInput : MonoBehaviour
             systemExecutor.onCompleteOperation.AddListener(()=>{isControllable = false;});
             }
     }
+
+
+
+
+    
    private void Update() {
 
             if(Input.GetKeyDown(KeyCode.Space))
@@ -85,13 +90,7 @@ public class ControllerInput : MonoBehaviour
         }
 
 
-    // if (Input.GetKeyDown(KeyCode.Space))
-    //     {
-
-    //         Debug.Log("[ControllerInput] Space Pressed");
-    //         SASpeechRecognizer.Instance.ToggleVoiceActivation(); 
-        
-    //     }
+  
 
    }
 }

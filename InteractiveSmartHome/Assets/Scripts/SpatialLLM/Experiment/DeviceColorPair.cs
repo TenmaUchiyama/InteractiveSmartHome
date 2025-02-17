@@ -7,11 +7,11 @@ namespace SpatialLLM.Experiment
 {
     public enum SpatialType
     {
-        ViewpointBased,
-        PositionBased,
-        DistanceBased,
-        DirectionBased,
-        HeightBased
+        ViewpointReference,
+        PositionReference,
+        DistanceReference,
+        ObjectReference,
+        HeightReference
     }
 
     public enum DeviceColor
@@ -27,6 +27,7 @@ namespace SpatialLLM.Experiment
     public class DeviceColorPair
     {
         public SADevice device;
+
         public DeviceColor color = DeviceColor.White;
 
         public Color GetFinalColor()
@@ -40,5 +41,14 @@ namespace SpatialLLM.Experiment
                 default: return Color.white;
             }
         }
+    }
+
+
+
+    [Serializable]
+    public class DeviceColorPairSerializable
+    {
+        public string deviceName;
+        public string colorName;
     }
 }
