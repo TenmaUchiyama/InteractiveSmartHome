@@ -126,10 +126,21 @@ public class SALight : SADevice
                 this.drawOnHover.VisualizeTargetDevice(Color.blue);
         }
 
+        public override void TurnOnWithColor(Color color)
+        {
+            light.enabled = true; 
+            light.intensity = intensityScale; 
+            light.color = color;
+            isDeviceOn = true;
+        }
 
+        public override void TurnOff()
+        {
+            light.enabled = false;
+            light.intensity = 0;
+            light.color = Color.white;
+            isDeviceOn = false;
 
-
-
-
+        }
     }
 }

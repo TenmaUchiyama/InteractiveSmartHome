@@ -38,6 +38,10 @@ namespace SpatialLLM.Device
 
         public abstract void OperateDevice(OperatingDeviceData operatingDeviceData);
 
+        public abstract void TurnOnWithColor(Color color);
+
+        public abstract void TurnOff();
+
         public abstract void Init();
 
 

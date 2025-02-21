@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using SpatialLLM.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,14 +20,40 @@ public class SystemExecutor : MonoBehaviour
     public UnityEvent onCompleteOperation;
 
 
+        void Start()
+        {
+            
+        }
+
+
 
         void Update()
         {
             //For Debug
-            if(Input.GetKeyDown(KeyCode.Escape))
-            {
-                CompleteOperation();
-            }
+            // if(Input.GetKeyDown(KeyCode.Escape))
+            // {
+            //     CompleteOperation();
+            // }
+
+            if(!isStarted) return;
+
+
+              if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+                {
+
+                
+                    Debug.Log("[ControllerInput] Pressed");
+                    SASpeechRecognizer.Instance.ActivateVoice();
+             
+                }
+
+
+                if(OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+                {
+                    Debug.Log("[ControllerInput] Released");
+                    SASpeechRecognizer.Instance.DeactivateVoice();
+               
+                }
         }
 
 

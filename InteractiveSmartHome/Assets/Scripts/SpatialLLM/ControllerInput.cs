@@ -26,15 +26,10 @@ public class ControllerInput : Singleton<MonoBehaviour>
 
 
 
-    
+
    private void Update() {
 
-            if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("SPACEKEY PRESSED"); 
-             LLMQueryRequest.Instance.SendQueryForDebug("");
-        }
-
+       
         if(!isControllable) return;
 
         if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
@@ -59,35 +54,6 @@ public class ControllerInput : Singleton<MonoBehaviour>
         }
 
 
-
-       if (Input.GetKeyDown(KeyCode.T))
-        {
-
-            Debug.Log("[ControllerInput] T Pressed");
-            List<SpatialLLM.Network.NetworkDataType.DeviceSpatialData> data = SpatialAwarnessProvider.Instance.DirectionFunction(DirectionUtil.GetDirection(DirectionUtil.Direction.Right), "high"); 
-
-
-            Debug.Log($"<color=yellow>[ControllerInput] Data: {data.Count}</color>");
-
-            foreach(var device in data)
-            {
-                Debug.Log($"<color=yellow>[ControllerInput] Device: {device.name}</color>");
-            }
-
-
-        
-        }
-
-
-        if(OVRInput.GetDown(OVRInput.RawButton.X))
-        {
-            systemExecutor.CompleteOperation();
-        }
-
-        if(Input.GetKeyDown(KeyCode.O))
-        {
-            systemExecutor.CompleteOperation();
-        }
 
 
   

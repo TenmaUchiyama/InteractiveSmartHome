@@ -78,7 +78,8 @@ public class LLMPerformanceTest
 
 public class ExperimentTask : MonoBehaviour
 {
-   
+    
+    [SerializeField] private SAWebsocket saWebsocket; 
     [SerializeField] private GameObject parentObject; 
 
     List<SADevice> allDevices;
@@ -95,6 +96,9 @@ public class ExperimentTask : MonoBehaviour
     private string user_name; 
 
     private DeviceArrangementGenerator arrangementGenerator;
+
+
+
 
     
 

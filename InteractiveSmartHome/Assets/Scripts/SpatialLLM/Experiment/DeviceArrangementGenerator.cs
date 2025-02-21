@@ -35,7 +35,8 @@ public class DeviceArrangeDataSerializable
         [SerializeField] public List<DeviceColorPair> inputTaskDevices;
 
         [Header("──────────────────────────────────────────────────────")]
-        public List<DeviceArrangeData> arrangementDataList;
+        [SerializeField] private  List<DeviceArrangeData> arrangementDataList;
+        public List<DeviceArrangeData> ArrangementDataList => arrangementDataList;
 
         public GameObject parentObject;
 
@@ -54,7 +55,7 @@ public class DeviceArrangeDataSerializable
             {
                 device_arrange_id = Guid.NewGuid().ToString(),
                 device_arrange_name = arrangementName,
-                device_arrange_type = arrangementType,
+                device_arrange_type = new List<SpatialType>(arrangementType), // 新しいリストインスタンスを生成
                 devices = new List<DeviceColorPair>(inputTaskDevices)
             };
 
@@ -65,9 +66,19 @@ public class DeviceArrangeDataSerializable
 
         [ContextMenu("Load Task Data")]
         public void LoadTaskData()
-        {
-            arrangementDataList = ReadTaskData();
-        }
+{
+        // 新しいリストを生成するのではなく、既存のリストを更新する
+        var newData = ReadTaskData();
+        
+        if (arrangementDataList == null)
+            arrangementDataList = new List<DeviceArrangeData>();
+        else
+            arrangementDataList.Clear();
+        
+        arrangementDataList.AddRange(newData);
+
+        Debug.Log(arrangementDataList.Count());
+    }
 
         private List<DeviceColorPairSerializable> ConvertToSerializable(List<DeviceColorPair> devicePairs)
         {
@@ -108,17 +119,23 @@ public class DeviceArrangeDataSerializable
 
 
         private List<DeviceArrangeData> ConvertFromSerializable(List<DeviceArrangeDataSerializable> serializedData)
-{
-    List<DeviceArrangeData> taskDatas = serializedData.Select(x => new DeviceArrangeData
     {
-        device_arrange_id = x.device_arrange_id,
-        device_arrange_name = x.device_arrange_name,
-        device_arrange_type = x.device_arrange_type.Select(type => (SpatialType)Enum.Parse(typeof(SpatialType), type)).ToList(),
-        devices = ConvertFromSerializable(x.devices) // ここを修正
-    }).ToList();
+        List<DeviceArrangeData> taskDatas = serializedData.Select(x => new DeviceArrangeData
+        {
+            device_arrange_id = x.device_arrange_id,
+            device_arrange_name = x.device_arrange_name,
+            device_arrange_type = x.device_arrange_type.Select(type => (SpatialType)Enum.Parse(typeof(SpatialType), type)).ToList(),
+            devices = ConvertFromSerializable(x.devices) // ここを修正
+        }).ToList();
 
-    return taskDatas;
-}
+        return taskDatas;
+    }
+
+
+    public List<DeviceArrangeDataSerializable> GetAllSerializedDeviceArrangeData() 
+    {
+        return ConvertToSerializable(arrangementDataList);
+    }
 
 
         private List<DeviceArrangeDataSerializable> ConvertToSerializable(List<DeviceArrangeData> arrangeData)

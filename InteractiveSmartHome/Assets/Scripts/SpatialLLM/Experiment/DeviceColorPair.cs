@@ -8,7 +8,7 @@ namespace SpatialLLM.Experiment
     public enum SpatialType
     {
         ViewpointReference,
-        PositionReference,
+        DirectionalReference,
         DistanceReference,
         ObjectReference,
         HeightReference
@@ -30,7 +30,7 @@ namespace SpatialLLM.Experiment
 
         public DeviceColor color = DeviceColor.White;
 
-        public Color GetFinalColor()
+        public Color GetUnityColor()
         {
             switch (color)
             {

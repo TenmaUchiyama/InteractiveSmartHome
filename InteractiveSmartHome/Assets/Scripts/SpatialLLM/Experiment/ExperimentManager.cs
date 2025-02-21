@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Meta.WitAi.Json;
 using SpatialLLM.Device;
 using UnityEngine;
 
@@ -67,10 +68,17 @@ public class ExperimentManager : MonoBehaviour
 
 
     private async void Init()
-    {
+    {   
+
+        
         Debug.Log("[DEBUG] Press A to Init");
         await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.A));
         TransitionToState(ExperimentFlowState.START_TASK);
+    }
+
+    private void SendAllDeviceDataToSocket() 
+    {
+        List<DeviceArrangeDataSerializable> data  = arrangementGenerator.GetAllSerializedDeviceArrangeData(); 
     }
 
 
@@ -91,18 +99,13 @@ public class ExperimentManager : MonoBehaviour
     DebugLogging("Show Device");
 
     // DeviceColorPair のリストから SADevice のリストに変換
-    List<SADevice> saDevices = this.currentArrange.devices.Select(x => x.device).ToList();
-    
+    List<DeviceColorPair> deviceArrangeDatas = this.currentArrange.devices; 
 
     // DisplayDevices は void を返すので、await しない
-    DisplayDevices(saDevices);
+    DisplayDevices(deviceArrangeDatas);
 
-    foreach (SADevice device in saDevices)
-    {
-        DebugLogging($"Device: {device.gameObject.name}");
-    }
-
-    Debug.Log("[DEBUG] Press A to Init");
+  
+    Debug.Log("<color=red>[DEBUG] Press A to Init</color>");
     await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A));
     ClearDeviceVisual();
 
@@ -121,10 +124,13 @@ public class ExperimentManager : MonoBehaviour
 // OPERATING STATE 
 private async UniTask Operation() 
 {
+    
     DebugLogging($"[{this.currentState.ToString()}] Operating"); 
     systemExecutor.BeginOperation(); 
     this.experimentTask.StartTaskTimer();
-    await systemExecutor.WaitForExecution();
+    // await systemExecutor.WaitForExecution();
+    Debug.Log("[DEBUG] Press A to Init");
+    await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.A));
     this.experimentTask.StopTaskTimer();
     TransitionToState(ExperimentFlowState.DONE);
 
@@ -193,11 +199,13 @@ private async UniTask Operation()
         }
     }
 
-    private void DisplayDevices(List<SADevice> saDevices)
+    private void DisplayDevices(List<DeviceColorPair> deviceColorPairs)
     {
-        foreach(SADevice saDevice in saDevices)
+        foreach(DeviceColorPair devicePair in deviceColorPairs)
         {
+            SADevice saDevice = devicePair.device; 
             DrawOnHover drawOnHover = saDevice.gameObject.GetComponent<DrawOnHover>();
+            saDevice.TurnOnWithColor(devicePair.GetUnityColor());
             if (drawOnHover != null)
             {
                 drawOnHover.VisualizeTargetDevice(Color.red); 
