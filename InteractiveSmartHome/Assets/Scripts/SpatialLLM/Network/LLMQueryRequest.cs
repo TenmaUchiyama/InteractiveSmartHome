@@ -45,8 +45,8 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
     [SerializeField] private string debugText = "";
 
-    [SerializeField] private bool isDebug;
-    
+    [SerializeField] private bool isUserStudy;
+
 
 
     public UnityEvent<string> OnReceiveResponseFromLLM;
@@ -76,6 +76,11 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
     private async void OnVoiceRecognized(string recognizedText)
     {
+
+        if(isUserStudy)
+        {
+
+        }
         switch(queryMode)
         {
             case LLMQueryMode.Spatial:
@@ -112,7 +117,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
             break; 
             case LLMQueryMode.Multiple_Select_Pointing:
                 Debug.Log("================================================================");
-                 List<SADevice> allDevices = SpatialAwarnessProvider.Instance.GetAllDevices(); 
+                List<SADevice> allDevices = SpatialAwarnessProvider.Instance.GetAllDevices(); 
                 List<DeviceLabel> selectedDeviceLabel = allDevices
                 .Where(device => device.IsDeviceSelected())
                 .Select(device => {

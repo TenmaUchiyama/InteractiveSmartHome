@@ -129,5 +129,15 @@ public class SACurtain : SADevice
         {
             throw new NotImplementedException();
         }
+
+        public override void TurnOnWithColor(Color color)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void TurnOff()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
