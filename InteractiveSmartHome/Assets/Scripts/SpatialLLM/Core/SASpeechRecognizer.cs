@@ -18,7 +18,7 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
     {
 
 
-
+        [SerializeField] SAUIManager sAUIManager;
         public UnityEvent OnVoiceRecogStart; 
         public UnityEvent OnVoiceRecogStop; 
 

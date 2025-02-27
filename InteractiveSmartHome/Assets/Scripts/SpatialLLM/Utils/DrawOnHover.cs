@@ -123,6 +123,8 @@ public class DrawOnHover : MonoBehaviour
 
     public void ClearDrawing() 
     {
+
+        Debug.Log("<color=red>DRAWING CLEAR</color>");
         lineRenderer.enabled = false;
     }
 

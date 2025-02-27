@@ -65,21 +65,17 @@ public class SALight : SADevice
         }
 
 
-        public override void Init() 
-        {
+       public override void Init() 
+{
 
+    OperatingDeviceData initData = new OperatingDeviceData {
+        state = false,
+    };
+    OperateDevice(initData);
+    UpdateCurrentData();
 
-
-
-            OperatingDeviceData initData = new OperatingDeviceData {
-                state = false,
-            };
-            OperateDevice(initData);
-            UpdateCurrentData();
-
-
-            this.drawOnHover.ClearDrawing();
-        }
+    this.drawOnHover.ClearDrawing();
+}
 
         private void UpdateCurrentData()
         {
@@ -106,6 +102,7 @@ public class SALight : SADevice
 
             Debug.Log($"<color=blue>[{this.gameObject.name}] State {operatingDeviceData.state}, Intensity: {operatingDeviceData.intensity}</color>");
              light.enabled = operatingDeviceData.state;
+            Debug.Log($"<color=red>[{light.enabled}</color>");
              isDeviceOn = operatingDeviceData.state;
              currentOperatingData = operatingDeviceData;
                 if(operatingDeviceData.intensity != null) light.intensity = Mathf.Clamp((float)operatingDeviceData.intensity / 3.0f, 0.0f, 3.0f);

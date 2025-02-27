@@ -28,9 +28,13 @@ public class ExperimentManager : MonoBehaviour
     private List<DeviceArrangeData> arrangeDataList;
     private DeviceArrangeData currentArrange;
     
+    
     [SerializeField]private  int currentArrangeIndex;
     [SerializeField] private SystemExecutor systemExecutor;
     [SerializeField] private GameObject parentObject; 
+    [SerializeField] private SAUIManager saUIManager;
+
+    private List<SADevice> allDevices;
     
     private ExperimentalDataManager experimentalDataManager;
     private ExperimentTask experimentTask;
@@ -49,6 +53,8 @@ public class ExperimentManager : MonoBehaviour
         experimentalDataManager = GetComponent<ExperimentalDataManager>();
         arrangementGenerator = GetComponent<DeviceArrangementGenerator>();
         experimentTask = GetComponent<ExperimentTask>();
+
+         allDevices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>(false));
 
         ReadTaskData();
         
@@ -71,7 +77,7 @@ public class ExperimentManager : MonoBehaviour
     {   
 
         
-        Debug.Log("[DEBUG] Press A to Init");
+        Debug.Log("[INIT] Press A to Init");
         await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.A));
         TransitionToState(ExperimentFlowState.START_TASK);
     }
@@ -104,9 +110,15 @@ public class ExperimentManager : MonoBehaviour
     // DisplayDevices は void を返すので、await しない
     DisplayDevices(deviceArrangeDatas);
 
-  
-    Debug.Log("<color=red>[DEBUG] Press A to Init</color>");
+    foreach(DeviceColorPair pair in deviceArrangeDatas)
+    {
+        Debug.Log(pair.device.name);
+    }
+    Debug.Log("<color=red>[ShowDevice] Press A to Go To Operation</color>");
+    saUIManager.SetDeviceCountText(deviceArrangeDatas.Count().ToString());
+    saUIManager.SetInstructionText("Press Y If You Are Ready"); 
     await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A));
+    saUIManager.ClearInstruction();
     ClearDeviceVisual();
 
     TransitionToState(ExperimentFlowState.OPERATION);
@@ -128,9 +140,9 @@ private async UniTask Operation()
     DebugLogging($"[{this.currentState.ToString()}] Operating"); 
     systemExecutor.BeginOperation(); 
     this.experimentTask.StartTaskTimer();
-    // await systemExecutor.WaitForExecution();
-    Debug.Log("[DEBUG] Press A to Init");
-    await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.A));
+    // await systemExecutor.WaitForExecution()
+    await systemExecutor.WaitForExecution();
+    saUIManager.ClearInstruction();
     this.experimentTask.StopTaskTimer();
     TransitionToState(ExperimentFlowState.DONE);
 
@@ -174,11 +186,14 @@ private async UniTask Operation()
     }
 
 
-
+    public List<SADevice> GetAllDevices() 
+    {
+        return this.allDevices;
+    }
 
     public void InitDevicesState(List<SADevice> saDevices) 
     {
-        foreach(SADevice saDevice in saDevices)
+        foreach(SADevice saDevice in allDevices)
         {
             saDevice.Init();
         }
@@ -201,7 +216,7 @@ private async UniTask Operation()
 
     private void DisplayDevices(List<DeviceColorPair> deviceColorPairs)
     {
-        foreach(DeviceColorPair devicePair in deviceColorPairs)
+        foreach(DeviceColorPair devicePair in this.currentArrange.devices)
         {
             SADevice saDevice = devicePair.device; 
             DrawOnHover drawOnHover = saDevice.gameObject.GetComponent<DrawOnHover>();
@@ -214,11 +229,29 @@ private async UniTask Operation()
     }
 
 
+    public void DisplayCurrentOperation()
+    {
+        List<DeviceColorPair> deviceColorPairs =  this.currentArrange.devices; 
+
+        foreach(DeviceColorPair devicePair in deviceColorPairs)
+        {
+            SADevice saDevice = devicePair.device; 
+            DrawOnHover drawOnHover = saDevice.gameObject.GetComponent<DrawOnHover>();
+            saDevice.TurnOnWithColor(devicePair.GetUnityColor());
+            if (drawOnHover != null)
+            {
+                drawOnHover.VisualizeTargetDevice(Color.blue); 
+            }
+        }
+    }
+
+
+
+
     private void ClearDeviceVisual() 
     {
-        foreach(Transform child in parentObject.transform)
+        foreach(SADevice device in allDevices)
         {
-            SADevice device = child.GetComponent<SADevice>();
             if(device != null)
             {
                 device.Init();
@@ -253,7 +286,7 @@ private async UniTask Operation()
     }
 
 
-    public DeviceArrangeData GetCurrentTaskData() 
+    public DeviceArrangeData GetCurrentArrangeData() 
     {
         return this.currentArrange;
     }
