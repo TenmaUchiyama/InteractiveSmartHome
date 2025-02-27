@@ -6,6 +6,7 @@ using MRFlow.Network;
 using Oculus.Interaction;
 using SpatialLLM.Network;
 using SpatialLLM.Type;
+using TMPro;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
 
@@ -19,6 +20,8 @@ namespace SpatialLLM.Device
    
     public abstract class SADevice : MonoBehaviour
     {
+
+         [SerializeField] ShowLabel showLabel;
          protected DBDeviceData deviceData; 
          protected DeviceSpatialData spatialData;
 
@@ -36,6 +39,9 @@ namespace SpatialLLM.Device
 
         public int HandleHover { get; private set; }
 
+
+
+
         public abstract void OperateDevice(OperatingDeviceData operatingDeviceData);
 
         public abstract void TurnOnWithColor(Color color);
@@ -44,6 +50,8 @@ namespace SpatialLLM.Device
 
         public abstract void Init();
 
+
+        
 
         public DeviceSpatialData GetDevicePositionalData()
         {

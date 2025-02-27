@@ -12,6 +12,9 @@ using SpatialLLM.Type;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
 
+
+
+
 public class HandPointing : MonoBehaviour
 {
     [SerializeField] OVRHand rightHand; 
@@ -25,6 +28,7 @@ public class HandPointing : MonoBehaviour
     [SerializeField] private Color rayColor = Color.green; // Ray の色
 
     private LineRenderer lineRenderer;
+    private PointingDevices pointingDevices;
 
 
         // [SerializeField, Interface(typeof(ISelector))]
@@ -37,7 +41,7 @@ public class HandPointing : MonoBehaviour
 
 
 
-         bool isVisibleStateChangedOnce =false;
+        bool isPinchedOnce = false;
 
 
 
@@ -50,30 +54,83 @@ public class HandPointing : MonoBehaviour
         // Selector.WhenUnselected += HandleUnselected;
 
 
-        SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+        // SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
 
         InitLineRenderer();
-    }
 
-
-    private void Update() {
-
-        VisualizeRay();
+        pointingDevices = GetComponent<PointingDevices>();
     }
 
 
 
 
-    void OnDestroy()
+
+
+
+
+
+
+ private void Update()
     {
-        // Selector.WhenSelected -= HandleSelected;
-        // Selector.WhenUnselected -= HandleUnselected;
+        
+
+          DrawPointingLine();
+        // ピンチが始まった瞬間を検出
+        if (rightHand.IsPressed() && !isPinchedOnce)
+        {
+            isPinchedOnce= true;
+            ToggleSADevice();
+            pointingDevices.GetSelected();
+        }
+
+        // ピンチが解除されたらフラグをリセット
+        if (!rightHand.IsPressed())
+        {
+            isPinchedOnce = false;
+        }
 
 
-        SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
+
     }
 
-  private async void OnVoiceRecognized(string detected)
+   private void ToggleSADevice()
+    {
+        // RayInteractor のヒット情報を取得
+        SurfaceHit? hit = rayInteractor.CollisionInfo;
+        if (!hit.HasValue) return;
+
+        // Raycast の正しい origin と direction を設定
+        Vector3 origin = hit.Value.Point + hit.Value.Normal * 0.01f; // 少しオフセットをつける
+        Vector3 direction = -hit.Value.Normal;
+
+        if (Physics.Raycast(origin, direction, out RaycastHit raycastHit, Mathf.Infinity))
+        {
+            string gameObjectName = raycastHit.collider.gameObject.name;
+            Debug.Log($"<color=yellow>Hit GameObject Name: {gameObjectName}</color>");
+
+            // 親オブジェクトも含めて SADevice を探す
+            SADevice device = raycastHit.collider.GetComponentInParent<SADevice>();
+            if (device != null)
+            {
+                Debug.Log("<color=yellow>SADevice component found on the hit object.</color>");
+
+                // isDeviceSelected の状態を Toggle
+                bool currentState = device.IsDeviceSelected();
+                device.SetIsSelected(!currentState);
+                Debug.Log($"<color=yellow>SADevice selection toggled: {currentState} -> {!currentState}</color>");
+            }
+            else
+            {
+                Debug.Log("<color=red>No SADevice component found on the hit object.</color>");
+            }
+        }
+        else
+        {
+            Debug.Log("<color=red>Raycast did not hit any object.</color>");
+        }
+    }
+
+    private async void OnVoiceRecognized(string detected)
 {
     try
     {
@@ -137,6 +194,10 @@ public class HandPointing : MonoBehaviour
         Debug.LogError($"OnVoiceRecognized encountered an error: {e.Message}");
     }
 }
+    
+    
+    
+    
     private void HandleUnselected()
     {
         isStateActivated = false;

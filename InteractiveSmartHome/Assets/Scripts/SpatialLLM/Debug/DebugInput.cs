@@ -23,20 +23,20 @@ public class DebugInput : MonoBehaviour
         OnSpacePressed.Invoke();
       }
 
-     if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-        {
-            Debug.Log("[ControllerInput] Pressed");
-            OnIndexPressed.Invoke();
-            SASpeechRecognizer.Instance.ActivateVoice();
-        }
+    //  if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+    //     {
+    //         Debug.Log("[ControllerInput] Pressed");
+    //         OnIndexPressed.Invoke();
+    //         SASpeechRecognizer.Instance.ActivateVoice();
+    //     }
 
 
-        if(OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
-        {
-             Debug.Log("[ControllerInput] Released");
-            OnIndexReleased.Invoke();
-            SASpeechRecognizer.Instance.DeactivateVoice();
-        }
+    //     if(OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+    //     {
+    //          Debug.Log("[ControllerInput] Released");
+    //         OnIndexReleased.Invoke();
+    //         SASpeechRecognizer.Instance.DeactivateVoice();
+    //     }
 
 
     }

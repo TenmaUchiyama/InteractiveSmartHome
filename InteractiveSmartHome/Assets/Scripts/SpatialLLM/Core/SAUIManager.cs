@@ -20,6 +20,8 @@ public class SAUIManager : MonoBehaviour
     [SerializeField] GameObject spinner;
     [SerializeField] GameObject userCommandObject;
     [SerializeField] TextMeshProUGUI userCommandText; 
+    [SerializeField] TextMeshProUGUI instructionText;
+    [SerializeField] TextMeshProUGUI deviceCountText;
 
 
      [SerializeField] GameObject  agentResponseObject;
@@ -28,13 +30,13 @@ public class SAUIManager : MonoBehaviour
     {
     
 
-        if(SASpeechRecognizer.Instance)SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+        // if(SASpeechRecognizer.Instance)SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
         if(LLMQueryRequest.Instance)LLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener(OnReceiveResponseFromLLM);
     }
 
   
     private void OnDestroy() {
-        if(SASpeechRecognizer.Instance)SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
+        // if(SASpeechRecognizer.Instance)SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
         if(LLMQueryRequest.Instance)LLMQueryRequest.Instance.OnReceiveResponseFromLLM.RemoveListener(OnReceiveResponseFromLLM);
     }
 
@@ -84,7 +86,7 @@ public class SAUIManager : MonoBehaviour
 
     private void OnVoiceRecognized(string recognizedText)
     {
-        spinner.SetActive(true);    
+       if(spinner)spinner.SetActive(true);    
        userCommandObject.SetActive(true);
        userCommandText.text = recognizedText;
     }
@@ -93,25 +95,75 @@ public class SAUIManager : MonoBehaviour
 
 
 
-    private void Update() {
-         if(OVRInput.GetDown(OVRInput.RawButton.Y))
-        {
-          ClearUI();
-        }
+    // private void Update() {
+    //      if(OVRInput.GetDown(OVRInput.RawButton.Y))
+    //     {
+    //       ClearUI();
+    //     }
+    // }
+
+
+    public void SetRecognizedTxt(string recognizedText)
+    {
+       userCommandObject.SetActive(true);
+       userCommandText.text = recognizedText;
+    }
+
+
+    // public void ClearUI() 
+    // {
+    //     userCommandText.text = ""; 
+    //     userCommandObject.SetActive(false); 
+
+    //     agentResponseText.text = "";
+    //     agentResponseObject.SetActive(false);
+
+
+    //     spinner.SetActive(false);
+
+    // }
+
+
+    public void ClearInstruction() 
+    {
+        instructionText.text = ""; 
+    }
+
+
+    public void SetInstructionText(string instruction) 
+    {
+        instructionText.text = instruction;
+    }
+
+    public bool IsRecognizedWordEmplty() 
+    {
+        return userCommandText.text == "";
+    }
+
+    public void ClearRecognizedWord()
+    {
+        userCommandText.text = ""; 
+        userCommandObject.SetActive(false);
+    }
+
+
+    public void ClearDeviceCount() 
+    {
+        deviceCountText.text = ""; 
+    }
+
+
+    public void SetDeviceCountText(string deviceCount)
+    {
+        deviceCountText.text = "Num of Devices: " + deviceCount;
     }
 
 
     public void ClearUI() 
     {
-        userCommandText.text = ""; 
-        userCommandObject.SetActive(false); 
-
-        agentResponseText.text = "";
-        agentResponseObject.SetActive(false);
-
-
-        spinner.SetActive(false);
-
+        this.ClearDeviceCount();
+        this.ClearInstruction();
+        this.ClearRecognizedWord();
     }
 
 

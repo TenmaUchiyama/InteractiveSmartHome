@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace SpatialLLM.Experiment{
 public class SystemExecutor : MonoBehaviour
 {
 
+    [SerializeField] SAUIManager saUIManager; 
+    [SerializeField] ExperimentManager experimentManager;
     private UniTaskCompletionSource<bool> completionSource;
 
 
@@ -20,13 +23,29 @@ public class SystemExecutor : MonoBehaviour
     public UnityEvent onCompleteOperation;
 
 
-        void Start()
+        protected virtual void Start()  
         {
+            if(SASpeechRecognizer.Instance) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+        }
+
+        void OnDestroy()
+        {
+            if(SASpeechRecognizer.Instance) SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
+        }
+
+        private void OnVoiceRecognized(string recognizedText)
+        {
+            saUIManager.SetRecognizedTxt(recognizedText);
+
+            if(!saUIManager.IsRecognizedWordEmplty())
+            {
+                saUIManager.SetInstructionText("Press Y to confirm");
+            }
             
         }
 
 
-
+        bool isOperationDone = false;
         void Update()
         {
             //For Debug
@@ -34,6 +53,28 @@ public class SystemExecutor : MonoBehaviour
             // {
             //     CompleteOperation();
             // }
+             if( OVRInput.GetDown(OVRInput.RawButton.Y))
+                { 
+                    
+                    
+                if(isOperationDone)    
+                {
+                    this.CompleteOperation();
+                    isOperationDone = false;
+                    saUIManager.ClearRecognizedWord();
+                    return;
+                }
+                if(!saUIManager.IsRecognizedWordEmplty())
+                {
+                    experimentManager.DisplayCurrentOperation();
+                    saUIManager.SetInstructionText("Press Y to continue"); 
+                    isOperationDone = true;
+                }
+
+                
+                    
+                }
+           
 
             if(!isStarted) return;
 
@@ -57,7 +98,7 @@ public class SystemExecutor : MonoBehaviour
         }
 
 
-        public void BeginOperation(){
+        public virtual void BeginOperation(){
             onBeginOperation.Invoke();
             isStarted = true;
         }
@@ -74,7 +115,7 @@ public class SystemExecutor : MonoBehaviour
         }
 
         // サブクラスから完了を通知するメソッド
-        public void CompleteOperation()
+        public virtual void CompleteOperation()
         {   
             onCompleteOperation?.Invoke();
             completionSource?.TrySetResult(isStarted);
