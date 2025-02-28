@@ -13,10 +13,17 @@ namespace SpatialLLM.Experiment{
 public class SystemExecutor : MonoBehaviour
 {
 
-    [SerializeField] SAUIManager saUIManager; 
-    [SerializeField] ExperimentManager experimentManager;
+    [SerializeField] protected SAUIManager saUIManager; 
+    [SerializeField] protected ExperimentManager experimentManager;
     private UniTaskCompletionSource<bool> completionSource;
 
+
+    protected bool isTriggarable =true;
+
+    protected bool isRecording = false;
+
+
+    protected bool isPointing = false;
 
     private bool isStarted = false;
     public UnityEvent onBeginOperation;
@@ -45,8 +52,8 @@ public class SystemExecutor : MonoBehaviour
         }
 
 
-        bool isOperationDone = false;
-        void Update()
+        protected bool isOperationDone = false;
+        public virtual void Update()
         {
             //For Debug
             // if(Input.GetKeyDown(KeyCode.Escape))
@@ -64,10 +71,14 @@ public class SystemExecutor : MonoBehaviour
                     saUIManager.ClearRecognizedWord();
                     return;
                 }
+
+
+
+
                 if(!saUIManager.IsRecognizedWordEmplty())
                 {
+                    if(isPointing) return;
                     experimentManager.DisplayCurrentOperation();
-                    saUIManager.SetInstructionText("Press Y to continue"); 
                     isOperationDone = true;
                 }
 
@@ -81,9 +92,10 @@ public class SystemExecutor : MonoBehaviour
 
               if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
                 {
-
+                    if(!isTriggarable)return ;
                 
                     Debug.Log("[ControllerInput] Pressed");
+                    isRecording = true;
                     SASpeechRecognizer.Instance.ActivateVoice();
              
                 }
@@ -91,7 +103,9 @@ public class SystemExecutor : MonoBehaviour
 
                 if(OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
                 {
+                    if(!isTriggarable) return ;
                     Debug.Log("[ControllerInput] Released");
+                    isRecording = false;
                     SASpeechRecognizer.Instance.DeactivateVoice();
                
                 }
