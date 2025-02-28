@@ -51,6 +51,16 @@ namespace SpatialLLM.Device
         public abstract void Init();
 
 
+        public void DisplayShowLabel(bool showing)
+        {
+            if(showing){
+                this.showLabel.DisplayLabel();}
+            else{
+                this.showLabel.HideLabel();
+            }
+        }
+
+
         
 
         public DeviceSpatialData GetDevicePositionalData()

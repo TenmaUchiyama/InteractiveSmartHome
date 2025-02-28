@@ -8,6 +8,7 @@ public class PointingDevices : MonoBehaviour
 {
     [SerializeField] GameObject parentObj; 
     [SerializeField] ExperimentManager experimentManager;
+    [SerializeField] PointerSystemExecutor pointerSystemExecutor;
 
 
     private List<SADevice> allDevices;
@@ -69,6 +70,15 @@ public class PointingDevices : MonoBehaviour
 
        selectedDevices.RemoveAll(pair => !pair.device.IsDeviceSelected());
 }
+
+
+
+[ContextMenu("Pointing Done")]
+public void PointingDone() {
+    this.pointerSystemExecutor.PointSystemDone();
+
+}
+
  // 🎯 **Inspector にボタンを追加し、押されたときに `TurnOnWithColor()` を呼び出す**
     [ContextMenu("Turn On Selected Devices")]
     public void TurnOnSelectedDevices()

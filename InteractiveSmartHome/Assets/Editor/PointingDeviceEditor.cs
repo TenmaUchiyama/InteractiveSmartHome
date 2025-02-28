@@ -20,6 +20,12 @@ public class PointingDeviceEditor : Editor
         {
             script.TurnOnSelectedDevices();
         }
+
+
+        if(GUILayout.Button("Pointing Done"))
+        {
+            
+        }
     }
 }
 
