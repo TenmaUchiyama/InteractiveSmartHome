@@ -29,8 +29,13 @@ public class DeviceArrangeDataSerializable
 
  public class DeviceArrangementGenerator : MonoBehaviour
     {
+
+
+
         public string arrangementName = null;
         public DeviceColor selectingDeviceColor= DeviceColor.White;
+        [SerializeField] private bool isTutorial = false;
+
         [SerializeField] public List<SpatialType> arrangementType;
         [SerializeField] public List<DeviceColorPair> inputTaskDevices;
 
@@ -156,7 +161,7 @@ public class DeviceArrangeDataSerializable
             var serializableData = ConvertToSerializable(tasks);
 
             string serialized = JsonConvert.SerializeObject(serializableData, Formatting.Indented);
-            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "TaskDeviceData.json");
+            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT",isTutorial ?   "TutorialDeviceData.json":"TaskDeviceData.json");
 
             if (!Directory.Exists(Path.Combine(Application.dataPath, "EXPERIMENT")))
             {
@@ -169,7 +174,7 @@ public class DeviceArrangeDataSerializable
 
         public List<DeviceArrangeData> ReadTaskData()
         {
-            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "TaskDeviceData.json");
+            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT",  isTutorial ?   "TutorialDeviceData.json":"TaskDeviceData.json");
 
             if (!File.Exists(filePath))
             {

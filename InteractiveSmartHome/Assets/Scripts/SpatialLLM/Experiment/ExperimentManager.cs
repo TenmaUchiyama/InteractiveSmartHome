@@ -77,8 +77,8 @@ public class ExperimentManager : MonoBehaviour
     {   
 
         
-        Debug.Log("[INIT] Press A to Init");
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.A));
+        Debug.Log("[INIT] Press Space to Init");
+        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
         TransitionToState(ExperimentFlowState.START_TASK);
     }
 
@@ -183,6 +183,11 @@ private async UniTask Operation()
     public void  StopLLMResponse()
     {
         this.experimentTask.StopLLMTimer();
+    }
+
+    public void BackToShowDevice() 
+    {
+        TransitionToState(ExperimentFlowState.SHOW_DEVICE);
     }
 
 

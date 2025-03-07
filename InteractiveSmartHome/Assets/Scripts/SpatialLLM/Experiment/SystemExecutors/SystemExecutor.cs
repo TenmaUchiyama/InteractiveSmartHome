@@ -90,6 +90,12 @@ public class SystemExecutor : MonoBehaviour
             if(!isStarted) return;
 
 
+              if(Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
+              {
+                experimentManager.BackToShowDevice();
+              }
+
+
               if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
                 {
                     if(!isTriggarable)return ;
@@ -115,6 +121,8 @@ public class SystemExecutor : MonoBehaviour
         public virtual void BeginOperation(){
             onBeginOperation.Invoke();
             isStarted = true;
+
+            saUIManager.SetInstructionText("Press Trigger to Record");
         }
 
         public virtual async UniTask WaitForExecution()
