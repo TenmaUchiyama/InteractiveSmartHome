@@ -12,7 +12,7 @@ using UnityEngine.Events;
 public class DrawOnHover : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper InteractableUnityEventWrapper;
-
+    
     public Color hoverColor = Color.white; // Hover時の色
     public Color selectedColor = Color.green; // Select時の色
     public float lineWidth = 0.01f; // 線の太さを設定
@@ -26,6 +26,9 @@ public class DrawOnHover : MonoBehaviour
         
         InitLineRenderer();
     }
+
+
+
     void Start()
     {
         saDevice = GetComponent<SADevice>();
@@ -35,9 +38,6 @@ public class DrawOnHover : MonoBehaviour
 
 
         DrawBoundingBox();
-
-
-       
     }
 
     void OnDestroy()

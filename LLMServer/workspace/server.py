@@ -1,22 +1,26 @@
-
-
-from http.client import HTTPException
-import json
+import dotenv
+from agent_runner import runner
+from sr_app_types.agent_types import State
+dotenv.load_dotenv("../.env")
 from fastapi import FastAPI
+import httpx
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 from pydantic import BaseModel
-import dotenv
 import os 
-dotenv.load_dotenv()
-from llm.apps.llm_app import invoke_llm_agent
-from llm.apps.pointing import invoke_pointing_agent
-from llm.apps.label import invoke_label_agent
-from llm.apps.multiple_selections import invoke_multiple_selection_agent
-from log_writer import add_label_log, add_pointing_log, add_spatial_log
+
+XR_SERVER_API = os.getenv("XR_SERVER_API")
 
 
 app = FastAPI()
+
+
+
+class InputMessage(BaseModel):
+    llm_message: str
+    task_id: str
+
+
 
 # CORS Middleware Configuration
 app.add_middleware(
@@ -28,80 +32,41 @@ app.add_middleware(
 )
 
 
-class Message(BaseModel):
+class InputMessage(BaseModel):
     llm_message: str
     task_id: str
 
-@app.post("/label_agent")
-def pointing_agent(message : Message):
-    try:
-        print("\n\n")
-        print("INPUT: ", message.llm_message)
-        print("\n\n")
-        res = invoke_label_agent(message.llm_message)
-        return_value = {
-            "llm_response": res["response"]
-        }
-
-        add_label_log(message.task_id, res["messages"])
 
 
-        return return_value
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@app.post("/pointing_agent")
-def pointing_agent(message : Message):
-    try:
-        print("\n\n")
-        print("INPUT: ", message.llm_message)
-        print("\n\n")
-        response = invoke_pointing_agent(message.llm_message)
-        return_value = {
-            "llm_response": response["response"]
-        }
+@app.get("/")
+def test():
 
-        add_pointing_log(message.task_id, response["messages"])
-        return return_value
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
-    
+    user_prompt = "Turn on all the lights i can see"
+    state : State = State(
+        user_prompt = user_prompt,
+    )
 
-@app.post("/multiple_select_agent")
-def pointing_agent(message : Message):
-    try:
-        print("\n\n")
-        print("INPUT: ", message.llm_message)
-        print("\n\n")
-        response = invoke_multiple_selection_agent(message.llm_message)
-        return_value = {
-            "llm_response": response
-        }
-        return return_value
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    response = runner.invoke(state)
+
+    return {"output" : response['spatialAgent'].final_output}
+
+
 
 @app.post("/llm_agent")
-def llm_agent(message: Message):
-    try:
-        # LLMエージェントにメッセージを送信し、レスポンスを取得
-        print("\n\n")
-        print("INPUT: ", message.llm_message)
-        print("\n\n")
-        
-        response = invoke_llm_agent(message.llm_message)
+def llm_agent(message : InputMessage):
+    user_prompt = message.llm_message
+    task_id = message.task_id
+    state : State = State(
+        user_prompt = user_prompt,
+    )
+    response = runner.invoke(state)
+    output = response['operatorAgent'].final_output
+    print("********************OUTPUT*********************")
+    print(output)
 
-        return_value = {
-            "llm_response": response["response"]
-        }
-
-        add_spatial_log(message.task_id, response["messages"])
-        return return_value
-
-    except Exception as e:
-        # エラーハンドリング：何らかの問題が発生した場合
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
-
+    return {"output" : output}
+    
 
 if __name__ == "__main__":
     uvicorn.run("server:app", host="localhost", port=8800, reload=True)

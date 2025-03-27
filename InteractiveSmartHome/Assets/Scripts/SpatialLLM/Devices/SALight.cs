@@ -32,7 +32,7 @@ public class SALight : SADevice
             this.deviceData = new DBDeviceData(
                 id,
                 this.gameObject.name,
-                "light",
+                SADeviceType.Light.ToString(),
                 "This is a light device. You need this when you want to turn on or off the light. Intensity 0 is the darkest, 100 is the brightest. You can specify the color of the light by specifying the RGB value. For example, if you want to set the light to red, you can specify the RGB value as 255, 0, 0.",
                 "device/" + id,
                 this.transform.position
@@ -137,7 +137,7 @@ public class SALight : SADevice
             light.intensity = 0;
             light.color = Color.white;
             isDeviceOn = false;
-
+            this.drawOnHover.ClearDrawing();
         }
     }
 }

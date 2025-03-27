@@ -31,10 +31,9 @@ public class ExperimentManager : MonoBehaviour
     
     [SerializeField]private  int currentArrangeIndex;
     [SerializeField] private SystemExecutor systemExecutor;
-    [SerializeField] private GameObject parentObject; 
+
     [SerializeField] private SAUIManager saUIManager;
 
-    private List<SADevice> allDevices;
     
     private ExperimentalDataManager experimentalDataManager;
     private ExperimentTask experimentTask;
@@ -54,7 +53,7 @@ public class ExperimentManager : MonoBehaviour
         arrangementGenerator = GetComponent<DeviceArrangementGenerator>();
         experimentTask = GetComponent<ExperimentTask>();
 
-         allDevices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>(false));
+    
 
         ReadTaskData();
         
@@ -191,13 +190,10 @@ private async UniTask Operation()
     }
 
 
-    public List<SADevice> GetAllDevices() 
-    {
-        return this.allDevices;
-    }
 
     public void InitDevicesState(List<SADevice> saDevices) 
     {
+        List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
         foreach(SADevice saDevice in allDevices)
         {
             saDevice.Init();
@@ -255,6 +251,7 @@ private async UniTask Operation()
 
     private void ClearDeviceVisual() 
     {
+        List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
         foreach(SADevice device in allDevices)
         {
             if(device != null)
