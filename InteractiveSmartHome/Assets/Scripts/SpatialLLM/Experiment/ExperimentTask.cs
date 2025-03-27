@@ -80,9 +80,7 @@ public class ExperimentTask : MonoBehaviour
 {
     
     [SerializeField] private SAWebsocket saWebsocket; 
-    [SerializeField] private GameObject parentObject; 
-
-    List<SADevice> allDevices;
+ 
     private ExperimentalDataManager experimentalDataManager;
     
    private bool isTaskTimerStarted = false;
@@ -130,7 +128,6 @@ public class ExperimentTask : MonoBehaviour
         experimentalDataManager = GetComponent<ExperimentalDataManager>();
 
 
-        allDevices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>(false));
 
     }
 
@@ -197,9 +194,9 @@ private TaskScore taskScore = new TaskScore(){
     // arrangeData.devices は「オンになってほしい」デバイスのリストと仮定
     List<SADevice> desiredDevices = arrangeData.devices.Select(x => x.device).ToList();
     
-    
+    List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
 
-    Debug.Log($"<color=yellow>{allDevices.Count}</color>");
+    
 
     
     // allDevices 内の各デバイスについて、期待する状態と実際の状態を比較

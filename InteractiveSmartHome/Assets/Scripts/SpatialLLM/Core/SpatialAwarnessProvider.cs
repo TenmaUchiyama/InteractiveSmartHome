@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ActionDataTypes;
 using SpatialLLM.Device;
+using SpatialLLM.Network;
 using SpatialLLM.Type;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
@@ -19,17 +21,7 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
    
     [SerializeField] private Transform userCameraTransform;
     // [SerializeField] private Camera frustalCamera; // 使用するカメラ
-    public GameObject parentObject; // 親オブジェクト
 
-    private List<SADevice> allDevices; // Deviceコンポーネントを持つオブジェクトのリスト
-
-
-
-
-
-
-   
-    
     public const float verticalFOV = 86f;
     public const float horizontalFOV = 100f;
 
@@ -41,7 +33,7 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     void Start()
     {
 
-            allDevices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>(false));
+        
 
       
 
@@ -49,174 +41,9 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
 
 
 
-
-    public List<SADevice> GetAllDevices()
-    {
-        return this.allDevices; 
-    }
-
-    public SADevice GetDeviceById(string id)
-    {
-        return allDevices.Find(device => device.GetDBDeviceData().device_id == id);
-    }
-
+   
  
 
-  public List<SADevice> GetDeviceInDirection(Direction direction, string device_type)
-{
-    List<SADevice> devicesInDirection = new List<SADevice>();
-
-    foreach (SADevice device in allDevices)
-    {
-
-        if (!device.CompareDeviceType(device_type)) continue; 
-        // デバイスの位置をユーザーのローカル座標系に変換
-        Vector3 localPos = userCameraTransform.InverseTransformPoint(device.transform.position);
-
-        switch (direction)
-        {
-            case Direction.Front:
-                // 自分の前にあるすべてのデバイス
-                if (localPos.z > 0)
-                {
-                    devicesInDirection.Add(device);
-                }
-                break;
-
-            case Direction.Back:
-                // 自分の後ろにあるすべてのデバイス
-                if (localPos.z < 0)
-                {
-                    devicesInDirection.Add(device);
-                }
-                break;
-
-            case Direction.Right:
-                // 自分の右側にあるすべてのデバイス
-                if (localPos.x > 0)
-                {
-                    devicesInDirection.Add(device);
-                }
-                break;
-
-            case Direction.Left:
-                // 自分の左側にあるすべてのデバイス
-                if (localPos.x < 0)
-                {
-                    devicesInDirection.Add(device);
-                }
-                break;
-
-            case Direction.Up:
-                // 自分の上にあるすべてのデバイス
-                if (localPos.y > 0)
-                {
-                    devicesInDirection.Add(device);
-                }
-                break;
-
-            case Direction.Down:
-                // 自分の下にあるすべてのデバイス
-                if (localPos.y < 0)
-                {
-                    devicesInDirection.Add(device);
-                }
-                break;
-        }
-    }
-
-    return devicesInDirection;
-}
-   
-public List<SADevice> GetDevicesInSight(string device_type = "", bool getInFov = true)
-{
-    List<SADevice> returnDevice = new List<SADevice>();  // 条件に合致するデバイスを格納するリスト
-
-    // 垂直方向と水平方向の半分のFOVを計算
-    float halfVerticalFOV = verticalFOV / 2f;
-    float halfHorizontalFOV = horizontalFOV / 2f;
-
-    foreach (var device in allDevices)
-    {
-        if (!device.CompareDeviceType(device_type)) continue;
-        if (device == null) continue;
-
-        Renderer renderer = device.GetComponent<Renderer>();
-        bool isWithinFov = false;
-
-        if (renderer != null)
-        {
-            Bounds bounds = renderer.bounds;
-            Vector3[] corners = GetBoundsCorners(bounds);
-
-            int outOfFovCount = 0;  // 範囲外の角のカウント
-            int halfCornersCount = corners.Length / 2;  // 半分の数
-
-            foreach (var corner in corners)
-            {
-                Vector3 directionToCorner = corner - userCameraTransform.position;
-                directionToCorner.Normalize();
-
-                Vector3 localDirection = userCameraTransform.InverseTransformDirection(directionToCorner);
-
-                float horizontalAngle = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
-                float verticalAngle = Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
-
-                // FOV内にない場合、カウント
-                if (Mathf.Abs(horizontalAngle) >= halfHorizontalFOV || Mathf.Abs(verticalAngle) >= halfVerticalFOV)
-                {
-                    outOfFovCount++;
-                }
-
-                // 範囲外の角が半分以上だったら終了
-                if (outOfFovCount >= halfCornersCount)
-                {
-                    isWithinFov = false;
-                    break;
-                }
-            }
-
-            // 範囲内の角が半分以上ならtrue、それ以外はfalse
-            if (outOfFovCount < halfCornersCount)
-            {
-                isWithinFov = true;
-            }
-        }
-        else
-        {
-            // Rendererがない場合はdevice.transform.positionで判定
-            Vector3 directionToDevice = device.transform.position - userCameraTransform.position;
-            directionToDevice.Normalize();
-
-            Vector3 localDirection = userCameraTransform.InverseTransformDirection(directionToDevice);
-
-            float horizontalAngle = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
-            float verticalAngle = Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
-
-            if (Mathf.Abs(horizontalAngle) < halfHorizontalFOV && Mathf.Abs(verticalAngle) < halfVerticalFOV)
-            {
-                isWithinFov = true;
-            }
-        }
-
-        if (getInFov)
-        {
-            if (isWithinFov)
-            {
-                returnDevice.Add(device);
-            }
-        }
-        else
-        {
-            if (!isWithinFov)
-            {
-                returnDevice.Add(device);
-            }
-        }
-    }
-
-    return returnDevice;  // 条件に合致するデバイスを返す
-}
 
     private Vector3[] GetBoundsCorners(Bounds bounds)
     {
@@ -234,6 +61,90 @@ public List<SADevice> GetDevicesInSight(string device_type = "", bool getInFov =
 
         return corners;
     }
+
+
+
+// ユーザーのカメラ（またはTransform）を基準に対象のローカル座標を取得
+private Vector3 GetLocalPosition(Transform target)
+{
+    return userCameraTransform.InverseTransformPoint(target.position);
+}
+
+// 指定方向（Front, Back, Right, Left, Up, Down）に対象があるかを判定
+private bool IsInDirection(Vector3 localPos, Direction direction)
+{
+    switch (direction)
+    {
+        case Direction.Front:
+            return localPos.z > 0;
+        case Direction.Back:
+            return localPos.z < 0;
+        case Direction.Right:
+            return localPos.x > 0;
+        case Direction.Left:
+            return localPos.x < 0;
+        case Direction.Up:
+            return localPos.y > 0;
+        case Direction.Down:
+            return localPos.y < 0;
+        default:
+            return false;
+    }
+}
+
+// 対象がユーザーのFOV内にあるかを判定
+private bool IsWithinFov(Transform targetTransform, float halfHorizontalFOV, float halfVerticalFOV)
+{
+    Renderer renderer = targetTransform.GetComponent<Renderer>();
+    if (renderer != null)
+    {
+        Bounds bounds = renderer.bounds;
+        Vector3[] corners = GetBoundsCorners(bounds); // ※各Boundsの角を取得する関数
+        int outOfFovCount = 0;
+        int halfCornersCount = corners.Length / 2;
+
+        foreach (var corner in corners)
+        {
+            Vector3 directionToCorner = (corner - userCameraTransform.position).normalized;
+            Vector3 localDirection = userCameraTransform.InverseTransformDirection(directionToCorner);
+            float horizontalAngle = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
+            float verticalAngle = Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
+
+            if (Mathf.Abs(horizontalAngle) >= halfHorizontalFOV || Mathf.Abs(verticalAngle) >= halfVerticalFOV)
+            {
+                outOfFovCount++;
+            }
+            if (outOfFovCount >= halfCornersCount)
+            {
+                return false;
+            }
+        }
+        return outOfFovCount < halfCornersCount;
+    }
+    else
+    {
+        // Rendererが無い場合はtransform.positionで判定
+        Vector3 directionToTarget = (targetTransform.position - userCameraTransform.position).normalized;
+        Vector3 localDirection = userCameraTransform.InverseTransformDirection(directionToTarget);
+        float horizontalAngle = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
+        float verticalAngle = Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
+        return Mathf.Abs(horizontalAngle) < halfHorizontalFOV && Mathf.Abs(verticalAngle) < halfVerticalFOV;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // // 視野内にあるオブジェクトのリストを取得するメソッド
@@ -263,92 +174,286 @@ public List<SADevice> GetDevicesInSight(string device_type = "", bool getInFov =
 
 
 
-
-
-    
-     public  List<DeviceSpatialData> AllDevice(string device_type,  string order = "proximity", string rangeStr = "")
+public List<SADevice> FindDevicesInDirection(Direction direction, string device_type)
 {
+    List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+    List<SADevice> devicesInDirection = new List<SADevice>();
 
-
-            
-            List<SADevice> devices = this.GetAllDevices().Where(
-                device => device.CompareDeviceType(device_type)
-            ).ToList();
-            
-    List<DeviceSpatialData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
-
-    devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr);
-    
-
-       
-    return devicePositionData;
-
-}
-
-
-
-   public  List<DeviceSpatialData> DirectionFunction( string device_type ="",string direction="Front", string order = "proximity", string rangeStr = "")
-{
-
-    Direction dir = DirectionUtil.GetDirection(direction);
-
-
-            List<SADevice> devices = this.GetDeviceInDirection(dir, device_type);
-    
-
-    List<DeviceSpatialData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
-
-
-    
-
-    devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr);
-    
-
-       
-    return devicePositionData;
-    
-}
-
-
-public  List<DeviceSpatialData> SightFunction(string device_type, string isWithinFov, string order = "proximity", string rangeStr = "")
-{
-    
-  
-    bool withinFov = isWithinFov.ToLower().Trim() == "true";
-
-    List<SADevice> devices = this.GetDevicesInSight(device_type, withinFov);
-
- 
-    List<DeviceSpatialData> devicePositionData = devices.Select(device => device.GetDevicePositionalData()).ToList();
-    
-   
-    devicePositionData = FilterDeviceData(devicePositionData, order, rangeStr); 
-    
-
-    return devicePositionData;
-    
-}
-
-
-
-
-private  List<DeviceSpatialData> FilterDeviceData (List<DeviceSpatialData> devicePositionData, string order, string rangeStr)
-{
-     
-      if (float.TryParse(rangeStr, out float range))
+    foreach (SADevice device in allDevices)
     {
-        // Filter based on range and convert the result to a List
-        devicePositionData = devicePositionData
-            .Where(device => device.distance_from_user < range)
-            .ToList();
+        if (!device.CompareDeviceType(device_type))
+            continue;
+
+        Vector3 localPos = GetLocalPosition(device.transform);
+        if (IsInDirection(localPos, direction))
+        {
+            devicesInDirection.Add(device);
+        }
+    }
+    return devicesInDirection;
+}
+
+public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = true)
+{
+    List<SADevice> returnDevices = new List<SADevice>();
+    List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+
+    float halfVerticalFOV = verticalFOV / 2f;
+    float halfHorizontalFOV = horizontalFOV / 2f;
+
+    foreach (var device in allDevices)
+    {
+        if (!device.CompareDeviceType(device_type))
+            continue;
+        if (device == null)
+            continue;
+
+        bool isWithinFov = IsWithinFov(device.transform, halfHorizontalFOV, halfVerticalFOV);
+
+        if (getInFov && isWithinFov)
+        {
+            returnDevices.Add(device);
+        }
+        else if (!getInFov && !isWithinFov)
+        {
+            returnDevices.Add(device);
+        }
+    }
+    return returnDevices;
+}
+
+
+public List<SAFurniture> FindFurnitureInFov(string furniture_type = "", bool getInFov = true)
+{
+    List<SAFurniture> returnFurniture = new List<SAFurniture>();
+    List<SAFurniture> allFurniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
+
+    float halfVerticalFOV = verticalFOV / 2f;
+    float halfHorizontalFOV = horizontalFOV / 2f;
+
+    foreach (var furniture in allFurniture)
+    {
+        if (furniture == null)
+            continue;
+
+        if (!furniture.CompareFurnitureType(furniture_type))
+            continue;
+
+        bool isWithinFov = IsWithinFov(furniture.transform, halfHorizontalFOV, halfVerticalFOV);
+
+        if (getInFov && isWithinFov)
+        {
+            returnFurniture.Add(furniture);
+        }
+        else if (!getInFov && !isWithinFov)
+        {
+            returnFurniture.Add(furniture);
+        }
     }
 
+    return returnFurniture;
+}
+public List<SAFurniture> FindFurnitureInDirection(Direction direction, string furniture_type)
+{
+    List<SAFurniture> allFurniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
+    List<SAFurniture> furnitureInDirection = new List<SAFurniture>();
+
+    foreach (SAFurniture furniture in allFurniture)
+    {
+        if (furniture == null)
+            continue;
+
+        if (!furniture.CompareFurnitureType(furniture_type))
+            continue;
+
+        Vector3 localPos = GetLocalPosition(furniture.transform);
+        if (IsInDirection(localPos, direction))
+        {
+            furnitureInDirection.Add(furniture);
+        }
+    }
+
+    return furnitureInDirection;
+}
+
+
+
 
     
+public List<DeviceSpatialData> GetAllDevices(string device_type, AllRequest allRequest)
+{
+    string order = allRequest.order;
+    float range = allRequest.range ?? 0f;
+
+    List<SADevice> devices = SADeviceRef.Instance.GetAllDevices()
+        .Where(device => device.CompareDeviceType(device_type))
+        .ToList();
+
+    if (devices == null)
+    {
+        Debug.LogError("Device list is null.");
+        return new List<DeviceSpatialData>();
+    }
+
+    List<DeviceSpatialData> devicePositionData = new List<DeviceSpatialData>();
+    foreach (var device in devices)
+    {
+        if (device == null)
+        {
+            Debug.LogError("Device is null.");
+            continue;
+        }
+
+        try
+        {
+            var positionalData = device.GetDevicePositionalRelativeToUser();
+            if (positionalData == null)
+            {
+                Debug.LogError("Device positional data is null for device: " + device.name);
+                continue;
+            }
+            devicePositionData.Add(positionalData);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Error getting positional data for device: " + device.name + " - " + ex.Message);
+        }
+    }
+
+    devicePositionData = FilterDeviceData(devicePositionData, order, range);
+
+    return devicePositionData;
+}
+
+public List<DeviceSpatialData> GetDevicesInDirection(string device_type, DirectionRequest directionRequest)
+{
+    string direction = directionRequest.direction;
+    string order = directionRequest.order;
+    float range = directionRequest.range ?? 0f;
+
+    Direction dir = DirectionUtil.GetDirection(direction);
+    Debug.Log("DIRECTION: " + direction); 
+    List<SADevice> devices = this.FindDevicesInDirection(dir, device_type);
+
+    if (devices == null)
+    {
+        Debug.LogError("Device list is null.");
+        return new List<DeviceSpatialData>();
+    }
+
+    List<DeviceSpatialData> devicePositionData = new List<DeviceSpatialData>();
+    foreach (var device in devices)
+    {
+        if (device == null)
+        {
+            Debug.LogError("Device is null.");
+            continue;
+        }
+
+        try
+        {
+            var positionalData = device.GetDevicePositionalRelativeToUser();
+            if (positionalData == null)
+            {
+                Debug.LogError("Device positional data is null for device: " + device.name);
+                continue;
+            }
+            devicePositionData.Add(positionalData);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Error getting positional data for device: " + device.name + " - " + ex.Message);
+        }
+    }
+
+    devicePositionData = FilterDeviceData(devicePositionData, order, range);
+
+    return devicePositionData;
+}
+
+public List<DeviceSpatialData> GetDeviceInFov(string device_type, FOVRequest fovData)
+{
+    bool withinFov = fovData.isInFov;
+    string order = fovData.order;
+    float range = fovData.range ?? 0f;
+
+    List<SADevice> devices = this.FindDevicesInFov(device_type, withinFov);
+    Debug.Log("Device Position Data: " + devices.Count);
+
+    if (devices == null)
+    {
+        Debug.LogError("Device list is null.");
+        return new List<DeviceSpatialData>();
+    }
+
+    List<DeviceSpatialData> devicePositionData = new List<DeviceSpatialData>();
+    foreach (var device in devices)
+    {
+        if (device == null)
+        {
+            Debug.LogError("Device is null.");
+            continue;
+        }
+
+        try
+        {
+            var positionalData = device.GetDevicePositionalRelativeToUser();
+            if (positionalData == null)
+            {
+                Debug.LogError("Device positional data is null for device: " + device.name);
+                continue;
+            }
+            devicePositionData.Add(positionalData);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Error getting positional data for device: " + device.name + " - " + ex.Message);
+        }
+    }
+
+    devicePositionData = FilterDeviceData(devicePositionData, order, range);
+
+    return devicePositionData;
+}
+
+private List<DeviceSpatialData> FilterDeviceData (List<DeviceSpatialData> devicePositionData, string order, float range)
+{
+    if (range <= 0)
+    {
+        range = float.MaxValue;
+    }
+    // Filter based on range and convert the result to a List
+    devicePositionData = devicePositionData
+        .Where(device => device.distance_from_user < range)
+        .ToList();
 
     devicePositionData = SortDevices(devicePositionData, order);
 
     return devicePositionData;
+}
+public List<FurnitureData> FilterFurnitureData(List<FurnitureData> data, string order, float range)
+{
+    IEnumerable<FurnitureData> filteredData = data;
+
+    if (range > 0f)
+    {
+        filteredData = filteredData.Where(d => d.distance_from_user <= range);
+    }
+
+    switch (order)
+    {
+        case "proximity":
+            filteredData = filteredData.OrderBy(d => d.distance_from_user);
+            break;
+        case "height":
+            filteredData = filteredData.OrderByDescending(d => d.position.y);
+            break;
+        case "right":
+            filteredData = filteredData.OrderByDescending(d => Vector3.Dot(Camera.main.transform.right, new Vector3(d.position.x, d.position.y, d.position.z).normalized));
+            break;
+    }
+
+    return filteredData.ToList();
 }
 
     private float ComputeAngle(Vector3 devicePosition)
@@ -409,8 +514,169 @@ private List<DeviceSpatialData> SortDevices(List<DeviceSpatialData> devices, str
     return devices;
 }
 
-   
 
+   
+public List<FurnitureData> GetFurnitureInDirection(DirFurnitureRequest request)
+{
+    string furnitureTypeStr = request.furnitureType;
+    string directionStr = request.direction;
+    string order = request.order;
+    float range = request.range ?? 0f;
+
+    // Direction enum に変換（"left" → Direction.Left など）
+    Direction directionEnum;
+    try
+    {
+        directionEnum = (Direction)Enum.Parse(typeof(Direction), directionStr, true);
+    }
+    catch
+    {
+        Debug.LogError($"Invalid direction: {directionStr}");
+        return new List<FurnitureData>();
+    }
+
+    List<SAFurniture> furnitures = this.FindFurnitureInDirection(directionEnum, furnitureTypeStr);
+    Debug.Log("Furniture count in direction: " + furnitures.Count);
+
+    if (furnitures == null || furnitures.Count == 0)
+    {
+        Debug.LogWarning("No furniture found in that direction.");
+        return new List<FurnitureData>();
+    }
+
+    List<FurnitureData> furnitureDataList = new List<FurnitureData>();
+
+    foreach (var furniture in furnitures)
+    {
+        if (furniture == null)
+        {
+            Debug.LogError("Furniture is null.");
+            continue;
+        }
+
+        try
+        {
+            var data = furniture.GetFurniturePositionalRelativeToUser();
+            if (data == null)
+            {
+                Debug.LogError("Furniture data is null for furniture: " + furniture.name);
+                continue;
+            }
+            furnitureDataList.Add(data);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error getting furniture data for {furniture.name}: {ex.Message}");
+        }
+    }
+
+    furnitureDataList = FilterFurnitureData(furnitureDataList, order, range);
+
+    return furnitureDataList;
+}
+
+
+public List<FurnitureData> GetFurnitureInFov(FOVFurnitureRequest furnitureRequest)
+{
+    string furnitureTypeStr = furnitureRequest.furnitureType;
+    bool withinFov = furnitureRequest.isInFov;
+    string order = furnitureRequest.order;
+    float range = furnitureRequest.range ?? 0f;
+
+    List<SAFurniture> furnitures = this.FindFurnitureInFov(furnitureTypeStr, withinFov);
+    Debug.Log("Furniture count: " + furnitures.Count);
+
+    if (furnitures == null || furnitures.Count == 0)
+    {
+        Debug.LogWarning("Furniture list is empty.");
+        return new List<FurnitureData>();
+    }
+
+    List<FurnitureData> furnitureDataList = new List<FurnitureData>();
+
+    foreach (var furniture in furnitures)
+    {
+        if (furniture == null)
+        {
+            Debug.LogError("Furniture is null.");
+            continue;
+        }
+
+        try
+        {
+            var data = furniture.GetFurniturePositionalRelativeToUser();
+            if (data == null)
+            {
+                Debug.LogError("Furniture data is null for furniture: " + furniture.name);
+                continue;
+            }
+            furnitureDataList.Add(data);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error getting furniture data for {furniture.name}: {ex.Message}");
+        }
+    }
+
+    furnitureDataList = FilterFurnitureData(furnitureDataList, order, range);
+
+    return furnitureDataList;
+}
+
+
+public  List<DeviceSpatialData> GetDevicesAroundFurniture(string furnitureID, string order="proximity", float range = 0f)
+{
+    List<DeviceSpatialData> deviceRelativePositions = new List<DeviceSpatialData>();
+
+    
+    // 指定したIDのFurnitureを取得
+    SAFurniture targetFurniture = SAFurnitureRef.Instance.GetFurnitureByID(furnitureID);
+    if (targetFurniture == null)
+    {
+        Debug.LogWarning("指定されたIDのFurnitureが見つかりません: " + furnitureID);
+        return deviceRelativePositions;
+    }
+
+    // ユーザーのローカル座標系でのFurnitureの位置を取得
+    Vector3 furnitureLocalPos = userCameraTransform.InverseTransformPoint(targetFurniture.transform.position);
+
+    // 全SADeviceを取得し、範囲内にあるものを調べる
+    List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+    foreach (SADevice device in allDevices)
+    {
+        // Furnitureとdevice間の距離をワールド座標上で計算
+        float distance = Vector3.Distance(targetFurniture.transform.position, device.transform.position);
+        if (range == 0 || distance <= range)
+        {
+            // ユーザーのローカル座標系でのdeviceの位置を取得
+            Vector3 deviceLocalPos = userCameraTransform.InverseTransformPoint(device.transform.position);
+            // Furnitureを基準とした相対位置を算出
+            Vector3 relativePos = deviceLocalPos - furnitureLocalPos;
+
+            DeviceSpatialData deviceSpatialData = device.GenerateFurnitureRelativePositionData(relativePos);
+            deviceRelativePositions.Add(deviceSpatialData);
+        }
+    }
+
+
+    deviceRelativePositions = FilterDeviceData(deviceRelativePositions, order,range);
+
+    return deviceRelativePositions;
+}
+
+
+
+
+
+
+public void TEST_FURNITURE() 
+{
+    List<SAFurniture> furniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
+    
+
+    // List<SADevice> devices = this.GetDevicesAroundFurniture(furniture[0].GetFurnitureData().id, 2f).Keys.ToList();
+    // Debug.Log($"<color=red>Received Device: {devices[0].gameObject.name}</color>");
+}
    
 
 

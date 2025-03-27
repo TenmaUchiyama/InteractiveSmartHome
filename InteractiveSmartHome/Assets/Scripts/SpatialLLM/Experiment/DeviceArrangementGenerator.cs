@@ -43,7 +43,7 @@ public class DeviceArrangeDataSerializable
         [SerializeField] private  List<DeviceArrangeData> arrangementDataList;
         public List<DeviceArrangeData> ArrangementDataList => arrangementDataList;
 
-        public GameObject parentObject;
+
 
         [ContextMenu("Update Task Data")]
         public void UpdateTaskData()
@@ -97,7 +97,7 @@ public class DeviceArrangeDataSerializable
         private List<DeviceColorPair> ConvertFromSerializable(List<DeviceColorPairSerializable> devicePairs)
         {
 
-            List<SADevice>allDevices = new List<SADevice>(parentObject.GetComponentsInChildren<SADevice>(false));
+            List<SADevice>allDevices = SADeviceRef.Instance.GetAllDevices();
             return devicePairs.Select(deviceJson =>
             {
                 foreach (SADevice child in allDevices)

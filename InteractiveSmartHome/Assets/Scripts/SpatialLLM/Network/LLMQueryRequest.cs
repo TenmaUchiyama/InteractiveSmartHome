@@ -37,8 +37,9 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     // 任意のコマンドを指定
     [SerializeField] private string host = "localhost";
     [SerializeField] private int port = 8800;
+    [SerializeField] SADeviceRef saDeviceRef; 
     [SerializeField] private LLMQueryMode queryMode = LLMQueryMode.Spatial;
-    [SerializeField] private ExperimentManager experimentManager;
+    // [SerializeField] private ExperimentManager experimentManager;
     [SerializeField] private ExperimentalDataManager experimentalDataManager;
 
     [SerializeField] public bool speechRequired = true;
@@ -66,6 +67,8 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     }
 
 
+
+    
     public void SendQueryForDebug(string text)
     {
 
@@ -86,13 +89,14 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
             case LLMQueryMode.Spatial:
 
                 var sendingData = new {
-                    taskId = experimentManager.GetCurrentTaskId(),
+                    // taskId =  debugText == "" ?experimentManager.GetCurrentTaskId()  : "0",
+                    taskId =  "0",
                     user_message = recognizedText
                 }; 
                 await SendQuery(recognizedText);
             break;
             case LLMQueryMode.Label:
-                List<SADevice> devices = SpatialAwarnessProvider.Instance.GetAllDevices(); 
+                List<SADevice> devices = saDeviceRef.GetAllDevices(); 
                 List<DeviceLabel> deviceLabels = devices.Select(device => {
                     DeviceLabel deviceLabel = new DeviceLabel(); 
                     deviceLabel.id = device.GetDBDeviceData().device_id;
@@ -117,7 +121,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
             break; 
             case LLMQueryMode.Multiple_Select_Pointing:
                 Debug.Log("================================================================");
-                List<SADevice> allDevices = SpatialAwarnessProvider.Instance.GetAllDevices(); 
+                List<SADevice> allDevices =  saDeviceRef.GetAllDevices(); 
                 List<DeviceLabel> selectedDeviceLabel = allDevices
                 .Where(device => device.IsDeviceSelected())
                 .Select(device => {
@@ -165,9 +169,9 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         _isRequesting = true;
 
 
-        this.experimentManager.StartLLMResponse();
+        // this.experimentManager.StartLLMResponse();
         await PostRequestAsync(url, jsonData);
-        this.experimentManager.StopLLMResponse();
+        // this.experimentManager.StopLLMResponse();
         
         _isRequesting = false;
     }

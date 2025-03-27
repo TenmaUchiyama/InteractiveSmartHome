@@ -15,7 +15,7 @@ namespace SpatialLLM.Experiment{
 public class LabelSystemExecutor : SystemExecutor
 {
         
-        [SerializeField] private ExperimentManager experimentManager;
+       
 
         private void Update()
         {
@@ -27,7 +27,7 @@ public class LabelSystemExecutor : SystemExecutor
             {
 
                 this.isTriggarable = false;
-                foreach(SADevice saDevice in experimentManager.GetAllDevices())
+                foreach(SADevice saDevice in SADeviceRef.Instance.GetAllDevices())
                 {
                     saDevice.DisplayShowLabel(true);
                 }
@@ -38,7 +38,7 @@ public class LabelSystemExecutor : SystemExecutor
             {
 
                 this.isTriggarable = true;
-                foreach(SADevice saDevice in experimentManager.GetAllDevices())
+                foreach(SADevice saDevice in SADeviceRef.Instance.GetAllDevices())
                 {
                     saDevice.DisplayShowLabel(false);
                 }

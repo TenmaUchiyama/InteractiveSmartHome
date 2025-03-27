@@ -57,20 +57,40 @@ namespace SpatialLLM.Device
                 this.showLabel.DisplayLabel();}
             else{
                 this.showLabel.HideLabel();
-            }
+            }   
         }
 
 
         
-
-        public DeviceSpatialData GetDevicePositionalData()
+        public DeviceSpatialData GenerateFurnitureRelativePositionData(Vector3 relativePos)
         {
-            this.spatialData.position = new Position(new Vector3(this.transform.position.x, this.transform.position.z, this.transform.position.y));
-            this.spatialData.distance_from_user = Vector3.Distance(transform.position, Camera.main.transform.position);
+            DeviceSpatialData spatialData = new DeviceSpatialData(
+                this.deviceData.device_id,
+                this.deviceData.device_name,
+                relativePos,
+                Vector3.Distance(transform.position, Camera.main.transform.position)
+            );
+   
+            return spatialData;
+        }
+
+        public DeviceSpatialData GetDevicePositionalRelativeToUser(Transform referenceCamera = null)
+        {
+            Transform camTransfrom = referenceCamera != null ? referenceCamera : Camera.main.transform; 
+
+            Vector3 relativePosition = camTransfrom.InverseTransformPoint(this.transform.position);
+            this.spatialData.position = new Position(new Vector3(relativePosition.x, relativePosition.y, relativePosition.z));
+            this.spatialData.distance_from_user = Vector3.Distance(transform.position, camTransfrom.position);
             return this.spatialData;
         }
 
 
+        public DeviceSpatialData GetDevicePositionalData() 
+        {
+            this.spatialData.position = new Position(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+            this.spatialData.distance_from_user = Vector3.Distance(transform.position, Camera.main.transform.position);
+            return this.spatialData;
+        }
 
         public string GetDeviceID() 
         {
@@ -98,6 +118,7 @@ namespace SpatialLLM.Device
 
         public bool CompareDeviceType(string device_type)
         {
+            Debug.Log($"<color=red>Compare Device Type.  This Device: {this.saDeviceType}, ComingDeviceType: {device_type}</color>");
             return device_type.Equals(saDeviceType.ToString()) || device_type == "";
         }
 
