@@ -16,7 +16,7 @@ public class SALight : SADevice
         [SerializeField] private float intensityScale = 10.0f;
     
          
-        Light light;
+        [SerializeField] Light light;
 
         DrawOnHover drawOnHover;
 
@@ -50,9 +50,8 @@ public class SALight : SADevice
 
         private void Start() {
         drawOnHover = GetComponent<DrawOnHover>();
-       
-            
-        light = GetComponentInChildren<Light>();
+        if(light == null)light = GetComponentInChildren<Light>();
+
 
        UpdateCurrentData();
 
@@ -124,14 +123,24 @@ public class SALight : SADevice
 
         public override void TurnOnWithColor(Color color)
         {
+
+            if(this.light == null)
+            {
+                Debug.LogError("Light is nulllllllllllllllllllllllll");
+            }
+            Debug.Log($"[Light Debug] Enabled: {light.enabled}, Intensity: {light.intensity}, Color: {light.color}");
+
             light.enabled = true; 
             light.intensity = intensityScale; 
             light.color = color;
             isDeviceOn = true;
+            Debug.Log($"[Light Debug] Enabled: {light.enabled}, Intensity: {light.intensity}, Color: {light.color}");
+
         }
 
         public override void TurnOff()
         {
+            Debug.Log("<color=green>Turn off </color>");
             light.enabled = false;
             light.intensity = 0;
             light.color = Color.white;
