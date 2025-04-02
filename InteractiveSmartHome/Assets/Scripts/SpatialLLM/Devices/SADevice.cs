@@ -10,37 +10,25 @@ using TMPro;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
 
-
-
 namespace SpatialLLM.Device
-
 {
-
-
-   
     public abstract class SADevice : MonoBehaviour
     {
+        [SerializeField] ShowLabel showLabel;
+        protected DBDeviceData deviceData ; 
+        protected DeviceSpatialData spatialData;
 
-         [SerializeField] ShowLabel showLabel;
-         protected DBDeviceData deviceData; 
-         protected DeviceSpatialData spatialData;
+        protected SADeviceType saDeviceType;
 
-         protected SADeviceType saDeviceType;
+        protected OperatingDeviceData currentOperatingData = new OperatingDeviceData(); 
 
-         protected OperatingDeviceData currentOperatingData = new OperatingDeviceData(); 
-
-         protected bool isDeviceSelected = false;
+        protected bool isDeviceSelected = false;
 
         protected bool isDeviceOn = false; 
 
         public bool IsDeviceOn => isDeviceOn;
- 
-    
 
         public int HandleHover { get; private set; }
-
-
-
 
         public abstract void OperateDevice(OperatingDeviceData operatingDeviceData);
 
@@ -49,6 +37,7 @@ namespace SpatialLLM.Device
         public abstract void TurnOff();
 
         public abstract void Init();
+        
 
 
         public void DisplayShowLabel(bool showing)
@@ -60,17 +49,22 @@ namespace SpatialLLM.Device
             }   
         }
 
-
-        
         public DeviceSpatialData GenerateFurnitureRelativePositionData(Vector3 relativePos)
         {
+         
+            if(this.spatialData ==null)
+            {
+                Debug.LogError("まじできもすぎる");
+                return null;
+            }
+         
             DeviceSpatialData spatialData = new DeviceSpatialData(
-                this.deviceData.device_id,
-                this.deviceData.device_name,
+                this.spatialData.id,
+                this.spatialData.name,
                 relativePos,
                 Vector3.Distance(transform.position, Camera.main.transform.position)
             );
-   
+
             return spatialData;
         }
 
@@ -84,7 +78,6 @@ namespace SpatialLLM.Device
             return this.spatialData;
         }
 
-
         public DeviceSpatialData GetDevicePositionalData() 
         {
             this.spatialData.position = new Position(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
@@ -97,12 +90,10 @@ namespace SpatialLLM.Device
             return this.deviceData.device_id;
         }
 
-
         public DBDeviceData GetDBDeviceData() 
         {
             return this.deviceData;
         }
-
 
         public bool IsDeviceSelected()
         {
@@ -114,26 +105,20 @@ namespace SpatialLLM.Device
             this.isDeviceSelected = isSelected;
         }
 
-        
-
         public bool CompareDeviceType(string device_type)
         {
             Debug.Log($"<color=red>Compare Device Type.  This Device: {this.saDeviceType}, ComingDeviceType: {device_type}</color>");
             return device_type.Equals(saDeviceType.ToString()) || device_type == "";
         }
 
-
         public SADeviceType GetSADeviceType()
         {
             return this.saDeviceType;
         }
 
-
-      
         public OperatingDeviceData GetCurrentOperateData()
         {
             return this.currentOperatingData;
         }
-
     }
 }

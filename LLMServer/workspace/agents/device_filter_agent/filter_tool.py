@@ -164,9 +164,40 @@ def getDevices(
 
 
 
+@tool
+def getDeviceAroundFurniture(
+    furniture_type: Annotated[str, """- furniture_type (str): Type of furniture. Allowed values: "TV", "Table"."""],
+    range: Annotated[float, """- range (float): Distance range (meters). Input None if specification is not required."""],
+) -> Dict:
+    """
+    Retrieves devices around specified furniture types.
+    Device coordinates are based on the relative positions between the specified furniture and the user's viewpoint.
+
+    """
+    try:
+        request_body = {
+            "furniture_type": furniture_type,
+             "range" : 5 if range is None else range,
+        }
+        print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
+        response = httpx.post(f"{base_url}/around_furniture", json=request_body)
+        if response.status_code == 200:
+            response_data = response.json()
+            response_data.setdefault("param", {})
+            if response_data.get("status") == "success":
+                response_data["param"]["filter_type"] = "around_furniture"
+                response_data["param"]["furniture_type"] = furniture_type
+                return response_data
+            else:
+                return {"status": "error", "message": "Server responded with an error", "details": response_data}
+        else:
+            return {"status": "error", "message": f"HTTP Error {response.status_code}", "details": response.text}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
 
 
 if "__main__" == __name__:
     print(getDeviceInFov.invoke({"isInFov": True, "order": "proximity", "range": 0.0}))
 
-    
