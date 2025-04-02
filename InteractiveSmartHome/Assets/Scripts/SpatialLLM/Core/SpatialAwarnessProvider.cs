@@ -223,6 +223,7 @@ public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = 
 }
 
 
+
 public List<SAFurniture> FindFurnitureInFov(string furniture_type = "", bool getInFov = true)
 {
     List<SAFurniture> returnFurniture = new List<SAFurniture>();
@@ -276,7 +277,23 @@ public List<SAFurniture> FindFurnitureInDirection(Direction direction, string fu
     return furnitureInDirection;
 }
 
+public SAFurniture FindFurnitureByType(string furniture_type)
+{
+    List<SAFurniture> allFurniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
 
+    foreach (SAFurniture furniture in allFurniture)
+    {
+        if (furniture == null)
+            continue;
+
+        if (furniture.CompareFurnitureType(furniture_type))
+        {
+            return furniture;
+        }
+    }
+
+    return null;
+}
 
 
     
@@ -624,6 +641,27 @@ public List<FurnitureData> GetFurnitureInFov(FOVFurnitureRequest furnitureReques
 }
 
 
+
+public List<DeviceSpatialData> GetDeviceByFurnitureType(string furniture_type, float range = 0f)
+{
+    SAFurniture saFurniture = this.FindFurnitureByType(furniture_type);
+    if (saFurniture == null)
+    {
+        Debug.LogWarning("指定されたIDのFurnitureが見つかりません: " + furniture_type);
+        return new List<DeviceSpatialData>();
+    }
+
+    List<DeviceSpatialData> deviceDatas = this.GetDevicesAroundFurniture(saFurniture.GetFurnitureData().id, "proximity", range);
+
+    if (deviceDatas == null || deviceDatas.Count == 0)
+    {
+        Debug.LogWarning("指定されたIDのFurnitureに関連するデバイスが見つかりません: " + furniture_type);
+        return new List<DeviceSpatialData>();
+    }
+
+    return deviceDatas;
+}
+
 public  List<DeviceSpatialData> GetDevicesAroundFurniture(string furnitureID, string order="proximity", float range = 0f)
 {
     List<DeviceSpatialData> deviceRelativePositions = new List<DeviceSpatialData>();
@@ -642,6 +680,7 @@ public  List<DeviceSpatialData> GetDevicesAroundFurniture(string furnitureID, st
 
     // 全SADeviceを取得し、範囲内にあるものを調べる
     List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+    
     foreach (SADevice device in allDevices)
     {
         // Furnitureとdevice間の距離をワールド座標上で計算

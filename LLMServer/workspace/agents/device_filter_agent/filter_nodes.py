@@ -52,7 +52,7 @@ parser = JsonOutputParser(pydantic_object=FilterOutputData)
 
 
 def debug_log(msg,flag=True):
-    return
+ 
     if flag: 
         print(msg)
     else:

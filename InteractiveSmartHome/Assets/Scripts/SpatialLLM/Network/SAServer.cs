@@ -44,6 +44,13 @@ public record DirFurnitureRequest
 
     public string furnitureType { get; set; }
 }
+
+
+public record FurnitureRequest
+{
+    public string furnitureType {get; set;}
+    public float? range { get; set; }
+}
 public record FOVRequest
 {
     
@@ -159,7 +166,20 @@ public class SAServer : HttpServer
             }
         });
 
+        Post("/furniture/get", async (context) => {
+            try {
+                FurnitureRequest data = await context.ReadBodyAsJsonAsync<FurnitureRequest>();
+                Debug.Log("Received Furniture"); 
+                Debug.Log(data);
 
+                List<DeviceSpatialData> directionResult = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(data.furnitureType, data.range ?? 0f);
+                string sendingDirectionData = this.SendingDeviceData(directionResult);
+                await context.Respond(200, sendingDirectionData);
+            } catch (Exception ex) {
+                Debug.LogError($"Error processing /furniture/get request: {ex.Message}");
+                await context.Respond(500, "Internal Server Error");
+            } 
+        });
 
         Post("/furniture/fov", async (context) => {
             try{
@@ -185,6 +205,7 @@ public class SAServer : HttpServer
                 DirFurnitureRequest data = await context.ReadBodyAsJsonAsync<DirFurnitureRequest>();
                 Debug.Log("Received Direction"); 
                 Debug.Log(data);
+                
                 List<FurnitureData> fovResult = SpatialAwarnessProvider.Instance.GetFurnitureInDirection(data);
                 string sendingFovData = this.SendingFurnitureData(fovResult);
                 Debug.Log($"<color=yellow>[SAServer] direction: {data.direction}, order : {data.order}, range: {data.range}</color>");

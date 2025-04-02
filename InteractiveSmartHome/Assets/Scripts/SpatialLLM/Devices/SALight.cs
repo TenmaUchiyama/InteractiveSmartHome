@@ -33,15 +33,14 @@ public class SALight : SADevice
                 id,
                 this.gameObject.name,
                 SADeviceType.Light.ToString(),
-                "This is a light device. You need this when you want to turn on or off the light. Intensity 0 is the darkest, 100 is the brightest. You can specify the color of the light by specifying the RGB value. For example, if you want to set the light to red, you can specify the RGB value as 255, 0, 0.",
+                "light",
                 "device/" + id,
                 this.transform.position
             );
 
+            Debug.Log($"<color=green>Device data initialized for {this.gameObject.name}. ID: {this.deviceData.device_id}</color>");
+
             this.spatialData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
-
-
-      
 
 
 
@@ -66,16 +65,16 @@ public class SALight : SADevice
 
 
        public override void Init() 
-{
+    {
 
-    OperatingDeviceData initData = new OperatingDeviceData {
-        state = false,
-    };
-    OperateDevice(initData);
-    UpdateCurrentData();
+        OperatingDeviceData initData = new OperatingDeviceData {
+            state = false,
+        };
+        OperateDevice(initData);
+        UpdateCurrentData();
 
-    this.drawOnHover.ClearDrawing();
-}
+        this.drawOnHover.ClearDrawing();
+    }
 
         private void UpdateCurrentData()
         {
