@@ -87,11 +87,30 @@ public class DeviceArrangeDataSerializable
 
         private List<DeviceColorPairSerializable> ConvertToSerializable(List<DeviceColorPair> devicePairs)
         {
-            return devicePairs.Select(d => new DeviceColorPairSerializable
+
+            Debug.Log($"<color=yellow>Device Pairs Count: {devicePairs.Count}");
+
+       var result = devicePairs.Select(d =>
             {
-                deviceName = d.device.gameObject.name,
-                colorName = d.color.ToString()
-            }).ToList();
+                if (d == null)
+                {
+                    Debug.LogWarning("DeviceColorPair が null です");
+                    return null;
+                }
+                if (d.device == null)
+                {
+                    Debug.LogWarning("d.device が null です");
+                    return null;
+                }
+
+                return new DeviceColorPairSerializable
+                {
+                    deviceName = d.device.gameObject?.name ?? "Unknown",
+                    colorName = d.color.ToString() ?? "Unknown"
+                };
+            }).Where(d => d != null).ToList();
+
+            return result;
         }
 
         private List<DeviceColorPair> ConvertFromSerializable(List<DeviceColorPairSerializable> devicePairs)

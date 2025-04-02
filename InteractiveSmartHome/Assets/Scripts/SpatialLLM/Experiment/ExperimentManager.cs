@@ -111,7 +111,7 @@ public class ExperimentManager : MonoBehaviour
 
     foreach(DeviceColorPair pair in deviceArrangeDatas)
     {
-        Debug.Log(pair.device.name);
+        Debug.Log($"<color=yellow>paris {pair.device.name}</color>");
     }
     Debug.Log("<color=red>[ShowDevice] Press A to Go To Operation</color>");
     saUIManager.SetDeviceCountText(deviceArrangeDatas.Count().ToString());

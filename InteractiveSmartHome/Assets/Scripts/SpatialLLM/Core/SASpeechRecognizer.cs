@@ -17,13 +17,13 @@ namespace SpatialLLM.Core
 public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
     {
 
-
-        [SerializeField] SAUIManager sAUIManager;
         public UnityEvent OnVoiceRecogStart; 
         public UnityEvent OnVoiceRecogStop; 
 
         public UnityEvent<string> OnVoiceRecognized;
-        
+
+
+
 
         [SerializeField] private VoiceService _voiceService;
 
@@ -150,10 +150,12 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
             if (!_activateImmediately)
             {
                 _request = _voiceService.Activate(new WitRequestOptions(), new VoiceServiceRequestEvents());
+                
             }
             else
             {
                 _request = _voiceService.ActivateImmediately(new WitRequestOptions(), new VoiceServiceRequestEvents());
+                
             }
         }
 
@@ -177,6 +179,8 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
                 {
                     _voiceService.Deactivate();
                 }
+
+                
             }
             else
             {
@@ -184,6 +188,7 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
                 {
                     _request.Cancel();
                 }
+                
             }
         }
 

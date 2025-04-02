@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using SpatialLLM.Core;
 using SpatialLLM.Device;
 using SpatialLLM.Experiment;
 using UnityEngine;
 
 public class PointingDevices : MonoBehaviour
 {
-    [SerializeField] GameObject parentObj; 
+
     [SerializeField] ExperimentManager experimentManager;
     [SerializeField] PointerSystemExecutor pointerSystemExecutor;
 
@@ -17,7 +18,7 @@ public class PointingDevices : MonoBehaviour
 
     void Start()
     {
-        allDevices = new List<SADevice>(parentObj.GetComponentsInChildren<SADevice>()); 
+        allDevices = SADeviceRef.Instance.GetAllDevices();
     }
 
  public void GetSelected()
