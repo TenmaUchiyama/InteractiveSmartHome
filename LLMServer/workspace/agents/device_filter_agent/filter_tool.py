@@ -180,7 +180,7 @@ def getDeviceAroundFurniture(
              "range" : 5 if range is None else range,
         }
         print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
-        response = httpx.post(f"{base_url}/furniture/get", json=request_body)
+        response = httpx.post(f"{base_url}/around_furniture", json=request_body)
         if response.status_code == 200:
             response_data = response.json()
             response_data.setdefault("param", {})
@@ -198,5 +198,6 @@ def getDeviceAroundFurniture(
 
 
 
-
+if "__main__" == __name__:
+    print(getDeviceInFov.invoke({"isInFov": True, "order": "proximity", "range": 0.0}))
 
