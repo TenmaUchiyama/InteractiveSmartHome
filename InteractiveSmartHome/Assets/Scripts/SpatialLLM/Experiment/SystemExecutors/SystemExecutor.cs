@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using SpatialLLM.Core;
+using SpatialLLM.Network;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,6 +16,8 @@ public class SystemExecutor : MonoBehaviour
 
     [SerializeField] protected SAUIManager saUIManager; 
     [SerializeField] protected ExperimentManager experimentManager;
+
+
     private UniTaskCompletionSource<bool> completionSource;
 
 
@@ -78,6 +81,11 @@ public class SystemExecutor : MonoBehaviour
                 if(!saUIManager.IsRecognizedWordEmplty())
                 {
                     if(isPointing) return;
+                    if(LLMQueryRequest.Instance){
+                        string detectedMsg = saUIManager.GetRecognizedWord(); 
+                        LLMQueryRequest.Instance.SendMessage(detectedMsg);
+                        return;
+                    }
                     experimentManager.DisplayCurrentOperation();
                     isOperationDone = true;
                 }

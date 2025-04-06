@@ -172,8 +172,25 @@ public class SAServer : HttpServer
                 Debug.Log("Received Furniture"); 
                 Debug.Log(data);
 
-                List<DeviceSpatialData> directionResult = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(data.furnitureType, data.range ?? 0f);
-                string sendingDirectionData = this.SendingDeviceData(directionResult);
+                SAFurniture saFurniture = SpatialAwarnessProvider.Instance.FindFurnitureByType(data.furnitureType);
+                
+                List<DeviceSpatialData> devices = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(saFurniture, data.range ?? 0f);
+                Debug.Log($"<color=yellow>Count {devices.Count}</color>");
+
+                FurnitureData furnitureData = saFurniture.GetFurniturePositionalRelativeToUser(); 
+                
+
+                var sending = new
+                {
+                    status = "success",
+                    devices = devices,
+                    furniture_data = furnitureData
+                };
+                
+                var sendingDirectionData = JsonConvert.SerializeObject(sending);
+
+
+                Debug.Log($"<color=yellow>Responding Data {sendingDirectionData}</color>");
                 await context.Respond(200, sendingDirectionData);
             } catch (Exception ex) {
                 Debug.LogError($"Error processing /furniture/get request: {ex.Message}");

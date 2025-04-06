@@ -15,8 +15,6 @@ public class PointerSystemExecutor : SystemExecutor
         [SerializeField ]private HandPointing pointing;
 
         private bool isMovable = false;
-    
-
 
         private void DisablePointing() 
         {
@@ -57,12 +55,6 @@ public class PointerSystemExecutor : SystemExecutor
             this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
 
         }
-
-
-
-
-
-
         void Update()
         {
 
@@ -81,8 +73,6 @@ public class PointerSystemExecutor : SystemExecutor
                         
                     }
                 }
-
-
 
                 if(OVRInput.GetDown(OVRInput.RawButton.X))
                 {

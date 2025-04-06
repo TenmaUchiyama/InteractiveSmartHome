@@ -140,6 +140,11 @@ public class SAUIManager : MonoBehaviour
         return userCommandText.text == "";
     }
 
+    public string GetRecognizedWord()
+    {
+        return userCommandText.text;
+    }
+
     public void ClearRecognizedWord()
     {
         userCommandText.text = ""; 

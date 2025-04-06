@@ -39,7 +39,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     [SerializeField] private int port = 8800;
     [SerializeField] SADeviceRef saDeviceRef; 
     [SerializeField] private LLMQueryMode queryMode = LLMQueryMode.Spatial;
-    // [SerializeField] private ExperimentManager experimentManager;
+    [SerializeField] private ExperimentManager experimentManager;
     [SerializeField] private ExperimentalDataManager experimentalDataManager;
 
     [SerializeField] public bool speechRequired = true;
@@ -61,10 +61,6 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
 };
 
-
-    private void Start() {
-        if(speechRequired) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
-    }
 
 
 
@@ -89,8 +85,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
             case LLMQueryMode.Spatial:
 
                 var sendingData = new {
-                    // taskId =  debugText == "" ?experimentManager.GetCurrentTaskId()  : "0",
-                    taskId =  "0",
+                    taskId =  debugText == "" ? experimentManager.GetCurrentTaskId()  : "0",
                     user_message = recognizedText
                 }; 
                 await SendQuery(recognizedText);

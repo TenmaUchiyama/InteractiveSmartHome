@@ -233,8 +233,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8400580927245639732, guid: 5c385979801a1ca428caa3583e28b97f, type: 3}
+      propertyPath: host
+      value: 127.0.0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8400580927245639732, guid: 5c385979801a1ca428caa3583e28b97f, type: 3}
       propertyPath: debugText
-      value: "\u4E00\u756A\u8FD1\u3044\u96FB\u6C17\u304B\u3089\u9060\u3044\u96FB\u6C17\u306B\u304B\u3051\u3066\u3002\u8D64\u8272\u304B\u3089\u9752\u8272\u306B\u30B0\u30E9\u30C7\u30FC\u30B7\u30E7\u30F3\u3092\u4F5C\u308B\u5F62\u3067\u96FB\u6C17\u3092\u70B9\u3051\u3066\u304F\u3060\u3055\u3044\u3002"
+      value: "\u30C6\u30FC\u30D6\u30EB\u5468\u8FBA\u306E\u96FB\u6C17\u3092\u70B9\u3051\u3066"
       objectReference: {fileID: 0}
     - target: {fileID: 8400580927245639732, guid: 5c385979801a1ca428caa3583e28b97f, type: 3}
       propertyPath: saDeviceRef
@@ -5908,7 +5912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 0
+  _meshType: 4
 --- !u!114 &195063359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5939,7 +5943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 0
+  _skeletonType: 4
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -6660,6 +6664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &219750217
 MonoBehaviour:
@@ -11810,7 +11815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 1
+  _meshType: 5
 --- !u!114 &386976278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11841,7 +11846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 1
+  _skeletonType: 5
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -14356,6 +14361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &485004802
 MonoBehaviour:
@@ -15227,6 +15233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &508050922
 MonoBehaviour:
@@ -19666,6 +19673,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &657832356
 MonoBehaviour:
@@ -23536,6 +23544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &826350672
 MonoBehaviour:
@@ -26361,6 +26370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &913755759
 MonoBehaviour:
@@ -27288,6 +27298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &937121732
 MonoBehaviour:
@@ -38833,6 +38844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &1325908875
 MonoBehaviour:
@@ -39100,6 +39112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &1328409355
 MonoBehaviour:
@@ -50682,6 +50695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &1740430645
 MonoBehaviour:
@@ -53465,6 +53479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &1836471559
 MonoBehaviour:
@@ -55686,6 +55701,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9084329142507987148, guid: f66191f7445b5c44ca8036fad921ca68, type: 3}
   m_PrefabInstance: {fileID: 1886666043}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1887096848 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+  m_PrefabInstance: {fileID: 1893264353}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1887573381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55991,6 +56011,83 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!1001 &1893264353
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2068472314}
+    m_Modifications:
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.2633598
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.98295844
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691240434977001428, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_Name
+      value: "\u30D5\u30ED\u30A2\u30E9\u30A4\u30C8 (1)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6956651989362312549, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
 --- !u!1 &1895759042
 GameObject:
   m_ObjectHideFlags: 0
@@ -59398,6 +59495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &2007260971
 MonoBehaviour:
@@ -61297,6 +61395,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2105931229}
+  - {fileID: 1887096848}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2068625960
@@ -62241,6 +62340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showLabel: {fileID: 0}
   intensityScale: 10
+  light: {fileID: 0}
   isDebug: 0
 --- !u!114 &2093979393
 MonoBehaviour:

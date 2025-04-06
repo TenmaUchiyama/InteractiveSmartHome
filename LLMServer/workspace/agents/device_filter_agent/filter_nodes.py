@@ -7,7 +7,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from typing import Literal
 from langchain_core.messages import SystemMessage
 from sr_app_types.node_types import NODE
-from agents.device_filter_agent.filter_tool import getDeviceInFov, getDeviceInDirection, getDevices
+from agents.device_filter_agent.filter_tool import getDeviceAroundFurniture, getDeviceInFov, getDeviceInDirection, getDevices
 import os
 
 from utils.callbacks import CustomCallbackHandler
@@ -22,18 +22,20 @@ class FILTER_TOOL(Enum):
     FOV = "getDeviceInFov" 
     DIR = "getDeviceInDirection"
     ALL = "getDevices"
+    FURNITURE = "getDeviceAroundFurniture"
     
 
 llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[])
 
 
 
-filter_agent = llm.bind_tools([getDeviceInFov,getDeviceInDirection, getDevices],strict=True) 
+filter_agent = llm.bind_tools([getDeviceInFov,getDeviceInDirection, getDevices, getDeviceAroundFurniture],strict=True) 
 
 filter_tool_map = {
     FILTER_TOOL.FOV.value  : getDeviceInFov, 
     FILTER_TOOL.DIR.value  : getDeviceInDirection, 
-    FILTER_TOOL.ALL.value : getDevices
+    FILTER_TOOL.ALL.value : getDevices,
+    FILTER_TOOL.FURNITURE.value : getDeviceAroundFurniture
 }
 
 
@@ -109,11 +111,19 @@ def filter_tool_node(state):
 
             if tool_function is None:
                 raise ValueError(f"Unknown tool function: {t['name']}")
+            
+
+            print()
+            print("MSG: ", last_message.content)
+            print("NAME: ", t["name"])
+            print("ARGS: ", t["args"])
+            print()
+
 
             tool_output = tool_function.invoke(t["args"])
-            print("***************TOOL OUTPUT)****************************")
-            print(tool_output)
-            print("***************TOOL OUTPUT)****************************")
+            # print("***************TOOL OUTPUT)****************************")
+            # print(tool_output)
+            # print("***************TOOL OUTPUT)****************************")
 
             tool_message = ToolMessage(
                 content="Successfully Get the All Device Data. You can safully finish tool calling." if tool_output.get('status') == 'success' else "FAILED",
@@ -126,7 +136,7 @@ def filter_tool_node(state):
             # `ToolMessage` を適切に追加
             state.filterAgent.messages.append(tool_message)
 
-            print("PARAM",tool_output)
+     
             state.filterAgent.tool_parameter = tool_output.get('param', {})
 
         debug_log("==============")
@@ -185,6 +195,7 @@ def filter_postprocess_node(state):
     output = parser.invoke(last_msg.content)
     output['params'] = state.filterAgent.tool_parameter
     debug_log(f"フォーマットする: { output}",True)
+    debug_log(f"parameter: {state.filterAgent.tool_parameter}",True)
     state.filterAgent.final_output = output
     return state
 

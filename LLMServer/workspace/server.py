@@ -1,13 +1,13 @@
 import dotenv
+dotenv.load_dotenv("../.env")
+import os
 from agent_runner import runner
 from sr_app_types.agent_types import State
-dotenv.load_dotenv("../.env")
 from fastapi import FastAPI
 import httpx
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 from pydantic import BaseModel
-import os 
 
 XR_SERVER_API = os.getenv("XR_SERVER_API")
 
@@ -69,4 +69,6 @@ def llm_agent(message : InputMessage):
     
 
 if __name__ == "__main__":
-    uvicorn.run("server:app", host="localhost", port=8800, reload=True)
+    
+    print("APIKEY: ",os.getenv("OPENAI_API_KEY"))
+    uvicorn.run("server:app", host="127.0.0.1", port=8800, reload=True)
