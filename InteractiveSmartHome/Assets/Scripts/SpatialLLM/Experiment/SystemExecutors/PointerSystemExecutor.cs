@@ -6,13 +6,12 @@ using SpatialLLM.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-
-namespace SpatialLLM.Experiment{
-public class PointerSystemExecutor : SystemExecutor
+namespace SpatialLLM.Experiment
+{
+    public class PointerSystemExecutor : SystemExecutor
     {
         [SerializeField] private RayInteractor rayInteractor;
-        [SerializeField ]private HandPointing pointing;
+        [SerializeField] private HandPointing pointing;
 
         private bool isMovable = false;
 
@@ -32,7 +31,6 @@ public class PointerSystemExecutor : SystemExecutor
         {
             // Pointer 用は最初に rayInteractor を非アクティブにしておく
             DisablePointing();
-            this.isPointing = true;
             base.Start();
         }
 
@@ -44,43 +42,35 @@ public class PointerSystemExecutor : SystemExecutor
 
         public override void CompleteOperation()
         {
-             DisablePointing();
+            DisablePointing();
             base.CompleteOperation();
         }
 
-
         public void PointSystemDone()
         {
-            this.isPointing = false; 
             this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
-
         }
-        void Update()
+
+         protected override void Update()
         {
+            if (!isStarted) return;
 
-            base.Update();
-                if( OVRInput.GetDown(OVRInput.RawButton.Y))
+            // 「戻る」操作
+            if (OVRInput.GetDown(OVRInput.RawButton.X))
+            {
+                isMovable = true;
+                this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
+            }
+
+            // 操作完了
+            if (OVRInput.GetDown(OVRInput.RawButton.Y))
+            {
+                if (isMovable)
                 {
-
-
-
-                    if(isMovable)
-                    {
-                        this.CompleteOperation(); 
-                        
-                        saUIManager.ClearRecognizedWord();
-                        isOperationDone = true;
-                        
-                    }
+                    this.CompleteOperation(); 
+                    saUIManager.ClearRecognizedWord();
                 }
-
-                if(OVRInput.GetDown(OVRInput.RawButton.X))
-                {
-                    isMovable = true; 
-
-                     this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
-                }
-
+            }
         }
     }
 }

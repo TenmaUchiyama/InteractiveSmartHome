@@ -37,10 +37,13 @@ class InputMessage(BaseModel):
     task_id: str
 
 
-
-
 @app.get("/")
 def test():
+    print("Hello")
+    return "HELO"
+
+@app.get("/simple")
+def simple():
 
     user_prompt = "Turn on all the lights i can see"
     state : State = State(
@@ -54,21 +57,33 @@ def test():
 
 
 @app.post("/llm_agent")
-def llm_agent(message : InputMessage):
+def llm_agent(message: InputMessage):
     user_prompt = message.llm_message
     task_id = message.task_id
-    state : State = State(
-        user_prompt = user_prompt,
+    state: State = State(
+        user_prompt=user_prompt,
     )
-    response = runner.invoke(state)
-    output = response['operatorAgent'].final_output
-    print("********************OUTPUT*********************")
-    print(output)
 
-    return {"output" : output}
+    try:
+        response = runner.invoke(state)
+        output = response['operatorAgent'].final_output
+        print("********************OUTPUT*********************")
+        print(output)
+        return {"output": output}
+
+    except Exception as e:
+        # 例外の詳細ログ
+        import traceback
+        print("************ EXCEPTION OCCURRED **************")
+        traceback.print_exc()
+
+        return {
+            "error": "LLM processing failed.",
+            "detail": str(e)
+        }
     
 
 if __name__ == "__main__":
-    
+
     print("APIKEY: ",os.getenv("OPENAI_API_KEY"))
     uvicorn.run("server:app", host="127.0.0.1", port=8800, reload=True)

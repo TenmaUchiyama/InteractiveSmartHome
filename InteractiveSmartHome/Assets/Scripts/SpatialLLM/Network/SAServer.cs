@@ -158,7 +158,6 @@ public class SAServer : HttpServer
                     message = "Operate Data Successfully"
                 };
                 var jsonData = JsonConvert.SerializeObject(sending);
-                Debug.Log($"<color=yellow>Operate Data Successfully {jsonData}</color>");
                 await context.Respond(200, jsonData);
             } catch (Exception ex) {
                 Debug.LogError($"Error processing /operate request: {ex.Message}");

@@ -41,8 +41,8 @@ graph.add_edge(NODE.FILTER_TOOL.value, NODE.FILTER_AGENT.value)
 
 # graph.add_edge(NODE.FILTER_POSTPROCESS.value, END)
 
-graph.add_conditional_edges(NODE.FILTER_POSTPROCESS.value, filter_final_router)
-
+# graph.add_conditional_edges(NODE.FILTER_POSTPROCESS.value, filter_final_router)
+graph.add_edge(NODE.FILTER_POSTPROCESS.value,NODE.SR_PREPROCESS.value)
 graph.add_edge(NODE.SR_PREPROCESS.value,NODE.SR_AGENT.value)
 graph.add_edge(NODE.SR_AGENT.value, NODE.SR_POSTPROCESS.value)
 graph.add_edge(NODE.SR_POSTPROCESS.value, NODE.OPERATOR_PREPROCESS.value)

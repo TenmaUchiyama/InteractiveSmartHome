@@ -22,7 +22,6 @@ public class SAFurnitureRef : Singleton<SAFurnitureRef>
 
 
 
-
     public List<SAFurniture> GetAllSAFurnitures()
     {
         return saFurnitures;

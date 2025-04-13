@@ -84,7 +84,7 @@ def getDeviceInDirection(
     
     try:
         print(f"Sending POST request to {base_url}/device/direction with body: {request_body}")
-        response = httpx.post(f"{base_url}/direction", json=request_body)
+        response = httpx.post(f"{base_url}/device/direction", json=request_body)
         
         if response.status_code == 200:
             response_data = response.json()

@@ -168,7 +168,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         await PostRequestAsync(url, jsonData);
         // this.experimentManager.StopLLMResponse();
         
-        _isRequesting = false;
+    _isRequesting = false;
     }
 
     // POSTリクエストを送信するコルーチン

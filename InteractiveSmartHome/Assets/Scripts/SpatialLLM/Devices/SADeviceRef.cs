@@ -23,13 +23,13 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
     void Update()
     {
-        // if(Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     foreach(SADevice device in saDevices)
-        //     {
-        //         device.TurnOff();
-        //     }
-        // }
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            foreach(SADevice device in saDevices)
+            {
+                device.TurnOff();
+            }
+        }
     }
 
 

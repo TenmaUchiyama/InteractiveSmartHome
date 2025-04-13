@@ -24,13 +24,11 @@ public static class NetworkDataType
     {
         public string id;
         public string name; 
-        
-
+    
      
         public Position position; 
         public float distance_from_user;
 
-        public float angle;
 
 
         public DeviceSpatialData(string id , string name, Vector3 position, float distance_from_user, float angle = 0)
@@ -39,7 +37,7 @@ public static class NetworkDataType
             this.name = name;
             this.position = new Position(position);
             this.distance_from_user = distance_from_user;
-            this.angle = angle;
+      
         }
    
 

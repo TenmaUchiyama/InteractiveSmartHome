@@ -22,8 +22,8 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     [SerializeField] private Transform userCameraTransform;
     // [SerializeField] private Camera frustalCamera; // 使用するカメラ
 
-    public const float verticalFOV = 86f;
-    public const float horizontalFOV = 100f;
+    public const float verticalFOV = 96f;
+    public const float horizontalFOV = 106f;
 
 
 
@@ -491,35 +491,24 @@ public List<FurnitureData> FilterFurnitureData(List<FurnitureData> data, string 
     }
 private List<DeviceSpatialData> SortDevices(List<DeviceSpatialData> devices, string order)
 {
-    // 各デバイスに角度を計算して追加
-    foreach (var device in devices)
-    {
-        Vector3 devicePos = new Vector3(device.position.x, device.position.y, device.position.z);
-        device.angle = ComputeAngle(devicePos);
-    }
-
     // ソートロジック
     switch (order.ToLower())
     {
         case "right":
-            // 右から左へ（角度が小さい順）
-            devices = devices.OrderBy(d => d.angle).ToList();
+            // 右から左へ（x値が大きい順）
+            devices = devices.OrderByDescending(d => d.position.x).ToList();
             break;
         case "left":
-            // 左から右へ（角度が大きい順）
-            devices = devices.OrderByDescending(d => d.angle).ToList();
+            // 左から右へ（x値が小さい順）
+            devices = devices.OrderBy(d => d.position.x).ToList();
             break;
         case "down":
-            // 高さの低い順
+            // 高さの低い順（y値が小さい順）
             devices = devices.OrderBy(d => d.position.y).ToList();
             break;
         case "high":
-            // 高さの高い順
+            // 高さの高い順（y値が大きい順）
             devices = devices.OrderByDescending(d => d.position.y).ToList();
-            break;
-        case "angle":
-            // 角度順
-            devices = devices.OrderBy(d => d.angle).ToList();
             break;
         case "proximity":
         default:
@@ -530,8 +519,6 @@ private List<DeviceSpatialData> SortDevices(List<DeviceSpatialData> devices, str
 
     return devices;
 }
-
-
    
 public List<FurnitureData> GetFurnitureInDirection(DirFurnitureRequest request)
 {

@@ -17,7 +17,8 @@ with open(file_path, "r", encoding="utf-8") as f:
 
 
 
-llm_spatial = ChatOpenAI(model="gpt-4o", verbose=True, callbacks=[])
+callback = CustomCallbackHandler("logs/spatial_logs.md")
+llm_spatial = ChatOpenAI(model="gpt-4o", verbose=True, callbacks=[callback])
 
 
 
@@ -31,7 +32,6 @@ parser = JsonOutputParser(pydantic_object=DeviceGroupsOutput)
 
 def sr_preprocess_node(state): 
     # print("=======[Spatial Reasoning] PREPROCESS ================")
-    
     sr_input_msg = HumanMessage(f"""
     User Input: {state.user_prompt}
     InputFromDeviceFilterAgent: {state.filterAgent.final_output}

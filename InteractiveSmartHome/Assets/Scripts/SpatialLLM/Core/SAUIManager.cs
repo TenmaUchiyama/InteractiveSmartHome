@@ -13,8 +13,7 @@ public class SAUIManager : MonoBehaviour
 
     public class LLMResponse
 {
-    [JsonProperty("llm_response")]
-    public string Response { get; set; }
+    public string output { get; set; }
 }
 
     [SerializeField] GameObject spinner;
@@ -52,27 +51,18 @@ public class SAUIManager : MonoBehaviour
             // JSONを型付きクラスにデシリアライズ
             LLMResponse response = JsonConvert.DeserializeObject<LLMResponse>(arg0);
 
-            if (response != null && !string.IsNullOrEmpty(response.Response))
-            {
-                Debug.Log($"<color=yellow>[SAUIManager] {response.Response}</color>");
+     
+                Debug.Log($"<color=yellow>[SAUIManager] {response.output}</color>");
 
                 if (agentResponseText != null)
                 {
-                    agentResponseText.text = response.Response;
+                    agentResponseText.text = response.output;
                 }
                 else
                 {
                     Debug.LogWarning("agentResponseText is not assigned in the inspector.");
                 }
-            }
-            else
-            {
-                Debug.LogError("llm_response is null or empty.");
-                if (agentResponseText != null)
-                {
-                    agentResponseText.text = "Error: Response is empty.";
-                }
-            }
+        
         }
         catch (Exception ex)
         {
@@ -80,15 +70,24 @@ public class SAUIManager : MonoBehaviour
         }
 
 
-       Invoke(nameof(ClearUI), 5f);
+  
     }
 
 
-    private void OnVoiceRecognized(string recognizedText)
+    public void ClearDisplay ()
+    {
+        spinner.SetActive(false);
+        agentResponseObject.SetActive(true); 
+  
+
+    }
+
+    public void DisplaySendingLLM(string recognizedText)
     {
        if(spinner)spinner.SetActive(true);    
        userCommandObject.SetActive(true);
        userCommandText.text = recognizedText;
+       
     }
 
 
@@ -149,6 +148,7 @@ public class SAUIManager : MonoBehaviour
     {
         userCommandText.text = ""; 
         userCommandObject.SetActive(false);
+        agentResponseObject.SetActive(false);
     }
 
 

@@ -25,7 +25,9 @@ class FILTER_TOOL(Enum):
     FURNITURE = "getDeviceAroundFurniture"
     
 
-llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[])
+
+callback = CustomCallbackHandler("logs/filter_logs.md")
+llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
 
 
 
@@ -126,7 +128,7 @@ def filter_tool_node(state):
             # print("***************TOOL OUTPUT)****************************")
 
             tool_message = ToolMessage(
-                content="Successfully Get the All Device Data. You can safully finish tool calling." if tool_output.get('status') == 'success' else "FAILED",
+                content=f"Successfully Get the All Device Data. You can safully finish tool calling. {tool_output.get('devices')}" if tool_output.get('status') == 'success' else "FAILED",
                 tool_call_id=tool_call_id  # すべてのツールに対して適切な `tool_call_id` を渡す
             )
 
@@ -197,6 +199,7 @@ def filter_postprocess_node(state):
     debug_log(f"フォーマットする: { output}",True)
     debug_log(f"parameter: {state.filterAgent.tool_parameter}",True)
     state.filterAgent.final_output = output
+    
     return state
 
 

@@ -17,8 +17,8 @@ with open(file_path, "r", encoding="utf-8") as f:
 class OPERATOR_TOOL(Enum): 
     OPERATE = "operateDevice" 
 
-
-llm_operator_model = ChatOpenAI(model="gpt-4o", verbose=True, callbacks=[]) 
+callback = CustomCallbackHandler("logs/operator_logs.md")
+llm_operator_model = ChatOpenAI(model="gpt-4o", verbose=True, callbacks=[callback]) 
 llm_operator = llm_operator_model.bind_tools([operateDevice], strict=True)
 tool_map  = {
     OPERATOR_TOOL.OPERATE.value : operateDevice
@@ -30,7 +30,7 @@ tool_map  = {
 def operator_preprocess_node(state): 
     # print("=======[Operator] PREPROCESS ================")
 
-    del state.filterAgent.final_output["isSpatialReasoningRequired"]
+   
     operator_input_msg = HumanMessage(f"""
     User Input: {state.user_prompt}
     InputFromSpatialReasoningAgent: {state.spatialAgent.final_output}

@@ -11,7 +11,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from typing import TypedDict
 from llm.utils.callbacks import CustomCallbackHandler
-from llm.tools.tools import getDevicesUserAngle, getDevicesInSights, operateDevice, getDevices, sortDevices
+from llm.tools.tools import getDevices, getDeviceAroundFurniture, getDeviceInDirection, getDeviceInFov,operateDevice
 
 
 
@@ -121,13 +121,14 @@ Input and output JSON data includes:
 class State(TypedDict):
     messages: List
 
-llm_with_tools = llm.bind_tools([getDevices, getDevicesUserAngle, getDevicesInSights,  operateDevice ])
+llm_with_tools = llm.bind_tools([getDevices, getDeviceInFov, getDeviceInDirection, getDeviceAroundFurniture  ,operateDevice])
 
 tool_map = {
     "getDevices" : getDevices,
-    "getDevicesUserAngle": getDevicesUserAngle,
-    "getDevicesInSights": getDevicesInSights,
-    "operateDevice": operateDevice,
+    "getDeviceInFov": getDeviceInFov,
+    "getDeviceInDirection": getDeviceInDirection,
+    "getDeviceAroundFurniture": getDeviceAroundFurniture,
+    "operateDevice":operateDevice
 }
 
 def llm_agent(state: State) -> State:

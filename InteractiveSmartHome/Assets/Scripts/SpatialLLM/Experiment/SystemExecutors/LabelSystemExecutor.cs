@@ -1,47 +1,111 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Triggers;
+using UnityEngine.Events;
 using SpatialLLM.Core;
 using SpatialLLM.Device;
-using UnityEngine;
-using UnityEngine.Events;
 
-
-
-
-namespace SpatialLLM.Experiment{
-public class LabelSystemExecutor : SystemExecutor
+namespace SpatialLLM.Experiment
 {
-        
-       
+    public class LabelSystemExecutor : SystemExecutor
+    {
+        private bool isGripHolding = false;
+        private bool isOperationDone = false;
 
-        private void Update()
+        private bool isTriggarable = false;
+
+        protected override void Start()
+        {
+            base.Start();
+
+            if (SASpeechRecognizer.Instance)
+            {
+                SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+            }
+        }
+
+        private void OnVoiceRecognized(string recognizedText)
+        {
+            saUIManager.SetRecognizedTxt(recognizedText);
+
+            if (!saUIManager.IsRecognizedWordEmplty())
+            {
+                saUIManager.SetInstructionText("Press Y to confirm");
+            }
+        }
+
+        protected override void Update()
         {
             base.Update();
 
+            if (!isStarted) return;
 
-            if(isRecording) return ;
-            if(OVRInput.GetDown(OVRInput.RawButton.LHandTrigger))
+            // --- ラベル表示処理（Gripボタン押し中） ---
+            isGripHolding = OVRInput.Get(OVRInput.RawButton.LHandTrigger);
+
+            foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
             {
+                device.DisplayShowLabel(isGripHolding && !SASpeechRecognizer.Instance.IsActive);
+            }
 
-                this.isTriggarable = false;
-                foreach(SADevice saDevice in SADeviceRef.Instance.GetAllDevices())
+            // --- Trigger録音処理 ---
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+            {
+                if (isGripHolding) return;
+
+                SASpeechRecognizer.Instance.ActivateVoice();
+                Debug.Log("[LabelExecutor] Trigger押下：録音開始");
+            }
+
+            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+            {
+                if (isGripHolding) return;
+
+        
+                SASpeechRecognizer.Instance.DeactivateVoice();
+                Debug.Log("[LabelExecutor] Trigger離す：録音終了");
+            }
+
+            // --- Yボタン処理 ---
+            if (OVRInput.GetDown(OVRInput.RawButton.Y))
+            {
+                if (!saUIManager.IsRecognizedWordEmplty())
                 {
-                    saDevice.DisplayShowLabel(true);
+                    if (!isOperationDone)
+                    {
+                        experimentManager.DisplayCurrentOperation();
+                        isOperationDone = true;
+                        saUIManager.SetInstructionText("Press Y to complete");
+                    }
+                    else
+                    {
+                        CompleteOperation();
+                        isOperationDone = false;
+                        saUIManager.ClearRecognizedWord();
+                    }
                 }
             }
 
-
-            if(OVRInput.GetUp(OVRInput.RawButton.LHandTrigger))
+            // --- キャンセル（XボタンまたはESC） ---
+            if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
             {
+                experimentManager.BackToShowDevice();
+            }
+        }
 
-                this.isTriggarable = true;
-                foreach(SADevice saDevice in SADeviceRef.Instance.GetAllDevices())
-                {
-                    saDevice.DisplayShowLabel(false);
-                }
+        public override void BeginOperation()
+        {
+            base.BeginOperation();
+            saUIManager.SetInstructionText("Press Trigger to Record, Grip to Show Labels");
+        }
+
+        public override void CompleteOperation()
+        {
+            base.CompleteOperation();
+
+            // 終了時にすべてのデバイスのラベルを非表示にする
+            foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
+            {
+                device.DisplayShowLabel(false);
             }
         }
     }
