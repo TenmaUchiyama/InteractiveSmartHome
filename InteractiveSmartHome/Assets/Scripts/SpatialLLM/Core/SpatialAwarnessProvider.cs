@@ -22,8 +22,13 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     [SerializeField] private Transform userCameraTransform;
     // [SerializeField] private Camera frustalCamera; // 使用するカメラ
 
+<<<<<<< HEAD
     public const float verticalFOV = 86f;
     public const float horizontalFOV = 100f;
+=======
+    public const float verticalFOV = 96f;
+    public const float horizontalFOV = 106f;
+>>>>>>> stack
 
 
 
@@ -491,35 +496,24 @@ public List<FurnitureData> FilterFurnitureData(List<FurnitureData> data, string 
     }
 private List<DeviceSpatialData> SortDevices(List<DeviceSpatialData> devices, string order)
 {
-    // 各デバイスに角度を計算して追加
-    foreach (var device in devices)
-    {
-        Vector3 devicePos = new Vector3(device.position.x, device.position.y, device.position.z);
-        device.angle = ComputeAngle(devicePos);
-    }
-
     // ソートロジック
     switch (order.ToLower())
     {
         case "right":
-            // 右から左へ（角度が小さい順）
-            devices = devices.OrderBy(d => d.angle).ToList();
+            // 右から左へ（x値が大きい順）
+            devices = devices.OrderByDescending(d => d.position.x).ToList();
             break;
         case "left":
-            // 左から右へ（角度が大きい順）
-            devices = devices.OrderByDescending(d => d.angle).ToList();
+            // 左から右へ（x値が小さい順）
+            devices = devices.OrderBy(d => d.position.x).ToList();
             break;
         case "down":
-            // 高さの低い順
+            // 高さの低い順（y値が小さい順）
             devices = devices.OrderBy(d => d.position.y).ToList();
             break;
         case "high":
-            // 高さの高い順
+            // 高さの高い順（y値が大きい順）
             devices = devices.OrderByDescending(d => d.position.y).ToList();
-            break;
-        case "angle":
-            // 角度順
-            devices = devices.OrderBy(d => d.angle).ToList();
             break;
         case "proximity":
         default:
@@ -530,8 +524,189 @@ private List<DeviceSpatialData> SortDevices(List<DeviceSpatialData> devices, str
 
     return devices;
 }
+<<<<<<< HEAD
+
+=======
+   
+public List<FurnitureData> GetFurnitureInDirection(DirFurnitureRequest request)
+{
+    string furnitureTypeStr = request.furnitureType;
+    string directionStr = request.direction;
+    string order = request.order;
+    float range = request.range ?? 0f;
+>>>>>>> stack
+
+    // Direction enum に変換（"left" → Direction.Left など）
+    Direction directionEnum;
+    try
+    {
+        directionEnum = (Direction)Enum.Parse(typeof(Direction), directionStr, true);
+    }
+    catch
+    {
+        Debug.LogError($"Invalid direction: {directionStr}");
+        return new List<FurnitureData>();
+    }
+
+    List<SAFurniture> furnitures = this.FindFurnitureInDirection(directionEnum, furnitureTypeStr);
+    Debug.Log("Furniture count in direction: " + furnitures.Count);
+
+    if (furnitures == null || furnitures.Count == 0)
+    {
+        Debug.LogWarning("No furniture found in that direction.");
+        return new List<FurnitureData>();
+    }
+
+    List<FurnitureData> furnitureDataList = new List<FurnitureData>();
+
+    foreach (var furniture in furnitures)
+    {
+        if (furniture == null)
+        {
+            Debug.LogError("Furniture is null.");
+            continue;
+        }
+
+        try
+        {
+            var data = furniture.GetFurniturePositionalRelativeToUser();
+            if (data == null)
+            {
+                Debug.LogError("Furniture data is null for furniture: " + furniture.name);
+                continue;
+            }
+            furnitureDataList.Add(data);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error getting furniture data for {furniture.name}: {ex.Message}");
+        }
+    }
+
+    furnitureDataList = FilterFurnitureData(furnitureDataList, order, range);
+
+    return furnitureDataList;
+}
 
 
+public List<FurnitureData> GetFurnitureInFov(FOVFurnitureRequest furnitureRequest)
+{
+    string furnitureTypeStr = furnitureRequest.furnitureType;
+    bool withinFov = furnitureRequest.isInFov;
+    string order = furnitureRequest.order;
+    float range = furnitureRequest.range ?? 0f;
+
+    List<SAFurniture> furnitures = this.FindFurnitureInFov(furnitureTypeStr, withinFov);
+    Debug.Log("Furniture count: " + furnitures.Count);
+
+    if (furnitures == null || furnitures.Count == 0)
+    {
+        Debug.LogWarning("Furniture list is empty.");
+        return new List<FurnitureData>();
+    }
+
+    List<FurnitureData> furnitureDataList = new List<FurnitureData>();
+
+    foreach (var furniture in furnitures)
+    {
+        if (furniture == null)
+        {
+            Debug.LogError("Furniture is null.");
+            continue;
+        }
+
+        try
+        {
+            var data = furniture.GetFurniturePositionalRelativeToUser();
+            if (data == null)
+            {
+                Debug.LogError("Furniture data is null for furniture: " + furniture.name);
+                continue;
+            }
+            furnitureDataList.Add(data);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error getting furniture data for {furniture.name}: {ex.Message}");
+        }
+    }
+
+    furnitureDataList = FilterFurnitureData(furnitureDataList, order, range);
+
+    return furnitureDataList;
+}
+
+
+
+public List<DeviceSpatialData> GetDeviceByFurnitureType(SAFurniture saFurniture, float range = 0f)
+{
+
+
+
+    List<DeviceSpatialData> deviceDatas = this.GetDevicesAroundFurniture(saFurniture.GetFurnitureData().id, "proximity", range);
+
+    if (deviceDatas == null || deviceDatas.Count == 0)
+    {
+        return new List<DeviceSpatialData>();
+    }
+
+    return deviceDatas;
+}
+
+public  List<DeviceSpatialData> GetDevicesAroundFurniture(string furnitureID, string order="proximity", float range = 0f)
+{
+    List<DeviceSpatialData> deviceRelativePositions = new List<DeviceSpatialData>();
+
+    
+    // 指定したIDのFurnitureを取得
+    SAFurniture targetFurniture = SAFurnitureRef.Instance.GetFurnitureByID(furnitureID);
+    if (targetFurniture == null)
+    {
+        Debug.LogWarning("指定されたIDのFurnitureが見つかりません: " + furnitureID);
+        return deviceRelativePositions;
+    }
+
+    // ユーザーのローカル座標系でのFurnitureの位置を取得
+    Vector3 furnitureLocalPos = userCameraTransform.InverseTransformPoint(targetFurniture.transform.position);
+
+    // 全SADeviceを取得し、範囲内にあるものを調べる
+    List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+    
+    foreach (SADevice device in allDevices)
+    {
+        // Furnitureとdevice間の距離をワールド座標上で計算
+        float distance = Vector3.Distance(targetFurniture.transform.position, device.transform.position);
+        if (range == 0 || distance <= range)
+        {
+            // ユーザーのローカル座標系でのdeviceの位置を取得
+            Vector3 deviceLocalPos = userCameraTransform.InverseTransformPoint(device.transform.position);
+            // Furnitureを基準とした相対位置を算出
+            Vector3 relativePos = deviceLocalPos - furnitureLocalPos;
+
+            DeviceSpatialData deviceSpatialData = device.GenerateFurnitureRelativePositionData(relativePos);
+            deviceRelativePositions.Add(deviceSpatialData);
+        }
+    }
+
+
+    deviceRelativePositions = FilterDeviceData(deviceRelativePositions, order,range);
+
+    return deviceRelativePositions;
+}
+
+
+
+
+
+
+public void TEST_FURNITURE() 
+{
+    List<SAFurniture> furniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
+    
+
+    // List<SADevice> devices = this.GetDevicesAroundFurniture(furniture[0].GetFurnitureData().id, 2f).Keys.ToList();
+    // Debug.Log($"<color=red>Received Device: {devices[0].gameObject.name}</color>");
+}
    
 public List<FurnitureData> GetFurnitureInDirection(DirFurnitureRequest request)
 {

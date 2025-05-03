@@ -3,6 +3,7 @@ import httpx
 url = "http://localhost:7070/fov"
 payload = {"isInFov": True, "order": "proximity"}
 
+<<<<<<< HEAD
 response = httpx.post(url, json=payload)
 
 print(response.status_code)
@@ -27,3 +28,6 @@ response = httpx.post(url, json=operate)
 print(response.status_code)
 
 print(response.json())
+=======
+
+>>>>>>> stack

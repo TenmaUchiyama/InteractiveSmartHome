@@ -39,12 +39,35 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     [SerializeField] private int port = 8800;
     [SerializeField] SADeviceRef saDeviceRef; 
     [SerializeField] private LLMQueryMode queryMode = LLMQueryMode.Spatial;
+<<<<<<< HEAD
     // [SerializeField] private ExperimentManager experimentManager;
+=======
+    [SerializeField] private ExperimentManager experimentManager;
+>>>>>>> stack
     [SerializeField] private ExperimentalDataManager experimentalDataManager;
 
     [SerializeField] public bool speechRequired = true;
 
     [SerializeField] private string debugText = "";
+<<<<<<< HEAD
+
+    [SerializeField] private bool isUserStudy;
+
+
+
+    public UnityEvent<string> OnReceiveResponseFromLLM;
+    private Dictionary<LLMQueryMode, string> queryModeUrl = new Dictionary<LLMQueryMode, string>(){
+    {LLMQueryMode.Spatial, "llm_agent"},
+    {LLMQueryMode.Pointing, "pointing_agent"},
+    {LLMQueryMode.Label, "label_agent"},
+    
+    {LLMQueryMode.Multiple_Select, "multiple_select_agent"},
+    {LLMQueryMode.Multiple_Select_Pointing, "multiple_select_agent"},
+
+};
+
+=======
+>>>>>>> stack
 
     [SerializeField] private bool isUserStudy;
 
@@ -62,11 +85,18 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 };
 
 
-    private void Start() {
-        if(speechRequired) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+
+
+    
+    public void SendQueryForDebug(string text)
+    {
+
+        text = debugText == "" ? text : debugText; 
+        OnVoiceRecognized(text); 
     }
 
 
+<<<<<<< HEAD
 
     
     public void SendQueryForDebug(string text)
@@ -80,6 +110,11 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     private async void OnVoiceRecognized(string recognizedText)
     {
 
+=======
+    private async void OnVoiceRecognized(string recognizedText)
+    {
+
+>>>>>>> stack
         if(isUserStudy)
         {
 
@@ -89,8 +124,12 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
             case LLMQueryMode.Spatial:
 
                 var sendingData = new {
+<<<<<<< HEAD
                     // taskId =  debugText == "" ?experimentManager.GetCurrentTaskId()  : "0",
                     taskId =  "0",
+=======
+                    taskId =  debugText == "" ? experimentManager.GetCurrentTaskId()  : "0",
+>>>>>>> stack
                     user_message = recognizedText
                 }; 
                 await SendQuery(recognizedText);
@@ -173,7 +212,11 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         await PostRequestAsync(url, jsonData);
         // this.experimentManager.StopLLMResponse();
         
+<<<<<<< HEAD
         _isRequesting = false;
+=======
+    _isRequesting = false;
+>>>>>>> stack
     }
 
     // POSTリクエストを送信するコルーチン
