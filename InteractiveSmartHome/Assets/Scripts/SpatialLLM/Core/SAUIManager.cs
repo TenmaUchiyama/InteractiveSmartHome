@@ -13,7 +13,12 @@ public class SAUIManager : MonoBehaviour
 
     public class LLMResponse
 {
+<<<<<<< HEAD
+    [JsonProperty("llm_response")]
+    public string Response { get; set; }
+=======
     public string output { get; set; }
+>>>>>>> stack
 }
 
     [SerializeField] GameObject spinner;
@@ -51,18 +56,40 @@ public class SAUIManager : MonoBehaviour
             // JSONを型付きクラスにデシリアライズ
             LLMResponse response = JsonConvert.DeserializeObject<LLMResponse>(arg0);
 
+<<<<<<< HEAD
+            if (response != null && !string.IsNullOrEmpty(response.Response))
+            {
+                Debug.Log($"<color=yellow>[SAUIManager] {response.Response}</color>");
+
+                if (agentResponseText != null)
+                {
+                    agentResponseText.text = response.Response;
+=======
      
                 Debug.Log($"<color=yellow>[SAUIManager] {response.output}</color>");
 
                 if (agentResponseText != null)
                 {
                     agentResponseText.text = response.output;
+>>>>>>> stack
                 }
                 else
                 {
                     Debug.LogWarning("agentResponseText is not assigned in the inspector.");
                 }
+<<<<<<< HEAD
+            }
+            else
+            {
+                Debug.LogError("llm_response is null or empty.");
+                if (agentResponseText != null)
+                {
+                    agentResponseText.text = "Error: Response is empty.";
+                }
+            }
+=======
         
+>>>>>>> stack
         }
         catch (Exception ex)
         {
@@ -70,6 +97,13 @@ public class SAUIManager : MonoBehaviour
         }
 
 
+<<<<<<< HEAD
+       Invoke(nameof(ClearUI), 5f);
+    }
+
+
+    private void OnVoiceRecognized(string recognizedText)
+=======
   
     }
 
@@ -83,11 +117,15 @@ public class SAUIManager : MonoBehaviour
     }
 
     public void DisplaySendingLLM(string recognizedText)
+>>>>>>> stack
     {
        if(spinner)spinner.SetActive(true);    
        userCommandObject.SetActive(true);
        userCommandText.text = recognizedText;
+<<<<<<< HEAD
+=======
        
+>>>>>>> stack
     }
 
 
@@ -139,16 +177,22 @@ public class SAUIManager : MonoBehaviour
         return userCommandText.text == "";
     }
 
+<<<<<<< HEAD
+=======
     public string GetRecognizedWord()
     {
         return userCommandText.text;
     }
 
+>>>>>>> stack
     public void ClearRecognizedWord()
     {
         userCommandText.text = ""; 
         userCommandObject.SetActive(false);
+<<<<<<< HEAD
+=======
         agentResponseObject.SetActive(false);
+>>>>>>> stack
     }
 
 

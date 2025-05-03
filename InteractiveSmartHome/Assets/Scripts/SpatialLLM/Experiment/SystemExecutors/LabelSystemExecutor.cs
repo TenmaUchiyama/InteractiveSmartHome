@@ -1,3 +1,53 @@
+<<<<<<< HEAD
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
+using SpatialLLM.Core;
+using SpatialLLM.Device;
+using UnityEngine;
+using UnityEngine.Events;
+
+
+
+
+namespace SpatialLLM.Experiment{
+public class LabelSystemExecutor : SystemExecutor
+{
+        
+       
+
+        private void Update()
+        {
+            base.Update();
+
+
+            if(isRecording) return ;
+            if(OVRInput.GetDown(OVRInput.RawButton.LHandTrigger))
+            {
+
+                this.isTriggarable = false;
+                foreach(SADevice saDevice in SADeviceRef.Instance.GetAllDevices())
+                {
+                    saDevice.DisplayShowLabel(true);
+                }
+            }
+
+
+            if(OVRInput.GetUp(OVRInput.RawButton.LHandTrigger))
+            {
+
+                this.isTriggarable = true;
+                foreach(SADevice saDevice in SADeviceRef.Instance.GetAllDevices())
+                {
+                    saDevice.DisplayShowLabel(false);
+                }
+            }
+        }
+    }
+}
+=======
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
@@ -110,3 +160,4 @@ namespace SpatialLLM.Experiment
         }
     }
 }
+>>>>>>> stack

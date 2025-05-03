@@ -116,7 +116,11 @@ public class ExperimentManager : MonoBehaviour
     Debug.Log("<color=red>[ShowDevice] Press A to Go To Operation</color>");
     saUIManager.SetDeviceCountText(deviceArrangeDatas.Count().ToString());
     saUIManager.SetInstructionText("Press Y If You Are Ready"); 
+<<<<<<< HEAD
+    await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A));
+=======
     await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y));
+>>>>>>> stack
     saUIManager.ClearInstruction();
     ClearDeviceVisual();
 
@@ -139,6 +143,10 @@ private async UniTask Operation()
     DebugLogging($"[{this.currentState.ToString()}] Operating"); 
     systemExecutor.BeginOperation(); 
     this.experimentTask.StartTaskTimer();
+<<<<<<< HEAD
+    // await systemExecutor.WaitForExecution()
+=======
+>>>>>>> stack
     await systemExecutor.WaitForExecution();
     saUIManager.ClearInstruction();
     this.experimentTask.StopTaskTimer();

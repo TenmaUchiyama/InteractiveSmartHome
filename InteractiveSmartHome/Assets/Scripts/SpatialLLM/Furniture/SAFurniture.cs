@@ -5,8 +5,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Newtonsoft.Json;
 using static SpatialLLM.Network.NetworkDataType;
+<<<<<<< HEAD
+=======
 using Oculus.Interaction.Samples;
 using JetBrains.Annotations;
+>>>>>>> stack
 
 
 namespace SpatialLLM.Core
@@ -18,6 +21,8 @@ namespace SpatialLLM.Core
 
     }
 
+<<<<<<< HEAD
+=======
 
     [Serializable]
     public class FurnitureShape 
@@ -37,6 +42,7 @@ namespace SpatialLLM.Core
 
     }
 
+>>>>>>> stack
     [Serializable]
     public class FurnitureData
     {
@@ -48,12 +54,17 @@ namespace SpatialLLM.Core
         public FurnitureType FurnitureType { get; private set; }
 
         public Position position; 
+<<<<<<< HEAD
+        
+        public float distance_from_user;
+=======
 
         public FurnitureShape furnitureShape;
         
         public float distance_from_user;
         
 
+>>>>>>> stack
 
         public FurnitureData(string id, string name, FurnitureType furnitureType)
         {
@@ -102,17 +113,24 @@ namespace SpatialLLM.Core
 
         void Awake()
         {
+<<<<<<< HEAD
+            furnitureData = new FurnitureData(Guid.NewGuid().ToString(), this.gameObject.name, furnitureType);
+=======
 
     
             furnitureData = new FurnitureData(Guid.NewGuid().ToString(), this.gameObject.name, furnitureType);
         
+>>>>>>> stack
 
         }
 
         void Start()
         {
             Debug.Log($"<color=yellow>Furniture Data: {furnitureData.ToStringRepresentation()}, Json: {furnitureData.ToJson()}</color>");
+<<<<<<< HEAD
+=======
             furnitureData.furnitureShape = this.GetBoundingBoxDimentions(); 
+>>>>>>> stack
         }
 
         void Update()
@@ -129,8 +147,11 @@ namespace SpatialLLM.Core
             return this.furnitureData;
         }
 
+<<<<<<< HEAD
+=======
        
 
+>>>>>>> stack
 
         public FurnitureData GetFurnitureData()
         {
@@ -142,6 +163,8 @@ namespace SpatialLLM.Core
             return furniture_type.Equals(this.furnitureData.GetFurnitureTypeInString()) || furniture_type == "";
         }
 
+<<<<<<< HEAD
+=======
     public Vector3 GetBoundingBoxDimentions_Vector()
     {
         // 子オブジェクトも含めた全Rendererコンポーネントを取得
@@ -172,6 +195,7 @@ namespace SpatialLLM.Core
     
         return new FurnitureShape(boundingBox.x, boundingBox.y, boundingBox.z); 
     }
+>>>>>>> stack
 
 
     }

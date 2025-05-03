@@ -1,3 +1,18 @@
+<<<<<<< HEAD
+from langchain.callbacks.base import BaseCallbackHandler
+
+class CustomCallbackHandler(BaseCallbackHandler):
+    def on_llm_start(self, serialized, prompts, **kwargs):
+        print("\n--- 送信するテキスト ---")
+        for i, prompt in enumerate(prompts):
+            print(f"Prompt {i + 1}: {prompt}")
+        print("\n")
+
+    def on_llm_end(self, response, **kwargs):
+        print("\n--- LLMからのレスポンス ---")
+        print(response)
+        print("\n")
+=======
 import os
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import LLMResult
@@ -52,3 +67,4 @@ class CustomCallbackHandler(BaseCallbackHandler):
         log_text = "## ✍️ 手動追加ログ\n"
         log_text += f"```\n{add_txt}\n```\n\n"
         self._write_log(log_text)
+>>>>>>> stack

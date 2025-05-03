@@ -7,7 +7,11 @@ from langchain_core.output_parsers import JsonOutputParser
 from typing import Literal
 from langchain_core.messages import SystemMessage
 from sr_app_types.node_types import NODE
+<<<<<<< HEAD
+from agents.device_filter_agent.filter_tool import getDeviceInFov, getDeviceInDirection, getDevices
+=======
 from agents.device_filter_agent.filter_tool import getDeviceAroundFurniture, getDeviceInFov, getDeviceInDirection, getDevices
+>>>>>>> stack
 import os
 
 from utils.callbacks import CustomCallbackHandler
@@ -22,6 +26,15 @@ class FILTER_TOOL(Enum):
     FOV = "getDeviceInFov" 
     DIR = "getDeviceInDirection"
     ALL = "getDevices"
+<<<<<<< HEAD
+    
+
+llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[])
+
+
+
+filter_agent = llm.bind_tools([getDeviceInFov,getDeviceInDirection, getDevices],strict=True) 
+=======
     FURNITURE = "getDeviceAroundFurniture"
     
 
@@ -32,12 +45,17 @@ llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
 
 
 filter_agent = llm.bind_tools([getDeviceInFov,getDeviceInDirection, getDevices, getDeviceAroundFurniture],strict=True) 
+>>>>>>> stack
 
 filter_tool_map = {
     FILTER_TOOL.FOV.value  : getDeviceInFov, 
     FILTER_TOOL.DIR.value  : getDeviceInDirection, 
+<<<<<<< HEAD
+    FILTER_TOOL.ALL.value : getDevices
+=======
     FILTER_TOOL.ALL.value : getDevices,
     FILTER_TOOL.FURNITURE.value : getDeviceAroundFurniture
+>>>>>>> stack
 }
 
 
@@ -113,6 +131,16 @@ def filter_tool_node(state):
 
             if tool_function is None:
                 raise ValueError(f"Unknown tool function: {t['name']}")
+<<<<<<< HEAD
+
+            tool_output = tool_function.invoke(t["args"])
+            print("***************TOOL OUTPUT)****************************")
+            print(tool_output)
+            print("***************TOOL OUTPUT)****************************")
+
+            tool_message = ToolMessage(
+                content="Successfully Get the All Device Data. You can safully finish tool calling." if tool_output.get('status') == 'success' else "FAILED",
+=======
             
 
             print()
@@ -129,6 +157,7 @@ def filter_tool_node(state):
 
             tool_message = ToolMessage(
                 content=f"Successfully Get the All Device Data. You can safully finish tool calling. {tool_output.get('devices')}" if tool_output.get('status') == 'success' else "FAILED",
+>>>>>>> stack
                 tool_call_id=tool_call_id  # すべてのツールに対して適切な `tool_call_id` を渡す
             )
 
@@ -138,7 +167,11 @@ def filter_tool_node(state):
             # `ToolMessage` を適切に追加
             state.filterAgent.messages.append(tool_message)
 
+<<<<<<< HEAD
+            print("PARAM",tool_output)
+=======
      
+>>>>>>> stack
             state.filterAgent.tool_parameter = tool_output.get('param', {})
 
         debug_log("==============")
@@ -197,9 +230,13 @@ def filter_postprocess_node(state):
     output = parser.invoke(last_msg.content)
     output['params'] = state.filterAgent.tool_parameter
     debug_log(f"フォーマットする: { output}",True)
+<<<<<<< HEAD
+    state.filterAgent.final_output = output
+=======
     debug_log(f"parameter: {state.filterAgent.tool_parameter}",True)
     state.filterAgent.final_output = output
     
+>>>>>>> stack
     return state
 
 

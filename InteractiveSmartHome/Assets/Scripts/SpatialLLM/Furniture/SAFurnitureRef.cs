@@ -22,6 +22,10 @@ public class SAFurnitureRef : Singleton<SAFurnitureRef>
 
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> stack
     public List<SAFurniture> GetAllSAFurnitures()
     {
         return saFurnitures;
