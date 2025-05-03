@@ -14,6 +14,8 @@ namespace SpatialLLM.Experiment
         [SerializeField] private HandPointing pointing;
 
         private bool isMovable = false;
+    
+
 
         private void DisablePointing() 
         {
@@ -51,7 +53,16 @@ namespace SpatialLLM.Experiment
             this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
         }
 
+<<<<<<< HEAD
          protected override void Update()
+=======
+
+
+
+
+
+        void Update()
+>>>>>>> parent of 1510e9d (new)
         {
             if (!isStarted) return;
 
@@ -70,7 +81,20 @@ namespace SpatialLLM.Experiment
                     this.CompleteOperation(); 
                     saUIManager.ClearRecognizedWord();
                 }
+<<<<<<< HEAD
             }
+=======
+
+
+
+                if(OVRInput.GetDown(OVRInput.RawButton.X))
+                {
+                    isMovable = true; 
+
+                     this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
+                }
+
+>>>>>>> parent of 1510e9d (new)
         }
     }
 }

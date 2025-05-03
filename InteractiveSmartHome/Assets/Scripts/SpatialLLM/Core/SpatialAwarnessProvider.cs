@@ -678,17 +678,33 @@ public List<FurnitureData> GetFurnitureInFov(FOVFurnitureRequest furnitureReques
 
 
 
+<<<<<<< HEAD
 public List<DeviceSpatialDataForFurniture> GetDeviceByFurnitureType(SAFurniture saFurniture, float range = 0f)
 {
 
 
  
     List<DeviceSpatialDataForFurniture> deviceDatas = GetDevicesAroundFurniture(saFurniture.GetFurnitureData().id, "proximity", range);
+=======
+public List<DeviceSpatialData> GetDeviceByFurnitureType(string furniture_type, float range = 0f)
+{
+    SAFurniture saFurniture = this.FindFurnitureByType(furniture_type);
+    if (saFurniture == null)
+    {
+        Debug.LogWarning("指定されたIDのFurnitureが見つかりません: " + furniture_type);
+        return new List<DeviceSpatialData>();
+    }
+>>>>>>> parent of 1510e9d (new)
 
 
     if (deviceDatas == null || deviceDatas.Count == 0)
     {
+<<<<<<< HEAD
         return new List<DeviceSpatialDataForFurniture>();
+=======
+        Debug.LogWarning("指定されたIDのFurnitureに関連するデバイスが見つかりません: " + furniture_type);
+        return new List<DeviceSpatialData>();
+>>>>>>> parent of 1510e9d (new)
     }
 
     return deviceDatas;

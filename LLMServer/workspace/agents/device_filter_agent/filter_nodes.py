@@ -7,7 +7,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from typing import Literal
 from langchain_core.messages import SystemMessage
 from sr_app_types.node_types import NODE
-from agents.device_filter_agent.filter_tool import getDeviceAroundFurniture, getDeviceInFov, getDeviceInDirection, getDevices
+from agents.device_filter_agent.filter_tool import getDeviceInFov, getDeviceInDirection, getDevices
 import os
 
 from utils.callbacks import CustomCallbackHandler
@@ -22,7 +22,6 @@ class FILTER_TOOL(Enum):
     FOV = "getDeviceInFov" 
     DIR = "getDeviceInDirection"
     ALL = "getDevices"
-    FURNITURE = "getDeviceAroundFurniture"
     
 
 
@@ -31,13 +30,12 @@ llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
 
 
 
-filter_agent = llm.bind_tools([getDeviceInFov,getDeviceInDirection, getDevices, getDeviceAroundFurniture],strict=True) 
+filter_agent = llm.bind_tools([getDeviceInFov,getDeviceInDirection, getDevices],strict=True) 
 
 filter_tool_map = {
     FILTER_TOOL.FOV.value  : getDeviceInFov, 
     FILTER_TOOL.DIR.value  : getDeviceInDirection, 
-    FILTER_TOOL.ALL.value : getDevices,
-    FILTER_TOOL.FURNITURE.value : getDeviceAroundFurniture
+    FILTER_TOOL.ALL.value : getDevices
 }
 
 
@@ -124,6 +122,12 @@ def filter_tool_node(state):
                 raise ValueError(f"Unknown tool function: {t['name']}")
 
             tool_output = tool_function.invoke(t["args"])
+<<<<<<< HEAD
+=======
+            print("***************TOOL OUTPUT)****************************")
+            print(tool_output)
+            print("***************TOOL OUTPUT)****************************")
+>>>>>>> parent of 1510e9d (new)
 
             state.logger.log(
                 node=t["name"],
@@ -140,6 +144,11 @@ def filter_tool_node(state):
 
             state.filterAgent.devices.extend(tool_output.get('devices', []))
             state.filterAgent.messages.append(tool_message)
+<<<<<<< HEAD
+=======
+
+            print("PARAM",tool_output)
+>>>>>>> parent of 1510e9d (new)
             state.filterAgent.tool_parameter = tool_output.get('param', {})
 
         return state
@@ -200,6 +209,7 @@ def filter_postprocess_node(state):
 
     output = parser.invoke(last_msg.content)
     output['params'] = state.filterAgent.tool_parameter
+<<<<<<< HEAD
     debug_log(f"フォーマットした内容: {output}", True)
 
     state.logger.log(
@@ -210,6 +220,9 @@ def filter_postprocess_node(state):
         output_type="parsed_json"
     )
 
+=======
+    debug_log(f"フォーマットする: { output}",True)
+>>>>>>> parent of 1510e9d (new)
     state.filterAgent.final_output = output
     return state
 

@@ -5,8 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Newtonsoft.Json;
 using static SpatialLLM.Network.NetworkDataType;
-using Oculus.Interaction.Samples;
-using JetBrains.Annotations;
 
 
 namespace SpatialLLM.Core
@@ -16,25 +14,6 @@ namespace SpatialLLM.Core
         TABLE,
         TV,
         SHELF
-
-    }
-
-
-    [Serializable]
-    public class FurnitureShape 
-    {
-        public float width {get; set;}
-        public float height {get; set;}
-        public float depth {get; set;}
-
-
-        public FurnitureShape(float x, float y, float z)
-        {
-            width = x;
-            height = y;
-            depth = z;
-        }
-
 
     }
 
@@ -49,12 +28,8 @@ namespace SpatialLLM.Core
         public FurnitureType FurnitureType { get; private set; }
 
         public Position position; 
-
-        public FurnitureShape furnitureShape;
         
         public float distance_from_user;
-        
-
 
         public FurnitureData(string id, string name, FurnitureType furnitureType)
         {
@@ -103,17 +78,13 @@ namespace SpatialLLM.Core
 
         void Awake()
         {
-
-    
             furnitureData = new FurnitureData(Guid.NewGuid().ToString(), this.gameObject.name, furnitureType);
-        
 
         }
 
         void Start()
         {
             Debug.Log($"<color=yellow>Furniture Data: {furnitureData.ToStringRepresentation()}, Json: {furnitureData.ToJson()}</color>");
-            furnitureData.furnitureShape = this.GetBoundingBoxDimentions(); 
         }
 
         void Update()
@@ -149,8 +120,6 @@ namespace SpatialLLM.Core
 }
 
 
-       
-
 
         public FurnitureData GetFurnitureData()
         {
@@ -162,36 +131,6 @@ namespace SpatialLLM.Core
             return furniture_type.Equals(this.furnitureData.GetFurnitureTypeInString());
         }
 
-    public Vector3 GetBoundingBoxDimentions_Vector()
-    {
-        // 子オブジェクトも含めた全Rendererコンポーネントを取得
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-
-        // Rendererが見つからなければ、サイズはゼロとする
-        if (renderers.Length == 0)
-        {
-            return Vector3.zero;
-        }
-
-        // 最初のRendererのboundsを初期値とする
-        Bounds combinedBounds = renderers[0].bounds;
-
-        // 残りのRendererのboundsを統合する
-        for (int i = 1; i < renderers.Length; i++)
-        {
-            combinedBounds.Encapsulate(renderers[i].bounds);
-        }
-
-        // combinedBounds.sizeには、幅(x)、高さ(y)、奥行き(z)が格納される
-        return combinedBounds.size;
-    }
-
-    public FurnitureShape GetBoundingBoxDimentions()
-    {
-        Vector3 boundingBox = this.GetBoundingBoxDimentions_Vector();
-    
-        return new FurnitureShape(boundingBox.x, boundingBox.y, boundingBox.z); 
-    }
 
 
     }

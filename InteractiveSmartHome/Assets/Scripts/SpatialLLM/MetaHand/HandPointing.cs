@@ -12,6 +12,9 @@ using SpatialLLM.Type;
 using UnityEngine;
 using static SpatialLLM.Network.NetworkDataType;
 
+
+
+
 public class HandPointing : MonoBehaviour
 {
     [SerializeField] OVRHand rightHand; 

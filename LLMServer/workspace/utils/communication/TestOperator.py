@@ -7,7 +7,7 @@ import httpx
 class TestOperator(DeviceOperator):
     def __init__(self):
         
-        self.request_url = os.getenv("XR_SERVER_API") + "/device/operate"
+        self.request_url = os.getenv("XR_SERVER_API") + "/operate"
         print(self.request_url)
 
     def send_operate_request(self, devices):
