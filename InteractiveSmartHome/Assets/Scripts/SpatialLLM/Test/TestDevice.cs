@@ -77,7 +77,7 @@ namespace SpatialLLM.Core{
             renderer = this.GetComponent<Renderer>();
 
             MRMqttController.Instance.OnConnectionCompleted += () => {
-            MRMqttController.Instance.SubscribeDeviceTopic(this.dbDeviceData.device_name, this.dbDeviceData.mqtt_topic,  OnReceiveMsgFromServer);
+            MRMqttController.Instance.SubscribeDeviceTopic(this.dbDeviceData.device_name, this.dbDeviceData.product_topic,  OnReceiveMsgFromServer);
             };
         }
 

@@ -22,7 +22,6 @@ testOperator = TestOperator()
 @tool
 def operateDevice(   devices: List[DeviceControlData]) -> str:
     """
-    COLOR MUUUUUSSSSTT BE INCLUDED
     This function operates devices based on provided control data.
     Example input:
     [

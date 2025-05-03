@@ -23,8 +23,11 @@ class TestOperator(DeviceOperator):
             print("Failed to Operate Devices.")
 
         return output
+    
+
 
 
 if __name__ == "__main__":
     test = TestOperator()
     test.send_operate_request([{"id": "test_curtain_id", "state": True, "intensity": 100}])
+    

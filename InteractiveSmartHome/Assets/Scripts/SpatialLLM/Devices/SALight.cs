@@ -59,7 +59,7 @@ public class SALight : SADevice
 
         if(isDebug)return;
         MRMqttController.Instance.OnConnectionCompleted += () => {
-        MRMqttController.Instance.SubscribeDeviceTopic(this.deviceData.device_name, this.deviceData.mqtt_topic,  OnReceiveMsgFromServer);
+        MRMqttController.Instance.SubscribeDeviceTopic(this.deviceData.device_name, this.deviceData.product_topic,  OnReceiveMsgFromServer);
         };
         }
 

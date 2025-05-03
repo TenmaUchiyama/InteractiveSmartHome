@@ -171,12 +171,7 @@ def getDeviceAroundFurniture(
              "range" : 5 if range is None else range,
         }
         print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
-<<<<<<< HEAD
-        response = httpx.post(f"{base_url}/furniture/get", json=request_body)
-        output = {}
-=======
         response = httpx.post(f"{base_url}/around_furniture", json=request_body)
->>>>>>> 1bc836a9da806b4f10ab8613f7735ae8dd36c185
         if response.status_code == 200:
             response_data = response.json()
             output.setdefault("param", {})
