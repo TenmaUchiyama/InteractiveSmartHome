@@ -5,11 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Newtonsoft.Json;
 using static SpatialLLM.Network.NetworkDataType;
-<<<<<<< HEAD
-=======
-using Oculus.Interaction.Samples;
-using JetBrains.Annotations;
->>>>>>> stack
 
 
 namespace SpatialLLM.Core
@@ -18,31 +13,10 @@ namespace SpatialLLM.Core
     {
         TABLE,
         TV,
+        SHELF
 
     }
 
-<<<<<<< HEAD
-=======
-
-    [Serializable]
-    public class FurnitureShape 
-    {
-        public float width {get; set;}
-        public float height {get; set;}
-        public float depth {get; set;}
-
-
-        public FurnitureShape(float x, float y, float z)
-        {
-            width = x;
-            height = y;
-            depth = z;
-        }
-
-
-    }
-
->>>>>>> stack
     [Serializable]
     public class FurnitureData
     {
@@ -54,17 +28,8 @@ namespace SpatialLLM.Core
         public FurnitureType FurnitureType { get; private set; }
 
         public Position position; 
-<<<<<<< HEAD
         
         public float distance_from_user;
-=======
-
-        public FurnitureShape furnitureShape;
-        
-        public float distance_from_user;
-        
-
->>>>>>> stack
 
         public FurnitureData(string id, string name, FurnitureType furnitureType)
         {
@@ -113,45 +78,48 @@ namespace SpatialLLM.Core
 
         void Awake()
         {
-<<<<<<< HEAD
             furnitureData = new FurnitureData(Guid.NewGuid().ToString(), this.gameObject.name, furnitureType);
-=======
-
-    
-            furnitureData = new FurnitureData(Guid.NewGuid().ToString(), this.gameObject.name, furnitureType);
-        
->>>>>>> stack
 
         }
 
         void Start()
         {
             Debug.Log($"<color=yellow>Furniture Data: {furnitureData.ToStringRepresentation()}, Json: {furnitureData.ToJson()}</color>");
-<<<<<<< HEAD
-=======
-            furnitureData.furnitureShape = this.GetBoundingBoxDimentions(); 
->>>>>>> stack
         }
 
         void Update()
         {
         
         }
-        public FurnitureData GetFurniturePositionalRelativeToUser(Transform referenceCamera = null)
-        {
-            Transform camTransfrom = referenceCamera != null ? referenceCamera : Camera.main.transform; 
+     public FurnitureData GetFurniturePositionalRelativeToUser(Transform referenceCamera = null)
+{
 
-            Vector3 relativePosition = camTransfrom.InverseTransformPoint(this.transform.position);
-            this.furnitureData.position = new Position(new Vector3(relativePosition.x, relativePosition.y, relativePosition.z));
-            this.furnitureData.distance_from_user = Vector3.Distance(transform.position, camTransfrom.position);
-            return this.furnitureData;
-        }
+    Debug.Log("<color=green>=========================================================================================</color>");
+    Transform camTransform = referenceCamera != null ? referenceCamera : Camera.main.transform;
 
-<<<<<<< HEAD
-=======
-       
 
->>>>>>> stack
+    Vector3 toFurniture = camTransform.position - this.transform.position;
+
+    
+    Vector3 userRight = camTransform.right;     
+    Vector3 userUp = camTransform.up;          
+    Vector3 userForward = camTransform.forward;
+
+
+    float relativeX = Vector3.Dot(toFurniture, userRight);    
+    float relativeY = Vector3.Dot(toFurniture, userUp);      
+    float relativeZ = Vector3.Dot(toFurniture, userForward);   
+
+    Vector3 relativePos = new Vector3(relativeX, relativeY, relativeZ);
+
+
+    this.furnitureData.position = new Position(relativePos);
+    this.furnitureData.distance_from_user = Vector3.Distance(transform.position, camTransform.position);
+
+    return this.furnitureData;
+}
+
+
 
         public FurnitureData GetFurnitureData()
         {
@@ -160,42 +128,9 @@ namespace SpatialLLM.Core
 
         public bool CompareFurnitureType(string furniture_type)
         {
-            return furniture_type.Equals(this.furnitureData.GetFurnitureTypeInString()) || furniture_type == "";
+            return furniture_type.Equals(this.furnitureData.GetFurnitureTypeInString());
         }
 
-<<<<<<< HEAD
-=======
-    public Vector3 GetBoundingBoxDimentions_Vector()
-    {
-        // 子オブジェクトも含めた全Rendererコンポーネントを取得
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-
-        // Rendererが見つからなければ、サイズはゼロとする
-        if (renderers.Length == 0)
-        {
-            return Vector3.zero;
-        }
-
-        // 最初のRendererのboundsを初期値とする
-        Bounds combinedBounds = renderers[0].bounds;
-
-        // 残りのRendererのboundsを統合する
-        for (int i = 1; i < renderers.Length; i++)
-        {
-            combinedBounds.Encapsulate(renderers[i].bounds);
-        }
-
-        // combinedBounds.sizeには、幅(x)、高さ(y)、奥行き(z)が格納される
-        return combinedBounds.size;
-    }
-
-    public FurnitureShape GetBoundingBoxDimentions()
-    {
-        Vector3 boundingBox = this.GetBoundingBoxDimentions_Vector();
-    
-        return new FurnitureShape(boundingBox.x, boundingBox.y, boundingBox.z); 
-    }
->>>>>>> stack
 
 
     }

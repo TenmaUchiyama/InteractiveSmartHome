@@ -6,19 +6,6 @@ using SpatialLLM.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
-<<<<<<< HEAD
-
-
-namespace SpatialLLM.Experiment{
-public class PointerSystemExecutor : SystemExecutor
-    {
-        [SerializeField] private RayInteractor rayInteractor;
-        [SerializeField ]private HandPointing pointing;
-
-        private bool isMovable = false;
-    
-
-=======
 namespace SpatialLLM.Experiment
 {
     public class PointerSystemExecutor : SystemExecutor
@@ -27,7 +14,8 @@ namespace SpatialLLM.Experiment
         [SerializeField] private HandPointing pointing;
 
         private bool isMovable = false;
->>>>>>> stack
+    
+
 
         private void DisablePointing() 
         {
@@ -45,10 +33,6 @@ namespace SpatialLLM.Experiment
         {
             // Pointer 用は最初に rayInteractor を非アクティブにしておく
             DisablePointing();
-<<<<<<< HEAD
-            this.isPointing = true;
-=======
->>>>>>> stack
             base.Start();
         }
 
@@ -60,56 +44,6 @@ namespace SpatialLLM.Experiment
 
         public override void CompleteOperation()
         {
-<<<<<<< HEAD
-             DisablePointing();
-            base.CompleteOperation();
-        }
-
-
-        public void PointSystemDone()
-        {
-            this.isPointing = false; 
-            this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
-
-        }
-
-
-
-
-
-
-        void Update()
-        {
-
-            base.Update();
-                if( OVRInput.GetDown(OVRInput.RawButton.Y))
-                {
-
-
-
-                    if(isMovable)
-                    {
-                        this.CompleteOperation(); 
-                        
-                        saUIManager.ClearRecognizedWord();
-                        isOperationDone = true;
-                        
-                    }
-                }
-
-
-
-                if(OVRInput.GetDown(OVRInput.RawButton.X))
-                {
-                    isMovable = true; 
-
-                     this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
-                }
-
-        }
-    }
-}
-=======
             DisablePointing();
             base.CompleteOperation();
         }
@@ -119,7 +53,16 @@ namespace SpatialLLM.Experiment
             this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
         }
 
+<<<<<<< HEAD
          protected override void Update()
+=======
+
+
+
+
+
+        void Update()
+>>>>>>> parent of 1510e9d (new)
         {
             if (!isStarted) return;
 
@@ -138,8 +81,20 @@ namespace SpatialLLM.Experiment
                     this.CompleteOperation(); 
                     saUIManager.ClearRecognizedWord();
                 }
+<<<<<<< HEAD
             }
+=======
+
+
+
+                if(OVRInput.GetDown(OVRInput.RawButton.X))
+                {
+                    isMovable = true; 
+
+                     this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
+                }
+
+>>>>>>> parent of 1510e9d (new)
         }
     }
 }
->>>>>>> stack

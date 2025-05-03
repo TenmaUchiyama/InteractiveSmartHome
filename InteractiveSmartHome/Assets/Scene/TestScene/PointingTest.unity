@@ -10999,10 +10999,6 @@ MonoBehaviour:
   minSegmentDistance: 0.01
   linePrefab: {fileID: 1503363369}
   selectableTag: Selectable
-  cam: {fileID: 0}
-  currentLine: {fileID: 0}
-  worldPoints: []
-  previousLine: {fileID: 0}
 --- !u!120 &1503363369
 LineRenderer:
   serializedVersion: 2
@@ -11119,22 +11115,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selector: {fileID: 458598118}
-  selectorColor:
-    r: 1
-    g: 0
-    b: 0
-    a: 0
+  selectorColor: {r: 1, g: 0, b: 0, a: 0}
   drawDistance: 1
   minSegmentDistance: 0.01
   linePrefab: {fileID: 1503363369}
   surfaceMaterial: {fileID: 0}
-  currentLine: {fileID: 0}
-  previousLine: {fileID: 0}
-  previousSurface: {fileID: 0}
-  drawPoints: []
-  cam: {fileID: 0}
-  allDevices: []
-  selectionStarted: 0
   selectableTag: Selectable
   beamMaxDistance: 10
 --- !u!1 &1513227621
@@ -12937,7 +12922,6 @@ MonoBehaviour:
   drawerOffset: {fileID: 458598118}
   laserLength: 1000
   lineRenderer: {fileID: 0}
-  laserTipCylinder: {fileID: 0}
 --- !u!4 &1770705644
 Transform:
   m_ObjectHideFlags: 0

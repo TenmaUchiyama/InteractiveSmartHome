@@ -39,35 +39,12 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     [SerializeField] private int port = 8800;
     [SerializeField] SADeviceRef saDeviceRef; 
     [SerializeField] private LLMQueryMode queryMode = LLMQueryMode.Spatial;
-<<<<<<< HEAD
     // [SerializeField] private ExperimentManager experimentManager;
-=======
-    [SerializeField] private ExperimentManager experimentManager;
->>>>>>> stack
     [SerializeField] private ExperimentalDataManager experimentalDataManager;
 
     [SerializeField] public bool speechRequired = true;
 
     [SerializeField] private string debugText = "";
-<<<<<<< HEAD
-
-    [SerializeField] private bool isUserStudy;
-
-
-
-    public UnityEvent<string> OnReceiveResponseFromLLM;
-    private Dictionary<LLMQueryMode, string> queryModeUrl = new Dictionary<LLMQueryMode, string>(){
-    {LLMQueryMode.Spatial, "llm_agent"},
-    {LLMQueryMode.Pointing, "pointing_agent"},
-    {LLMQueryMode.Label, "label_agent"},
-    
-    {LLMQueryMode.Multiple_Select, "multiple_select_agent"},
-    {LLMQueryMode.Multiple_Select_Pointing, "multiple_select_agent"},
-
-};
-
-=======
->>>>>>> stack
 
     [SerializeField] private bool isUserStudy;
 
@@ -85,18 +62,11 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 };
 
 
-
-
-    
-    public void SendQueryForDebug(string text)
-    {
-
-        text = debugText == "" ? text : debugText; 
-        OnVoiceRecognized(text); 
+    private void Start() {
+        if(speechRequired) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
     }
 
 
-<<<<<<< HEAD
 
     
     public void SendQueryForDebug(string text)
@@ -110,11 +80,6 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     private async void OnVoiceRecognized(string recognizedText)
     {
 
-=======
-    private async void OnVoiceRecognized(string recognizedText)
-    {
-
->>>>>>> stack
         if(isUserStudy)
         {
 
@@ -122,17 +87,19 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         switch(queryMode)
         {
             case LLMQueryMode.Spatial:
+              
 
-                var sendingData = new {
 <<<<<<< HEAD
+                Debug.Log("DEVICE ID: " +experimentManager.GetCurrentTaskId() );
+                await SendQuery(recognizedText, experimentManager.GetCurrentTaskId());
+=======
+                var sendingData = new {
                     // taskId =  debugText == "" ?experimentManager.GetCurrentTaskId()  : "0",
                     taskId =  "0",
-=======
-                    taskId =  debugText == "" ? experimentManager.GetCurrentTaskId()  : "0",
->>>>>>> stack
                     user_message = recognizedText
                 }; 
                 await SendQuery(recognizedText);
+>>>>>>> parent of 1510e9d (new)
             break;
             case LLMQueryMode.Label:
                 List<SADevice> devices = saDeviceRef.GetAllDevices(); 
@@ -197,26 +164,22 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
   
 
- public async Task SendQuery(string sending_text)
+ public async Task SendQuery(string sending_text, string task_id = "test_id", string prompt_id = "0" )
     {
-        Debug.Log($"<color=yellow>Sending Query: {sending_text}</color>");
+        Debug.Log($"<color=yellow>Sending Query: {sending_text}, {task_id}</color>");
         string path = queryModeUrl[queryMode];
         string url = $"http://{host}:{port}/{path}";
 
-        var data = new  { llm_message = sending_text , task_id = "test_id" };
+        var data = new  { llm_message = sending_text , task_id =  task_id , prompt_id = prompt_id};
         string jsonData = JsonConvert.SerializeObject(data);
         _isRequesting = true;
 
 
-        // this.experimentManager.StartLLMResponse();
+        this.experimentManager.StartLLMResponse();
         await PostRequestAsync(url, jsonData);
-        // this.experimentManager.StopLLMResponse();
+        this.experimentManager.StopLLMResponse(sending_text);
         
-<<<<<<< HEAD
-        _isRequesting = false;
-=======
     _isRequesting = false;
->>>>>>> stack
     }
 
     // POSTリクエストを送信するコルーチン

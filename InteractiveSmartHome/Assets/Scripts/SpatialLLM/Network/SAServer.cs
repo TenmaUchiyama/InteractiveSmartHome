@@ -97,6 +97,16 @@ public class SAServer : HttpServer
             await context.Respond(200, "Hello from Quest 3");
         });
 
+
+
+        Get("/device/all-device", async (context) => {
+
+            List<DeviceSpatialData> deviceSpatialDatas = SADeviceRef.Instance.GetAllDevices().Select(d => d.GetDevicePositionalData()).ToList();    
+            string sendingData = JsonConvert.SerializeObject(deviceSpatialDatas);
+            await context.Respond(200, sendingData);
+        });
+
+
         Post("/device/fov", async (context) => {
             try {
                 FOVRequest data = await context.ReadBodyAsJsonAsync<FOVRequest>();
@@ -158,10 +168,6 @@ public class SAServer : HttpServer
                     message = "Operate Data Successfully"
                 };
                 var jsonData = JsonConvert.SerializeObject(sending);
-<<<<<<< HEAD
-                Debug.Log($"<color=yellow>Operate Data Successfully {jsonData}</color>");
-=======
->>>>>>> stack
                 await context.Respond(200, jsonData);
             } catch (Exception ex) {
                 Debug.LogError($"Error processing /operate request: {ex.Message}");
@@ -176,29 +182,27 @@ public class SAServer : HttpServer
                 Debug.Log(data);
 
 <<<<<<< HEAD
-                List<DeviceSpatialData> directionResult = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(data.furnitureType, data.range ?? 0f);
-                string sendingDirectionData = this.SendingDeviceData(directionResult);
-=======
                 SAFurniture saFurniture = SpatialAwarnessProvider.Instance.FindFurnitureByType(data.furnitureType);
                 
-                List<DeviceSpatialData> devices = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(saFurniture, data.range ?? 0f);
+                List<DeviceSpatialDataForFurniture> devices = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(saFurniture, data.range ?? 0f);
                 Debug.Log($"<color=yellow>Count {devices.Count}</color>");
-
-                FurnitureData furnitureData = saFurniture.GetFurniturePositionalRelativeToUser(); 
-                
+      
 
                 var sending = new
                 {
                     status = "success",
                     devices = devices,
-                    furniture_data = furnitureData
+                 
                 };
                 
                 var sendingDirectionData = JsonConvert.SerializeObject(sending);
 
 
                 Debug.Log($"<color=yellow>Responding Data {sendingDirectionData}</color>");
->>>>>>> stack
+=======
+                List<DeviceSpatialData> directionResult = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(data.furnitureType, data.range ?? 0f);
+                string sendingDirectionData = this.SendingDeviceData(directionResult);
+>>>>>>> parent of 1510e9d (new)
                 await context.Respond(200, sendingDirectionData);
             } catch (Exception ex) {
                 Debug.LogError($"Error processing /furniture/get request: {ex.Message}");
@@ -249,7 +253,7 @@ public class SAServer : HttpServer
 
                 GetDeviceAroundFurnitureReq furnitureData = await context.ReadBodyAsJsonAsync<GetDeviceAroundFurnitureReq>();
                 Debug.Log($"<color=yellow>sending: {furnitureData} </color>"); 
-                List<DeviceSpatialData> devicePositionalDatas = SpatialAwarnessProvider.Instance.GetDevicesAroundFurniture(furnitureData.id, furnitureData.order, furnitureData.range ?? 0f);
+                List<DeviceSpatialDataForFurniture> devicePositionalDatas = SpatialAwarnessProvider.Instance.GetDevicesAroundFurniture(furnitureData.id, furnitureData.order, furnitureData.range ?? 0f);
                 Debug.Log($"<color=yellow>[SAServer] {devicePositionalDatas}</color>");
 
                 string sendingDeviceData = this.SendingDeviceData(devicePositionalDatas);
@@ -264,6 +268,18 @@ public class SAServer : HttpServer
     }
 
     private string  SendingDeviceData(List<DeviceSpatialData> devicePositionalDatas)
+    {
+        var sending = new
+        {
+            status = "success",
+            devices = devicePositionalDatas
+        };
+        
+        var jsonData = JsonConvert.SerializeObject(sending);
+        return jsonData;
+    }
+
+    private string  SendingDeviceData(List<DeviceSpatialDataForFurniture> devicePositionalDatas)
     {
         var sending = new
         {

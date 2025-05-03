@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using SpatialLLM.Device;
+using UnityEditor.Rendering;
 using UnityEngine;
 namespace SpatialLLM.Experiment
 {
@@ -12,15 +13,23 @@ namespace SpatialLLM.Experiment
 [Serializable]
 public class ExperimentTaskData
 {
-    public string user_name {get;set;}
+    public string user_name { get; set; }
     public string taskId { get; set; }
     public string taskName { get; set; }
     public string arrange_data_id { get; set; }
-    public float taskCompletionTime { get; set; }
-    public float llmResponseTime { get; set; }
-    public TaskScore taskScore { get; set; }
-    public LLMPerformanceTest llmPerformanceTest { get; set; }
-    
+
+    public List<TaskMetrics> metrics;
+}
+
+[Serializable]
+public class TaskMetrics
+{
+    public int id;  
+    public string prompt; 
+    public float taskCompletionTime;
+    public float llmResponseTime;
+    public TaskScore taskScore;
+    public LLMPerformanceTest llmPerformanceTest;
 }
 
 [Serializable]
@@ -80,6 +89,8 @@ public class ExperimentTask : MonoBehaviour
 {
     
     [SerializeField] private SAWebsocket saWebsocket; 
+
+    private ExperimentTaskData currentTaskData;
  
     private ExperimentalDataManager experimentalDataManager;
     
@@ -102,23 +113,40 @@ public class ExperimentTask : MonoBehaviour
 
     public ExperimentTaskData GetExperimentTaskData()
     {
-        ExperimentTaskData taskData = new ExperimentTaskData();
-        taskData.user_name = this.user_name;
-        taskData.taskId = this.currentTaskId;
-        taskData.taskCompletionTime = this.taskCompletionTime;
-        taskData.llmResponseTime = this.llmResponseTime;
-        taskData.taskScore = this.taskScore;
-        taskData.llmPerformanceTest = this.llmPerformanceTest;
-        taskData.arrange_data_id = this.deviceArrangeId;
-        return taskData;
+
+      
+        return currentTaskData;
+    }
+
+
+
+
+
+    public void AddCurrentQueryAttempt(string prompt, DeviceArrangeData currentArrange) 
+    {
+        Debug.Log("================ ADDING =================");
+        this.CalculateScores(currentArrange);
+        currentTaskData.metrics.Add(new TaskMetrics
+        {
+            id = currentTaskData.metrics.Count,
+            prompt = prompt,
+            taskCompletionTime = this.taskCompletionTime,
+            llmResponseTime = this.llmResponseTime,
+            taskScore = this.taskScore,
+            llmPerformanceTest = this.llmPerformanceTest
+        });
+        this.ClearAllData();
+
+
     }
     
     public void Initialize (DeviceArrangeData task)
     {
+        currentTaskData = new ExperimentTaskData();
         this.ClearAllData();
-        this.user_name=this.experimentalDataManager.GetUserName();
-        this.deviceArrangeId = task.device_arrange_id; 
-        this.currentTaskId = Guid.NewGuid().ToString();
+        currentTaskData.user_name=this.experimentalDataManager.GetUserName();
+        currentTaskData.arrange_data_id = task.device_arrange_id; 
+        currentTaskData.taskId = Guid.NewGuid().ToString();
     }
 
 
@@ -126,9 +154,6 @@ public class ExperimentTask : MonoBehaviour
     {   
 
         experimentalDataManager = GetComponent<ExperimentalDataManager>();
-
-
-
     }
 
 
@@ -163,19 +188,22 @@ private TaskScore taskScore = new TaskScore(){
 
     public void StartTaskTimer()
     {
-        isTaskTimerStarted = true;       
+        taskCompletionTime = 0;
+        isTaskTimerStarted = true;    
+
     }
 
 
     public void StopTaskTimer()
     {
         isTaskTimerStarted = false;
-
+        
     }
 
 
     public void StartLLMTimer()
     {
+        llmResponseTime = 0;
         isLLMTimerStarted = true;       
     }
 
@@ -222,7 +250,7 @@ private TaskScore taskScore = new TaskScore(){
             // オンにする必要がないのにオンになっている: False Positive
             taskScore.FP++;
         }
-        else // (!shouldBeOn && !isOn)
+        else if  (!shouldBeOn && !isOn)
         {
             // 正しくオフになっている: True Negative
             taskScore.TN++;
@@ -234,7 +262,10 @@ private TaskScore taskScore = new TaskScore(){
 }
 
 
-
+    public TaskMetrics GetTaskMetrics() 
+    {
+        return this.currentTaskData.metrics[-1];
+    }
 
     public void ClearAllData() 
     {

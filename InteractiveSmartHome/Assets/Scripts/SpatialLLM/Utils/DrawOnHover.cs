@@ -61,7 +61,7 @@ public class DrawOnHover : MonoBehaviour
         Debug.Log("<color=red>Hovered</color>");
 
         // Hover時の色を設定
-  
+        
         DrawHover();
     }
 
@@ -198,4 +198,33 @@ public class DrawOnHover : MonoBehaviour
 
       
     }
+
+
+
+
+    private void OnTriggerEnter(Collider other)
+{
+    // 相手がプレイヤーの手や指定タグだった場合などに反応
+
+        Debug.Log("<color=cyan>Trigger Enter (Hover)</color>");
+        DrawHover();
+
+}
+
+private void OnTriggerExit(Collider other)
+{
+  
+        Debug.Log("<color=cyan>Trigger Exit (Unhover)</color>");
+        if (!saDevice.IsDeviceSelected())
+        {
+            lineRenderer.enabled = false;
+        }
+        else
+        {
+            lineRenderer.startColor = selectedColor;
+        }
+}
+
+
+
 }

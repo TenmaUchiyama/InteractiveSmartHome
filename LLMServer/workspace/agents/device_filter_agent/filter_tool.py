@@ -13,7 +13,6 @@ base_url = os.getenv("XR_SERVER_API")
 
 @tool
 def getDeviceInFov(
-<<<<<<< HEAD
     isInFov: Annotated[bool, """- isInFov (bool): If True, returns devices that are within the user's line of sight. Default: True"""],
     order: Annotated[str, """- order (str): Sorting method for devices. Possible values: "proximity", "right", "high". Default: proximity"""],
     range: Annotated[float, """- range (float): Distance range (meters). Input 0.0 if specification is not required."""] 
@@ -21,15 +20,6 @@ def getDeviceInFov(
     """
     This function retrieves devices that are within the user's line of sight.
     return boolean value indicates whether the devices are successfully received in back side.
-=======
-    isInFov: Annotated[bool, """True if retrieving devices currently visible to the user. Default: True"""],
-    order: Annotated[str, """Sorting order of the devices. Options: 'proximity' (closest first), 'right' (from left to right), 'high' (from lowest to highest). Default: 'proximity'"""],
-    range: Annotated[float, """Optional distance range in meters. Use 0.0 if not specifying a limit."""] 
-) -> Dict:
-    """
-    Retrieves devices currently within the user's visible area.
-    Use when the instruction involves visual terms (e.g., "devices I can see", "the nearest device", "rightmost one", "leftmost").
->>>>>>> stack
     """
     
     try:
@@ -44,11 +34,7 @@ def getDeviceInFov(
             request_body["range"] = range
 
         # print(f"Sending POST request to {base_url}/fov with body: {request_body}")
-<<<<<<< HEAD
         response = httpx.post(f"{base_url}/fov", json=request_body)
-=======
-        response = httpx.post(f"{base_url}/device/fov", json=request_body)
->>>>>>> stack
         print("Received Devices")
 
         if response.status_code == 200:
@@ -81,6 +67,10 @@ def getDeviceInFov(
 @tool
 def getDeviceInDirection(
 <<<<<<< HEAD
+    direction: Annotated[str, """Direction relative to the user's body. Must be one of: 'Front', 'Back', 'Left', 'Right' ,'Up' ,'Down'."""],
+    order: Annotated[str, """Sorting order of devices. Options: 'proximity' (closest first), 'right' (from left to right), 'high' (from lowest to highest). Default: 'proximity'"""],
+    range: Annotated[float, """Optional distance range in meters. Use 0.0 if not specifying a limit."""] 
+=======
     direction: Annotated[str, """
     - direction (str): The direction to search for devices. Possible values are:
           - "Front" (devices in front of the user)
@@ -90,21 +80,13 @@ def getDeviceInDirection(
     """],
     order: Annotated[str, """- order (str): Sorting method for devices. Possible values: "proximity", "right", "high". Default: proximity"""],
     range: Annotated[float, """- range (float): Distance range (meters). Input None if specification is not required."""] 
+>>>>>>> parent of 1510e9d (new)
 ) -> Dict:
 
     """
     This function retrieves devices based on the user's direction and order.
 
     return boolean value indicates whether the devices are successfully received in backside.
-=======
-    direction: Annotated[str, """Direction relative to the user's body. Must be one of: 'Front', 'Back', 'Left', 'Right'."""],
-    order: Annotated[str, """Sorting order of devices. Options: 'proximity' (closest first), 'right' (from left to right), 'high' (from lowest to highest). Default: 'proximity'"""],
-    range: Annotated[float, """Optional distance range in meters. Use 0.0 if not specifying a limit."""] 
-) -> Dict:
-    """
-    Retrieves devices based on a clear body-relative direction.
-    Use when the user explicitly references a direction relative to their body (e.g., "behind me", "to my left", "on my right").
->>>>>>> stack
     """
 
 
@@ -116,12 +98,12 @@ def getDeviceInDirection(
     
     try:
 <<<<<<< HEAD
-        print(f"Sending POST request to {base_url}/direction with body: {request_body}")
-        response = httpx.post(f"{base_url}/direction", json=request_body)
-=======
         print(f"Sending POST request to {base_url}/device/direction with body: {request_body}")
         response = httpx.post(f"{base_url}/device/direction", json=request_body)
->>>>>>> stack
+=======
+        print(f"Sending POST request to {base_url}/direction with body: {request_body}")
+        response = httpx.post(f"{base_url}/direction", json=request_body)
+>>>>>>> parent of 1510e9d (new)
         
         if response.status_code == 200:
             response_data = response.json()
@@ -148,21 +130,12 @@ def getDeviceInDirection(
 
 @tool
 def getDevices(
-<<<<<<< HEAD
         order: Annotated[str, """- order (str): Sorting method for devices. Possible values: "proximity", "right", "high". Default: proximity"""],
         range: Annotated[float, """- range (float): Distance range (meters). Input None if specification is not required."""] 
 ) -> Dict:
     """
     This function retrieves devices based on the user's retrieved direction.
     return boolean value indicates whether the devices are successfully received.
-=======
-    order: Annotated[str, """Sorting order of devices. Options: 'proximity' (closest first), 'right' (from left to right), 'high' (from lowest to highest). Default: 'proximity'"""],
-    range: Annotated[float, """Optional distance range in meters. Use 0.0 if not specifying a limit."""] 
-) -> Dict:
-    """
-    Retrieves all available devices without any spatial constraints.
-    Use for general commands without spatial conditions (e.g., "all lights", "everything", "around me").
->>>>>>> stack
     """
     try:
         # print()
@@ -178,11 +151,7 @@ def getDevices(
             request_body["range"] = range
         
         # print(f"Sending POST request to {base_url}/all with body: {request_body}")
-<<<<<<< HEAD
         response = httpx.post(f"{base_url}/all", json=request_body)
-=======
-        response = httpx.post(f"{base_url}/device/all", json=request_body)
->>>>>>> stack
         
         if response.status_code == 200:
             response_data = response.json()
@@ -209,6 +178,13 @@ def getDevices(
 @tool
 def getDeviceAroundFurniture(
 <<<<<<< HEAD
+    furniture_type: Annotated[str, """Type of furniture serving as the reference point. Must be 'TV',  'TABLE' or 'SHELF'."""],
+    range: Annotated[float, """Optional distance range around the furniture in meters. Default is 4 meters if not specified."""]
+) -> Dict:
+    """
+    Retrieves devices around specified furniture items.
+    Use when the user's instruction explicitly refers to furniture (e.g., "near the TV", "on the table", "around the shelf").
+=======
     furniture_type: Annotated[str, """- furniture_type (str): Type of furniture. Allowed values: "TV", "Table"."""],
     range: Annotated[float, """- range (float): Distance range (meters). Input None if specification is not required."""],
 ) -> Dict:
@@ -216,6 +192,7 @@ def getDeviceAroundFurniture(
     Retrieves devices around specified furniture types.
     Device coordinates are based on the relative positions between the specified furniture and the user's viewpoint.
 
+>>>>>>> parent of 1510e9d (new)
     """
     try:
         request_body = {
@@ -223,44 +200,22 @@ def getDeviceAroundFurniture(
              "range" : 5 if range is None else range,
         }
         print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
-        response = httpx.post(f"{base_url}/around_furniture", json=request_body)
+        response = httpx.post(f"{base_url}/furniture/get", json=request_body)
         if response.status_code == 200:
             response_data = response.json()
             response_data.setdefault("param", {})
             if response_data.get("status") == "success":
-                response_data["param"]["filter_type"] = "around_furniture"
-                response_data["param"]["furniture_type"] = furniture_type
-                return response_data
-=======
-    furniture_type: Annotated[str, """Type of furniture serving as the reference point. Must be 'TV' or 'TABLE'."""],
-    range: Annotated[float, """Optional distance range around the furniture in meters. Default is 5 meters if not specified."""]
-) -> Dict:
-    """
-    Retrieves devices around specified furniture items.
-    Use when the user's instruction explicitly refers to furniture (e.g., "near the TV", "on the table", "around the table").
-    """
-    try:
-        request_body = {
-            "furnitureType": furniture_type,
-             "range" : 5 if range is None else range,
-        }
-        print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
 <<<<<<< HEAD
-        response = httpx.post(f"{base_url}/furniture/get", json=request_body)
-        output = {}
-=======
-        response = httpx.post(f"{base_url}/around_furniture", json=request_body)
->>>>>>> 1bc836a9da806b4f10ab8613f7735ae8dd36c185
-        if response.status_code == 200:
-            response_data = response.json()
-            output.setdefault("param", {})
-            if response_data.get("status") == "success":
                 output["param"]["filter_type"] = "around_furniture"
                 output["status"] = response_data.get('status')
                 output["devices"] = response_data.get("devices")
-                output["param"]["furniture_data"] = response_data["furniture_data"]
+               
                 return output
->>>>>>> stack
+=======
+                response_data["param"]["filter_type"] = "around_furniture"
+                response_data["param"]["furniture_type"] = furniture_type
+                return response_data
+>>>>>>> parent of 1510e9d (new)
             else:
                 return {"status": "error", "message": "Server responded with an error", "details": response_data}
         else:
@@ -271,6 +226,5 @@ def getDeviceAroundFurniture(
 
 
 
-if "__main__" == __name__:
-    print(getDeviceInFov.invoke({"isInFov": True, "order": "proximity", "range": 0.0}))
+
 

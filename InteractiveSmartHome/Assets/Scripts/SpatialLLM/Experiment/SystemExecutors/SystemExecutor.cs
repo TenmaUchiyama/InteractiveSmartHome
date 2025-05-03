@@ -126,6 +126,10 @@ public class SystemExecutor : MonoBehaviour
             saUIManager.SetInstructionText("Press Trigger to Record");
 =======
 using Cysharp.Threading.Tasks;
+<<<<<<< HEAD
+=======
+using SpatialLLM.Core;
+>>>>>>> parent of 1510e9d (new)
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -136,6 +140,7 @@ namespace SpatialLLM.Experiment
         [SerializeField] protected SAUIManager saUIManager;
         [SerializeField] protected ExperimentManager experimentManager;
 
+<<<<<<< HEAD
         protected bool isStarted = false;
         protected UniTaskCompletionSource<bool> completionSource;
 
@@ -145,6 +150,115 @@ namespace SpatialLLM.Experiment
         public virtual void BeginOperation()
         {
             onBeginOperation?.Invoke();
+=======
+    [SerializeField] protected SAUIManager saUIManager; 
+    [SerializeField] protected ExperimentManager experimentManager;
+    private UniTaskCompletionSource<bool> completionSource;
+
+
+    protected bool isTriggarable =true;
+
+    protected bool isRecording = false;
+
+
+    protected bool isPointing = false;
+
+    private bool isStarted = false;
+    public UnityEvent onBeginOperation;
+    public UnityEvent onCompleteOperation;
+
+
+        protected virtual void Start()  
+        {
+            if(SASpeechRecognizer.Instance) SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+        }
+
+        void OnDestroy()
+        {
+            if(SASpeechRecognizer.Instance) SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
+        }
+
+        private void OnVoiceRecognized(string recognizedText)
+        {
+            saUIManager.SetRecognizedTxt(recognizedText);
+
+            if(!saUIManager.IsRecognizedWordEmplty())
+            {
+                saUIManager.SetInstructionText("Press Y to confirm");
+            }
+            
+        }
+
+
+        protected bool isOperationDone = false;
+        public virtual void Update()
+        {
+            //For Debug
+            // if(Input.GetKeyDown(KeyCode.Escape))
+            // {
+            //     CompleteOperation();
+            // }
+             if( OVRInput.GetDown(OVRInput.RawButton.Y))
+                { 
+                    
+                    
+                if(isOperationDone)    
+                {
+                    this.CompleteOperation();
+                    isOperationDone = false;
+                    saUIManager.ClearRecognizedWord();
+                    return;
+                }
+
+
+
+
+                if(!saUIManager.IsRecognizedWordEmplty())
+                {
+                    if(isPointing) return;
+                    experimentManager.DisplayCurrentOperation();
+                    isOperationDone = true;
+                }
+
+                
+                    
+                }
+           
+
+            if(!isStarted) return;
+
+
+              if(Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
+              {
+                experimentManager.BackToShowDevice();
+              }
+
+
+              if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+                {
+                    if(!isTriggarable)return ;
+                
+                    Debug.Log("[ControllerInput] Pressed");
+                    isRecording = true;
+                    SASpeechRecognizer.Instance.ActivateVoice();
+             
+                }
+
+
+                if(OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+                {
+                    if(!isTriggarable) return ;
+                    Debug.Log("[ControllerInput] Released");
+                    isRecording = false;
+                    SASpeechRecognizer.Instance.DeactivateVoice();
+               
+                }
+        }
+
+
+        public virtual void BeginOperation(){
+            onBeginOperation.Invoke();
+>>>>>>> parent of 1510e9d (new)
             isStarted = true;
             saUIManager.SetInstructionText("Press Trigger to Record");
             Debug.Log("Operation Begun");
