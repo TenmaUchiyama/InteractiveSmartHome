@@ -45,7 +45,7 @@ public class SADeviceRef : Singleton<SADeviceRef>
     {
         SADevice foundDevice = saDevices.Find(device => { 
             
-            Debug.Log($"<color=red>Device ID: {device.GetDBDeviceData().device_id}, Compared_to: {id}</color>");
+            
             return device.GetDBDeviceData().device_id == id;});
 
         return foundDevice; 

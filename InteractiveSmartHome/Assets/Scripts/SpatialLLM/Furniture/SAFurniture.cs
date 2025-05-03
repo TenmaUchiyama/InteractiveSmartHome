@@ -15,6 +15,7 @@ namespace SpatialLLM.Core
     {
         TABLE,
         TV,
+        SHELF
 
     }
 
@@ -119,15 +120,34 @@ namespace SpatialLLM.Core
         {
         
         }
-        public FurnitureData GetFurniturePositionalRelativeToUser(Transform referenceCamera = null)
-        {
-            Transform camTransfrom = referenceCamera != null ? referenceCamera : Camera.main.transform; 
+     public FurnitureData GetFurniturePositionalRelativeToUser(Transform referenceCamera = null)
+{
 
-            Vector3 relativePosition = camTransfrom.InverseTransformPoint(this.transform.position);
-            this.furnitureData.position = new Position(new Vector3(relativePosition.x, relativePosition.y, relativePosition.z));
-            this.furnitureData.distance_from_user = Vector3.Distance(transform.position, camTransfrom.position);
-            return this.furnitureData;
-        }
+    Debug.Log("<color=green>=========================================================================================</color>");
+    Transform camTransform = referenceCamera != null ? referenceCamera : Camera.main.transform;
+
+
+    Vector3 toFurniture = camTransform.position - this.transform.position;
+
+    
+    Vector3 userRight = camTransform.right;     
+    Vector3 userUp = camTransform.up;          
+    Vector3 userForward = camTransform.forward;
+
+
+    float relativeX = Vector3.Dot(toFurniture, userRight);    
+    float relativeY = Vector3.Dot(toFurniture, userUp);      
+    float relativeZ = Vector3.Dot(toFurniture, userForward);   
+
+    Vector3 relativePos = new Vector3(relativeX, relativeY, relativeZ);
+
+
+    this.furnitureData.position = new Position(relativePos);
+    this.furnitureData.distance_from_user = Vector3.Distance(transform.position, camTransform.position);
+
+    return this.furnitureData;
+}
+
 
        
 
@@ -139,7 +159,7 @@ namespace SpatialLLM.Core
 
         public bool CompareFurnitureType(string furniture_type)
         {
-            return furniture_type.Equals(this.furnitureData.GetFurnitureTypeInString()) || furniture_type == "";
+            return furniture_type.Equals(this.furnitureData.GetFurnitureTypeInString());
         }
 
     public Vector3 GetBoundingBoxDimentions_Vector()

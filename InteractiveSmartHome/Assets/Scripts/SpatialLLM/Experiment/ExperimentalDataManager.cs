@@ -38,6 +38,8 @@ public class ExperimentalDataManager : MonoBehaviour
 
     public async Task WriteExperimentalDataAsync(ExperimentTask experimentalTask)
     {
+
+        Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Writing!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         ExperimentTaskData taskData = experimentalTask.GetExperimentTaskData(); 
 
         string serialized = JsonConvert.SerializeObject(taskData, Formatting.Indented);
@@ -46,6 +48,7 @@ public class ExperimentalDataManager : MonoBehaviour
 
         if(!Directory.Exists(Path.Combine(Application.dataPath, "EXPERIMENT", user_name)))
         {
+             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Creating!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             Directory.CreateDirectory(Path.Combine(Application.dataPath, "EXPERIMENT", user_name));
         }  
 

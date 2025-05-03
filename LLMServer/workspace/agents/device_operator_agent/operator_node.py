@@ -3,7 +3,7 @@ from langchain_core.messages import ToolMessage
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage, SystemMessage
-from agents.device_operator_agent.prompts.operator_tool import operateDevice
+from agents.device_operator_agent.operator_tool import operateDevice
 import os
 from sr_app_types.node_types import NODE
 from utils.callbacks import CustomCallbackHandler

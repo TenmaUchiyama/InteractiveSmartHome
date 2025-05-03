@@ -34,6 +34,7 @@ public class ExperimentManager : MonoBehaviour
 
     [SerializeField] private SAUIManager saUIManager;
 
+    [SerializeField] private int SEED;
     
     private ExperimentalDataManager experimentalDataManager;
     private ExperimentTask experimentTask;
@@ -77,7 +78,18 @@ public class ExperimentManager : MonoBehaviour
 
         
         Debug.Log("[INIT] Press Space to Init");
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        await UniTask.WaitUntil(() => {
+            
+            
+             if(Input.GetKeyDown(KeyCode.Space))
+             {
+                Debug.Log("Space Pressed"); 
+                return true;
+             }
+             return false;
+             });
+
+
         TransitionToState(ExperimentFlowState.START_TASK);
     }
 
@@ -153,21 +165,22 @@ private async UniTask Operation()
         
 
         this.ClearDeviceVisual();
-        this.experimentTask.CalculateScores(this.currentArrange);
+   
 
         currentArrangeIndex++; 
 
         if(currentArrangeIndex >= this.arrangeDataList.Count)
         {
             DebugLogging("$<color=yellow>All Process Done!</color>"); 
+            this.saUIManager.ClearUI();
+            this.saUIManager.SetInstructionText("All Tasks Done!");
+
             return; 
         }
         await this.experimentalDataManager.WriteExperimentalDataAsync(this.experimentTask);
         this.experimentTask.ClearAllData();
 
         TransitionToState(ExperimentFlowState.START_TASK);
-
-
     }
 
 
@@ -175,12 +188,12 @@ private async UniTask Operation()
     public void StartLLMResponse() 
     {
         this.experimentTask.StartLLMTimer(); 
-
     }
 
-    public void  StopLLMResponse()
+    public void  StopLLMResponse(string prompt)
     {
         this.experimentTask.StopLLMTimer();
+        this.experimentTask.AddCurrentQueryAttempt(prompt, this.currentArrange);
     }
 
     public void BackToShowDevice() 
@@ -267,8 +280,22 @@ private async UniTask Operation()
     {
         Debug.Log($"{arrangementGenerator.ReadTaskData().Count}");
        arrangeDataList = arrangementGenerator.ReadTaskData();
+       Shuffle(arrangeDataList, SEED);
        
     }
+
+
+    private void Shuffle<T>(List<T> list, int seed)
+{
+    System.Random rng = new System.Random(seed);
+    int n = list.Count;
+    while (n > 1)
+    {
+        n--;
+        int k = rng.Next(n + 1);
+        (list[k], list[n]) = (list[n], list[k]);
+    }
+}
 
     
      private async void TransitionToState(ExperimentFlowState nextState)
@@ -294,6 +321,7 @@ private async UniTask Operation()
     
     public string GetCurrentTaskId()
     {
+       
         return this.currentArrange.device_arrange_id; 
     }
 }

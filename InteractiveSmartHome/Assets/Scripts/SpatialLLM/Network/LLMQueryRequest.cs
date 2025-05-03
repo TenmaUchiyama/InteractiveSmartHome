@@ -83,12 +83,10 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
         switch(queryMode)
         {
             case LLMQueryMode.Spatial:
+              
 
-                var sendingData = new {
-                    taskId =  debugText == "" ? experimentManager.GetCurrentTaskId()  : "0",
-                    user_message = recognizedText
-                }; 
-                await SendQuery(recognizedText);
+                Debug.Log("DEVICE ID: " +experimentManager.GetCurrentTaskId() );
+                await SendQuery(recognizedText, experimentManager.GetCurrentTaskId());
             break;
             case LLMQueryMode.Label:
                 List<SADevice> devices = saDeviceRef.GetAllDevices(); 
@@ -153,20 +151,20 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
 
   
 
- public async Task SendQuery(string sending_text)
+ public async Task SendQuery(string sending_text, string task_id = "test_id", string prompt_id = "0" )
     {
-        Debug.Log($"<color=yellow>Sending Query: {sending_text}</color>");
+        Debug.Log($"<color=yellow>Sending Query: {sending_text}, {task_id}</color>");
         string path = queryModeUrl[queryMode];
         string url = $"http://{host}:{port}/{path}";
 
-        var data = new  { llm_message = sending_text , task_id = "test_id" };
+        var data = new  { llm_message = sending_text , task_id =  task_id , prompt_id = prompt_id};
         string jsonData = JsonConvert.SerializeObject(data);
         _isRequesting = true;
 
 
-        // this.experimentManager.StartLLMResponse();
+        this.experimentManager.StartLLMResponse();
         await PostRequestAsync(url, jsonData);
-        // this.experimentManager.StopLLMResponse();
+        this.experimentManager.StopLLMResponse(sending_text);
         
     _isRequesting = false;
     }

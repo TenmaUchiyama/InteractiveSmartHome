@@ -37,7 +37,40 @@ public static class NetworkDataType
             this.name = name;
             this.position = new Position(position);
             this.distance_from_user = distance_from_user;
-      
+        }
+   
+
+    }
+
+
+
+    [Serializable]
+  public class DeviceSpatialDataForFurniture
+    {
+        public string id;
+        public string name; 
+    
+     
+        public Position position; 
+        public float distance_from_furniture;
+
+
+
+        public DeviceSpatialDataForFurniture(string id , string name, Vector3 position, float distance_from_furniture, float angle = 0)
+        {
+            this.id = id;
+            this.name = name;
+            this.position = new Position(position);
+            this.distance_from_furniture = distance_from_furniture;
+        }
+
+
+        public DeviceSpatialDataForFurniture(DeviceSpatialData deviceSpatial, float distance_from_furniture)
+        {
+            this.id = deviceSpatial.id;
+            this.name = deviceSpatial.name;
+            this.position = deviceSpatial.position;
+            this.distance_from_furniture = distance_from_furniture;
         }
    
 

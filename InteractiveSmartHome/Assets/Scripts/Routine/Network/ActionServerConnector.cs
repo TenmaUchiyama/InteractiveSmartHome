@@ -210,6 +210,14 @@ public async Task AddDevices(List<DBDeviceData> deviceData)
     string resutl = await PostRequest(deviceUrl, jsonDevice);
 }
 
+public async Task AddDevices(string deviceData)
+{
+ 
+    string deviceUrl = this.deviceUrl + "/add";
+
+    string resutl = await PostRequest(deviceUrl, deviceData);
+}
+
 #endregion
 
 
@@ -323,6 +331,11 @@ public async Task DeleteAllDevices()
 
 
 #endregion
+
+
+
+
+
 
 
 #region Requesters

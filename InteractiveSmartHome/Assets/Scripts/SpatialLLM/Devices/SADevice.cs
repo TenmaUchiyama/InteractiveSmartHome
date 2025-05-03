@@ -54,7 +54,7 @@ namespace SpatialLLM.Device
          
             if(this.spatialData ==null)
             {
-                Debug.LogError("まじできもすぎる");
+              
                 return null;
             }
          
@@ -66,6 +66,26 @@ namespace SpatialLLM.Device
             );
 
             return spatialData;
+        }
+
+
+        public DeviceSpatialDataForFurniture GenerateDeviceSpatialDataForFurniture(Vector3 relativePos,float distance)
+        {
+             
+            if(this.spatialData ==null)
+            {
+              
+                return null;
+            }
+         
+            DeviceSpatialDataForFurniture spatialDataForFurniture = new DeviceSpatialDataForFurniture(
+                this.spatialData.id,
+                this.spatialData.name,
+                relativePos,
+              distance
+            );
+
+            return spatialDataForFurniture;
         }
 
         public DeviceSpatialData GetDevicePositionalRelativeToUser(Transform referenceCamera = null)

@@ -135,7 +135,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
                         case "recorded": 
                             string userInput = saUIManager.GetRecognizedWord(); 
                             saUIManager.DisplaySendingLLM(userInput);
-                            if(!LLMQueryRequest.Instance.IsRequesting) await LLMQueryRequest.Instance.SendQuery(userInput); 
+                            if(!LLMQueryRequest.Instance.IsRequesting) await LLMQueryRequest.Instance.SendQuery(userInput, experimentManager.GetCurrentTaskId()); 
 
                         break; 
                         case "received": 

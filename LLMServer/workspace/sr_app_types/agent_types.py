@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict
+from typing import Annotated, List, Optional, Dict
 from langchain_core.messages import BaseMessage, HumanMessage
 from enum import Enum
+
+from EXPERIMENT.task_manager import ExperimentTaskResultManager
 
 
 @dataclass
@@ -22,6 +24,7 @@ class State:
     filterAgent : FilterAgentType = field(default_factory = FilterAgentType)
     spatialAgent: AgentHistory = field(default_factory = AgentHistory)
     operatorAgent: AgentHistory = field(default_factory = AgentHistory)
+    logger: ExperimentTaskResultManager = None 
 
 class AGENT(Enum): 
     DEVICE_FILTER = "filterAgent"
