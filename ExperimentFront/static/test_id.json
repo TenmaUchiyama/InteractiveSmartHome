@@ -1,0 +1,149 @@
+[
+  {
+    "task_id": "test_id",
+    "node": "filter_agent_node",
+    "type": "agent",
+    "agent_output_type": "tool_call",
+    "input": "ええと 、目の前の真ん中の電気つけて",
+    "output": "",
+    "timestamp": "2025-04-14T18:56:53.919124"
+  },
+  {
+    "task_id": "test_id",
+    "node": "getDeviceInFov",
+    "type": "tool",
+    "agent_output_type": "ToolMessage",
+    "input": {
+      "isInFov": true,
+      "order": "proximity",
+      "range": 0.0
+    },
+    "output": {
+      "status": "success",
+      "devices": [
+        {
+          "id": "d9560ceb-71e5-4f9f-b8fe-80074dd793f0",
+          "name": "植物ライト３",
+          "position": {
+            "x": -0.0320224464,
+            "y": -0.301062942,
+            "z": 2.19819164
+          },
+          "distance_from_user": 2.21894336
+        },
+        {
+          "id": "12b2bd2a-83a8-4318-ab2b-7885fd98c220",
+          "name": "フロアライト２",
+          "position": {
+            "x": 0.9678655,
+            "y": -0.292460442,
+            "z": 2.2104516
+          },
+          "distance_from_user": 2.43071842
+        },
+        {
+          "id": "3c37583d-a3fc-4228-ac00-c6df72242350",
+          "name": "フロアライト１",
+          "position": {
+            "x": -1.03191042,
+            "y": -0.309665322,
+            "z": 2.18593168
+          },
+          "distance_from_user": 2.4370122
+        },
+        {
+          "id": "d393d4e5-c436-49cc-97a9-2b165d377f78",
+          "name": "テーブルライト1",
+          "position": {
+            "x": -1.52988327,
+            "y": 2.34788561,
+            "z": 4.31123447
+          },
+          "distance_from_user": 5.141969
+        },
+        {
+          "id": "121daa46-6628-4b2d-909f-f541aafeee1f",
+          "name": "テーブルライト2",
+          "position": {
+            "x": 1.74874914,
+            "y": 2.37609315,
+            "z": 4.351435
+          },
+          "distance_from_user": 5.25727272
+        }
+      ],
+      "param": {
+        "filter_type": "fov",
+        "isInFov": true,
+        "order": "proximity"
+      }
+    },
+    "timestamp": "2025-04-14T18:56:54.367813"
+  },
+  {
+    "task_id": "test_id",
+    "node": "filter_agent_node",
+    "type": "agent",
+    "agent_output_type": "AIMessage",
+    "input": "Successfully Get the All Device Data. You can safully finish tool calling. [{'id': 'd9560ceb-71e5-4f9f-b8fe-80074dd793f0', 'name': '植物ライト３', 'position': {'x': -0.0320224464, 'y': -0.301062942, 'z': 2.19819164}, 'distance_from_user': 2.21894336}, {'id': '12b2bd2a-83a8-4318-ab2b-7885fd98c220', 'name': 'フロアライト２', 'position': {'x': 0.9678655, 'y': -0.292460442, 'z': 2.2104516}, 'distance_from_user': 2.43071842}, {'id': '3c37583d-a3fc-4228-ac00-c6df72242350', 'name': 'フロアライト１', 'position': {'x': -1.03191042, 'y': -0.309665322, 'z': 2.18593168}, 'distance_from_user': 2.4370122}, {'id': 'd393d4e5-c436-49cc-97a9-2b165d377f78', 'name': 'テーブルライト1', 'position': {'x': -1.52988327, 'y': 2.34788561, 'z': 4.31123447}, 'distance_from_user': 5.141969}, {'id': '121daa46-6628-4b2d-909f-f541aafeee1f', 'name': 'テーブルライト2', 'position': {'x': 1.74874914, 'y': 2.37609315, 'z': 4.351435}, 'distance_from_user': 5.25727272}]",
+    "output": "```json\n{\n  \"tool_used\": \"getDeviceInFov\",\n  \"memo\": \"The instruction uses viewpoint-based terms like 'middle' and 'in front of me', so getDeviceInFov was used.\"\n}\n```\n\nThe devices currently visible to you are:\n\n1. 植物ライト３\n2. フロアライト２\n3. フロアライト１\n4. テーブルライト1\n5. テーブルライト2\n\nPlease specify which one you would like to turn on, as there are multiple lights in your field of view.",
+    "timestamp": "2025-04-14T18:56:56.943618"
+  },
+  {
+    "task_id": "test_id",
+    "node": "filter_postprocess_node",
+    "type": "postprocess",
+    "agent_output_type": "parsed_json",
+    "input": "```json\n{\n  \"tool_used\": \"getDeviceInFov\",\n  \"memo\": \"The instruction uses viewpoint-based terms like 'middle' and 'in front of me', so getDeviceInFov was used.\"\n}\n```\n\nThe devices currently visible to you are:\n\n1. 植物ライト３\n2. フロアライト２\n3. フロアライト１\n4. テーブルライト1\n5. テーブルライト2\n\nPlease specify which one you would like to turn on, as there are multiple lights in your field of view.",
+    "output": {
+      "tool_used": "getDeviceInFov",
+      "memo": "The instruction uses viewpoint-based terms like 'middle' and 'in front of me', so getDeviceInFov was used.",
+      "params": {
+        "filter_type": "fov",
+        "isInFov": true,
+        "order": "proximity"
+      }
+    },
+    "timestamp": "2025-04-14T18:56:56.956143"
+  },
+  {
+    "task_id": "test_id",
+    "node": "sr_agent_node",
+    "type": "agent",
+    "agent_output_type": "tool_call",
+    "input": "\n    User Input: ええと 、目の前の真ん中の電気つけて\n    InputFromDeviceFilterAgent: {'tool_used': 'getDeviceInFov', 'memo': \"The instruction uses viewpoint-based terms like 'middle' and 'in front of me', so getDeviceInFov was used.\", 'params': {'filter_type': 'fov', 'isInFov': True, 'order': 'proximity'}}\n    Devices: [{'id': 'd9560ceb-71e5-4f9f-b8fe-80074dd793f0', 'name': '植物ライト３', 'position': {'x': -0.0320224464, 'y': -0.301062942, 'z': 2.19819164}, 'distance_from_user': 2.21894336}, {'id': '12b2bd2a-83a8-4318-ab2b-7885fd98c220', 'name': 'フロアライト２', 'position': {'x': 0.9678655, 'y': -0.292460442, 'z': 2.2104516}, 'distance_from_user': 2.43071842}, {'id': '3c37583d-a3fc-4228-ac00-c6df72242350', 'name': 'フロアライト１', 'position': {'x': -1.03191042, 'y': -0.309665322, 'z': 2.18593168}, 'distance_from_user': 2.4370122}, {'id': 'd393d4e5-c436-49cc-97a9-2b165d377f78', 'name': 'テーブルライト1', 'position': {'x': -1.52988327, 'y': 2.34788561, 'z': 4.31123447}, 'distance_from_user': 5.141969}, {'id': '121daa46-6628-4b2d-909f-f541aafeee1f', 'name': 'テーブルライト2', 'position': {'x': 1.74874914, 'y': 2.37609315, 'z': 4.351435}, 'distance_from_user': 5.25727272}]\n    ",
+    "output": "",
+    "timestamp": "2025-04-14T18:57:00.637855"
+  },
+  {
+    "task_id": "test_id",
+    "node": "operateDevice",
+    "type": "tool",
+    "agent_output_type": "ToolMessage",
+    "input": {
+      "devices": [
+        {
+          "id": "d9560ceb-71e5-4f9f-b8fe-80074dd793f0",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ]
+    },
+    "output": "RESULT: [Status] 200\n[Message] Operate Data Successfully",
+    "timestamp": "2025-04-14T18:57:00.979311"
+  },
+  {
+    "task_id": "test_id",
+    "node": "sr_postprocess_node",
+    "type": "postprocess",
+    "agent_output_type": "parsed_text",
+    "input": "RESULT: [Status] 200\n[Message] Operate Data Successfully",
+    "output": "RESULT: [Status] 200\n[Message] Operate Data Successfully",
+    "timestamp": "2025-04-14T18:57:00.980838"
+  }
+]

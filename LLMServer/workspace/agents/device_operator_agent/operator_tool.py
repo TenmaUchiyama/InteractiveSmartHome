@@ -23,23 +23,6 @@ testOperator = TestOperator()
 def operateDevice(   devices: List[DeviceControlData]) -> str:
     """
     This function operates devices based on provided control data.
-    Example input:
-    [
-        {
-            "id": "test_light_id",
-            "state": true,
-            "intensity": 100,
-            "color": {"r": 255, "g": 255, "b": 255}  # default is white
-        },
-         {
-            "id": "test_curtain_id",
-            "state": true,
-            "intensity": 100,
-            "color": {"r": 255, "g": 255, "b": 255}
-        }
-    ]
-
-
     **For curtain, 0 = open, 100 = close    
     """
 
@@ -50,6 +33,7 @@ def operateDevice(   devices: List[DeviceControlData]) -> str:
         print("=====================[OPERATOR TOOL] operateDevice=====================")
         # デバイスデータを取得
         convert_data =  [device.dict() for device in devices]
+        
         response = testOperator.send_operate_request(convert_data)
         print("RESPONSE: ", response)
         return  f"RESULT: {response}"

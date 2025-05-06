@@ -10,6 +10,7 @@ class NODE(Enum):
     SR_PREPROCESS = "sr_preprocess_node"
     SR_AGENT = "sr_agent_node"
     SR_POSTPROCESS = "sr_postprocess_node"
+    SR_TOOL="sr_tool_node"
 
     OPERATOR_PREPROCESS = "operator_preprocess_node"
     OPERATOR_AGENT = "operator_agent_node"

@@ -59,7 +59,6 @@ Input and output JSON data includes:
 - **name**: Human-readable device name.
 - **position (x, y, z)**: Device coordinates in a 3D space.
 - **distance_from_user**: Euclidean distance from the user.
-- **angle**: Angular position relative to the user.
 
 ---
 
