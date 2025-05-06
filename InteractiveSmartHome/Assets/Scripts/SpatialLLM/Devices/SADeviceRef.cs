@@ -23,15 +23,6 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
     void Update()
     {
-<<<<<<< HEAD
-        // if(Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     foreach(SADevice device in saDevices)
-        //     {
-        //         device.TurnOff();
-        //     }
-        // }
-=======
         if(Input.GetKeyDown(KeyCode.O))
         {
             foreach(SADevice device in saDevices)
@@ -39,7 +30,6 @@ public class SADeviceRef : Singleton<SADeviceRef>
                 device.TurnOff();
             }
         }
->>>>>>> stack
     }
 
 

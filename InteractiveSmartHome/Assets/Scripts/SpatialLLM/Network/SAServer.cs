@@ -181,28 +181,8 @@ public class SAServer : HttpServer
                 Debug.Log("Received Furniture"); 
                 Debug.Log(data);
 
-<<<<<<< HEAD
-                SAFurniture saFurniture = SpatialAwarnessProvider.Instance.FindFurnitureByType(data.furnitureType);
-                
-                List<DeviceSpatialDataForFurniture> devices = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(saFurniture, data.range ?? 0f);
-                Debug.Log($"<color=yellow>Count {devices.Count}</color>");
-      
-
-                var sending = new
-                {
-                    status = "success",
-                    devices = devices,
-                 
-                };
-                
-                var sendingDirectionData = JsonConvert.SerializeObject(sending);
-
-
-                Debug.Log($"<color=yellow>Responding Data {sendingDirectionData}</color>");
-=======
                 List<DeviceSpatialData> directionResult = SpatialAwarnessProvider.Instance.GetDeviceByFurnitureType(data.furnitureType, data.range ?? 0f);
                 string sendingDirectionData = this.SendingDeviceData(directionResult);
->>>>>>> parent of 1510e9d (new)
                 await context.Respond(200, sendingDirectionData);
             } catch (Exception ex) {
                 Debug.LogError($"Error processing /furniture/get request: {ex.Message}");
@@ -253,7 +233,7 @@ public class SAServer : HttpServer
 
                 GetDeviceAroundFurnitureReq furnitureData = await context.ReadBodyAsJsonAsync<GetDeviceAroundFurnitureReq>();
                 Debug.Log($"<color=yellow>sending: {furnitureData} </color>"); 
-                List<DeviceSpatialDataForFurniture> devicePositionalDatas = SpatialAwarnessProvider.Instance.GetDevicesAroundFurniture(furnitureData.id, furnitureData.order, furnitureData.range ?? 0f);
+                List<DeviceSpatialData> devicePositionalDatas = SpatialAwarnessProvider.Instance.GetDevicesAroundFurniture(furnitureData.id, furnitureData.order, furnitureData.range ?? 0f);
                 Debug.Log($"<color=yellow>[SAServer] {devicePositionalDatas}</color>");
 
                 string sendingDeviceData = this.SendingDeviceData(devicePositionalDatas);

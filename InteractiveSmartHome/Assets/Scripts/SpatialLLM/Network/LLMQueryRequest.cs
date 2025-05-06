@@ -39,7 +39,7 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
     [SerializeField] private int port = 8800;
     [SerializeField] SADeviceRef saDeviceRef; 
     [SerializeField] private LLMQueryMode queryMode = LLMQueryMode.Spatial;
-    // [SerializeField] private ExperimentManager experimentManager;
+    [SerializeField] private ExperimentManager experimentManager;
     [SerializeField] private ExperimentalDataManager experimentalDataManager;
 
     [SerializeField] public bool speechRequired = true;
@@ -89,17 +89,12 @@ public class LLMQueryRequest : Singleton<LLMQueryRequest>
             case LLMQueryMode.Spatial:
               
 
-<<<<<<< HEAD
-                Debug.Log("DEVICE ID: " +experimentManager.GetCurrentTaskId() );
-                await SendQuery(recognizedText, experimentManager.GetCurrentTaskId());
-=======
                 var sendingData = new {
                     // taskId =  debugText == "" ?experimentManager.GetCurrentTaskId()  : "0",
                     taskId =  "0",
                     user_message = recognizedText
                 }; 
                 await SendQuery(recognizedText);
->>>>>>> parent of 1510e9d (new)
             break;
             case LLMQueryMode.Label:
                 List<SADevice> devices = saDeviceRef.GetAllDevices(); 

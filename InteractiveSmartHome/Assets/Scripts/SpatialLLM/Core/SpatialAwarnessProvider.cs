@@ -22,8 +22,8 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     [SerializeField] private Transform userCameraTransform;
     // [SerializeField] private Camera frustalCamera; // 使用するカメラ
 
-    public const float verticalFOV = 60f;
-    public const float horizontalFOV = 90f;
+    public const float verticalFOV = 96f;
+    public const float horizontalFOV = 106f;
 
 
 
@@ -448,23 +448,6 @@ private List<DeviceSpatialData> FilterDeviceData (List<DeviceSpatialData> device
 
     return devicePositionData;
 }
-
-
-private List<DeviceSpatialDataForFurniture> FilterDeviceData (List<DeviceSpatialDataForFurniture> devicePositionData, string order, float range)
-{
-    if (range <= 0)
-    {
-        range = float.MaxValue;
-    }
-    // Filter based on range and convert the result to a List
-    devicePositionData = devicePositionData
-        .Where(device => device.distance_from_furniture < range)
-        .ToList();
-
-    devicePositionData = SortDevices(devicePositionData, order);
-
-    return devicePositionData;
-}
 public List<FurnitureData> FilterFurnitureData(List<FurnitureData> data, string order, float range)
 {
     IEnumerable<FurnitureData> filteredData = data;
@@ -531,38 +514,6 @@ private List<DeviceSpatialData> SortDevices(List<DeviceSpatialData> devices, str
         default:
             // 距離の近い順（デフォルト）
             devices = devices.OrderBy(d => d.distance_from_user).ToList();
-            break;
-    }
-
-    return devices;
-}
-   
-
-   private List<DeviceSpatialDataForFurniture> SortDevices(List<DeviceSpatialDataForFurniture> devices, string order)
-{
-    // ソートロジック
-    switch (order.ToLower())
-    {
-        case "right":
-            // 右から左へ（x値が大きい順）
-            devices = devices.OrderByDescending(d => d.position.x).ToList();
-            break;
-        case "left":
-            // 左から右へ（x値が小さい順）
-            devices = devices.OrderBy(d => d.position.x).ToList();
-            break;
-        case "down":
-            // 高さの低い順（y値が小さい順）
-            devices = devices.OrderBy(d => d.position.y).ToList();
-            break;
-        case "high":
-            // 高さの高い順（y値が大きい順）
-            devices = devices.OrderByDescending(d => d.position.y).ToList();
-            break;
-        case "proximity":
-        default:
-            // 距離の近い順（デフォルト）
-            devices = devices.OrderBy(d => d.distance_from_furniture).ToList();
             break;
     }
 
@@ -678,43 +629,27 @@ public List<FurnitureData> GetFurnitureInFov(FOVFurnitureRequest furnitureReques
 
 
 
-<<<<<<< HEAD
-public List<DeviceSpatialDataForFurniture> GetDeviceByFurnitureType(SAFurniture saFurniture, float range = 0f)
+public List<DeviceSpatialData> GetDeviceByFurnitureType(string saFurnitureType, float range = 0f)
 {
 
 
- 
-    List<DeviceSpatialDataForFurniture> deviceDatas = GetDevicesAroundFurniture(saFurniture.GetFurnitureData().id, "proximity", range);
-=======
-public List<DeviceSpatialData> GetDeviceByFurnitureType(string furniture_type, float range = 0f)
-{
-    SAFurniture saFurniture = this.FindFurnitureByType(furniture_type);
-    if (saFurniture == null)
-    {
-        Debug.LogWarning("指定されたIDのFurnitureが見つかりません: " + furniture_type);
-        return new List<DeviceSpatialData>();
-    }
->>>>>>> parent of 1510e9d (new)
-
+    SAFurniture saFurniture  = this.FindFurnitureByType(saFurnitureType);
+    List<DeviceSpatialData> deviceDatas = this.GetDevicesAroundFurniture(saFurniture.GetFurnitureData().id, "proximity", range);
 
     if (deviceDatas == null || deviceDatas.Count == 0)
     {
-<<<<<<< HEAD
-        return new List<DeviceSpatialDataForFurniture>();
-=======
-        Debug.LogWarning("指定されたIDのFurnitureに関連するデバイスが見つかりません: " + furniture_type);
         return new List<DeviceSpatialData>();
->>>>>>> parent of 1510e9d (new)
     }
 
     return deviceDatas;
 }
 
-public List<DeviceSpatialDataForFurniture> GetDevicesAroundFurniture(string furnitureID, string order = "proximity", float range = 0f)
+public  List<DeviceSpatialData> GetDevicesAroundFurniture(string furnitureID, string order="proximity", float range = 0f)
 {
-    List<DeviceSpatialDataForFurniture> deviceRelativePositions = new List<DeviceSpatialDataForFurniture>();
+    List<DeviceSpatialData> deviceRelativePositions = new List<DeviceSpatialData>();
 
-    // 家具を取得
+    
+    // 指定したIDのFurnitureを取得
     SAFurniture targetFurniture = SAFurnitureRef.Instance.GetFurnitureByID(furnitureID);
     if (targetFurniture == null)
     {
@@ -722,48 +657,37 @@ public List<DeviceSpatialDataForFurniture> GetDevicesAroundFurniture(string furn
         return deviceRelativePositions;
     }
 
-    // 家具のワールド座標
-    Vector3 furniturePos = targetFurniture.transform.position;
+    // ユーザーのローカル座標系でのFurnitureの位置を取得
+    Vector3 furnitureLocalPos = userCameraTransform.InverseTransformPoint(targetFurniture.transform.position);
 
-    // ユーザーの位置から座標系を構築（向きではなく位置を基準に）
-    Vector3 diffToUser = furniturePos - userCameraTransform.position;
-    diffToUser.y = 0f;
-    Vector3 forward = diffToUser.normalized;
-    Vector3 right = Vector3.Cross(Vector3.up, forward).normalized;
-    Vector3 up = Vector3.up;
-
-    // 全SADeviceを取得し、各Deviceの家具基準のローカル座標を算出
+    // 全SADeviceを取得し、範囲内にあるものを調べる
     List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+    
     foreach (SADevice device in allDevices)
     {
-        float distance = Vector3.Distance(furniturePos, device.transform.position);
+        // Furnitureとdevice間の距離をワールド座標上で計算
+        float distance = Vector3.Distance(targetFurniture.transform.position, device.transform.position);
         if (range == 0 || distance <= range)
         {
-            // 家具を原点としたデバイスとの位置差分
-            Vector3 diff = device.transform.position - furniturePos;
+            // ユーザーのローカル座標系でのdeviceの位置を取得
+            Vector3 deviceLocalPos = userCameraTransform.InverseTransformPoint(device.transform.position);
+            // Furnitureを基準とした相対位置を算出
+            Vector3 relativePos = deviceLocalPos - furnitureLocalPos;
 
-            // 家具中心のローカル座標系に射影
-            float localX = Vector3.Dot(diff, right);
-            float localY = Vector3.Dot(diff, up);
-            float localZ = Vector3.Dot(diff, forward);
-            Vector3 localPos = new Vector3(localX, localY, localZ);
-
-            // ログで確認（オプション）
-            Debug.Log($"{device.name} 相対位置: X:{localX:F2} Y:{localY:F2} Z:{localZ:F2}");
-
-            // デバイス相対データ作成
-            DeviceSpatialDataForFurniture spatialData = device.GenerateDeviceSpatialDataForFurniture(localPos, distance);
-            if (spatialData != null)
-            {
-                deviceRelativePositions.Add(spatialData);
-            }
+            DeviceSpatialData deviceSpatialData = device.GenerateFurnitureRelativePositionData(relativePos);
+            deviceRelativePositions.Add(deviceSpatialData);
         }
     }
 
-    // フィルタリング処理
-    deviceRelativePositions = FilterDeviceData(deviceRelativePositions, order, range);
+
+    deviceRelativePositions = FilterDeviceData(deviceRelativePositions, order,range);
+
     return deviceRelativePositions;
 }
+
+
+
+
 
 
 public void TEST_FURNITURE() 
@@ -774,7 +698,9 @@ public void TEST_FURNITURE()
     // List<SADevice> devices = this.GetDevicesAroundFurniture(furniture[0].GetFurnitureData().id, 2f).Keys.ToList();
     // Debug.Log($"<color=red>Received Device: {devices[0].gameObject.name}</color>");
 }
-   
+
+
+
 
 
 }

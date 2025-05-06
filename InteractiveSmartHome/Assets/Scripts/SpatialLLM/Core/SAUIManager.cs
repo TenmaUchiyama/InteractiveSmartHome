@@ -91,7 +91,10 @@ public class SAUIManager : MonoBehaviour
     }
 
 
-
+    public string GetRecognizedWord() 
+    {
+        return userCommandText.text;
+    }
 
 
     // private void Update() {
