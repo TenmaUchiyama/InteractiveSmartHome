@@ -20796,7 +20796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e298a5b303f62f49a729de22bd5a31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  systemExecutor: {fileID: 925221669}
+  systemExecutor: {fileID: 0}
   experimentManager: {fileID: 1178553824}
 --- !u!4 &1012273685
 Transform:
@@ -23754,8 +23754,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentArrangeIndex: 0
-  systemExecutor: {fileID: 925221669}
+  systemExecutor: {fileID: 0}
   saUIManager: {fileID: 0}
+  SEED: 0
 --- !u!4 &1178553825
 Transform:
   m_ObjectHideFlags: 0
@@ -37885,6 +37886,7 @@ MonoBehaviour:
   port: 8800
   saDeviceRef: {fileID: 0}
   queryMode: 2
+  experimentManager: {fileID: 0}
   experimentalDataManager: {fileID: 0}
   speechRequired: 1
   debugText: Could you Please turn on Pendant Light number from 4 to 6
@@ -38984,7 +38986,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57fd2e69b123c7d4f858968c80417378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sAUIManager: {fileID: 0}
   OnVoiceRecogStart:
     m_PersistentCalls:
       m_Calls:
