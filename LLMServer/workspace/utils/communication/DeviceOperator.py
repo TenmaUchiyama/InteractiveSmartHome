@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from utils.Mqtt import MqttPublisher 
+from utils.communication.Mqtt import MQTTPublisher 
 import httpx
 import os
 import json
@@ -8,7 +8,7 @@ import json
 class DeviceOperator(ABC): 
 
     def __init__(self):
-        self.mqtt_publisher = MqttPublisher("localhost", 1883) 
+        self.mqtt_publisher = MQTTPublisher("localhost", 1883) 
         self.simulation_id = os.getenv("XR_SERVER_API") + "/device/operate"
         print(self.simulation_id)
         
@@ -64,7 +64,7 @@ class DeviceOperator(ABC):
                 payload = json.dumps(device)  # 辞書など別形式なら fallback
             self.mqtt_publisher.send_data(topic, payload)
 
-    def send_switchbot_request(self, devices: List[dict]):
+    def send_switchbot_request(self, devices: list[dict]):
         url = "https://api.switch-bot.com/v1.1/devices"
         headers = {
             "Authorization": self.switchbot_token,
