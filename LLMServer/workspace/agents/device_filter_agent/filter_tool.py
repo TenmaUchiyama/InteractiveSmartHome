@@ -34,7 +34,7 @@ def getDeviceInFov(
             request_body["range"] = range
 
         # print(f"Sending POST request to {base_url}/fov with body: {request_body}")
-        response = httpx.post(f"{base_url}/fov", json=request_body)
+        response = httpx.post(f"{base_url}/device/fov", json=request_body)
         print("Received Devices")
 
         if response.status_code == 200:
@@ -134,7 +134,7 @@ def getDevices(
             request_body["range"] = range
         
         # print(f"Sending POST request to {base_url}/all with body: {request_body}")
-        response = httpx.post(f"{base_url}/all", json=request_body)
+        response = httpx.post(f"{base_url}/device/all", json=request_body)
         
         if response.status_code == 200:
             response_data = response.json()

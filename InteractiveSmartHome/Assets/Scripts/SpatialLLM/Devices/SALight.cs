@@ -30,12 +30,12 @@ public class SALight : SADevice
             string id = Guid.NewGuid().ToString();
 
             this.deviceData = new DBDeviceData(
-                id,
-                this.gameObject.name,
-                SADeviceType.Light.ToString(),
-                "light",
-                "device/" + id,
-                this.transform.position
+                // id,
+                // this.gameObject.name,
+                // SADeviceType.Light.ToString(),
+                // "light",
+                // "device/" + id,
+                // this.transform.position
             );
 
             Debug.Log($"<color=green>Device data initialized for {this.gameObject.name}. ID: {this.deviceData.device_id}</color>");
@@ -59,7 +59,7 @@ public class SALight : SADevice
 
         if(isDebug)return;
         MRMqttController.Instance.OnConnectionCompleted += () => {
-        MRMqttController.Instance.SubscribeDeviceTopic(this.deviceData.device_name, this.deviceData.mqtt_topic,  OnReceiveMsgFromServer);
+        MRMqttController.Instance.SubscribeDeviceTopic(this.deviceData.device_name, this.deviceData.connector_topic,  OnReceiveMsgFromServer);
         };
         }
 

@@ -1,11 +1,15 @@
+import asyncio
 import time
 import requests
 import  time, uuid, hmac, hashlib, base64
+import httpx  # type: ignore
 
-class SwitchBotOperatorSecure:
+
+class SwitchBotOperator:
     def __init__(self, token: str, secret: str):
         self.token = token
         self.secret = secret
+        
 
     def _generate_headers(self):
         nonce = str(uuid.uuid4())  # UUID文字列でOK
@@ -25,23 +29,43 @@ class SwitchBotOperatorSecure:
             "sign": sign,
             "nonce": nonce
         }
+    
 
-    def send_command(self, device_id: str, command: str, parameter: str = "default", command_type: str = "command"):
+    async def send_command(self, client: httpx.AsyncClient, device_id: str, command: str, parameter="default"):
         url = f"https://api.switch-bot.com/v1.1/devices/{device_id}/commands"
-        body = {
-            "command": command,
-            "parameter": parameter,
-            "commandType": command_type
-        }
+        body = {"command": command, "parameter": parameter, "commandType": "command"}
         headers = self._generate_headers()
+        resp = await client.post(url, headers=headers, json=body)
+        print(f"[{command}] {device_id} => {resp.status_code}")
+        return resp
 
-        try:
-            response = requests.post(url, headers=headers, json=body)
-            print(f"[{command}] to {device_id} => {response.status_code}: {response.text}")
-            return response
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-            return None
+    async def send_switchbot_request(self, devices: list[dict]):
+        async with httpx.AsyncClient() as client:
+            tasks = []
+            for d in devices:
+                dev_id = d["connector_topic"]
+                # 電源
+                if "state" in d:
+                    cmd = "turnOn" if d["state"] else "turnOff"
+                    tasks.append(self.send_command(client, dev_id, cmd))
+                    if not d["state"]:
+                        continue
+                # 明るさ
+                if d.get("state") and "intensity" in d:
+                    tasks.append(self.send_command(client, dev_id, "setBrightness", str(d["intensity"])))
+                # 色
+                if d.get("state") and "color" in d:
+                    c = d["color"]
+                    rgb = f"{c['r']}:{c['g']}:{c['b']}"
+                    tasks.append(self.send_command(client, dev_id, "setColor", rgb))
+            # すべてを並列実行
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for r in results:
+                if isinstance(r, Exception):
+                    print(f"[ERROR] {r}")
+
+
+
 
     def get_device_list(self):
         url = "https://api.switch-bot.com/v1.1/devices"
@@ -62,56 +86,12 @@ class SwitchBotOperatorSecure:
 
 
 
-
-# class SwitchBotOperator():
-#     def __init__(self, token: str):
-#         self.token = token
-#         self.headers = {
-#             "Authorization": self.token,
-#             "Content-Type": "application/json; charset=utf8"
-#         }
-
-#     def send_command(self, device_id, command, parameter="default", command_type="command"):
-#         url = f"https://api.switch-bot.com/v1.0/devices/{device_id}/commands"
-#         body = {
-#             "command": command,
-#             "parameter": parameter,
-#             "commandType": command_type
-#         }
-#         response = requests.post(url, headers=self.headers, json=body)
-#         print(f"[{command}] to {device_id} => {response.status_code}: {response.text}")
-#         return response
-
-#     def send_operate_request(self, devices):
-#         for device in devices:
-#             device_id = device["id"]
-
-#             # ON/OFF
-#             if "state" in device:
-#                 command = "turnOn" if device["state"] else "turnOff"
-#                 self.send_command(device_id, command)
-#                 time.sleep(0.3)
-
-#             # 明るさ
-#             if "intensity" in device:
-#                 intensity = str(device["intensity"])
-#                 self.send_command(device_id, "setBrightness", intensity)
-#                 time.sleep(0.3)
-
-#             # 色変更
-#             if "color" in device:
-#                 color = device["color"]
-#                 rgb_str = f"{color['r']}:{color['g']}:{color['b']}"
-#                 self.send_command(device_id, "setColor", rgb_str)
-#                 time.sleep(0.3)
-
-
-
 if __name__ == '__main__':
     import os
     import dotenv
     dotenv.load_dotenv("../../../.env")
     secret = os.getenv("SB_SECRET")
     token = os.getenv('SB_TOKEN')
+    
 
     sb = SwitchBotOperatorSecure(token=token, secret=secret)

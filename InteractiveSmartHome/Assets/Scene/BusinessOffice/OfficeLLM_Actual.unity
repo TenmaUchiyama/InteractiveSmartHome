@@ -7645,7 +7645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3b62ebea00e9d449bcbcc2e3f8ea38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentPrefab: {fileID: 1914743778}
+  parentObject: {fileID: 1914743778}
 --- !u!1001 &324814593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21010,7 +21010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e298a5b303f62f49a729de22bd5a31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  systemExecutor: {fileID: 0}
+  systemExecutor: {fileID: 925221669}
   experimentManager: {fileID: 1178553824}
 --- !u!4 &1012273685
 Transform:
@@ -24326,6 +24326,7 @@ MonoBehaviour:
   currentArrangeIndex: 0
   systemExecutor: {fileID: 925221669}
   saUIManager: {fileID: 2208641716800745862}
+  SEED: 0
 --- !u!4 &1178553825
 Transform:
   m_ObjectHideFlags: 0
@@ -42545,7 +42546,15 @@ MonoBehaviour:
   resetHmdPoseOnRelease: 1
   resetHmdPoseByMiddleMouseButton: 1
   activateKeys: 3201000031010000
+  activateKeyBindings:
+  - <Keyboard>/leftCtrl
+  - <Keyboard>/rightCtrl
+  - <Keyboard>/f1
   pitchKeys: 3401000033010000
+  pitchKeyBindings:
+  - <Keyboard>/leftAlt
+  - <Keyboard>/rightAlt
+  - <Keyboard>/f2
 --- !u!114 &2115785929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42561,7 +42570,7 @@ MonoBehaviour:
   useRecommendedMSAALevel: 1
   _monoscopic: 0
   _sharpenType: 0
-  enableDynamicResolution: 0
+  _enableDynamicResolution: 0
   minDynamicResolutionScale: 1
   maxDynamicResolutionScale: 1
   quest2MinDynamicResolutionScale: 0.7
@@ -42668,7 +42677,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115785927}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0026945781, y: 0.01763311, z: -0.00089790585, w: 0.9998405}
+  m_LocalRotation: {x: -0.5071874, y: 0.0147143025, z: -0.009758185, w: 0.8616549}
   m_LocalPosition: {x: -3.6219997, y: 1.231, z: -7.4900002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -42676,7 +42685,7 @@ Transform:
   - {fileID: 1716007951}
   - {fileID: 1681560405}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: -60.898, y: 4.157, z: -3.742}
 --- !u!1 &2129635465
 GameObject:
   m_ObjectHideFlags: 0

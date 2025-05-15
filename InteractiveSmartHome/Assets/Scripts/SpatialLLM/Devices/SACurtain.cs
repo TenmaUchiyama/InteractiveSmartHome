@@ -37,12 +37,7 @@ public class SACurtain : SADevice
             string id = Guid.NewGuid().ToString();
 
             this.deviceData = new DBDeviceData(
-                id,
-                this.gameObject.name,
-                "curtain",
-                "This is a curtain device. You need this when you want to open or close the curtain. You can specify the value of the curtain by specifying the value. 0 is fully open, 100 is closed.",
-                "device/" + id,
-                this.transform.position
+                
             );
 
             this.spatialData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
@@ -55,7 +50,7 @@ public class SACurtain : SADevice
 
         this.currentOperatingData.intensity = (int)value;
          MRMqttController.Instance.OnConnectionCompleted += () => {
-            MRMqttController.Instance.SubscribeDeviceTopic(this.deviceData.device_name, this.deviceData.mqtt_topic,  OnReceiveMsgFromServer);
+            MRMqttController.Instance.SubscribeDeviceTopic(this.deviceData.device_name, this.deviceData.connector_topic,  OnReceiveMsgFromServer);
         };
     }
 

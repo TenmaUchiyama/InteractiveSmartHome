@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using SpatialLLM.Core;
+using SpatialLLM.Network;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +18,16 @@ public class SpatialAwarnessProviderHelper : Editor
         if (GUILayout.Button("TEST_FURNITURE"))
         {
             spatialAwarnessProvider.TEST_FURNITURE();
+        }
+
+
+        if (GUILayout.Button("TEST FOV DEVICE"))
+        {
+            FOVRequest request = new FOVRequest(); 
+            request.isInFov = true;
+            request.order = "proximity";
+
+            spatialAwarnessProvider.GetDeviceInFov("Light", request);
         }
     }
 }

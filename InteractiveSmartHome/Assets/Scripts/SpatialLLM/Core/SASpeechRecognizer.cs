@@ -130,6 +130,7 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
         {
             if (_isActive)
             {
+                
                 Deactivate();
             }
         }
@@ -169,8 +170,15 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
                 Debug.LogError("VoiceService is not assigned.");
                 return;
             }
+
+
+
+
+
+            Debug.Log("iwiojfoiwejfiojwejfiowjefoeo");
             if (!_deactivateAndAbort)
             {
+                  _voiceService.Deactivate();
                 if (_request != null)
                 {
                     _request.DeactivateAudio();

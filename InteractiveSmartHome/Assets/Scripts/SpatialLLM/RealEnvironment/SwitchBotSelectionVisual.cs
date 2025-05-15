@@ -1,0 +1,134 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SwitchBotSelectionVisual : MonoBehaviour
+{
+       public Color hoverColor = Color.white; // Hover時の色
+    public Color selectedColor = Color.green; // Select時の色
+    public float lineWidth = 0.01f; // 線の太さを設定
+
+    private LineRenderer lineRenderer;
+
+
+    void  OnEnable()
+    {
+        InitLineRenderer();
+    }
+
+
+
+    void Start()
+    {   
+
+        DrawBoundingBox();
+    }
+
+
+
+
+    public void SetLinePosition(bool world) 
+    {
+        lineRenderer.useWorldSpace = world;
+    }
+
+    private void InitLineRenderer()
+    {
+          // LineRendererコンポーネントを取得または追加
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // シェーダーを変更
+
+        lineRenderer.useWorldSpace = false;
+        lineRenderer.loop = false; // ループ設定を解除
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+
+        // 初期色を設定
+        lineRenderer.startColor = Color.blue;
+        lineRenderer.endColor = Color.blue;
+
+    }
+
+
+
+    public void ClearDrawing() 
+    {
+
+      
+        lineRenderer.enabled = false;
+    }
+
+
+    public void VisualizeTargetDevice(Color targetColor)
+    {
+        lineRenderer.startColor = targetColor;
+        lineRenderer.endColor = targetColor;
+        lineRenderer.enabled = true;
+        
+    }
+
+     public void DrawBoundingBox()
+    {
+       BoxCollider boxCollider = GetComponent<BoxCollider>();
+        if (boxCollider == null)
+        {
+            Debug.LogWarning("BoxCollider が見つかりません.");
+            return;
+        }
+
+        // BoxCollider の中心とサイズを取得
+        Vector3 center = boxCollider.center;
+        Vector3 size   = boxCollider.size;
+
+        // ローカル空間でのコーナー座標を計算
+        Vector3[] corners = new Vector3[8];
+        Transform t = transform;
+
+        corners[0] = center + new Vector3(-size.x, -size.y, -size.z) * 0.5f; // 左下前
+        corners[1] = center + new Vector3( size.x, -size.y, -size.z) * 0.5f; // 右下前
+        corners[2] = center + new Vector3( size.x,  size.y, -size.z) * 0.5f; // 右上前
+        corners[3] = center + new Vector3(-size.x,  size.y, -size.z) * 0.5f; // 左上前
+        corners[4] = center + new Vector3(-size.x, -size.y,  size.z) * 0.5f; // 左下後
+        corners[5] = center + new Vector3( size.x, -size.y,  size.z) * 0.5f; // 右下後
+        corners[6] = center + new Vector3( size.x,  size.y,  size.z) * 0.5f; // 右上後
+        corners[7] = center + new Vector3(-size.x,  size.y,  size.z) * 0.5f; // 左上後
+
+        // ワールド座標に変換
+        for (int i = 0; i < corners.Length; i++)
+        {
+            corners[i] = t.TransformPoint(corners[i]);
+        }
+
+        // ボックスを構成する12本のエッジ（始点・終点）をインデックスで定義
+        int[] edgeIndices = new int[]
+        {
+            // 前面(4本)
+            0, 1,  1, 2,  2, 3,  3, 0,
+            // 背面(4本)
+            4, 5,  5, 6,  6, 7,  7, 4,
+            // 垂直(4本)
+            0, 4,  1, 5,  2, 6,  3, 7
+        };
+
+        // 「辺」を一本ずつ [start, end, end] としてリストに追加
+        List<Vector3> linePointsList = new List<Vector3>();
+        for (int i = 0; i < edgeIndices.Length; i += 2)
+        {
+            Vector3 start = corners[edgeIndices[i]];
+            Vector3 end   = corners[edgeIndices[i + 1]];
+
+            // ダミー頂点で線を切る: [start, end, end]
+            linePointsList.Add(start);
+            linePointsList.Add(end);
+            linePointsList.Add(end); // 終点の重複
+        }
+
+        // LineRenderer へ反映
+        lineRenderer.positionCount = linePointsList.Count;
+        lineRenderer.SetPositions(linePointsList.ToArray());
+
+      
+    }
+
+
+}

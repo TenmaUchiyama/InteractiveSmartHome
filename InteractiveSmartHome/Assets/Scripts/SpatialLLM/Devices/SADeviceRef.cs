@@ -8,7 +8,7 @@ public class SADeviceRef : Singleton<SADeviceRef>
 {
 
 
-    [SerializeField] GameObject parentPrefab;
+    [SerializeField] GameObject parentObject;
     
     private List<SADevice> saDevices = new List<SADevice>();
 
@@ -17,7 +17,7 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
     void Start()
     {
-        saDevices = parentPrefab.GetComponentsInChildren<SADevice>(false).ToList(); 
+        saDevices = parentObject.GetComponentsInChildren<SADevice>(false).ToList(); 
     }
 
 
@@ -36,7 +36,7 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
     public List<SADevice> GetAllDevices()
     {
-        return saDevices;
+        return parentObject.GetComponentsInChildren<SADevice>(false).ToList(); 
     }
 
 
@@ -50,5 +50,25 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
         return foundDevice; 
     }
+
+
+    public void AddSADevice(SADevice saDevice)
+    {
+        saDevice.transform.SetParent(parentObject.transform, worldPositionStays: true);
+
+    }
+
+    public GameObject GetSADeviceParent() 
+    {
+        return this.parentObject;
+    }
+
+
+    public List<SADevice> GetAllDevicesRealTime()
+    {
+        return parentObject.GetComponentsInChildren<SADevice>(false).ToList(); ;
+    }
+
+
 
 }

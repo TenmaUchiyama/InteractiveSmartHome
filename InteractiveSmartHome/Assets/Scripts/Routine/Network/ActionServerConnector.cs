@@ -58,11 +58,11 @@ public class ActionServerConnector : MonoBehaviour
 #region Getters
 
 
-public async Task< List<DeviceData>> GetAllDevices()
+public async Task< List<DBDeviceData>> GetAllDevices()
 {
     string url = deviceUrl + "/get-all";
     string result = await GetRequest(url);
-    List<DeviceData> deviceDatas = JsonConvert.DeserializeObject< List<DeviceData>>(result);
+    List<DBDeviceData> deviceDatas = JsonConvert.DeserializeObject< List<DBDeviceData>>(result);
     return deviceDatas;
 }
 
@@ -210,6 +210,15 @@ public async Task AddDevices(List<DBDeviceData> deviceData)
     string resutl = await PostRequest(deviceUrl, jsonDevice);
 }
 
+
+public async Task AddDevice( DBDeviceData deviceData)
+{
+    string jsonDevice = JsonConvert.SerializeObject(deviceData,settings);
+    string deviceUrl = this.deviceUrl + "/add";
+
+    string resutl = await PostRequest(deviceUrl, jsonDevice);
+}
+
 public async Task AddDevices(string deviceData)
 {
  
@@ -330,6 +339,14 @@ public async Task DeleteAllDevices()
 }
 
 
+public async Task DeleteDevice(string deviceId)
+{
+    string url = $"{deviceUrl}/delete/{deviceId}"; 
+
+    await DeleteRequest(url );
+}
+
+
 #endregion
 
 
@@ -408,6 +425,29 @@ public async Task<string> PutRequest(string url, string jsonBody, Dictionary<str
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        var operation = request.SendWebRequest();
+
+        while (!operation.isDone)
+        {
+            await Task.Yield();
+        }
+
+        string result = HandleResponse(request);
+        return result;
+    }
+}
+
+
+private async Task<string> DeleteRequest(string url)
+{
+    Debug.Log($"[ActionServerConnector] Sending DELETE request to {url}");
+
+    using (UnityWebRequest request = UnityWebRequest.Delete(url))
+    {
+        // 通常、DELETEにはボディを含めない
+        // request.uploadHandler = new UploadHandlerRaw(...); ←これは不要
         request.SetRequestHeader("Content-Type", "application/json");
 
         var operation = request.SendWebRequest();

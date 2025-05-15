@@ -1,14 +1,9 @@
 import dotenv
-<<<<<<< HEAD
 from EXPERIMENT.task_manager import ExperimentTaskResultManager
 dotenv.load_dotenv("../.env")
 import os
 from agent_runner_spoperate import runner
-=======
-from agent_runner import runner
->>>>>>> parent of 1510e9d (new)
 from sr_app_types.agent_types import State
-dotenv.load_dotenv("../.env")
 from fastapi import FastAPI
 import httpx
 from starlette.middleware.cors import CORSMiddleware
@@ -16,7 +11,6 @@ import uvicorn
 from pydantic import BaseModel
 import os 
 
-XR_SERVER_API = os.getenv("XR_SERVER_API")
 
 
 app = FastAPI()
@@ -48,6 +42,10 @@ class InputMessage(BaseModel):
 def test():
     print("Hello")
     return "HELO"
+
+
+
+
 
 @app.get("/simple")
 def simple():
@@ -105,10 +103,4 @@ def llm_agent(message: InputMessage):
     
 
 if __name__ == "__main__":
-<<<<<<< HEAD
-
-    print("APIKEY: ",os.getenv("OPENAI_API_KEY"))
-    uvicorn.run("server:app", host="127.0.0.1", port=8800, reload=True)
-=======
     uvicorn.run("server:app", host="localhost", port=8800, reload=True)
->>>>>>> parent of 1510e9d (new)

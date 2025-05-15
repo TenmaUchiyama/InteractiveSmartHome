@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -214,11 +215,38 @@ namespace SpatialLLM.Network
         /// <summary>
         /// フォームデータ (x-www-form-urlencoded) をパースする
         /// </summary>
-        public static async Task<System.Collections.Specialized.NameValueCollection> ReadFormDataAsync(this HttpListenerContext context)
+        public static async Task<NameValueCollection> ReadFormDataAsync(this HttpListenerContext context)
         {
             string requestBody = await context.ReadBodyAsTextAsync();
-            return System.Web.HttpUtility.ParseQueryString(requestBody);
+                return requestBody.ParseQueryString();
+}
+
+public static NameValueCollection ParseQueryString(this string query)
+{
+    var result = new NameValueCollection();
+    if (string.IsNullOrEmpty(query)) return result;
+
+    string[] pairs = query.Split('&');
+    foreach (var pair in pairs)
+    {
+        if (string.IsNullOrEmpty(pair)) continue;
+
+        int idx = pair.IndexOf('=');
+        if (idx > 0)
+        {
+            string key = WebUtility.UrlDecode(pair.Substring(0, idx));
+            string value = WebUtility.UrlDecode(pair.Substring(idx + 1));
+            result.Add(key, value);
         }
+        else
+        {
+            string key = WebUtility.UrlDecode(pair);
+            result.Add(key, "");
+        }
+    }
+
+    return result;
+}
 
 
 

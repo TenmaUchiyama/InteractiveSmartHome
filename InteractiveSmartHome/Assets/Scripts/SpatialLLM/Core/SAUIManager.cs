@@ -30,13 +30,13 @@ public class SAUIManager : MonoBehaviour
     
 
         // if(SASpeechRecognizer.Instance)SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
-        if(LLMQueryRequest.Instance)LLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener(OnReceiveResponseFromLLM);
+        if(PromptLLMQueryRequest.Instance) PromptLLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener(OnReceiveResponseFromLLM);
     }
 
   
     private void OnDestroy() {
         // if(SASpeechRecognizer.Instance)SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
-        if(LLMQueryRequest.Instance)LLMQueryRequest.Instance.OnReceiveResponseFromLLM.RemoveListener(OnReceiveResponseFromLLM);
+        if(PromptLLMQueryRequest.Instance) PromptLLMQueryRequest.Instance.OnReceiveResponseFromLLM.RemoveListener(OnReceiveResponseFromLLM);
     }
 
 
@@ -44,7 +44,7 @@ public class SAUIManager : MonoBehaviour
     {
 
        spinner.SetActive(false);
-       agentResponseObject.SetActive(true); 
+    //    agentResponseObject.SetActive(true); 
 
       try
         {

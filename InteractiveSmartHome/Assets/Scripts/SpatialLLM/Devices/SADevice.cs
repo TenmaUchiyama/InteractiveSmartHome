@@ -15,6 +15,7 @@ namespace SpatialLLM.Device
     public abstract class SADevice : MonoBehaviour
     {
         [SerializeField] ShowLabel showLabel;
+        
         protected DBDeviceData deviceData ; 
         protected DeviceSpatialData spatialData;
 
@@ -90,12 +91,34 @@ namespace SpatialLLM.Device
 
         public DeviceSpatialData GetDevicePositionalRelativeToUser(Transform referenceCamera = null)
         {
-            Transform camTransfrom = referenceCamera != null ? referenceCamera : Camera.main.transform; 
-
+            try{Transform camTransfrom = referenceCamera != null ? referenceCamera : Camera.main.transform; 
+        
             Vector3 relativePosition = camTransfrom.InverseTransformPoint(this.transform.position);
-            this.spatialData.position = new Position(new Vector3(relativePosition.x, relativePosition.y, relativePosition.z));
-            this.spatialData.distance_from_user = Vector3.Distance(transform.position, camTransfrom.position);
+            Vector3 position  = new Vector3(relativePosition.x, relativePosition.y, relativePosition.z);
+     
+            float distance_from_user = Vector3.Distance(transform.position, camTransfrom.position);
+
+            if(this.spatialData == null)
+            {
+                this.spatialData = new DeviceSpatialData(
+                    id: this.spatialData.id,
+                    name: this.spatialData.name,
+                    position: position, 
+                    distance_from_user: distance_from_user
+                ); 
+            }else{
+                this.spatialData.position = new Position(position); 
+                this.spatialData.distance_from_user= distance_from_user;
+
+            }
+            
+          
             return this.spatialData;
+            }catch (Exception ex)
+            {
+                Debug.LogError("[SADevice]Error getting positional data for device: " + this.name + " - " + ex.Message);
+            }
+            return null; 
         }
 
         public DeviceSpatialData GetDevicePositionalData() 
@@ -113,6 +136,12 @@ namespace SpatialLLM.Device
         public DBDeviceData GetDBDeviceData() 
         {
             return this.deviceData;
+        }
+
+
+        public void SetDBDeviceData(DBDeviceData deviceData)
+        {
+            this.deviceData = deviceData;
         }
 
         public bool IsDeviceSelected()

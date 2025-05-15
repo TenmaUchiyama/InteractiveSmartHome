@@ -93,54 +93,22 @@ private bool IsInDirection(Vector3 localPos, Direction direction)
 }
 
 // 対象がユーザーのFOV内にあるかを判定
-private bool IsWithinFov(Transform targetTransform, float halfHorizontalFOV, float halfVerticalFOV)
+// 対象がユーザーのFOV内にあるかを、詳細デバッグ付きで判定
+private bool IsWithinFov(Transform targetTransform)
 {
+    Camera cam = Camera.main; // または userCameraTransform.GetComponent<Camera>()
+    if (cam == null) return false;
+
     Renderer renderer = targetTransform.GetComponent<Renderer>();
-    if (renderer != null)
-    {
-        Bounds bounds = renderer.bounds;
-        Vector3[] corners = GetBoundsCorners(bounds); // ※各Boundsの角を取得する関数
-        int outOfFovCount = 0;
-        int halfCornersCount = corners.Length / 2;
+    if (renderer == null) return false;
 
-        foreach (var corner in corners)
-        {
-            Vector3 directionToCorner = (corner - userCameraTransform.position).normalized;
-            Vector3 localDirection = userCameraTransform.InverseTransformDirection(directionToCorner);
-            float horizontalAngle = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
-            float verticalAngle = Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
+    Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
 
-            if (Mathf.Abs(horizontalAngle) >= halfHorizontalFOV || Mathf.Abs(verticalAngle) >= halfVerticalFOV)
-            {
-                outOfFovCount++;
-            }
-            if (outOfFovCount >= halfCornersCount)
-            {
-                return false;
-            }
-        }
-        return outOfFovCount < halfCornersCount;
-    }
-    else
-    {
-        // Rendererが無い場合はtransform.positionで判定
-        Vector3 directionToTarget = (targetTransform.position - userCameraTransform.position).normalized;
-        Vector3 localDirection = userCameraTransform.InverseTransformDirection(directionToTarget);
-        float horizontalAngle = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
-        float verticalAngle = Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
-        return Mathf.Abs(horizontalAngle) < halfHorizontalFOV && Mathf.Abs(verticalAngle) < halfVerticalFOV;
-    }
+    bool isInView = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+
+    Debug.Log($"[FOV] {targetTransform.name} は視野内: {isInView}");
+    return isInView;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -197,6 +165,7 @@ public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = 
 {
     List<SADevice> returnDevices = new List<SADevice>();
     List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+    Debug.Log(allDevices.Count);
 
     float halfVerticalFOV = verticalFOV / 2f;
     float halfHorizontalFOV = horizontalFOV / 2f;
@@ -208,7 +177,8 @@ public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = 
         if (device == null)
             continue;
 
-        bool isWithinFov = IsWithinFov(device.transform, halfHorizontalFOV, halfVerticalFOV);
+        bool isWithinFov = IsWithinFov(device.transform);
+        Debug.Log($"<color=yellow>{isWithinFov}</color>");
 
         if (getInFov && isWithinFov)
         {
@@ -240,7 +210,7 @@ public List<SAFurniture> FindFurnitureInFov(string furniture_type = "", bool get
         if (!furniture.CompareFurnitureType(furniture_type))
             continue;
 
-        bool isWithinFov = IsWithinFov(furniture.transform, halfHorizontalFOV, halfVerticalFOV);
+        bool isWithinFov = IsWithinFov(furniture.transform);
 
         if (getInFov && isWithinFov)
         {
@@ -414,7 +384,8 @@ public List<DeviceSpatialData> GetDeviceInFov(string device_type, FOVRequest fov
 
         try
         {
-            var positionalData = device.GetDevicePositionalRelativeToUser();
+
+            var positionalData = device.GetDevicePositionalRelativeToUser(userCameraTransform);
             if (positionalData == null)
             {
                 Debug.LogError("Device positional data is null for device: " + device.name);

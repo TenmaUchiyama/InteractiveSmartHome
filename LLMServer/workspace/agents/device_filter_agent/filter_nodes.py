@@ -122,12 +122,9 @@ def filter_tool_node(state):
                 raise ValueError(f"Unknown tool function: {t['name']}")
 
             tool_output = tool_function.invoke(t["args"])
-<<<<<<< HEAD
-=======
             print("***************TOOL OUTPUT)****************************")
             print(tool_output)
             print("***************TOOL OUTPUT)****************************")
->>>>>>> parent of 1510e9d (new)
 
             state.logger.log(
                 node=t["name"],
@@ -144,11 +141,8 @@ def filter_tool_node(state):
 
             state.filterAgent.devices.extend(tool_output.get('devices', []))
             state.filterAgent.messages.append(tool_message)
-<<<<<<< HEAD
-=======
 
             print("PARAM",tool_output)
->>>>>>> parent of 1510e9d (new)
             state.filterAgent.tool_parameter = tool_output.get('param', {})
 
         return state
@@ -209,7 +203,6 @@ def filter_postprocess_node(state):
 
     output = parser.invoke(last_msg.content)
     output['params'] = state.filterAgent.tool_parameter
-<<<<<<< HEAD
     debug_log(f"フォーマットした内容: {output}", True)
 
     state.logger.log(
@@ -220,9 +213,6 @@ def filter_postprocess_node(state):
         output_type="parsed_json"
     )
 
-=======
-    debug_log(f"フォーマットする: { output}",True)
->>>>>>> parent of 1510e9d (new)
     state.filterAgent.final_output = output
     return state
 

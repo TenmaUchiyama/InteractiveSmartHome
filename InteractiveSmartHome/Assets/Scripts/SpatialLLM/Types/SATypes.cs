@@ -54,26 +54,33 @@ public static class DirectionUtil
 
 
 
-public record DBDeviceData 
+public record DBDeviceData
 {
     public string device_id { get; set; }
-    public string device_type { get; set;}
+    public string device_type { get; set; }
     public string device_name { get; set; }
-    public string description { get; set; }
-    public string mqtt_topic { get; set; }
-    public Position device_position { get; set; }
 
+    public string anchor_id { get; set; }
+    public string connector_type { get; set; }
+    public string connector_topic { get; set; }
+    public string description { get; set; } = "";
 
-
-    public DBDeviceData(string devcie_id,  string device_name, string device_type, string description, string mqtt_topic, Vector3 device_position)
+    public DBDeviceData(
+        string device_id = "",
+        string device_type = "",
+        string device_name= "",
+        string anchor_id = "",
+        string connector_type = "",
+        string connector_topic = "",
+        string description =" ")
     {
-        this.device_id = devcie_id;
+        this.device_id = device_id;
         this.device_type = device_type;
         this.device_name = device_name;
-        this.description =description;
-        this.mqtt_topic = mqtt_topic;
-        this.device_position = new Position(device_position);
-
+        this.anchor_id = anchor_id;
+        this.connector_type = connector_type;
+        this.connector_topic = connector_topic;
+        this.description = description;
     }
 }
 

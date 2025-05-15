@@ -2,56 +2,62 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Meta.XR.BuildingBlocks;
-using Newtonsoft.Json;
 using UnityEngine;
-
-
+using Newtonsoft.Json;
+using SpatialLLM.Device;
+using MRFlow.Network;
+using SpatialLLM.Type;
 
 [Serializable]
-public class DeviceDataTemporary 
+public class DeviceDataTemporary
 {
-    public string deviceId; 
-    public string anchorId; 
-    public string modelType;
-    public string modelDeviceId; 
-    public string modelName; 
 
+    
+    public string deviceId;
+    public string anchorId;
+    public string modelType;
+    public string modelDeviceId;
+    public string modelName;
 
     public DeviceDataTemporary(Guid guid, Guid anchorId, string modelType, string modelDeviceId, string modelName)
     {
         this.deviceId = guid.ToString();
         this.anchorId = anchorId.ToString();
-        this.modelName = modelType;
+        this.modelType = modelType;
         this.modelDeviceId = modelDeviceId;
         this.modelName = modelName;
-            
     }
 
     public DeviceDataTemporary(string guid, string anchorId, string modelType, string modelDeviceId, string modelName)
     {
         this.deviceId = guid;
         this.anchorId = anchorId;
-        this.modelName = modelType;
+        this.modelType = modelType;
         this.modelDeviceId = modelDeviceId;
         this.modelName = modelName;
-            
     }
+
     public string GetSerializedData()
     {
         return JsonConvert.SerializeObject(this);
     }
-
 }
 
-
-[RequireComponent(typeof(SpatialAnchorCoreBuildingBlock))]
 public class DeviceAnchoreManager : MonoBehaviour
 {
+    [SerializeField] GameObject devicePrefab;
+    [SerializeField] ActionServerConnector actionServerConnector;
 
-    [SerializeField] GameObject spawnObject;
-    SpatialAnchorCoreBuildingBlock anchorCore;
-    // Start is called before the first frame update
+    private SpatialAnchorCore anchorCore;
+    private GameObject latestCreatedObject;
 
+    void Start()
+    {
+        anchorCore = GetComponent<SpatialAnchorCore>();
+        anchorCore.OnAnchorCreateCompleted.AddListener(OnAnchorCreated);
+        anchorCore.OnAnchorsLoadCompleted.AddListener(OnAnchorLoaded);
+        anchorCore.OnAnchorsEraseAllCompleted.AddListener(OnAllErased);
+    }
 
     void OnDestroy()
     {
@@ -60,44 +66,59 @@ public class DeviceAnchoreManager : MonoBehaviour
         anchorCore.OnAnchorsEraseAllCompleted.RemoveListener(OnAllErased);
     }
 
-    void Start()
+    private void OnAllErased(OVRSpatialAnchor.OperationResult result)
     {
-        anchorCore = GetComponent<SpatialAnchorCoreBuildingBlock>();
-
-
-        anchorCore.OnAnchorCreateCompleted.AddListener(OnAnchorCreated);
-        anchorCore.OnAnchorsLoadCompleted.AddListener(OnAnchorLoaded);
-        anchorCore.OnAnchorsEraseAllCompleted.AddListener(OnAllErased);
+        Debug.Log($"<color=red> Erased all with result: {result}</color>");
     }
 
-    private void OnAllErased(OVRSpatialAnchor.OperationResult arg0)
+    private void OnAnchorLoaded(List<OVRSpatialAnchor> anchors)
     {
-        Debug.Log($"<color=red> Erased all with result: {arg0}</color>");
+        if (anchors.Count > 0)
+        {
+            Debug.Log($"<color=yellow> LOADED : {anchors[0].Uuid}</color>");
+        }
     }
 
-    private void OnAnchorLoaded(List<OVRSpatialAnchor> arg0)
+    private async void OnAnchorCreated(OVRSpatialAnchor anchor, OVRSpatialAnchor.OperationResult result)
     {
-       Debug.Log($"<color=yellow> LOADED : {arg0[0].Uuid.ToString()}");
+      
+        if (result == OVRSpatialAnchor.OperationResult.Success && latestCreatedObject != null)
+        {
+            if (latestCreatedObject.TryGetComponent<SASwitchbot>(out var switchBot))
+            {
+                switchBot.GenerateDBDeviceData(anchor.Uuid.ToString());
+                SADeviceRef.Instance.AddSADevice(switchBot.gameObject.GetComponent<SADevice>());
+                await actionServerConnector.AddDevices(new List<DBDeviceData>{switchBot.GetDBDeviceData()});
+                Debug.Log($"<color=yellow>Anchor Created & ID set: {anchor.Uuid.ToString()}</color>");
+            }
+
+            latestCreatedObject = null; // 使用後クリア
+        }
+        else
+        {
+            Debug.LogWarning($"<color=red>Anchor creation failed or no tracked object</color>");
+        }
     }
 
-    private void OnAnchorCreated(OVRSpatialAnchor arg0, OVRSpatialAnchor.OperationResult arg1)
+    public async void  CreateAnchorOnPosition(Transform ghostPosition)
     {
-        Debug.Log($"<color=yellow>{arg0.Uuid.ToString()}</color>");
-    }
-
     
-    // Update is called once per frame
+        //  OVRSpatialAnchor anchor = anchoreObject.AddComponent<OVRSpatialAnchor>();
+        //  anchor.transform.position = ghostPosition.position;
+        //  anchor.transform.rotation = ghostPosition.rotation;
+         anchorCore.InstantiateSpatialAnchor(devicePrefab, ghostPosition.position, ghostPosition.rotation);
+         
+    }
+
+
+
+
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C))
+        if(Input.GetKeyDown(KeyCode.Delete))
         {
-            anchorCore.InstantiateSpatialAnchor(spawnObject, spawnObject.transform.position, spawnObject.transform.rotation);
-        }
-
-
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            anchorCore.LoadAndInstantiateAnchors(spawnObject,new List<Guid>{new Guid("3d64aa70-0059-d983-14cf-571a76aa791d")});
+            anchorCore.EraseAllAnchors();
         }
     }
+
 }

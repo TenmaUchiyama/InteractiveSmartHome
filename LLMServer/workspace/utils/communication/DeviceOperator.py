@@ -1,109 +1,121 @@
-from abc import ABC, abstractmethod
-from utils.communication.Mqtt import MQTTPublisher 
-import httpx
+from dotenv import load_dotenv
+# from Mqtt import MQTTPublisher 
+import httpx # type: ignore
 import os
+import json
+from utils.communication.SwitchBotOperator import SwitchBotOperator
+import asyncio
+from typing import List, Dict, Tuple
 import json
 
 
-class DeviceOperator(ABC): 
 
+
+class DeviceOperator():
     def __init__(self):
-        self.mqtt_publisher = MQTTPublisher("localhost", 1883) 
-        self.simulation_id = os.getenv("XR_SERVER_API") + "/device/operate"
-        print(self.simulation_id)
         
-        
-    
-    
+        load_dotenv("../.env")
+        self.switchbot = SwitchBotOperator(
+            token=os.getenv("SB_TOKEN"),
+            secret=os.getenv("SB_SECRET")
+        )
+        print(self.switchbot.token, self.switchbot.secret)
+        # MQTT Publisher の初期化（使う場合）
+        # self.mqtt_publisher = MQTTPublisher(...)
 
-    def send_simulation_request(self, devices):
-        print("Sending Operate Request to Test Server.") 
-        response = httpx.post(self.simulation_id, json=devices)
-        output = ""
-        print("CODE: ", response.status_code)
-        if response.status_code == 200:
-            output = f"[Status] {response.status_code}\n[Message] {response.json()['message']}"
-            print("All Devices Are Operated Successfully.")
-        else:
-            output = f"[Status] {response.status_code}\n[Message] Failed to Operate Devices."
-            print("Failed to Operate Devices.")
-        return output
+    def send_operator(self, llm_devices: List[dict]) -> Dict[str, List[dict]]:
+        all_devs = self._fetch_all_devices()
+        sb_map, mq_map = self._build_maps(all_devs)
+        mq_reqs, sb_reqs = self._prepare_requests(llm_devices, sb_map, mq_map)
 
+   
+  
+        if mq_reqs:
+            self.send_mqtt_request(mq_reqs)
+        if sb_reqs:
+            asyncio.run(self.switchbot.send_switchbot_request(sb_reqs))
+            
 
+        return {"mqtt": mq_reqs, "switchbot": sb_reqs}
 
-    
-    def send_operator(self, devices):
-        all_devices = httpx.get("http://localhost:4049/device/get-all").json()
-        
-        mqtts = []
-        switchbots = []
-    
-        for device in all_devices:
-            conn_type = device.get("connection_type")
-            if conn_type == "mqtt":
-                mqtts.append(device)
-            elif conn_type == "switchbot":
-                switchbots.append(device)
-    
-        self.send_mqtt_request(mqtts)
-        self.send_switchbot_request(switchbots)
-    
-        return all_devices
+    def _fetch_all_devices(self) -> List[dict]:
+        resp = httpx.get("http://localhost:4049/device/get-all")
+        resp.raise_for_status()
+        return resp.json()
 
+    def _build_maps(self, devices: List[dict]) -> Tuple[Dict[str, dict], Dict[str, dict]]:
+        sb_map = {
+            d["device_id"]: d
+            for d in devices
+            if d.get("connector_type") == "switchbot"
+        }
+        mq_map = {
+            d["device_id"]: d
+            for d in devices
+            if d.get("connector_type") == "mqtt"
+        }
+        return sb_map, mq_map
 
-    def send_mqtt_request(self, devices): 
-        for device in devices: 
-            topic = getattr(device, "topic", None)
-            if not topic:
-                print(f"Device missing topic: {device}")
+    def _prepare_requests(
+        self,
+        llm_devices: List[dict],
+        sb_map: Dict[str, dict],
+        mq_map: Dict[str, dict]
+    ) -> Tuple[List[dict], List[dict]]:
+        mqtt_reqs = []
+        switchbot_reqs = []
+
+        for data in llm_devices:
+            dev_id = data.get("id")
+      
+            if not dev_id:
+                print("[WARN] Device entry missing 'id'")
                 continue
-    
-            try:
-                payload = device.json()
-            except AttributeError:
-                payload = json.dumps(device)  # 辞書など別形式なら fallback
+
+            if dev_id in sb_map:
+                db = sb_map[dev_id]
+             
+                switchbot_reqs.append({
+                    "connector_topic": db["connector_topic"],
+                    "state": data.get("state"),
+                    "intensity": data.get("intensity"),
+                    "color": data.get("color"),
+                })
+            elif dev_id in mq_map:
+                db = mq_map[dev_id]
+                mqtt_reqs.append({
+                    "topic": db.get("connector_topic") or db.get("topic"),
+                    "state": data.get("state"),
+                    "intensity": data.get("intensity"),
+                    "color": data.get("color"),
+                })
+            else:
+                print(f"[WARN] Unknown device_id: {dev_id}")
+
+        return mqtt_reqs, switchbot_reqs
+
+    def send_mqtt_request(self, devices: List[dict]):
+        for dev in devices:
+            topic = dev["topic"]
+            payload = json.dumps(dev)
             self.mqtt_publisher.send_data(topic, payload)
 
-    def send_switchbot_request(self, devices: list[dict]):
-        url = "https://api.switch-bot.com/v1.1/devices"
-        headers = {
-            "Authorization": self.switchbot_token,
-            "Content-Type": "application/json"
-        }
 
-        for raw in devices:
-            try:
-                # dict → Pydanticモデルに変換
-                data = DeviceControlData(**raw)
-                switchbot_id = raw.get("topic")  # 実際はDevice ID
 
-                # 電源
-                power_cmd = {
-                    "command": "turnOn" if data.state else "turnOff",
-                    "parameter": "default",
-                    "commandType": "command"
-                }
-                httpx.post(f"{url}/{switchbot_id}/commands", headers=headers, json=power_cmd)
+if __name__ == "__main__":
 
-                # 明るさ
-                brightness_cmd = {
-                    "command": "setBrightness",
-                    "parameter": str(data.intensity),
-                    "commandType": "command"
-                }
-                httpx.post(f"{url}/{switchbot_id}/commands", headers=headers, json=brightness_cmd)
 
-                # 色
-                rgb_str = f"{data.color.r}:{data.color.g}:{data.color.b}"
-                color_cmd = {
-                    "command": "setColor",
-                    "parameter": rgb_str,
-                    "commandType": "command"
-                }
-                httpx.post(f"{url}/{switchbot_id}/commands", headers=headers, json=color_cmd)
 
-                print(f"SwitchBot操作完了: {switchbot_id}")
 
-            except Exception as e:
-                print(f"[ERROR] SwitchBot制御中にエラー: {e}")
-            
+    db = DeviceOperator() 
+
+    device = [{
+        "id"  : "test_id",
+        "state" : False, 
+        "intensity" : "80", 
+        "color" : {"r":20, "g":20, "b":255}
+    }
+    ]
+
+
+    db.send_operator(device)

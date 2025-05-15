@@ -1,43 +1,52 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Oculus.Interaction;
-using Oculus.Platform;
 using SpatialLLM.Device;
-using SpatialLLM.Network;
 using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(LineRenderer))]
 public class DrawOnHover : MonoBehaviour
 {
+    [Header("Events")]
     [SerializeField] private InteractableUnityEventWrapper InteractableUnityEventWrapper;
-    
-    public Color hoverColor = Color.white; // Hover時の色
-    public Color selectedColor = Color.green; // Select時の色
-    public float lineWidth = 0.01f; // 線の太さを設定
+
+    [Header("Line Settings")]
+    public Color hoverColor    = Color.white;  // Hover時の色
+    public Color selectedColor = Color.green;  // Select時の色
+    public float lineWidth     = 0.01f;        // 線の太さ
+
+    [Header("VR Camera (Center Eye)")]
+    [SerializeField] private Camera vrCamera;   // Inspectorで割り当て or CenterEyeAnchorから自動取得
 
     private LineRenderer lineRenderer;
-    private SADevice saDevice;
+    private SADevice     saDevice;
+    private Renderer     targetRenderer;
 
-    void  OnEnable()
+    void Awake()
     {
- 
-        
-        InitLineRenderer();
+        // VRカメラ探し
+        if (vrCamera == null)
+        {
+            var go = GameObject.Find("CenterEyeAnchor");
+            if (go != null) vrCamera = go.GetComponent<Camera>();
+        }
+        if (vrCamera == null)
+            Debug.LogError("DrawOnHover: VR Camera が見つかりません。CenterEyeAnchor をアサインしてください。");
+
+        lineRenderer    = GetComponent<LineRenderer>();
+        saDevice        = GetComponent<SADevice>();
+        targetRenderer  = GetComponent<Renderer>();
     }
 
-
+  
 
     void Start()
     {
-        saDevice = GetComponent<SADevice>();
+        InitLineRenderer();
+        DrawBoundingBox();  // 初期形状を一度だけセット
         InteractableUnityEventWrapper.WhenHover.AddListener(WhenHovered);
         InteractableUnityEventWrapper.WhenUnhover.AddListener(WhenUnHovered);
-        // InteractableUnityEventWrapper.WhenSelect.AddListener(WhenSelected);
-
-
-        DrawBoundingBox();
+        InteractableUnityEventWrapper.WhenSelect.AddListener(WhenSelected);
     }
 
     void OnDestroy()
@@ -47,174 +56,88 @@ public class DrawOnHover : MonoBehaviour
         InteractableUnityEventWrapper.WhenSelect.RemoveListener(WhenSelected);
     }
 
-    private void WhenSelected()
+    /// <summary>
+    /// FOV内かどうかを判定
+    /// </summary>
+    private bool IsWithinFov()
     {
-        Debug.Log($"<color=red>Selected: {this.saDevice.gameObject.name}</color>");
-        saDevice.SetIsSelected(!saDevice.IsDeviceSelected());
-        DrawSelect();
-    
-      
+        if (vrCamera == null || targetRenderer == null) return false;
+        var planes = GeometryUtility.CalculateFrustumPlanes(vrCamera);
+        return GeometryUtility.TestPlanesAABB(planes, targetRenderer.bounds);
     }
 
     private void WhenHovered()
     {
-        Debug.Log("<color=red>Hovered</color>");
+        if (!IsWithinFov()) return;
 
-        // Hover時の色を設定
-        
         DrawHover();
     }
 
     private void WhenUnHovered()
     {
-        Debug.Log("<color=red>UnHovered</color>");
+        // 元の挙動そのまま
+        DrawUnhover();
+    }
 
-        // UnHover時に選択されていない場合は非表示
-        if (!saDevice.IsDeviceSelected())
-        {
-            lineRenderer.enabled = false;
-        }else{
-            lineRenderer.startColor = selectedColor;
-        }
+    private void WhenSelected()
+    {
+        if (!IsWithinFov()) return;
+
+        saDevice.SetIsSelected(!saDevice.IsDeviceSelected());
+        DrawSelect();
     }
 
 
 
-
+    /// <summary>
+    /// ラインの初期設定
+    /// </summary>
     private void InitLineRenderer()
     {
-          // LineRendererコンポーネントを取得または追加
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // シェーダーを変更
-        lineRenderer.enabled = false;
-        lineRenderer.useWorldSpace = true;
-        lineRenderer.loop = false; // ループ設定を解除
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
-
-        // 初期色を設定
-        lineRenderer.startColor = hoverColor;
-        lineRenderer.endColor = hoverColor;
-
+        lineRenderer.material      = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.useWorldSpace = false;  // VRではWorldSpace一択
+        lineRenderer.loop          = false;
+        lineRenderer.startWidth    = lineWidth;
+        lineRenderer.endWidth      = lineWidth;
+        lineRenderer.startColor    = hoverColor;
+        lineRenderer.endColor      = hoverColor;
+        lineRenderer.enabled       = false;
     }
 
-    public void DrawSelect() 
+    /// <summary>
+    /// 選択トグルに応じて色・表示を切り替え
+    /// </summary>
+    public void DrawSelect()
     {
         if (saDevice.IsDeviceSelected())
         {
             lineRenderer.startColor = selectedColor;
-            lineRenderer.endColor = selectedColor;
+            lineRenderer.endColor   = selectedColor;
+            lineRenderer.enabled    = true;
         }
         else
         {
             lineRenderer.startColor = hoverColor;
-            lineRenderer.endColor = hoverColor;
+            lineRenderer.endColor   = hoverColor;
+            lineRenderer.enabled    = false;
         }
-
-          lineRenderer.enabled = saDevice.IsDeviceSelected();
     }
 
-    public void DrawHover() 
+    /// <summary>
+    /// Hover時は常に白ライン表示
+    /// </summary>
+    public void DrawHover()
     {
         lineRenderer.startColor = hoverColor;
-        lineRenderer.endColor = hoverColor;
-        lineRenderer.enabled = true;
+        lineRenderer.endColor   = hoverColor;
+        lineRenderer.enabled    = true;
     }
 
-    public void ClearDrawing() 
+    /// <summary>
+    /// 元の DrawUnhover 名義はそのまま残し
+    /// </summary>
+    public void DrawUnhover()
     {
-
-      
-        lineRenderer.enabled = false;
-    }
-
-
-    public void VisualizeTargetDevice(Color targetColor)
-    {
-        lineRenderer.startColor = targetColor;
-        lineRenderer.endColor = targetColor;
-        lineRenderer.enabled = true;
-    }
-
-     public void DrawBoundingBox()
-    {
-       BoxCollider boxCollider = GetComponent<BoxCollider>();
-        if (boxCollider == null)
-        {
-            Debug.LogWarning("BoxCollider が見つかりません.");
-            return;
-        }
-
-        // BoxCollider の中心とサイズを取得
-        Vector3 center = boxCollider.center;
-        Vector3 size   = boxCollider.size;
-
-        // ローカル空間でのコーナー座標を計算
-        Vector3[] corners = new Vector3[8];
-        Transform t = transform;
-
-        corners[0] = center + new Vector3(-size.x, -size.y, -size.z) * 0.5f; // 左下前
-        corners[1] = center + new Vector3( size.x, -size.y, -size.z) * 0.5f; // 右下前
-        corners[2] = center + new Vector3( size.x,  size.y, -size.z) * 0.5f; // 右上前
-        corners[3] = center + new Vector3(-size.x,  size.y, -size.z) * 0.5f; // 左上前
-        corners[4] = center + new Vector3(-size.x, -size.y,  size.z) * 0.5f; // 左下後
-        corners[5] = center + new Vector3( size.x, -size.y,  size.z) * 0.5f; // 右下後
-        corners[6] = center + new Vector3( size.x,  size.y,  size.z) * 0.5f; // 右上後
-        corners[7] = center + new Vector3(-size.x,  size.y,  size.z) * 0.5f; // 左上後
-
-        // ワールド座標に変換
-        for (int i = 0; i < corners.Length; i++)
-        {
-            corners[i] = t.TransformPoint(corners[i]);
-        }
-
-        // ボックスを構成する12本のエッジ（始点・終点）をインデックスで定義
-        int[] edgeIndices = new int[]
-        {
-            // 前面(4本)
-            0, 1,  1, 2,  2, 3,  3, 0,
-            // 背面(4本)
-            4, 5,  5, 6,  6, 7,  7, 4,
-            // 垂直(4本)
-            0, 4,  1, 5,  2, 6,  3, 7
-        };
-
-        // 「辺」を一本ずつ [start, end, end] としてリストに追加
-        List<Vector3> linePointsList = new List<Vector3>();
-        for (int i = 0; i < edgeIndices.Length; i += 2)
-        {
-            Vector3 start = corners[edgeIndices[i]];
-            Vector3 end   = corners[edgeIndices[i + 1]];
-
-            // ダミー頂点で線を切る: [start, end, end]
-            linePointsList.Add(start);
-            linePointsList.Add(end);
-            linePointsList.Add(end); // 終点の重複
-        }
-
-        // LineRenderer へ反映
-        lineRenderer.positionCount = linePointsList.Count;
-        lineRenderer.SetPositions(linePointsList.ToArray());
-
-      
-    }
-
-
-
-
-    private void OnTriggerEnter(Collider other)
-{
-    // 相手がプレイヤーの手や指定タグだった場合などに反応
-
-        Debug.Log("<color=cyan>Trigger Enter (Hover)</color>");
-        DrawHover();
-
-}
-
-private void OnTriggerExit(Collider other)
-{
-  
-        Debug.Log("<color=cyan>Trigger Exit (Unhover)</color>");
         if (!saDevice.IsDeviceSelected())
         {
             lineRenderer.enabled = false;
@@ -222,9 +145,84 @@ private void OnTriggerExit(Collider other)
         else
         {
             lineRenderer.startColor = selectedColor;
+            lineRenderer.endColor   = selectedColor;
+            lineRenderer.enabled    = true;
         }
+    }
+
+    /// <summary>
+    /// ClearDrawing もオリジナル通り
+    /// </summary>
+    public void ClearDrawing()
+    {
+        lineRenderer.enabled = false;
+    }
+
+    /// <summary>
+    /// 特定色でラインを強調
+    /// </summary>
+    public void VisualizeTargetDevice(Color targetColor)
+    {
+        lineRenderer.startColor = targetColor;
+        lineRenderer.endColor   = targetColor;
+        lineRenderer.enabled    = true;
+    }
+
+    /// <summary>
+    /// 可視状態チェック
+    /// </summary>
+    public bool isVisible()
+    {
+        return lineRenderer.enabled;
+    }
+
+    /// <summary>
+    /// MeshRenderer.bounds を使ってワイヤーフレーム描画頂点を生成
+    /// </summary>
+public void DrawBoundingBox()
+{
+    BoxCollider box = GetComponent<BoxCollider>();
+    if (box == null)
+    {
+        Debug.LogWarning("BoxCollider が見つかりません。");
+        return;
+    }
+
+    Vector3 center = box.center;
+    Vector3 size   = box.size;
+    Vector3 e = size * 0.5f;
+
+    Vector3[] corners = new Vector3[]
+    {
+        center + new Vector3(-e.x, -e.y, -e.z),
+        center + new Vector3( e.x, -e.y, -e.z),
+        center + new Vector3( e.x,  e.y, -e.z),
+        center + new Vector3(-e.x,  e.y, -e.z),
+        center + new Vector3(-e.x, -e.y,  e.z),
+        center + new Vector3( e.x, -e.y,  e.z),
+        center + new Vector3( e.x,  e.y,  e.z),
+        center + new Vector3(-e.x,  e.y,  e.z),
+    };
+
+    int[] edges = new int[]
+    {
+        0,1, 1,2, 2,3, 3,0,
+        4,5, 5,6, 6,7, 7,4,
+        0,4, 1,5, 2,6, 3,7
+    };
+
+    List<Vector3> points = new();
+    for (int i = 0; i < edges.Length; i += 2)
+    {
+        points.Add(corners[edges[i]]);
+        points.Add(corners[edges[i + 1]]);
+        points.Add(corners[edges[i + 1]]);
+    }
+
+    lineRenderer.useWorldSpace = false;
+    lineRenderer.positionCount = points.Count;
+    lineRenderer.SetPositions(points.ToArray());
+    lineRenderer.enabled = true;
 }
-
-
 
 }

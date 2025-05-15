@@ -53,12 +53,12 @@ namespace SpatialLLM.Core{
 
             string id = Guid.NewGuid().ToString();
             this.dbDeviceData = new DBDeviceData(
-                id,
-                this.gameObject.name,
-                "test",
-                "device/" + this.gameObject.name,
-                "This is a test device. You can use this device to test the system.",
-                this.transform.position
+                // id,
+                // this.gameObject.name,
+                // "test",
+                // "device/" + this.gameObject.name,
+                // "This is a test device. You can use this device to test the system.",
+                // this.transform.position
 
             );
 
@@ -77,7 +77,7 @@ namespace SpatialLLM.Core{
             renderer = this.GetComponent<Renderer>();
 
             MRMqttController.Instance.OnConnectionCompleted += () => {
-            MRMqttController.Instance.SubscribeDeviceTopic(this.dbDeviceData.device_name, this.dbDeviceData.mqtt_topic,  OnReceiveMsgFromServer);
+            MRMqttController.Instance.SubscribeDeviceTopic(this.dbDeviceData.device_name, this.dbDeviceData.connector_topic,  OnReceiveMsgFromServer);
             };
         }
 
