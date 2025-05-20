@@ -1,7 +1,7 @@
 import httpx
 from langchain.tools import tool
 from langchain_openai import ChatOpenAI
-from typing import Annotated, Dict
+from typing import Annotated, Dict, Union
 import os 
 
 base_url = os.getenv("XR_SERVER_API")
@@ -13,9 +13,7 @@ base_url = os.getenv("XR_SERVER_API")
 
 @tool
 def getDeviceInFov(
-    isInFov: Annotated[bool, """- isInFov (bool): If True, returns devices that are within the user's line of sight. Default: True"""],
-    order: Annotated[str, """- order (str): Sorting method for devices. Possible values: "proximity", "right", "high". Default: proximity"""],
-    range: Annotated[float, """- range (float): Distance range (meters). Input 0.0 if specification is not required."""] 
+    params: Dict[str, Union[bool, str, float]]
 ) -> Dict:
     """
     This function retrieves devices that are within the user's line of sight.
@@ -23,15 +21,16 @@ def getDeviceInFov(
     """
     
     try:
-        # print("\n[TOOL FOV]v")
-        
+        # print("\n[TOOL FOV] getDevicesInFov")
+        print("======[FROM TOOL]=====")
+        print(params)
         request_body = {
-            "isInFov": isInFov,
-            "order": order
+            "isInFov": params["isInFov"],
+            "order": params["order"]
         }
 
-        if range != 0.0:
-            request_body["range"] = range
+        if params["range"] != 0.0:
+            request_body["range"] = params["range"]
 
         # print(f"Sending POST request to {base_url}/fov with body: {request_body}")
         response = httpx.post(f"{base_url}/device/fov", json=request_body)
@@ -45,10 +44,10 @@ def getDeviceInFov(
 
             # `param` に値を追加
             response_data["param"]["filter_type"] = "fov"
-            response_data["param"]["isInFov"] = isInFov
-            response_data["param"]["order"] = order
-            if range != 0.0:
-                response_data["param"]["range"] = range
+            response_data["param"]["isInFov"] = params["isInFov"]
+            response_data["param"]["order"] = params["order"]
+            if params["range"] != 0.0:
+                response_data["param"]["range"] = params["range"]
 
             if response_data.get("status") == "success":
                 # print(f"[TOOL FOV] {response_data}")
@@ -66,28 +65,29 @@ def getDeviceInFov(
 
 @tool
 def getDeviceInDirection(
-    direction: Annotated[str, """Direction relative to the user's body. Must be one of: 'Front', 'Back', 'Left', 'Right' ,'Up' ,'Down'."""],
-    order: Annotated[str, """Sorting order of devices. Options: 'proximity' (closest first), 'right' (from left to right), 'high' (from lowest to highest). Default: 'proximity'"""],
-    range: Annotated[float, """Optional distance range in meters. Use 0.0 if not specifying a limit."""] 
+    params: Dict[str, Union[str, float]]
 ) -> Dict:
-
     """
     This function retrieves devices based on the user's direction and order.
 
     return boolean value indicates whether the devices are successfully received in backside.
     """
-
+    print("======[FROM TOOL]=====")
+    print(params)
+    direction = params["direction"]
+    order = params["order"]
+    range = params["range"]
 
     request_body = {
         "direction": direction,
         "order": order,
-        "range" : range
+        "range": range
     }
-    
+
     try:
         print(f"Sending POST request to {base_url}/device/direction with body: {request_body}")
         response = httpx.post(f"{base_url}/device/direction", json=request_body)
-        
+
         if response.status_code == 200:
             response_data = response.json()
             response_data.setdefault("param", {})
@@ -113,26 +113,28 @@ def getDeviceInDirection(
 
 @tool
 def getDevices(
-        order: Annotated[str, """- order (str): Sorting method for devices. Possible values: "proximity", "right", "high". Default: proximity"""],
-        range: Annotated[float, """- range (float): Distance range (meters). Input None if specification is not required."""] 
+    params: Dict[str, Union[str, float]]
 ) -> Dict:
     """
     This function retrieves devices based on the user's retrieved direction.
     return boolean value indicates whether the devices are successfully received.
     """
     try:
+
+
+        print("======[FROM TOOL]=====")
+        print(params)
         # print()
         # print("=====================[TOOL] getDevices================")
         request_body = {
-        "order": order ,
+        "order": params["order"] ,
         }
 
 
 
-        
-        if range != 0: 
-            request_body["range"] = range
-        
+        if params["range"] != 0: 
+            request_body["range"] = params["range"]
+
         # print(f"Sending POST request to {base_url}/all with body: {request_body}")
         response = httpx.post(f"{base_url}/device/all", json=request_body)
         
@@ -142,9 +144,9 @@ def getDevices(
             if response_data.get("status") == "success":
                 print(response_data)
                 response_data["param"]["filter_type"] = "all"
-                response_data["param"]["order"] = order
-                if range != 0:
-                    response_data["param"]["range"] = range
+                response_data["param"]["order"] = params["order"]
+                if params["range"] != 0:
+                    response_data["param"]["range"] = params["range"]
                 # print("================================================")
                 # print()
                 return response_data
@@ -158,17 +160,18 @@ def getDevices(
 
 @tool
 def getDeviceAroundFurniture(
-    furniture_type: Annotated[str, """Type of furniture serving as the reference point. Must be 'TV',  'TABLE' or 'SHELF'."""],
-    range: Annotated[float, """Optional distance range around the furniture in meters. Default is 4 meters if not specified."""]
+    params: Dict[str, Union[str, float]],
 ) -> Dict:
     """
     Retrieves devices around specified furniture items.
     Use when the user's instruction explicitly refers to furniture (e.g., "near the TV", "on the table", "around the shelf").
     """
     try:
+        print("======[FROM TOOL]=====")
+        print(params)
         request_body = {
-            "furniture_type": furniture_type,
-             "range" : 5 if range is None else range,
+            "furniture_type": params["furniture_type"],
+            "range": 5 if params["range"] is None else params["range"],
         }
         print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
         response = httpx.post(f"{base_url}/furniture/get", json=request_body)

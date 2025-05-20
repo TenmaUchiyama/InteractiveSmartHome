@@ -13,6 +13,15 @@ import os
 from utils.callbacks import CustomCallbackHandler
 from sr_app_types.no_tool_agent_types import State
 
+
+from pydantic import BaseModel
+from typing import Any
+
+
+
+
+
+
 script_dir = os.path.dirname(os.path.abspath(__file__))  # スクリプトのあるディレクトリ
 file_path = os.path.join(script_dir, "prompts", "no_tool_filter_msg.txt")
 
@@ -20,23 +29,23 @@ with open(file_path, "r", encoding="utf-8") as f:
     filter_message = SystemMessage(f.read())
 
 class FILTER_TOOL(Enum): 
-    FOV = "getDeviceInFov" 
-    DIR = "getDeviceInDirection"
-    ALL = "getDevices"
-    AROUND_FURNITURE = "getDeviceAroundFurniture"
+    FOV = "fov" 
+    DIR = "direction"
+    ALL = "all"
+    AROUND_FURNITURE = "around_furniture"
     
 
 
 callback = CustomCallbackHandler("logs/filter_logs.md")
-llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
+filter_agent = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
 
 
 
 # ツールバインド（全フィルター対応）
-filter_agent_node = llm.bind_tools(
-    [getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture],
-    strict=True
-)
+# filter_agent_node = llm.bind_tools(
+#     [getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture],
+#     strict=True
+# )
 
 # ツール名と関数の対応マップ
 filter_tool_map = {
@@ -46,11 +55,13 @@ filter_tool_map = {
     FILTER_TOOL.AROUND_FURNITURE.value: getDeviceAroundFurniture
 }
 
-class FilterOutputData(BaseModel):
-    filter_type: Literal['sight', 'direction', 'object']
-    order: Literal['proximity', 'right', 'height']
-    devices: list
 
+
+
+
+class FilterOutputData(BaseModel):
+    filter_type: str
+    params: Any
 
 parser = JsonOutputParser(pydantic_object=FilterOutputData)
 
@@ -69,5 +80,10 @@ def filter_preprocess(state : State):
 
 
 def filter_agent_node(state : State):
-    print(state)
+    print("=========[FILTER AGENT NODE]=========")
+    res = filter_agent.invoke(state.filterAgent.input_prompt)
+    output = parser.invoke(res.content)
+    print("=========[FILTER AGENT NODE OUTPUT]=========")
+    print(output)
+    state.filterAgent.output = output
     return state

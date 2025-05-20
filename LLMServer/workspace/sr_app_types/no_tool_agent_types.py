@@ -19,6 +19,7 @@ class FilterAgentType:
 @dataclass
 class State:
     user_prompt: HumanMessage = None
-    filterAgent : FilterAgentType = field(default_factory = FilterAgentType)
-  
-    logger: ExperimentTaskResultManager = None 
+    filterAgent: FilterAgentType = field(default_factory=FilterAgentType)
+
+    logger: ExperimentTaskResultManager = None
+
