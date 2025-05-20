@@ -14,7 +14,7 @@ from utils.callbacks import CustomCallbackHandler
 from sr_app_types.no_tool_agent_types import State
 
 script_dir = os.path.dirname(os.path.abspath(__file__))  # スクリプトのあるディレクトリ
-file_path = os.path.join(script_dir, "prompts", "no_fiolter_msg.txt")
+file_path = os.path.join(script_dir, "prompts", "no_tool_filter_msg.txt")
 
 with open(file_path, "r", encoding="utf-8") as f:
     filter_message = SystemMessage(f.read())
