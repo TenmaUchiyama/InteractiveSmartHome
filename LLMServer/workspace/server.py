@@ -11,3 +11,121 @@ from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 from pydantic import BaseModel
 import os 
+
+
+
+app = FastAPI()
+
+
+
+class InputMessage(BaseModel):
+    llm_message: str
+    task_id: str
+
+
+
+# CORS Middleware Configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust as needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+class InputMessage(BaseModel):
+    llm_message: str
+    task_id: str
+
+
+@app.get("/")
+def test():
+    print("Hello")
+    return "HELO"
+
+
+
+
+
+@app.get("/simple")
+def simple():
+
+    user_prompt = "Turn on all the lights i can see"
+    state : State = State(
+        user_prompt = user_prompt,
+    )
+
+    response = runner.invoke(state)
+
+    return {"output" : response['spatialAgent'].final_output}
+
+
+@app.post("/turn_off_all")
+def turn_off_all():
+
+    operateDevice.invoke({[{
+    "id"  : "light1",
+    "state" : False, 
+    "intensity" : "80", 
+    "color" : {"r":0, "g":0, "b":255}
+},
+
+{    "id"  : "light2",
+    "state" : False, 
+    "intensity" : "80", 
+    "color" : {"r":255, "g":0, "b":0}
+},
+{    "id"  : "light3",
+    "state" : False, 
+    "intensity" : "80", 
+    "color" : {"r":0, "g":255, "b":0}
+}]})
+
+
+
+
+
+@app.post("/llm_agent")
+def llm_agent(message: InputMessage):
+
+
+    
+    user_prompt = message.llm_message
+    task_id = message.task_id
+    print("ID: ", task_id)
+    # グローバルLogger初期化（インスタンス共有）
+    logger = ExperimentTaskResultManager.instance()
+    logger.start(task_id)
+
+    # loggerをStateに注入してrunnerに渡す
+    state: State = State(
+        user_prompt=user_prompt,
+        logger=logger
+    )
+
+    try:
+        response = runner.invoke(state)
+        output = response['spatialAgent'].final_output
+
+        # 成功後ログ書き出し
+        logger.save()
+
+        print("********************OUTPUT*********************")
+        print(output)
+        return {"output": output}
+
+    except Exception as e:
+        # 例外の詳細ログ
+        import traceback
+        print("************ EXCEPTION OCCURRED **************")
+        traceback.print_exc()
+
+        return {
+            "error": "LLM processing failed.",
+            "detail": str(e)
+        }
+    
+
+if __name__ == "__main__":
+    uvicorn.run("server:app", host="localhost", port=8800, reload=True)

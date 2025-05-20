@@ -1,0 +1,66 @@
+from langchain_openai import ChatOpenAI
+from enum import Enum
+from langchain.tools import StructuredTool
+from langchain_core.messages import ToolMessage
+from pydantic import BaseModel, Field
+from langchain_core.output_parsers import JsonOutputParser
+from typing import Literal
+from langchain_core.messages import SystemMessage
+from sr_app_types.node_types import NODE
+from agents.device_filter_agent.filter_tool import getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture
+import os
+
+from utils.callbacks import CustomCallbackHandler
+from sr_app_types.no_tool_agent_types import State
+
+script_dir = os.path.dirname(os.path.abspath(__file__))  # スクリプトのあるディレクトリ
+file_path = os.path.join(script_dir, "prompts", "no_fiolter_msg.txt")
+
+with open(file_path, "r", encoding="utf-8") as f:
+    filter_message = SystemMessage(f.read())
+
+class FILTER_TOOL(Enum): 
+    FOV = "getDeviceInFov" 
+    DIR = "getDeviceInDirection"
+    ALL = "getDevices"
+    AROUND_FURNITURE = "getDeviceAroundFurniture"
+    
+
+
+callback = CustomCallbackHandler("logs/filter_logs.md")
+llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
+
+
+
+# ツールバインド（全フィルター対応）
+filter_agent = llm.bind_tools(
+    [getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture],
+    strict=True
+)
+
+# ツール名と関数の対応マップ
+filter_tool_map = {
+    FILTER_TOOL.FOV.value: getDeviceInFov, 
+    FILTER_TOOL.DIR.value: getDeviceInDirection, 
+    FILTER_TOOL.ALL.value: getDevices,
+    FILTER_TOOL.AROUND_FURNITURE.value: getDeviceAroundFurniture
+}
+
+class FilterOutputData(BaseModel):
+    filter_type: Literal['sight', 'direction', 'object']
+    order: Literal['proximity', 'right', 'height']
+    devices: list
+
+
+parser = JsonOutputParser(pydantic_object=FilterOutputData)
+
+
+
+def filter_preprocess(state : State):
+    user_prompt = state["user_prompt"]
+    print(user_prompt)
+
+
+
+def filter_agent(state : State):
+    pass
