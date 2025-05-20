@@ -156,8 +156,6 @@ def getDevices(
         return {"status": "error", "message": str(e)}
     
 
-
-
 @tool
 def getDeviceAroundFurniture(
     furniture_type: Annotated[str, """Type of furniture serving as the reference point. Must be 'TV',  'TABLE' or 'SHELF'."""],

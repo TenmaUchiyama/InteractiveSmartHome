@@ -3,12 +3,13 @@ import time
 import requests
 import  time, uuid, hmac, hashlib, base64
 import httpx  # type: ignore
-
+from dotenv import load_dotenv
+import os
 
 class SwitchBotOperator:
     def __init__(self, token: str, secret: str):
-        self.token = token
-        self.secret = secret
+        self.token = token if token != "" else os.getenv("SB_TOKEN")
+        self.secret = secret  if secret != "" else os.getenv("SB_SECRET")
         
 
     def _generate_headers(self):
@@ -39,6 +40,12 @@ class SwitchBotOperator:
         print(f"[{command}] {device_id} => {resp.status_code}")
         return resp
 
+
+
+    """
+    実際に外から使われるメソッド。
+
+    """
     async def send_switchbot_request(self, devices: list[dict]):
         async with httpx.AsyncClient() as client:
             tasks = []

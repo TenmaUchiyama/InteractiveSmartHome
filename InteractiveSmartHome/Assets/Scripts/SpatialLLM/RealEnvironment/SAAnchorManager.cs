@@ -117,6 +117,7 @@ public async void DeleteAllAnchors()
     Debug.Log("<color=cyan>Anchor Created at custom position</color>");
 
     SASwitchbot sASwitchbot = go.GetComponent<SASwitchbot>();
+    string[] temp = {"9C9E6EDCDB72","9C9E6EDE6E06", "9C9E6EDE9D12"};
 
     if (sASwitchbot == null)
     {
@@ -124,7 +125,9 @@ public async void DeleteAllAnchors()
     }else{
         sASwitchbot.CreateDeviceData(anchor.Uuid.ToString());
         Debug.Log($"<color=lime>CreateDeviceData called {sASwitchbot.GetDBDeviceData().anchor_id}</color>");
-        await actionServerConnector.AddDevices(new List<DBDeviceData>(){sASwitchbot.GetDBDeviceData()});
+        DBDeviceData switchBotData = sASwitchbot.GetDBDeviceData(); 
+        switchBotData.connector_topic = temp[SADeviceRef.Instance.GetAllDevices().Count-1];
+        await actionServerConnector.AddDevices(new List<DBDeviceData>(){switchBotData});
     }
 
    
@@ -210,7 +213,7 @@ private async void LoadAllAnchorsFromServer()
             continue;
         }
 
-        // アンカーPrefabをインスタンス化してBind
+    // アンカーPrefabをインスタンス化してBind
         Pose pose; 
         unbound.TryGetPose(out pose);
         var go = Instantiate(anchorPrefab, pose.position, pose.rotation, SADeviceRef.Instance.GetSADeviceParent().transform);

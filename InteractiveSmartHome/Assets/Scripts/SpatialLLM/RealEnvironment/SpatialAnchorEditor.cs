@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using SpatialLLM.Device;
+using SpatialLLM.Type;
 using UnityEngine;
 
 public class SpatialAnchorEditor : MonoBehaviour
@@ -46,6 +47,17 @@ public class SpatialAnchorEditor : MonoBehaviour
         {
                Debug.Log("<color=yellow>R Triggered</color>");
             await saanchorManager.CreateAnchorOnPosition(testSpawnPos.transform);
+
+
+            foreach(var device in SADeviceRef.Instance.GetAllDevices())
+            {   
+                DBDeviceData dbDevice = device.GetDBDeviceData();
+                Debug.Log($"<color=cyan>{dbDevice.device_name}</color>");
+                Debug.Log($"<color=cyan>{dbDevice.device_id}</color>");
+                Debug.Log($"<color=cyan>{dbDevice.anchor_id}</color>");
+                Debug.Log($"<color=cyan>{dbDevice.connector_type}</color>");
+                Debug.Log($"<color=cyan>{dbDevice.connector_topic}</color>");
+            }
         }
 
 

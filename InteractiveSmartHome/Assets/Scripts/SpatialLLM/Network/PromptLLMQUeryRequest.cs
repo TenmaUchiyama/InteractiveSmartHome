@@ -40,7 +40,7 @@ namespace SpatialLLM.Network
 
         private async void OnVoiceRecognized(string recognizedText)
         {
-            await SendQuery(recognizedText);
+            // await SendQuery(recognizedText);
         }
 
         public async Task SendQuery(string userMessage, string taskId = "test_id", string promptId = "0")
@@ -81,7 +81,7 @@ namespace SpatialLLM.Network
 
                 if (request.result == UnityWebRequest.Result.Success)
                 {
-                    Debug.Log($"<color=green>Response: {request.downloadHandler.text}</color>");
+                    Debug.Log($"<color=cyan>Response: {request.downloadHandler.text}</color>");
                     OnReceiveResponseFromLLM?.Invoke(request.downloadHandler.text);
                 }
                 else

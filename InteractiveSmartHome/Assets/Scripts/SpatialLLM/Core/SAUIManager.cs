@@ -74,21 +74,38 @@ public class SAUIManager : MonoBehaviour
     }
 
 
-    public void ClearDisplay ()
+    public void FinishLoadingAndDisplayResponse (string agentOutput)
     {
         spinner.SetActive(false);
         agentResponseObject.SetActive(true); 
-  
+        agentResponseText.text = agentOutput;
 
+    }
+
+
+    public void StartSendLLM()
+    {
+        this.ClearUserCommand();
+        if(spinner) spinner.SetActive(true); 
     }
 
     public void DisplaySendingLLM(string recognizedText)
     {
-       if(spinner)spinner.SetActive(true);    
-       userCommandObject.SetActive(true);
-       userCommandText.text = recognizedText;
-       
+        
+          userCommandText.text = recognizedText;
+          userCommandObject.SetActive(true); 
     }
+
+    
+
+
+    public void ClearUserCommand()
+    {
+        userCommandObject.SetActive(false);
+       userCommandText.text ="";
+    }
+
+    
 
 
     public string GetRecognizedWord() 

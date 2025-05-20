@@ -42,6 +42,7 @@ def sr_preprocess_node(state):
     InputFromDeviceFilterAgent: {state.filterAgent.final_output}
     Devices: {state.filterAgent.devices}
     """)
+    print(sr_input_msg)
     
     sr_msgs = [
         spatial_message,

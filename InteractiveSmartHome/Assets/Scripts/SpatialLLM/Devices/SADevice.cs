@@ -101,8 +101,8 @@ namespace SpatialLLM.Device
             if(this.spatialData == null)
             {
                 this.spatialData = new DeviceSpatialData(
-                    id: this.spatialData.id,
-                    name: this.spatialData.name,
+                    id: this.GetDeviceID(),
+                    name: this.gameObject.name,
                     position: position, 
                     distance_from_user: distance_from_user
                 ); 

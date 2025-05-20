@@ -15,7 +15,7 @@ class RGBColor(BaseModel):
 class DeviceControlData(BaseModel):
     id: str = Field(..., description="Device ID to control.")
     state: bool = Field(..., description="Power state. True = ON, False = OFF.")
-    intensity: int = Field(..., description="Brightness level from 0 to 100.")
+    intensity: int = Field(..., description="Brightness level from 0 to 60.")
     color: RGBColor = Field(..., description="Color as RGB values.")
 
 

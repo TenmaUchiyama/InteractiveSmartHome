@@ -44,6 +44,7 @@ class DeviceOperator():
         return resp.json()
 
     def _build_maps(self, devices: List[dict]) -> Tuple[Dict[str, dict], Dict[str, dict]]:
+   
         sb_map = {
             d["device_id"]: d
             for d in devices
@@ -64,10 +65,15 @@ class DeviceOperator():
     ) -> Tuple[List[dict], List[dict]]:
         mqtt_reqs = []
         switchbot_reqs = []
-
+        print()
+        print("SB_MAP", sb_map)
+        print()
+        print()
+        print("LLM_DEVICES", llm_devices)
+        print()
         for data in llm_devices:
             dev_id = data.get("id")
-      
+            
             if not dev_id:
                 print("[WARN] Device entry missing 'id'")
                 continue
