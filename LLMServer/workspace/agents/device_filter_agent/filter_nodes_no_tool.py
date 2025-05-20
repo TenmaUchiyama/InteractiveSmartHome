@@ -33,7 +33,7 @@ llm = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
 
 
 # ツールバインド（全フィルター対応）
-filter_agent = llm.bind_tools(
+filter_agent_node = llm.bind_tools(
     [getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture],
     strict=True
 )
@@ -57,10 +57,17 @@ parser = JsonOutputParser(pydantic_object=FilterOutputData)
 
 
 def filter_preprocess(state : State):
-    user_prompt = state["user_prompt"]
-    print(user_prompt)
+    user_prompt = state.user_prompt
+    input_msg = [
+        filter_message, 
+        user_prompt
+    ]
+
+    state.filterAgent.input_prompt = input_msg
+    return state
 
 
 
-def filter_agent(state : State):
-    pass
+def filter_agent_node(state : State):
+    print(state)
+    return state

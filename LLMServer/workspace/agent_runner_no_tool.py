@@ -3,7 +3,7 @@ from langgraph.graph import Graph, START, END, StateGraph
 from IPython.display import Image, display
 from sr_app_types.no_tool_agent_types import State
 from sr_app_types.node_types import NODE
-from agents.device_filter_agent.filter_nodes_no_tool import filter_preprocess
+from agents.device_filter_agent.filter_nodes_no_tool import filter_preprocess, filter_agent_node
 
 
 graph = StateGraph(State)
@@ -12,7 +12,7 @@ graph = StateGraph(State)
 # =======  ADD NODES =============
 # Add filter nodes
 graph.add_node(NODE.FILTER_PREPROCESS.value, filter_preprocess)
-# graph.add_node(NODE.FILTER_AGENT.value,filter_agent_node )
+graph.add_node(NODE.FILTER_AGENT.value,filter_agent_node )
 # graph.add_node(NODE.FILTER_TOOL.value, filter_tool_node)
 # graph.add_node(NODE.FILTER_POSTPROCESS.value, filter_postprocess_node)
 
@@ -30,7 +30,8 @@ graph.add_node(NODE.FILTER_PREPROCESS.value, filter_preprocess)
 
 # =======  ADD EDGES =============
 graph.add_edge(START, NODE.FILTER_PREPROCESS.value)
-graph.add_edge(NODE.FILTER_PREPROCESS.value , END)
+graph.add_edge(NODE.FILTER_PREPROCESS.value, NODE.FILTER_AGENT.value)
+graph.add_edge(NODE.FILTER_AGENT.value, END)
 
 # graph.add_edge(NODE.FILTER_PREPROCESS.value, NODE.FILTER_AGENT.value)
 # graph.add_conditional_edges(NODE.FILTER_AGENT.value, filter_router)

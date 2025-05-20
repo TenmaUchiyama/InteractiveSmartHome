@@ -58,9 +58,9 @@ namespace SpatialLLM.Network
             string jsonData = JsonConvert.SerializeObject(data);
             _isRequesting = true;
 
-            experimentManager?.StartLLMResponse();
-            await PostRequestAsync(url, jsonData);
-            experimentManager?.StopLLMResponse(userMessage);
+                experimentManager?.StartLLMResponse();
+                await PostRequestAsync(url, jsonData);
+                experimentManager?.StopLLMResponse(userMessage);
 
             _isRequesting = false;
         }

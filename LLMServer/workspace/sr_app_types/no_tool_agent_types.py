@@ -11,6 +11,7 @@ from EXPERIMENT.task_manager import ExperimentTaskResultManager
 
 @dataclass
 class FilterAgentType:
+    input_prompt: BaseMessage
     output: List[BaseMessage] = field(default_factory=list)
     tool_output: Optional[Dict] = Optional 
     devices: List[str] = field(default_factory=list)  
