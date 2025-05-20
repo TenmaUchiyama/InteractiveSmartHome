@@ -59,33 +59,44 @@ class DeviceControlData(BaseModel):
     color: Optional[Dict[str, int]] 
 
 
-    
+class AroundFurnitureRequest(BaseModel):
+    furniture_type: str
+    range: Optional[float] = None
 
 
-@app.post("/all")
+
+@app.post("/device/all")
 def all(body : AllRequest):
     print(body)
     return {"status" : "success", "devices" : sort_devices(body.order, test_devices)}
 
-@app.post("/fov")
+@app.post("/device/fov")
 def sight(body : FOVRequest):
     print(body)
     return {"status" : "success", "devices" : sort_devices(body.order, test_devices)}
 
 
 
-@app.post("/direction")
+@app.post("/device/direction")
 def direction(body : DirectionRequest):
     print(body)
     return {"status" : "success", "devices" : sort_devices(body.order, test_devices)}
 
 
-@app.post("/operate")
+@app.post("/device/operate")
 def operate(body : list[DeviceControlData]):
     print("OPERATION")
     print("COUNT: ", len(body))
     print(body)
     return {"status" : "success", "message" : "All Devices Are Operated Successfully."}
+
+
+@app.post("/device/around_furniture")
+def around_furniture(body : AroundFurnitureRequest):
+    print(body)
+    return {"status" : "success", "devices" : sort_devices(body.order, test_devices)}
+
+
 
 
 

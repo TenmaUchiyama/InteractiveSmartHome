@@ -13,7 +13,7 @@ base_url = os.getenv("XR_SERVER_API")
 
 @tool
 def getDeviceInFov(
-    params: Dict[str, Union[bool, str, float]]
+    params: Dict
 ) -> Dict:
     """
     This function retrieves devices that are within the user's line of sight.

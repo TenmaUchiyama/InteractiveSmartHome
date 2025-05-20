@@ -7,7 +7,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from typing import Literal
 from langchain_core.messages import SystemMessage
 from sr_app_types.node_types import NODE
-from agents.device_filter_agent.filter_tool import getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture
+from agents.device_filter_agent.no_tool_filter_algorithm import getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture
 import os
 
 from utils.callbacks import CustomCallbackHandler
@@ -81,9 +81,28 @@ def filter_preprocess(state : State):
 
 def filter_agent_node(state : State):
     print("=========[FILTER AGENT NODE]=========")
+
     res = filter_agent.invoke(state.filterAgent.input_prompt)
     output = parser.invoke(res.content)
-    print("=========[FILTER AGENT NODE OUTPUT]=========")
     print(output)
-    state.filterAgent.output = output
+    state.filterAgent.selected_tool = output
     return state
+
+
+
+def filter_tool_node(state : State):
+    print("=========[FILTER TOOL NODE]=========")
+    print(state.filterAgent.selected_tool)
+    toolType = state.filterAgent.selected_tool["filter_type"]
+
+    if toolType is not None:
+        toolType = filter_tool_map[toolType]
+        params = state.filterAgent.selected_tool["params"]
+       
+        result = toolType.invoke(input={"params": params})
+      
+        state.filterAgent.devices = result
+        return state
+    else:
+        return None
+    

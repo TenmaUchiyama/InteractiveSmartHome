@@ -2,9 +2,8 @@
 from typing import Annotated, Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 from langchain.tools import tool
-
-
 from utils.communication.DeviceOperator import DeviceOperator
+from utils.communication.TestOperator import TestOperator
 
 
 class RGBColor(BaseModel):
@@ -21,8 +20,9 @@ class DeviceControlData(BaseModel):
 
 
 deviceOperator = DeviceOperator()
+testOperator = TestOperator()
 
-
+is_simulation = True
 
 @tool
 def operateDevice(   devices: List[DeviceControlData]) -> str:
@@ -36,11 +36,17 @@ def operateDevice(   devices: List[DeviceControlData]) -> str:
 
         print()
         print("=====================[OPERATOR TOOL] operateDevice=====================")
+
+
+
         # デバイスデータを取得
-        convert_data =  [device.dict() for device in devices]
         
-        response = deviceOperator.send_operator(convert_data)
+        convert_data =  [device.dict() for device in devices]
+    
+        response = deviceOperator.send_operator(convert_data) if not is_simulation else testOperator.send_operate_request(convert_data)
         print("RESPONSE: ", response)
+            
+     
         return  response
         
     

@@ -1,28 +1,64 @@
 from dotenv import load_dotenv # type: ignore
-load_dotenv("../.env")
-from agent_runner_no_tool import runner
-from sr_app_types.no_tool_agent_types import State
+print(load_dotenv("../.env"))
+import os
+from no_tool_agent_runner import getFilterDeviceRunner, getSpatialRunner, getSystemRunner
+from sr_app_types.no_tool_agent_types import SpatialAgentType, State
 from langchain_core.messages import BaseMessage, HumanMessage
 from sr_app_types.no_tool_agent_types import FilterAgentType
-from agents.device_filter_agent.filter_nodes_no_tool import filter_tool_map
-
-
-propmt = "俺の後ろの電気の右の電気を点けて"
-state: State = State(
-    user_prompt=HumanMessage(propmt),
-    filterAgent=FilterAgentType(input_prompt=HumanMessage(propmt))
-)
-
-
-output = runner.invoke(state)
-tool = output["filterAgent"].output["filter_type"]
-
-param = output["filterAgent"].output["params"]
+import json
+from agents.device_operator_agent.operator_tool import operateDevice
 
 
 
+def testFilterDeviceRunner():
+    propmt = "日本の信号の色の配色を目の前の電気を使って教えて"
+    state: State = State(
+        user_prompt=HumanMessage(propmt)
+        
+    )
 
-print(filter_tool_map[tool].invoke(param))
+
+    runner = getFilterDeviceRunner()
+    output = runner.invoke(state)
+
+    print(output["filterAgent"].devices)
 
 
 
+
+def testSpatialRunner():
+    propmt = "日本の信号の色の配色を目の前の電気を使って教えて"
+
+    devices =  [{'id': 'light 3', 'name': 'Ceiling Light 1,0', 'position': [0.0, 2.5, -0.75], 'distance_from_user': 2.6101}, {'id': 'light 4', 'name': 'Ceiling Light 1,1', 'position': [0.0, 2.5, 0.75], 'distance_from_user': 2.6101}, {'id': 'light 1', 'name': 'Ceiling Light 0,0', 'position': [-1.5, 2.5, -0.75], 'distance_from_user': 3.0104}, {'id': 'light 2', 'name': 'Ceiling Light 0,1', 'position': [-1.5, 2.5, 0.75], 'distance_from_user': 3.0104}, {'id': 'light 5', 'name': 'Ceiling Light 2,0', 'position': [1.5, 2.5, -0.75], 'distance_from_user': 3.0104}, {'id': 'light 6', 'name': 'Ceiling Light 2,1', 'position': [1.5, 2.5, 0.75], 'distance_from_user': 3.0104}]
+
+    state: State = State(
+        user_prompt=HumanMessage(propmt),
+        filterAgent=FilterAgentType(devices=devices, selected_tool={ "filter_type": "fov", "params": {'isInFov': True, 'order': 'proximity', 'range': 0.0}})
+
+    )
+   
+    print("=========[SR PREPROCESS NODE]=========")
+
+    runner = getSpatialRunner()
+    output = runner.invoke(state)
+    print(output["spatialAgent"].output_data)
+
+
+
+def testSystemRunner():
+    propmt = "日本の信号の色の配色を目の前の電気を使って教えて"
+
+    state: State = State(
+        user_prompt=HumanMessage(propmt)
+    )
+
+    runner = getSystemRunner()
+    output = runner.invoke(state)   
+
+    print(output["spatialAgent"].output_data)
+
+
+
+
+
+testSystemRunner()

@@ -1,13 +1,12 @@
 import os
-from utils.communication.DeviceOperator import DeviceOperator
 # from DeviceOperator import DeviceOperator
 import httpx
 
 
-class TestOperator(DeviceOperator):
+class TestOperator():
     def __init__(self):
         
-        self.request_url = os.getenv("XR_SERVER_API") + "/operate"
+        self.request_url = os.getenv("XR_SERVER_API") + "/device/operate"
         print(self.request_url)
 
     def send_operate_request(self, devices):

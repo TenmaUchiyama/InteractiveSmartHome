@@ -10,7 +10,6 @@ import json
 
 
 
-
 class DeviceOperator():
     def __init__(self):
         
