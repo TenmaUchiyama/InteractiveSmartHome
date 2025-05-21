@@ -7,7 +7,7 @@ from langchain_core.messages import BaseMessage, HumanMessage
 from sr_app_types.no_tool_agent_types import FilterAgentType
 import json
 from agents.device_operator_agent.operator_tool import operateDevice
-
+from utils.communication.DeviceOperator import DeviceOperator
 
 
 def testFilterDeviceRunner():
@@ -61,4 +61,9 @@ def testSystemRunner():
 
 
 
-testSystemRunner()
+
+
+
+deviceOperator = DeviceOperator()
+
+deviceOperator.send_operator([{"id": "light 1", "name": "Ceiling Light 0,0", "position": [0.0, 2.5, -0.75], "distance_from_user": 3.0104}])
