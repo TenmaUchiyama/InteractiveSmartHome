@@ -63,7 +63,23 @@ def testSystemRunner():
 
 
 
-
-deviceOperator = DeviceOperator()
-
-deviceOperator.send_operator([{"id": "light 1", "name": "Ceiling Light 0,0", "position": [0.0, 2.5, -0.75], "distance_from_user": 3.0104}])
+operateDevice.invoke([
+        {
+            "id": "light1",
+            "state": False,
+            "intensity": "80",
+            "color": {"r": 0, "g": 0, "b": 255}
+        },
+        {
+            "id": "light2",
+            "state": False,
+            "intensity": "80",
+            "color": {"r": 255, "g": 0, "b": 0}
+        },
+        {
+            "id": "light3",
+            "state": False,
+            "intensity": "80",
+            "color": {"r": 0, "g": 255, "b": 0}
+        }
+    ])

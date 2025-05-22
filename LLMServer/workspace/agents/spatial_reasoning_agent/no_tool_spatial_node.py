@@ -55,7 +55,7 @@ def sr_preprocess_node(state: State):
 def sr_agent_node(state: State):
     print("=========[SR AGENT NODE]=========")
     res = spatial_agent.invoke(state.spatialAgent.input_prompt)
-    
+    print(res.content)
     output = parser.invoke(res.content)
     print(output)
     state.spatialAgent.output_data = output

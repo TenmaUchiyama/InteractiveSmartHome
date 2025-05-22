@@ -22,7 +22,7 @@ class DeviceControlData(BaseModel):
 deviceOperator = DeviceOperator()
 testOperator = TestOperator()
 
-is_simulation = True
+is_simulation = False
 
 @tool
 def operateDevice(   devices: List[DeviceControlData]) -> str:
@@ -40,7 +40,7 @@ def operateDevice(   devices: List[DeviceControlData]) -> str:
 
 
         # デバイスデータを取得
-        
+            
         convert_data =  [device.dict() for device in devices]
     
         response = deviceOperator.send_operator(convert_data) if not is_simulation else testOperator.send_operate_request(convert_data)

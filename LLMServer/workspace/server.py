@@ -1,15 +1,18 @@
 import dotenv
 from EXPERIMENT.task_manager import ExperimentTaskResultManager
+from utils.communication.SwitchBotOperator import SwitchBotOperator
 dotenv.load_dotenv("../.env")
 import os
 from agent_runner_spoperate import runner
 from sr_app_types.agent_types import State
 from agents.device_operator_agent.operator_tool import operateDevice
-from fastapi import FastAPI
-import httpx
-from starlette.middleware.cors import CORSMiddleware
-import uvicorn
-from pydantic import BaseModel
+from no_tool_agent_runner import getFilterDeviceRunner, getSpatialRunner, getSystemRunner
+from fastapi import FastAPI # type: ignore
+import httpx # type: ignore
+from starlette.middleware.cors import CORSMiddleware # type: ignore
+import uvicorn# type: ignore
+from pydantic import BaseModel# type: ignore
+from langchain_core.messages import  HumanMessage
 import os 
 
 
@@ -61,32 +64,81 @@ def simple():
     return {"output" : response['spatialAgent'].final_output}
 
 
-@app.post("/turn_off_all")
-def turn_off_all():
+@app.get("/turn_off_all")
+async def turn_off_all():
+    try:
+        print("TURNING OFF")
+        devices = {
+            "LED1": "9C9E6EDCDB72",
+            "LED2": "9C9E6EDE6E06",
+            "LED3": "9C9E6EDE9D12"
+        }
 
-    operateDevice.invoke({[{
-    "id"  : "light1",
-    "state" : False, 
-    "intensity" : "80", 
-    "color" : {"r":0, "g":0, "b":255}
-},
+        sb = SwitchBotOperator()  # ここで例外発生中
+        async with httpx.AsyncClient() as client:
+            for name, device_id in devices.items():
+                await sb.send_command(client, device_id=device_id, command="turnOff")
+                print(f"Turned OFF {name} with ID {device_id}")
 
-{    "id"  : "light2",
-    "state" : False, 
-    "intensity" : "80", 
-    "color" : {"r":255, "g":0, "b":0}
-},
-{    "id"  : "light3",
-    "state" : False, 
-    "intensity" : "80", 
-    "color" : {"r":0, "g":255, "b":0}
-}]})
+    except Exception as e:
+        print("An error occurred:", e)
+        return {"error": "Failed to turn off devices", "detail": str(e)}
+
+    return "TURNING OFF"
+
+    
+
+
 
 
 
 
 
 @app.post("/llm_agent")
+def llm_agent_no_tool(message: InputMessage):
+    runner = getSystemRunner()
+    user_prompt = message.llm_message
+    task_id = message.task_id
+    print("ID: ", task_id)
+    # グローバルLogger初期化（インスタンス共有）
+    logger = ExperimentTaskResultManager.instance()
+    logger.start(task_id)
+
+    # loggerをStateに注入してrunnerに渡す
+    state: State = State(
+        user_prompt=HumanMessage(user_prompt),
+        logger=logger
+    )
+
+    try:
+
+
+        response = runner.invoke(state)
+        output = response['spatialAgent'].output_data
+
+        # 成功後ログ書き出し
+        logger.save()
+
+        print("********************OUTPUT*********************")
+        print(output)
+        return {"output": output}
+
+    except Exception as e:
+        # 例外の詳細ログ
+        import traceback
+        print("************ EXCEPTION OCCURRED **************")
+        traceback.print_exc()
+
+        return {
+            "error": "LLM processing failed.",
+            "detail": str(e)
+        }
+
+
+
+
+
+
 def llm_agent(message: InputMessage):
 
 
