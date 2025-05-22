@@ -1,0 +1,82 @@
+[
+  {
+    "user_prompt": "Switch on the light that’s to the left of the one in front of the table.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TABLE", "range": 4.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch off the light that’s between the two near the TV.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TV", "range": 4.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on the second light next to the one left of the shelf.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "SHELF", "range": 4.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn off the light that’s behind the one in front of the table.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TABLE", "range": 4.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch off the third light behind the table.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TABLE", "range": 4.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on the light in the middle, behind the table.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TABLE", "range": 4.0 }
+    }
+  },
+  {
+    "user_prompt": "Activate the light on the far left of the TV.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TV", "range": 4.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on the second light within 2 meters of the table.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TABLE", "range": 2.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch on all lights between 1 and 3 meters from the table.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TABLE", "range": 3.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn off the third farthest light behind the table.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "around_furniture",
+      "params": { "furniture_type": "TABLE", "range": 4.0 }
+    }
+  }
+]

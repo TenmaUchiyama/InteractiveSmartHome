@@ -1,0 +1,82 @@
+[
+  {
+    "user_prompt": "Turn on the lights I can see.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch off all devices visible from here.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Activate the light I can currently see on the far left.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "right", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn off the three lights furthest away in my view.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch on the top two lights that are visible.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "high", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on the rightmost  light.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "right", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Activate the lights in the front row.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn off all lights within 3 meters from here.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "proximity", "range": 3.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch off the leftmost two lights",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "right", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on all devices I can see within 2.5 meters.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "fov",
+      "params": { "isInFov": true, "order": "proximity", "range": 2.5 }
+    }
+  }
+]

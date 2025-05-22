@@ -1,0 +1,82 @@
+[
+  {
+    "user_prompt": "Turn off the light above me.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Up", "order": "high", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn off all lights under my feet.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Down", "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on the rightmost light behind me.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Back", "order": "right", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch off the light in the middle of those behind me.",
+    "abstract_level": "high",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Back", "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on the light to my right.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Right", "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch off the light behind me.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Back", "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn off the light located to my left.",
+    "abstract_level": "medium",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Left", "order": "proximity", "range": 0.0 }
+    }
+  },
+  {
+    "user_prompt": "Turn on the light 2 meters to my right.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Right", "order": "proximity", "range": 2.0 }
+    }
+  },
+  {
+    "user_prompt": "Switch on the diagonally front-left light 1 meter away.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Front", "order": "right", "range": 1.0 }
+    }
+  },
+  {
+    "user_prompt": "Activate the light 2.5 meters above me.",
+    "abstract_level": "low",
+    "output": {
+      "filter_type": "direction",
+      "params": { "direction": "Up", "order": "high", "range": 2.5 }
+    }
+  }
+]

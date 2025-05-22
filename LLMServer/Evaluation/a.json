@@ -1,0 +1,362 @@
+[
+    // ---------- fov ----------
+    {
+      "user_prompt": "右端のライトをつけて",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "right", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "左の電気二つを消して",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "right", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "奥にあるライトを点けて",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "天井のライトをつけて",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "high", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "正面に見えてるライトを消して",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "視界に入ってる電気をつけて",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "右側に見えるライトを全て消して",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "right", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "高いところにあるライトを消して",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "high", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "前にあるライトを点けて",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "見えている全てのライトを消して",
+      "output": {
+        "filter_type": "fov",
+        "params": { "isInFov": true, "order": "proximity", "range": 0.0 }
+      }
+    },
+  
+    // ---------- direction ----------
+    {
+      "user_prompt": "私の右側のライトをつけて",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Right", "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "俺の左にあるライトを消して",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Left", "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "背後の電気を消して",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Back", "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "上のライトを消して",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Up", "order": "high", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "下にあるライトをつけて",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Down", "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "私の前にあるライトをつけて",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Front", "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "俺の後ろの電気を消して",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Back", "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "下にある電気を全部消して",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Down", "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "俺の前にある高いライトをつけて",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Front", "order": "high", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "自分の左側にある電気を消して",
+      "output": {
+        "filter_type": "direction",
+        "params": { "direction": "Left", "order": "proximity", "range": 0.0 }
+      }
+    },
+  
+    // ---------- around_furniture ----------
+    {
+      "user_prompt": "テーブルの近くのライトをつけて",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "TABLE", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "TVの前のライトを消して",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "TV", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "棚の横にあるライトを点けて",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "SHELF", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "TVの近くの電気を全部消して",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "TV", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "本棚の横のライトを消して",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "SHELF", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "ダイニングテーブルの前のライトをつけて",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "TABLE", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "テレビの横の電気を消して",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "TV", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "机の周りのライトをつけて",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "TABLE", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "棚の前にあるライトを消して",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "SHELF", "range": 4.0 }
+      }
+    },
+    {
+      "user_prompt": "机の近くの電気をすべて点けて",
+      "output": {
+        "filter_type": "around_furniture",
+        "params": { "furniture_type": "TABLE", "range": 4.0 }
+      }
+    },
+  
+    // ---------- all ----------
+    {
+      "user_prompt": "全部のライトをつけて",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "周りのライトを全部消して",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 2.0 }
+      }
+    },
+    {
+      "user_prompt": "近くにある電気を全部つけて",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 2.0 }
+      }
+    },
+    {
+      "user_prompt": "部屋の全てのライトを消して",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "ライトを全部青にして",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "すべての電気をつけて",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "周囲のライトを赤くして",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 2.0 }
+      }
+    },
+    {
+      "user_prompt": "この部屋のライトを全部消して",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 0.0 }
+      }
+    },
+    {
+      "user_prompt": "近くのライトをすべて点けて",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 2.0 }
+      }
+    },
+    {
+      "user_prompt": "全体の電気をオフにして",
+      "output": {
+        "filter_type": "all",
+        "params": { "order": "proximity", "range": 0.0 }
+      }
+    },
+  
+    // ---------- null ----------
+    {
+      "user_prompt": "今のライトの状態を教えて",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "この部屋の温度を教えて",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "何が起きてるか教えて",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "面白いこと言って",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "デバイスの一覧を表示して",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "リビングの状態を確認して",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "電気の数を教えて",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "エアコンついてる？",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "今日の天気は？",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    },
+    {
+      "user_prompt": "ライトの設定を見せて",
+      "output": {
+        "filter_type": null,
+        "params": null
+      }
+    }
+  ]
+  
