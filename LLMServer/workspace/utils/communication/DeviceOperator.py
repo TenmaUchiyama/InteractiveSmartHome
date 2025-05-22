@@ -24,9 +24,15 @@ class DeviceOperator():
         # MQTT Publisher の初期化（使う場合）
         # self.mqtt_publisher = MQTTPublisher(...)
 
+
+
+
+
     def send_operator(self, llm_devices: List[dict]) -> Dict[str, List[dict]]:
         all_devs = self._fetch_all_devices()
         #ここで、llm_devicesで指定されているidがall_devsに存在しなければ、それはtest_dataに追加する
+        print("ALL_DEVS", all_devs)
+        
         test_data = []
         for dev in llm_devices:
             if dev["id"] not in [d["device_id"] for d in all_devs]:
