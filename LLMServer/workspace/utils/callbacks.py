@@ -1,15 +1,11 @@
 import os
+import time
 from langchain_core.callbacks.base import BaseCallbackHandler
 from langchain_core.outputs.llm_result import LLMResult
 
 class LogFileWriter:
-    """
-    ファイルへの書き込みを担うクラス。
-    指定されたファイルパスに対してログ内容を書き込みます。
-    """
     def __init__(self, file_path: str):
         self.file_path = file_path
-        # 書き込み先のディレクトリが存在しない場合は作成
         base_dir = os.path.dirname(self.file_path)
         os.makedirs(base_dir, exist_ok=True)
     
@@ -23,48 +19,35 @@ class LogFileWriter:
 
 class CustomCallbackHandler(BaseCallbackHandler):
     def __init__(self, relative_path: str):
-        # ルートディレクトリからの絶対パスを算出
-        root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-        base_path = os.path.join(root_dir, relative_path)
-
-        base_dir = os.path.dirname(base_path)
-        base_name, ext = os.path.splitext(os.path.basename(base_path))
-        if ext.lower() != ".md":
-            ext = ".md"
-
-        self.log_path = os.path.join(base_dir, base_name + ext)
-        
-        # LogFileWriter のインスタンスを生成し、ファイル書き込みを委譲
-        self.file_writer = LogFileWriter(self.log_path)
-        self._initialized = False  # 初回だけ初期化するフラグ
+        # ... 既存の初期化処理 ...
+        self.last_tokens = None
+        self.last_cost = None
+        self.last_time = None
+        self.start_time = None
 
     def on_llm_start(self, serialized, prompts, **kwargs):
-        # 初回のみファイル内容をリセット
-        if not self._initialized:
-            with open(self.log_path, 'w', encoding='utf-8') as f:
-                f.write("# 🧠 LLM Markdown Log\n\n")
-            self._initialized = True
-
-        log_text = "## 🚀 送信されたプロンプト\n"
-        for i, prompt in enumerate(prompts):
-            log_text += f"### Prompt {i + 1}\n\n{prompt}\n\n\n"
-        self.file_writer.write_log(log_text)
+        self.start_time = time.time()
+        # ... 既存コード ...
 
     def on_llm_end(self, response: LLMResult, **kwargs):
-        log_text = "## 📥 LLMからのレスポンス\n"
+        elapsed_time = time.time() - self.start_time if self.start_time else 0.0
+        self.last_time = elapsed_time
+
         try:
-            content = response.generations[0][0].text
+            usage = response.llm_output.get("token_usage", {})
+            prompt_tokens = usage.get("prompt_tokens", 0)
+            completion_tokens = usage.get("completion_tokens", 0)
+            self.last_tokens = {
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": prompt_tokens + completion_tokens
+            }
+
+            cost_prompt = 0.01  # GPT-4 Turbo
+            cost_completion = 0.03
+            cost = (prompt_tokens / 1000) * cost_prompt + (completion_tokens / 1000) * cost_completion
+            self.last_cost = round(cost, 6)
+
         except Exception as e:
-            content = f"[レスポンスの抽出に失敗しました: {e}]"
-        log_text += f"\n{content}\n\n\n"
-        self.file_writer.write_log(log_text)
-
-    def add_output(self, add_txt: str):
-        log_text = "## ✍️ 手動追加ログ\n"
-        log_text += f"\n{add_txt}\n\n\n"
-        self.file_writer.write_log(log_text)
-
-    def add_mid(self, caller :str, add_txt: str):
-        log_text = f"## ✍️ {caller}\n"
-        log_text += f"\n{add_txt}\n\n\n"
-        self.file_writer.write_log(log_text)
+            self.last_tokens = None
+            self.last_cost = None

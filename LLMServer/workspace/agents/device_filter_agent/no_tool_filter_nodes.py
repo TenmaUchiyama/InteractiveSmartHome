@@ -81,11 +81,16 @@ def filter_preprocess(state : State):
 
 def filter_agent_node(state : State):
     print("=========[FILTER AGENT NODE]=========")
-
     res = filter_agent.invoke(state.filterAgent.input_prompt)
     output = parser.invoke(res.content)
     print(output)
     state.filterAgent.selected_tool = output
+
+    state.filterAgent.metrics = {
+        "tokens": callback.last_tokens,
+        "cost_usd": callback.last_cost,
+        "elapsed_seconds": callback.last_time
+    }
     return state
 
 

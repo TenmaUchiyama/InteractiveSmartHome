@@ -39,15 +39,16 @@ class SpatialOutput(BaseModel):
 @dataclass
 class FilterAgentType:
     input_prompt: List[BaseMessage] = field(default_factory=list)
-    output: List[BaseMessage] = field(default_factory=list)
     selected_tool: Optional[Dict] = None 
     devices: List[str] = field(default_factory=list)  
+    metrics: Optional[Dict] = None
 
 @dataclass
 class SpatialAgentType:
     output: List[BaseMessage] = field(default_factory=list)
     input_prompt: List[BaseMessage] = field(default_factory=list)
     output_data: Optional[SpatialOutput] = None
+    metrics: Optional[Dict] = None
 
 @dataclass
 class State:
