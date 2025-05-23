@@ -19,7 +19,9 @@ with open(file_path, "r", encoding="utf-8") as f:
 
 # コールバック設定と LLM の初期化
 callback = CustomCallbackHandler("logs/spatial_logs.md")
-llm_sp = ChatOpenAI(model="gpt-4o", verbose=True, callbacks=[callback])
+model = os.getenv("GPT_MODEL")
+model = model.strip() if model and model.strip() else "gpt-4o"
+llm_sp = ChatOpenAI(model=model, verbose=True, callbacks=[callback])
 # operateDevice ツールをバインド（operator と同じツールを利用）
 llm_spatial = llm_sp.bind_tools(tools=[operateDevice], strict=True)
 

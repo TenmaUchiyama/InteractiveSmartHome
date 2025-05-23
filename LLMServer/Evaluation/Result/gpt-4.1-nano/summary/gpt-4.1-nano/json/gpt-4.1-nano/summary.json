@@ -1,0 +1,43 @@
+{
+  "exact_match_accuracy": 0.9,
+  "type_accuracy": 0.975,
+  "partial_match": 0.975,
+  "confusion_matrix": [
+    [
+      39,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "classification_report": "                  precision    recall  f1-score   support\n\n             fov       1.00      0.97      0.99        40\n       direction       0.00      0.00      0.00         0\naround_furniture       0.00      0.00      0.00         0\n             all       0.00      0.00      0.00         0\n\n       micro avg       0.97      0.97      0.97        40\n       macro avg       0.25      0.24      0.25        40\n    weighted avg       1.00      0.97      0.99        40\n",
+  "cost_summary": {
+    "total": 0.005475999999999999,
+    "average": 0.00013689999999999997,
+    "max": 0.000138
+  },
+  "time_summary": {
+    "total": 89.24405312538147,
+    "average": 2.2311013281345367,
+    "max": 12.453819990158081
+  },
+  "note": "この結果は filter_type に基づいた分類性能の評価を含みます。"
+}

@@ -5,7 +5,6 @@ from enum import Enum
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
-from EXPERIMENT.task_manager import ExperimentTaskResultManager
 
 class Position(BaseModel):
     x: float
@@ -55,5 +54,4 @@ class State:
     user_prompt: HumanMessage = None
     filterAgent: FilterAgentType = field(default_factory=FilterAgentType)
     spatialAgent: SpatialAgentType = field(default_factory=SpatialAgentType)
-    logger: ExperimentTaskResultManager = None
 

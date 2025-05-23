@@ -1,0 +1,3 @@
+| Task ID   | Prompt                                                          | Ground Truth   | Predicted   | ✅ Exact Match   | ✅ filter_type_match   | param_match                      |   Cost (USD) |   Response Time (s) | Model        |
+|:----------|:----------------------------------------------------------------|:---------------|:------------|:-----------------|:-----------------------|:---------------------------------|-------------:|--------------------:|:-------------|
+| FOV01     | Turn on all visible ones in my field of view within 2.0 meters. | fov            | fov         | ✅               | ✅                     | ✅ ['isInFov', 'order', 'range'] |     0.000136 |             1.62426 | gpt-4.1-nano |

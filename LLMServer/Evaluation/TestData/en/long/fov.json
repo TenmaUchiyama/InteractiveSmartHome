@@ -1,5 +1,7 @@
 [
   {
+    "task_id": "FOV01",
+    "id": "183e0e85-e669-40fc-b929-54cd123df122",
     "user_prompt": "Turn on all visible ones in my field of view within 2.0 meters.",
     "output": {
       "filter_type": "fov",
@@ -8,10 +10,11 @@
         "order": "proximity",
         "range": 2.0
       }
-    },
-    "id": "06d0303f-5992-45a2-88fe-509f6ddb555b"
+    }
   },
   {
+    "task_id": "FOV02",
+    "id": "d4aa683d-a3a7-4c30-8519-b6b5a014256f",
     "user_prompt": "Could you activate everything I can currently see?",
     "output": {
       "filter_type": "fov",
@@ -20,10 +23,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "8f0b8d3b-c82e-4356-ba1d-9f721b6d7f00"
+    }
   },
   {
+    "task_id": "FOV03",
+    "id": "dfcfcb7b-8313-43ae-bb3c-11101b9c4e4b",
     "user_prompt": "Switch off any visible devices within 1.5 meters.",
     "output": {
       "filter_type": "fov",
@@ -32,11 +36,12 @@
         "order": "proximity",
         "range": 1.5
       }
-    },
-    "id": "085d57d1-0813-4ae7-87da-8698a714115f"
+    }
   },
   {
-    "user_prompt": "Power on the rightmost light that’s visible to me.",
+    "task_id": "FOV04",
+    "id": "0ab83626-de43-4565-a78d-c40d1f47d195",
+    "user_prompt": "Power on the rightmost light that\u2019s visible to me.",
     "output": {
       "filter_type": "fov",
       "params": {
@@ -44,22 +49,24 @@
         "order": "right",
         "range": 0.0
       }
-    },
-    "id": "de71e765-3b88-4473-8114-73c6fbba521c"
+    }
   },
   {
+    "task_id": "FOV05",
+    "id": "989a6385-e4b6-4287-af6e-abffca077297",
     "user_prompt": "Please turn off the ceiling lights that I can see.",
     "output": {
       "filter_type": "fov",
       "params": {
         "isInFov": true,
-        "order": "high",
+        "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "55cf4c2c-4bac-4c5c-a7c0-4036098d7f3c"
+    }
   },
   {
+    "task_id": "FOV06",
+    "id": "1dd3a091-9c53-4e28-b79f-4ff2db0f4f35",
     "user_prompt": "Make sure all visible devices within three meters are switched on.",
     "output": {
       "filter_type": "fov",
@@ -68,10 +75,11 @@
         "order": "proximity",
         "range": 3.0
       }
-    },
-    "id": "6dbdc233-af98-4dab-99e9-d54e7384cdfc"
+    }
   },
   {
+    "task_id": "FOV07",
+    "id": "a8a56640-c408-4963-ada0-49c0fb774fec",
     "user_prompt": "Only activate those in my sight and nearby.",
     "output": {
       "filter_type": "fov",
@@ -80,10 +88,11 @@
         "order": "proximity",
         "range": 1.0
       }
-    },
-    "id": "fd3ee88b-d060-4414-a176-e95a7a0bacfc"
+    }
   },
   {
+    "task_id": "FOV08",
+    "id": "7b68d918-8d02-4495-99f8-290783d53670",
     "user_prompt": "Enable the lights within my gaze.",
     "output": {
       "filter_type": "fov",
@@ -92,10 +101,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "65f7f234-3bfc-48bb-891c-5e96c9c7d9f9"
+    }
   },
   {
+    "task_id": "FOV09",
+    "id": "35b8b801-d95a-4dba-96c5-5c38c6ba03ef",
     "user_prompt": "I want the visible devices in front of me to be activated.",
     "output": {
       "filter_type": "fov",
@@ -104,10 +114,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "2d817d57-7214-4f92-a2c2-80dd793e5771"
+    }
   },
   {
+    "task_id": "FOV10",
+    "id": "16b38944-0abe-4a9f-bef2-98cf8beee868",
     "user_prompt": "Turn on the closest one I can see right now.",
     "output": {
       "filter_type": "fov",
@@ -116,10 +127,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "5adec7f1-616e-4d4a-992b-7e3beb9da91c"
+    }
   },
   {
+    "task_id": "FOV11",
+    "id": "6841c65d-d763-455a-950d-cdac9486676d",
     "user_prompt": "Switch on all the visible ones within 2.5 meters of my position.",
     "output": {
       "filter_type": "fov",
@@ -128,11 +140,12 @@
         "order": "proximity",
         "range": 2.5
       }
-    },
-    "id": "99144bda-68a9-4017-a229-8aaa20be4a6b"
+    }
   },
   {
-    "user_prompt": "Please shut off anything visible from here that’s within 2 meters.",
+    "task_id": "FOV12",
+    "id": "f23d7dd2-35c7-4169-9f00-6d7b4ffeae5e",
+    "user_prompt": "Please shut off anything visible from here that\u2019s within 2 meters.",
     "output": {
       "filter_type": "fov",
       "params": {
@@ -140,10 +153,11 @@
         "order": "proximity",
         "range": 2.0
       }
-    },
-    "id": "6cfc4f23-0a76-4508-a29c-340224f16cd9"
+    }
   },
   {
+    "task_id": "FOV13",
+    "id": "5b975619-165c-459f-bcde-fddf54e81eca",
     "user_prompt": "Only the devices in my field of view should be on.",
     "output": {
       "filter_type": "fov",
@@ -152,10 +166,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "4e624c93-ba3f-468c-b070-e96971330c26"
+    }
   },
   {
+    "task_id": "FOV14",
+    "id": "c6ae306d-d1f5-4d77-b119-082d2e57b713",
     "user_prompt": "Deactivate the visible lights near the top.",
     "output": {
       "filter_type": "fov",
@@ -164,10 +179,11 @@
         "order": "high",
         "range": 0.0
       }
-    },
-    "id": "587ffca4-b6ae-4e7b-841b-d6fea80af875"
+    }
   },
   {
+    "task_id": "FOV15",
+    "id": "4bd9a52a-397e-4e3c-8767-281f113b6a0c",
     "user_prompt": "Could you make the rightmost visible one active?",
     "output": {
       "filter_type": "fov",
@@ -176,10 +192,11 @@
         "order": "right",
         "range": 0.0
       }
-    },
-    "id": "3caa4dc1-485c-466a-ae64-7a7dc59d3680"
+    }
   },
   {
+    "task_id": "FOV16",
+    "id": "37e8a820-7037-4e8d-ad0b-cad7de219bb9",
     "user_prompt": "Keep the devices within my line of sight powered on.",
     "output": {
       "filter_type": "fov",
@@ -188,10 +205,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "3b24d667-2c61-4645-8b10-b4af8f5c0af5"
+    }
   },
   {
+    "task_id": "FOV17",
+    "id": "20411802-848c-4f64-85da-c7077b005ac8",
     "user_prompt": "Enable all lights I can currently see within 1.8 meters.",
     "output": {
       "filter_type": "fov",
@@ -200,10 +218,11 @@
         "order": "proximity",
         "range": 1.8
       }
-    },
-    "id": "f708de52-9978-4326-ad10-a7245b27ece8"
+    }
   },
   {
+    "task_id": "FOV18",
+    "id": "1a48a045-56ce-46fc-97b3-0593bb78819c",
     "user_prompt": "I want to switch on the lights visible directly ahead.",
     "output": {
       "filter_type": "fov",
@@ -212,11 +231,12 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "7a584fc1-4d03-4999-b0ad-006016481f1a"
+    }
   },
   {
-    "user_prompt": "Lights in my field of vision—just turn them on.",
+    "task_id": "FOV19",
+    "id": "933f83e2-0a63-46b9-bf64-68fe7200091f",
+    "user_prompt": "Lights in my field of vision\u2014just turn them on.",
     "output": {
       "filter_type": "fov",
       "params": {
@@ -224,10 +244,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "5546a499-cb81-428b-9d6a-3d5275964a36"
+    }
   },
   {
+    "task_id": "FOV20",
+    "id": "e7744593-8fb4-4bbf-b2a9-77a405ae418f",
     "user_prompt": "Switch off the device in my sight.",
     "output": {
       "filter_type": "fov",
@@ -236,11 +257,12 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "1ce95ccf-a674-40df-adda-1ce5a9018a23"
+    }
   },
   {
-    "user_prompt": "Turn off all the devices I can’t see right now.",
+    "task_id": "FOV21",
+    "id": "5ff19541-9327-4464-8a57-d943b0c727b9",
+    "user_prompt": "Turn off all the devices I can\u2019t see right now.",
     "output": {
       "filter_type": "fov",
       "params": {
@@ -248,10 +270,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "324295b8-a314-4ee3-a748-d85312d6c524"
+    }
   },
   {
+    "task_id": "FOV22",
+    "id": "2f585ee2-5d09-43af-92cd-96aaa54439ea",
     "user_prompt": "Deactivate whatever is currently outside my field of vision.",
     "output": {
       "filter_type": "fov",
@@ -260,10 +283,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "bdeb6b57-4517-4ca7-8daf-014a1c4f3d0b"
+    }
   },
   {
+    "task_id": "FOV23",
+    "id": "5a8a348d-bc7f-405e-8664-9ef1b7f9caaf",
     "user_prompt": "Turn off all devices not in sight and located more than 2 meters away.",
     "output": {
       "filter_type": "fov",
@@ -272,10 +296,11 @@
         "order": "proximity",
         "range": 2.0
       }
-    },
-    "id": "af307b17-475a-4711-8712-2e2586b57ab4"
+    }
   },
   {
+    "task_id": "FOV24",
+    "id": "3627c15d-9f7b-4569-9599-c55545df5c03",
     "user_prompt": "Disable anything beyond what I'm looking at.",
     "output": {
       "filter_type": "fov",
@@ -284,10 +309,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "397e4ac9-d9d7-4898-9697-58f5d33b38e6"
+    }
   },
   {
+    "task_id": "FOV25",
+    "id": "1a283edb-69b1-4ef8-97a1-9e51135c6a32",
     "user_prompt": "Cut off power to any non-visible appliance farther than two meters.",
     "output": {
       "filter_type": "fov",
@@ -296,10 +322,11 @@
         "order": "proximity",
         "range": 2.0
       }
-    },
-    "id": "5e19fea2-e95a-4d87-93a5-22731ede57db"
+    }
   },
   {
+    "task_id": "FOV26",
+    "id": "dac544b3-8c91-4dff-be37-b4010ce14360",
     "user_prompt": "Kill power to the ones out of sight.",
     "output": {
       "filter_type": "fov",
@@ -308,10 +335,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "c0112acb-9821-46db-8fe5-f3d658b26bf2"
+    }
   },
   {
+    "task_id": "FOV27",
+    "id": "8e5e54d3-7980-4aec-ab00-77d981109230",
     "user_prompt": "Deactivate the hidden appliances outside my sightline.",
     "output": {
       "filter_type": "fov",
@@ -320,10 +348,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "91d8a780-1758-4ea1-8adb-1b0b0b04a9d8"
+    }
   },
   {
+    "task_id": "FOV28",
+    "id": "6b97061c-3c99-4c88-bbe9-a131f7432151",
     "user_prompt": "Shut off any hidden device beyond 3 meters from me.",
     "output": {
       "filter_type": "fov",
@@ -332,10 +361,11 @@
         "order": "proximity",
         "range": 3.0
       }
-    },
-    "id": "e7b81295-cc0c-4324-a0cd-13485010c3e4"
+    }
   },
   {
+    "task_id": "FOV29",
+    "id": "5e7089b2-9095-431d-a8b8-a892c7c83999",
     "user_prompt": "Turn off the equipment that's not currently in view.",
     "output": {
       "filter_type": "fov",
@@ -344,10 +374,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "ffe7d7ef-3837-407f-8597-dab63c00d5ca"
+    }
   },
   {
+    "task_id": "FOV30",
+    "id": "d0547fc0-98c9-447a-bd67-4c34adb08370",
     "user_prompt": "Switch off the rightmost lights that are out of view.",
     "output": {
       "filter_type": "fov",
@@ -356,10 +387,11 @@
         "order": "right",
         "range": 0.0
       }
-    },
-    "id": "85cd9874-5e79-4c23-b50b-58c35eaba089"
+    }
   },
   {
+    "task_id": "FOV31",
+    "id": "38868c28-6963-42cb-8007-7e64f0879ada",
     "user_prompt": "Shut down the devices hidden from view.",
     "output": {
       "filter_type": "fov",
@@ -368,10 +400,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "4a5ca0b5-12f1-4789-8d7e-5ed9c0a4da3b"
+    }
   },
   {
+    "task_id": "FOV32",
+    "id": "0ee74f56-aa89-4fcf-a569-05da1a26e583",
     "user_prompt": "Deactivate lights that are outside my view and farther than 1.5 meters.",
     "output": {
       "filter_type": "fov",
@@ -380,10 +413,11 @@
         "order": "proximity",
         "range": 1.5
       }
-    },
-    "id": "5bd7d55c-d480-4b6e-a27a-0831df971875"
+    }
   },
   {
+    "task_id": "FOV33",
+    "id": "6268cb7f-d012-4a93-8e34-183e5d5d6785",
     "user_prompt": "Switch off the devices that are currently behind me and not visible.",
     "output": {
       "filter_type": "fov",
@@ -392,10 +426,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "abf9934a-9266-4a3d-bc64-75f2c55409d8"
+    }
   },
   {
+    "task_id": "FOV34",
+    "id": "4842d0e1-d148-4e1a-a722-92c8825fd857",
     "user_prompt": "Turn off the unseen devices beyond a distance of 2.5 meters.",
     "output": {
       "filter_type": "fov",
@@ -404,10 +439,11 @@
         "order": "proximity",
         "range": 2.5
       }
-    },
-    "id": "b484bb5a-ec5a-476d-bd63-a148b97ddd62"
+    }
   },
   {
+    "task_id": "FOV35",
+    "id": "f58dff9e-9412-4022-802f-33e6e5228456",
     "user_prompt": "Switch off anything out of my sight and more than 4 meters distant.",
     "output": {
       "filter_type": "fov",
@@ -416,11 +452,12 @@
         "order": "proximity",
         "range": 4.0
       }
-    },
-    "id": "1eb7e9bf-458d-45e4-aece-6e362a448e15"
+    }
   },
   {
-    "user_prompt": "Please disable the far side devices I can’t see from here.",
+    "task_id": "FOV36",
+    "id": "702d4b4e-000f-4d1a-92ac-b5ae023b8111",
+    "user_prompt": "Please disable the far side devices I can\u2019t see from here.",
     "output": {
       "filter_type": "fov",
       "params": {
@@ -428,11 +465,12 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "49788238-bae9-4d8f-896f-3d94c0b036e6"
+    }
   },
   {
-    "user_prompt": "Switch off the upper devices I can’t currently see.",
+    "task_id": "FOV37",
+    "id": "acbd5b9b-509b-4110-acc9-82d055fd2dd9",
+    "user_prompt": "Switch off the upper devices I can\u2019t currently see.",
     "output": {
       "filter_type": "fov",
       "params": {
@@ -440,11 +478,12 @@
         "order": "high",
         "range": 0.0
       }
-    },
-    "id": "ef4e609b-00da-4c17-824a-2fa317560b94"
+    }
   },
   {
-    "user_prompt": "Please turn off the devices that I can’t see and are at least 5 meters away.",
+    "task_id": "FOV38",
+    "id": "ce332d81-d6b7-4d19-a7be-0ecd70aed134",
+    "user_prompt": "Please turn off the devices that I can\u2019t see and are at least 5 meters away.",
     "output": {
       "filter_type": "fov",
       "params": {
@@ -452,10 +491,11 @@
         "order": "proximity",
         "range": 5.0
       }
-    },
-    "id": "c54c007f-e8ef-40cb-bb60-31db2b8480d8"
+    }
   },
   {
+    "task_id": "FOV39",
+    "id": "45174410-8b45-42f7-b394-7df3041c4339",
     "user_prompt": "Please keep only the visible lights on, and power off the rest.",
     "output": {
       "filter_type": "fov",
@@ -464,10 +504,11 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "960abc45-aca1-4105-ad1c-d2941616c02b"
+    }
   },
   {
+    "task_id": "FOV40",
+    "id": "e87b3aa1-585c-4417-a362-aa5370a57aad",
     "user_prompt": "Power down the lamps that are hidden from my current view.",
     "output": {
       "filter_type": "fov",
@@ -476,7 +517,6 @@
         "order": "proximity",
         "range": 0.0
       }
-    },
-    "id": "4b75aab8-2c0b-4d5b-ab35-ca5cfbecb806"
+    }
   }
 ]

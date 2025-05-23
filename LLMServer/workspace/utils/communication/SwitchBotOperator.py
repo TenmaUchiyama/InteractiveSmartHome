@@ -10,7 +10,6 @@ class SwitchBotOperator:
     def __init__(self, token: str = "", secret: str = ""):
         self.token = token if token != "" else os.getenv("SB_TOKEN")
         self.secret = secret  if secret != "" else os.getenv("SB_SECRET")
-        print(f"SwitchBotOperator initialized with token: {self.token} and secret: {self.secret}")
         
 
     def _generate_headers(self):

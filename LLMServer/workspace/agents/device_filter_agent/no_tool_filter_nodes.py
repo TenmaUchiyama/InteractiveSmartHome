@@ -37,7 +37,9 @@ class FILTER_TOOL(Enum):
 
 
 callback = CustomCallbackHandler("logs/filter_logs.md")
-filter_agent = ChatOpenAI(model="gpt-4o" , temperature= 0.0, callbacks=[callback])
+model = os.getenv("GPT_MODEL")
+model = model.strip() if model and model.strip() else "gpt-4o"
+filter_agent = ChatOpenAI(model= model, temperature= 0.0, callbacks=[callback])
 
 
 
@@ -80,10 +82,9 @@ def filter_preprocess(state : State):
 
 
 def filter_agent_node(state : State):
-    print("=========[FILTER AGENT NODE]=========")
     res = filter_agent.invoke(state.filterAgent.input_prompt)
     output = parser.invoke(res.content)
-    print(output)
+
     state.filterAgent.selected_tool = output
 
     state.filterAgent.metrics = {
@@ -96,8 +97,6 @@ def filter_agent_node(state : State):
 
 
 def filter_tool_node(state : State):
-    print("=========[FILTER TOOL NODE]=========")
-    print(state.filterAgent.selected_tool)
     toolType = state.filterAgent.selected_tool["filter_type"]
 
     if toolType is not None:

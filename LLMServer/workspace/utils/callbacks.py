@@ -17,17 +17,27 @@ class LogFileWriter:
         except Exception as e:
             print(f"[ログファイルへの書き込みに失敗]: {e}")
 
+
+
 class CustomCallbackHandler(BaseCallbackHandler):
     def __init__(self, relative_path: str):
-        # ... 既存の初期化処理 ...
+        self.relative_path = relative_path
         self.last_tokens = None
         self.last_cost = None
         self.last_time = None
         self.start_time = None
 
+        # モデル価格（USD / 1M tokens）
+        self.model_prices_per_million = {
+            "gpt-4.1": {"input": 2.00, "output": 8.00},
+            "gpt-4.1-mini": {"input": 0.40, "output": 1.60},
+            "gpt-4.1-nano": {"input": 0.10, "output": 0.40},
+            "gpt-4.5-preview": {"input": 75.00, "output": 150.00},
+            "gpt-4o": {"input": 2.50, "output": 10.00},
+        }
+
     def on_llm_start(self, serialized, prompts, **kwargs):
         self.start_time = time.time()
-        # ... 既存コード ...
 
     def on_llm_end(self, response: LLMResult, **kwargs):
         elapsed_time = time.time() - self.start_time if self.start_time else 0.0
@@ -37,16 +47,22 @@ class CustomCallbackHandler(BaseCallbackHandler):
             usage = response.llm_output.get("token_usage", {})
             prompt_tokens = usage.get("prompt_tokens", 0)
             completion_tokens = usage.get("completion_tokens", 0)
+            total_tokens = prompt_tokens + completion_tokens
+
             self.last_tokens = {
                 "prompt_tokens": prompt_tokens,
                 "completion_tokens": completion_tokens,
-                "total_tokens": prompt_tokens + completion_tokens
+                "total_tokens": total_tokens
             }
 
-            cost_prompt = 0.01  # GPT-4 Turbo
-            cost_completion = 0.03
-            cost = (prompt_tokens / 1000) * cost_prompt + (completion_tokens / 1000) * cost_completion
-            self.last_cost = round(cost, 6)
+            # モデル取得と単価取得
+            model_name = os.getenv("GPT_MODEL") or "gpt-4o"
+            prices = self.model_prices_per_million.get(model_name, {"input": 0.0, "output": 0.0})
+
+            input_cost = (prices["input"] / 1_000_000) * prompt_tokens
+            output_cost = (prices["output"] / 1_000_000) * completion_tokens
+
+            self.last_cost = round(input_cost + output_cost, 6)
 
         except Exception as e:
             self.last_tokens = None

@@ -22,8 +22,7 @@ def getDeviceInFov(
     
     try:
         # print("\n[TOOL FOV] getDevicesInFov")
-        print("======[FROM TOOL]=====")
-        print(params)
+ 
         request_body = {
             "isInFov": params["isInFov"],
             "order": params["order"]
@@ -34,7 +33,6 @@ def getDeviceInFov(
 
         # print(f"Sending POST request to {base_url}/fov with body: {request_body}")
         response = httpx.post(f"{base_url}/device/fov", json=request_body)
-        print("Received Devices")
 
         if response.status_code == 200:
             response_data = response.json()
@@ -72,8 +70,7 @@ def getDeviceInDirection(
 
     return boolean value indicates whether the devices are successfully received in backside.
     """
-    print("======[FROM TOOL]=====")
-    print(params)
+
     direction = params["direction"]
     order = params["order"]
     range = params["range"]
@@ -85,7 +82,7 @@ def getDeviceInDirection(
     }
 
     try:
-        print(f"Sending POST request to {base_url}/device/direction with body: {request_body}")
+        # print(f"Sending POST request to {base_url}/device/direction with body: {request_body}")
         response = httpx.post(f"{base_url}/device/direction", json=request_body)
 
         if response.status_code == 200:
@@ -122,8 +119,7 @@ def getDevices(
     try:
 
 
-        print("======[FROM TOOL]=====")
-        print(params)
+    
         # print()
         # print("=====================[TOOL] getDevices================")
         request_body = {
@@ -167,8 +163,7 @@ def getDeviceAroundFurniture(
     Use when the user's instruction explicitly refers to furniture (e.g., "near the TV", "on the table", "around the shelf").
     """
     try:
-        print("======[FROM TOOL]=====")
-        print(params)
+     
         request_body = {
             "furniture_type": params["furniture_type"],
             "range": 5 if params["range"] is None else params["range"],

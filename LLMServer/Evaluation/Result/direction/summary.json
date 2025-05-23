@@ -1,0 +1,52 @@
+{
+  "exact_match_accuracy": 1.0,
+  "type_accuracy": 1.0,
+  "partial_match": 1.0,
+  "confusion_matrix": [
+    [
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "classification_report": "                  precision    recall  f1-score   support\n\n             fov       1.00      1.00      1.00         1\n       direction       0.00      0.00      0.00         0\naround_furniture       0.00      0.00      0.00         0\n             all       0.00      0.00      0.00         0\n\n       micro avg       1.00      1.00      1.00         1\n       macro avg       0.25      0.25      0.25         1\n    weighted avg       1.00      1.00      1.00         1\n",
+  "cost_summary": {
+    "total": 0.000136,
+    "average": 0.000136,
+    "max": 0.000136
+  },
+  "time_summary": {
+    "total": 1.6242568492889404,
+    "average": 1.6242568492889404,
+    "max": 1.6242568492889404
+  },
+  "parameter_metrics": {
+    "isInFov_precision": 1.0,
+    "isInFov_recall": 1.0,
+    "isInFov_f1": 1.0,
+    "order_precision": 1.0,
+    "order_recall": 1.0,
+    "order_f1": 1.0,
+    "range_mae": 0.0
+  },
+  "note": "filter_type = 'direction' に関する性能評価"
+}
