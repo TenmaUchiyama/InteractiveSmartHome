@@ -113,8 +113,9 @@ public class SAServer : HttpServer
                 Debug.Log("Received Fov"); 
                 Debug.Log(SpatialAwarnessProvider.Instance);
                 List<DeviceSpatialData> fovResult = SpatialAwarnessProvider.Instance.GetDeviceInFov("Light", data);
+                Debug.Log($"<color=yellow>FOV Result: {fovResult.Count}</color>");
                 string sendingFovData = this.SendingDeviceData(fovResult);
-                Debug.Log($"<color=yellow>[SAServer] isInFov: {data.isInFov}, order : {data.order}, range: {data.range}</color>");  
+                Debug.Log($"<color=yellow>[SAServer] {sendingFovData}</color>");
                 await context.Respond(200, sendingFovData);
             } catch (Exception ex) {
                 Debug.LogError($"Error processing /fov request: {ex.Message}");
@@ -157,9 +158,11 @@ public class SAServer : HttpServer
 
                 foreach(OperatingDeviceData data in operatingDeviceDatas)
                 {
-                    if(data == null) continue; 
+                    Debug.Log($"<color=yellow>Operating Device: {data.id}, state: {data.state}, intensity: {data.intensity}, color: {data.color}</color>");
+                    if (data == null) continue; 
                     SADevice saDevice = SADeviceRef.Instance.GetDeviceById(data.id); 
-                    if(saDevice)saDevice.OperateDevice(data);
+                    Debug.Log($"<color=yellow>SADevice: {saDevice}</color>");
+                    if (saDevice) saDevice.OperateDevice(data);
                 }
 
 
@@ -190,22 +193,22 @@ public class SAServer : HttpServer
             } 
         });
 
-        Post("/furniture/fov", async (context) => {
-            try{
+        // Post("/furniture/fov", async (context) => {
+        //     try{
 
-                FOVFurnitureRequest data = await context.ReadBodyAsJsonAsync<FOVFurnitureRequest>();
-                Debug.Log("Received Fov"); 
-                Debug.Log(data);
-                List<FurnitureData> fovResult = SpatialAwarnessProvider.Instance.GetFurnitureInFov(data);
-                string sendingFovData = this.SendingFurnitureData(fovResult);
-                Debug.Log($"<color=yellow>[SAServer] isInFov: {data.isInFov}, order : {data.order}, range: {data.range}</color>");
+        //         FOVFurnitureRequest data = await context.ReadBodyAsJsonAsync<FOVFurnitureRequest>();
+        //         Debug.Log("Received Fov"); 
+        //         Debug.Log(data);
+        //         // List<FurnitureData> fovResult = SpatialAwarnessProvider.Instance.GetFurnitureInFov(data);
+        //         string sendingFovData = this.SendingFurnitureData(fovResult);
+        //         Debug.Log($"<color=yellow>[SAServer] isInFov: {data.isInFov}, order : {data.order}, range: {data.range}</color>");
 
-                await context.Respond(200, sendingFovData);
-            }catch(Exception e)
-            {
-                Debug.LogError($"Error processing /furniture/fov request: {e.Message}");
-            };
-        }); 
+        //         await context.Respond(200, sendingFovData);
+        //     }catch(Exception e)
+        //     {
+        //         Debug.LogError($"Error processing /furniture/fov request: {e.Message}");
+        //     };
+        // }); 
 
 
         Post("/furniture/direction", async (context) => {

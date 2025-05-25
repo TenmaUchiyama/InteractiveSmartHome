@@ -1,7 +1,7 @@
 from dotenv import load_dotenv # type: ignore
 print(load_dotenv("../.env"))
 import os
-from no_tool_agent_runner import getFilterDeviceRunner, getSpatialRunner, getSystemRunner
+from no_tool_agent_runner import getSystemRunner, getSpatialRunner, getSystemRunner
 from sr_app_types.no_tool_agent_types import SpatialAgentType, State
 from langchain_core.messages import BaseMessage, HumanMessage
 from sr_app_types.no_tool_agent_types import FilterAgentType
@@ -18,7 +18,7 @@ def testFilterDeviceRunner():
     )
 
 
-    runner = getFilterDeviceRunner()
+    runner = getSystemRunner()
     output = runner.invoke(state)
 
     print(output["filterAgent"].devices)

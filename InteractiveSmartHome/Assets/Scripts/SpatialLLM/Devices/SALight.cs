@@ -30,12 +30,13 @@ public class SALight : SADevice
             string id = Guid.NewGuid().ToString();
 
             this.deviceData = new DBDeviceData(
-                // id,
-                // this.gameObject.name,
-                // SADeviceType.Light.ToString(),
-                // "light",
-                // "device/" + id,
-                // this.transform.position
+                Guid.NewGuid().ToString(),
+                "light",
+                this.gameObject.name,
+                 "", 
+                  "",
+                "",
+                ""
             );
 
             Debug.Log($"<color=green>Device data initialized for {this.gameObject.name}. ID: {this.deviceData.device_id}</color>");

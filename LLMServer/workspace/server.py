@@ -1,19 +1,18 @@
 import dotenv
-from EXPERIMENT.task_manager import ExperimentTaskResultManager
 from utils.communication.SwitchBotOperator import SwitchBotOperator
 dotenv.load_dotenv("../.env")
 import os
-from agent_runner_spoperate import runner
-from sr_app_types.agent_types import State
-from agents.device_operator_agent.operator_tool import operateDevice
-from no_tool_agent_runner import getFilterDeviceRunner, getSpatialRunner, getSystemRunner
+from sr_app_types.no_tool_agent_types import State
+from no_tool_agent_runner import getSystemRunner
 from fastapi import FastAPI # type: ignore
 import httpx # type: ignore
 from starlette.middleware.cors import CORSMiddleware # type: ignore
 import uvicorn# type: ignore
 from pydantic import BaseModel# type: ignore
-from langchain_core.messages import  HumanMessage
 import os 
+import json
+from dataclasses import asdict
+from langchain_core.messages import BaseMessage
 
 
 
@@ -86,58 +85,6 @@ async def turn_off_all():
 
     return "TURNING OFF"
 
-    
-
-
-
-
-
-
-
-@app.post("/llm_agent")
-def llm_agent_no_tool(message: InputMessage):
-    runner = getSystemRunner()
-    user_prompt = message.llm_message
-    task_id = message.task_id
-    print("ID: ", task_id)
-    # グローバルLogger初期化（インスタンス共有）
-    logger = ExperimentTaskResultManager.instance()
-    logger.start(task_id)
-
-    # loggerをStateに注入してrunnerに渡す
-    state: State = State(
-        user_prompt=HumanMessage(user_prompt),
-        logger=logger
-    )
-
-    try:
-
-
-        response = runner.invoke(state)
-        output = response['spatialAgent'].output_data
-
-        # 成功後ログ書き出し
-        logger.save()
-
-        print("********************OUTPUT*********************")
-        print(output)
-        return {"output": output}
-
-    except Exception as e:
-        # 例外の詳細ログ
-        import traceback
-        print("************ EXCEPTION OCCURRED **************")
-        traceback.print_exc()
-
-        return {
-            "error": "LLM processing failed.",
-            "detail": str(e)
-        }
-
-
-
-
-
 
 def llm_agent(message: InputMessage):
 
@@ -147,22 +94,18 @@ def llm_agent(message: InputMessage):
     task_id = message.task_id
     print("ID: ", task_id)
     # グローバルLogger初期化（インスタンス共有）
-    logger = ExperimentTaskResultManager.instance()
-    logger.start(task_id)
-
+   
+    
     # loggerをStateに注入してrunnerに渡す
     state: State = State(
         user_prompt=user_prompt,
-        logger=logger
     )
 
     try:
         response = runner.invoke(state)
         output = response['spatialAgent'].final_output
 
-        # 成功後ログ書き出し
-        logger.save()
-
+ 
         print("********************OUTPUT*********************")
         print(output)
         return {"output": output}
@@ -178,6 +121,66 @@ def llm_agent(message: InputMessage):
             "detail": str(e)
         }
     
+
+
+
+def serialize_value(value):
+    if isinstance(value, BaseMessage):
+        return {
+            "type": value.type,
+            "content": value.content,
+            # 追加で必要なら他の属性も
+        }
+    elif isinstance(value, list):
+        return [serialize_value(v) for v in value]
+    elif isinstance(value, dict):
+        return {k: serialize_value(v) for k, v in value.items()}
+    elif hasattr(value, "__dataclass_fields__"):
+        return serialize_value(asdict(value))
+    else:
+        return value
+
+
+@app.post("/llm_agent")
+def llm_agent_no_tool(message: InputMessage):
+    runner = getSystemRunner()
+    user_prompt = message.llm_message
+    task_id = message.task_id
+
+    print("ID: ", task_id)
+
+    state = State(user_prompt=user_prompt)
+
+    try:
+        response = runner.invoke(state)
+        output = response["spatialAgent"].output_data
+        serialized = serialize_value(response)
+
+        # ⬇️ input_prompt を削除
+        if "filterAgent" in serialized:
+            serialized["filterAgent"].pop("input_prompt", None)
+        if "spatialAgent" in serialized:
+            serialized["spatialAgent"].pop("input_prompt", None)
+
+        save_path = f"./logs/RESULTS/TEST/{task_id}.json"
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        with open(save_path, "w", encoding="utf-8") as f:
+            json.dump(serialized, f, indent=2, ensure_ascii=False)
+
+        return {
+            "output": serialized["spatialAgent"]["output_data"]["response"] if output else None
+        }
+    except Exception as e:
+        import traceback
+        print("************ EXCEPTION OCCURRED **************")
+        traceback.print_exc()
+        return {
+            "error": "LLM processing failed.",
+            "detail": str(e)
+        }
+
+
+
 
 if __name__ == "__main__":
     uvicorn.run("server:app", host="localhost", port=8800, reload=True)

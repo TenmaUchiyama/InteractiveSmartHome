@@ -10,9 +10,10 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report,
 )
-from no_tool_agent_runner import getFilterDeviceRunner
-from sr_app_types.no_tool_agent_types import State
+from no_tool_agent_runner import getSystemRunner
+from sr_app_types.no_tool_agent_types import State, FilterAgentOutput
 from evaluation.Analyzer import Analyzer, FovAnalyzer
+
 
 # Seaborn のスタイル設定
 sns.set(style="whitegrid")
@@ -22,23 +23,12 @@ class FilterAgentEvaluator:
         load_dotenv()  # .env をロード
         try:
             print("=== INIT START ===")
-            self.ran_data: List[Dict[str, Any]] = [{'id': '183e0e85-e669-40fc-b929-54cd123df122',
-  'ground_truth': {'filter_type': 'fov',
-   'params': {'isInFov': True, 'order': 'proximity', 'range': 2.0}},
-  'predicted': {'filter_type': 'fov',
-   'params': {'isInFov': True, 'order': 'proximity', 'range': 2.0}},
-  'metrics': {'tokens': {'prompt_tokens': 1182,
-    'completion_tokens': 44,
-    'total_tokens': 1226},
-   'cost_usd': 0.000136,
-   'elapsed_seconds': 1.6242568492889404},
-  'used_model': 'gpt-4.1-nano'}]
-            print("ran_data initialized", self.ran_data)
+            self.ran_data: List[Dict[str, Any]] = []
             self.data_path = data_path
-            self.runner = runner or getFilterDeviceRunner()
-            print("runner obtained")
+            self.runner = runner or getSystemRunner()
+      
             self._load_data()
-            print("load_data done")
+        
         except Exception as e:
             print("EXCEPTION IN INIT:", e)
 
@@ -74,24 +64,29 @@ class FilterAgentEvaluator:
         return self.ran_data
 
 
+    from sr_app_types.no_tool_agent_types import FilterAgentOutput
+
     def _run_single_test(self, item: Dict[str, Any], fa: Any) -> Dict[str, Any]:
-        pred = fa.selected_tool
+        pred: FilterAgentOutput = fa.output_data
         gt = item["output"]
 
         output = {
             "id": item["id"],
             "ground_truth": gt,
-            "predicted": pred,
+            "predicted": {
+                "filter_type": pred.filter_type,
+                "params": pred.params,
+                "reasoning": pred.reasoning
+            },
             "metrics": fa.metrics,
-            "used_model": os.getenv("GPT_MODEL")
+            "used_model": os.getenv("GPT_MODEL"),
         }
 
-        # 🔧 修正：paramsを抽出してから比較する
-        params_pred = pred.get("params", {})
+        params_pred = pred.params or {}
         params_gt = gt.get("params", {})
 
-        exact = pred == gt
-        ft_match = pred.get("filter_type") == gt.get("filter_type")
+        exact = pred.filter_type == gt.get("filter_type") and params_pred == params_gt
+        ft_match = pred.filter_type == gt.get("filter_type")
         isInFov_match = params_pred.get("isInFov") == params_gt.get("isInFov")
         order_match = params_pred.get("order") == params_gt.get("order")
         range_match = abs(params_pred.get("range", 0.0) - params_gt.get("range", 0.0)) < 1e-4
@@ -103,19 +98,13 @@ class FilterAgentEvaluator:
             f"order: {'✅' if order_match else '❌'}, "
             f"range: {'✅' if range_match else '❌'}"
             )
-        print("time_taken: ", fa.metrics["elapsed_seconds"])
-        print("cost_usd: $", fa.metrics["cost_usd"])
-
-        # GTと予測の内容を表示（見やすく整形）
-        # print("   🟦 Ground Truth:")
-        # print(json.dumps(gt, indent=4, ensure_ascii=False))
-        # print("   🟩 Predicted:")
-        # print(json.dumps(pred, indent=4, ensure_ascii=False))
-        # print()
-
-
+        if fa.metrics:
+            print("time_taken: ", fa.metrics.get("elapsed_seconds"))
+            print("cost_usd: $", fa.metrics.get("cost_usd"))
 
         return output
+
+    
     def save_outputs(self, path: str):
         """run_tests の outputs を JSON 形式で保存"""
         os.makedirs(os.path.dirname(path), exist_ok=True)

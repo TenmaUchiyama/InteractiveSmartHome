@@ -3,12 +3,12 @@ load_dotenv("../.env")
 import multiprocessing
 import os
 from evaluation.FilterAgentEvaluator import FilterAgentEvaluator
-from no_tool_agent_runner import getFilterDeviceRunner
+from no_tool_agent_runner import getSystemRunner
 
 
 def run_for_model(model_name: str, data_path: str, output_root: str):
     print(f"[{model_name}] 開始")
-    runner = getFilterDeviceRunner()
+    runner = getSystemRunner()
     evaluator = FilterAgentEvaluator(data_path, runner)
     evaluator.change_model(model_name)
     evaluator.run_tests(0, len(evaluator.data))

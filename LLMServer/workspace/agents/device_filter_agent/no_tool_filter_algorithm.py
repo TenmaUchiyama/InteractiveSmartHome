@@ -39,7 +39,7 @@ def getDeviceInFov(
 
             # `param` が存在しない場合は作成する
             response_data.setdefault("param", {})
-
+            print(response_data)
             # `param` に値を追加
             response_data["param"]["filter_type"] = "fov"
             response_data["param"]["isInFov"] = params["isInFov"]

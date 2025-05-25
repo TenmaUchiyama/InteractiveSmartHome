@@ -6,52 +6,40 @@ from pydantic import BaseModel
 from typing import List, Dict, Any
 
 
-class Position(BaseModel):
-    x: float
-    y: float
-    z: float
 
-class Device(BaseModel):
-    id: str
-    position: Position
 
-class Color(BaseModel):
-    r: int
-    g: int
-    b: int
+@dataclass
+class FilterAgentOutput:
+    filter_type: str
+    params: Dict[str, Any]
+    reasoning: str
 
-class DeviceState(BaseModel):
-    id: str
-    state: bool
-    intensity: int
-    color: Color
-
-class SpatialInput(BaseModel):
-    filter_selected_tool: Optional[Dict] = None
-    user_prompt: str
-    devices: List[Device]
-
-class SpatialOutput(BaseModel):
-    devices: List[DeviceState]
+@dataclass
+class SpatialOutput:
+    devices: List[Dict[str, Any]]
     response: str
+    reasoning: str
+    response_time_ms: Optional[float] = None
 
 @dataclass
 class FilterAgentType:
     input_prompt: List[BaseMessage] = field(default_factory=list)
-    selected_tool: Optional[Dict] = None 
-    devices: List[str] = field(default_factory=list)  
-    metrics: Optional[Dict] = None
+    output_tool_selection: Optional[FilterAgentOutput] = None
+    devices: Optional[List[Dict[str, Any]]] = None
+    metrics: Optional[Dict] = None  # e.g., accuracy, latency
 
 @dataclass
 class SpatialAgentType:
-    output: List[BaseMessage] = field(default_factory=list)
     input_prompt: List[BaseMessage] = field(default_factory=list)
+    selected_devices: List[str] = field(default_factory=list)  # Device IDs
     output_data: Optional[SpatialOutput] = None
-    metrics: Optional[Dict] = None
+    metrics: Optional[Dict] = None  # e.g., is_correct, error_type
 
 @dataclass
 class State:
-    user_prompt: HumanMessage = None
+    user_prompt: str
     filterAgent: FilterAgentType = field(default_factory=FilterAgentType)
     spatialAgent: SpatialAgentType = field(default_factory=SpatialAgentType)
+    system_metrics: Optional[Dict] = None
+
 

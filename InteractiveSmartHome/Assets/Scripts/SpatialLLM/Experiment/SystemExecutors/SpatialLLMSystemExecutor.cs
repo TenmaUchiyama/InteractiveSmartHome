@@ -89,7 +89,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
 
 
 
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) )
             {
            
 
@@ -107,7 +107,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
 
 
 
-             if (OVRInput.GetDown(OVRInput.RawButton.Y))
+             if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
             {
                     YOperation();
             }
@@ -135,7 +135,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
                         case "recorded": 
                             string userInput = saUIManager.GetRecognizedWord(); 
                             saUIManager.DisplaySendingLLM(userInput);
-                            if(!LLMQueryRequest.Instance.IsRequesting) await LLMQueryRequest.Instance.SendQuery(userInput, experimentManager.GetCurrentTaskId()); 
+                            if(!PromptLLMQueryRequest.Instance.IsRequesting) await PromptLLMQueryRequest.Instance.SendQuery(userInput, experimentManager.GetCurrentTaskId()); 
 
                         break; 
                         case "received": 

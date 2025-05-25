@@ -25,17 +25,16 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     public const float verticalFOV = 96f;
     public const float horizontalFOV = 106f;
 
+    private Camera cam;
+    private Plane[] camPlanes;
 
 
 
 
+        void Start()
+        {
 
-    void Start()
-    {
-
-        
-
-      
+       
 
     }
 
@@ -94,22 +93,17 @@ private bool IsInDirection(Vector3 localPos, Direction direction)
 
 // 対象がユーザーのFOV内にあるかを判定
 // 対象がユーザーのFOV内にあるかを、詳細デバッグ付きで判定
-private bool IsWithinFov(Transform targetTransform)
+private void InitCamera()
 {
-    Camera cam = Camera.main; // または userCameraTransform.GetComponent<Camera>()
-    if (cam == null) return false;
-
-    Renderer renderer = targetTransform.GetComponent<Renderer>();
-    if (renderer == null) return false;
-
-    Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
-
-    bool isInView = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
-
-    Debug.Log($"[FOV] {targetTransform.name} は視野内: {isInView}");
-    return isInView;
+    cam = Camera.main;
+    camPlanes = GeometryUtility.CalculateFrustumPlanes(cam);
 }
 
+private bool IsWithinFov(Renderer renderer)
+{
+    if (cam == null || renderer == null) return false;
+    return GeometryUtility.TestPlanesAABB(camPlanes, renderer.bounds);
+}
 
 
 
@@ -163,89 +157,106 @@ public List<SADevice> FindDevicesInDirection(Direction direction, string device_
 
 public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = true)
 {
+    InitCamera();
+
     List<SADevice> returnDevices = new List<SADevice>();
     List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
-    Debug.Log(allDevices.Count);
-
-    float halfVerticalFOV = verticalFOV / 2f;
-    float halfHorizontalFOV = horizontalFOV / 2f;
 
     foreach (var device in allDevices)
     {
-        if (!device.CompareDeviceType(device_type))
-            continue;
-        if (device == null)
-            continue;
+        if (device == null) continue;
+        if (!device.CompareDeviceType(device_type)) continue;
 
-        bool isWithinFov = IsWithinFov(device.transform);
-        Debug.Log($"<color=yellow>{isWithinFov}</color>");
+        // 優先：Collider → Fallback：Renderer
+        Bounds? bounds = null;
 
-        if (getInFov && isWithinFov)
+        Collider col = device.GetComponent<Collider>();
+        if (col != null)
         {
-            returnDevices.Add(device);
+            bounds = col.bounds;
         }
-        else if (!getInFov && !isWithinFov)
+        else
+        {
+            Renderer renderer = device.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                bounds = renderer.bounds;
+            }
+        }
+
+        if (!bounds.HasValue) continue;
+
+        // カメラの後ろにあるかチェック
+        Vector3 directionToDevice = (device.transform.position - cam.transform.position).normalized;
+        float dot = Vector3.Dot(cam.transform.forward, directionToDevice);
+        if (dot < 0f) continue;
+
+        // FOVチェック
+        bool isInFov = GeometryUtility.TestPlanesAABB(camPlanes, bounds.Value);
+        
+        if ((getInFov && isInFov) || (!getInFov && !isInFov))
         {
             returnDevices.Add(device);
         }
     }
+
     return returnDevices;
 }
 
+// public List<SAFurniture> FindFurnitureInFov(string furniture_type = "", bool getInFov = true)
+// {
+//     List<SAFurniture> returnFurniture = new List<SAFurniture>();
+//     List<SAFurniture> allFurniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
+
+//     float halfVerticalFOV = verticalFOV / 2f;
+//     float halfHorizontalFOV = horizontalFOV / 2f;
+
+//     foreach (var furniture in allFurniture)
+//     {
+//         if (furniture == null)
+//             continue;
+
+//         if (!furniture.CompareFurnitureType(furniture_type))
+//             continue;
+
+//         bool isWithinFov = IsWithinFov(furniture.transform);
+
+//         if (getInFov && isWithinFov)
+//         {
+//             returnFurniture.Add(furniture);
+//         }
+//         else if (!getInFov && !isWithinFov)
+//         {
+//             returnFurniture.Add(furniture);
+//         }
+//     }
+
+//     return returnFurniture;
+// }
 
 
-public List<SAFurniture> FindFurnitureInFov(string furniture_type = "", bool getInFov = true)
-{
-    List<SAFurniture> returnFurniture = new List<SAFurniture>();
-    List<SAFurniture> allFurniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
-
-    float halfVerticalFOV = verticalFOV / 2f;
-    float halfHorizontalFOV = horizontalFOV / 2f;
-
-    foreach (var furniture in allFurniture)
-    {
-        if (furniture == null)
-            continue;
-
-        if (!furniture.CompareFurnitureType(furniture_type))
-            continue;
-
-        bool isWithinFov = IsWithinFov(furniture.transform);
-
-        if (getInFov && isWithinFov)
+        public List<SAFurniture> FindFurnitureInDirection(Direction direction, string furniture_type)
         {
-            returnFurniture.Add(furniture);
+            List<SAFurniture> allFurniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
+            List<SAFurniture> furnitureInDirection = new List<SAFurniture>();
+
+            foreach (SAFurniture furniture in allFurniture)
+            {
+                if (furniture == null)
+                    continue;
+
+                if (!furniture.CompareFurnitureType(furniture_type))
+                    continue;
+
+                Vector3 localPos = GetLocalPosition(furniture.transform);
+                if (IsInDirection(localPos, direction))
+                {
+                    furnitureInDirection.Add(furniture);
+                }
+            }
+
+            return furnitureInDirection;
         }
-        else if (!getInFov && !isWithinFov)
-        {
-            returnFurniture.Add(furniture);
-        }
-    }
-
-    return returnFurniture;
-}
-public List<SAFurniture> FindFurnitureInDirection(Direction direction, string furniture_type)
-{
-    List<SAFurniture> allFurniture = SAFurnitureRef.Instance.GetAllSAFurnitures();
-    List<SAFurniture> furnitureInDirection = new List<SAFurniture>();
-
-    foreach (SAFurniture furniture in allFurniture)
-    {
-        if (furniture == null)
-            continue;
-
-        if (!furniture.CompareFurnitureType(furniture_type))
-            continue;
-
-        Vector3 localPos = GetLocalPosition(furniture.transform);
-        if (IsInDirection(localPos, direction))
-        {
-            furnitureInDirection.Add(furniture);
-        }
-    }
-
-    return furnitureInDirection;
-}
 
 public SAFurniture FindFurnitureByType(string furniture_type)
 {
@@ -551,52 +562,52 @@ public List<FurnitureData> GetFurnitureInDirection(DirFurnitureRequest request)
 }
 
 
-public List<FurnitureData> GetFurnitureInFov(FOVFurnitureRequest furnitureRequest)
-{
-    string furnitureTypeStr = furnitureRequest.furnitureType;
-    bool withinFov = furnitureRequest.isInFov;
-    string order = furnitureRequest.order;
-    float range = furnitureRequest.range ?? 0f;
+// public List<FurnitureData> GetFurnitureInFov(FOVFurnitureRequest furnitureRequest)
+// {
+//     string furnitureTypeStr = furnitureRequest.furnitureType;
+//     bool withinFov = furnitureRequest.isInFov;
+//     string order = furnitureRequest.order;
+//     float range = furnitureRequest.range ?? 0f;
 
-    List<SAFurniture> furnitures = this.FindFurnitureInFov(furnitureTypeStr, withinFov);
-    Debug.Log("Furniture count: " + furnitures.Count);
+//     List<SAFurniture> furnitures = this.FindFurnitureInFov(furnitureTypeStr, withinFov);
+//     Debug.Log("Furniture count: " + furnitures.Count);
 
-    if (furnitures == null || furnitures.Count == 0)
-    {
-        Debug.LogWarning("Furniture list is empty.");
-        return new List<FurnitureData>();
-    }
+//     if (furnitures == null || furnitures.Count == 0)
+//     {
+//         Debug.LogWarning("Furniture list is empty.");
+//         return new List<FurnitureData>();
+//     }
 
-    List<FurnitureData> furnitureDataList = new List<FurnitureData>();
+//     List<FurnitureData> furnitureDataList = new List<FurnitureData>();
 
-    foreach (var furniture in furnitures)
-    {
-        if (furniture == null)
-        {
-            Debug.LogError("Furniture is null.");
-            continue;
-        }
+//     foreach (var furniture in furnitures)
+//     {
+//         if (furniture == null)
+//         {
+//             Debug.LogError("Furniture is null.");
+//             continue;
+//         }
 
-        try
-        {
-            var data = furniture.GetFurniturePositionalRelativeToUser();
-            if (data == null)
-            {
-                Debug.LogError("Furniture data is null for furniture: " + furniture.name);
-                continue;
-            }
-            furnitureDataList.Add(data);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error getting furniture data for {furniture.name}: {ex.Message}");
-        }
-    }
+//         try
+//         {
+//             var data = furniture.GetFurniturePositionalRelativeToUser();
+//             if (data == null)
+//             {
+//                 Debug.LogError("Furniture data is null for furniture: " + furniture.name);
+//                 continue;
+//             }
+//             furnitureDataList.Add(data);
+//         }
+//         catch (Exception ex)
+//         {
+//             Debug.LogError($"Error getting furniture data for {furniture.name}: {ex.Message}");
+//         }
+//     }
 
-    furnitureDataList = FilterFurnitureData(furnitureDataList, order, range);
+//     furnitureDataList = FilterFurnitureData(furnitureDataList, order, range);
 
-    return furnitureDataList;
-}
+//     return furnitureDataList;
+// }
 
 
 

@@ -16,4 +16,7 @@ class NODE(Enum):
     OPERATOR_AGENT = "operator_agent_node"
     OPERATOR_TOOL = "operator_tool_node"
     OPERATOR_POSTPROCESS = "operator_postprocess_node"
+
+
+    SYSTEM_POST_PROCESS = "system_post_process_node"
     

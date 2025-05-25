@@ -37,7 +37,7 @@ public class ExperimentManager : MonoBehaviour
     [SerializeField] private int SEED;
     
     private ExperimentalDataManager experimentalDataManager;
-    private ExperimentTask experimentTask;
+    // private ExperimentTask experimentTask;
     private int currentTaskId; 
     private ExperimentFlowState currentState = ExperimentFlowState.NONE;
     private Stack<ExperimentFlowState> stateHistory = new Stack<ExperimentFlowState>(); 
@@ -50,9 +50,9 @@ public class ExperimentManager : MonoBehaviour
     //とりあえずデバイスの色をつける
 
     private void Start() {
-        experimentalDataManager = GetComponent<ExperimentalDataManager>();
+        // experimentalDataManager = GetComponent<ExperimentalDataManager>();
         arrangementGenerator = GetComponent<DeviceArrangementGenerator>();
-        experimentTask = GetComponent<ExperimentTask>();
+        // // experimentTask = GetComponent<ExperimentTask>();
 
     
 
@@ -104,7 +104,7 @@ public class ExperimentManager : MonoBehaviour
     private async UniTask StartTask()
     { 
         this.currentArrange = this.arrangeDataList[this.currentArrangeIndex]; 
-        this.experimentTask.Initialize(this.currentArrange);
+        // this.experimentTask.Initialize(this.currentArrange);
         TransitionToState(ExperimentFlowState.SHOW_DEVICE);
     }
 
@@ -150,10 +150,10 @@ private async UniTask Operation()
     
     DebugLogging($"[{this.currentState.ToString()}] Operating"); 
     systemExecutor.BeginOperation(); 
-    this.experimentTask.StartTaskTimer();
+    // this.experimentTask.StartTaskTimer();
     await systemExecutor.WaitForExecution();
     saUIManager.ClearInstruction();
-    this.experimentTask.StopTaskTimer();
+    // this.experimentTask.StopTaskTimer();
     TransitionToState(ExperimentFlowState.DONE);
 
 }
@@ -177,8 +177,8 @@ private async UniTask Operation()
 
             return; 
         }
-        await this.experimentalDataManager.WriteExperimentalDataAsync(this.experimentTask);
-        this.experimentTask.ClearAllData();
+        // await this.experimentalDataManager.WriteExperimentalDataAsync(this.experimentTask);
+        // this.experimentTask.ClearAllData();
 
         TransitionToState(ExperimentFlowState.START_TASK);
     }
@@ -187,13 +187,13 @@ private async UniTask Operation()
 
     public void StartLLMResponse() 
     {
-        this.experimentTask.StartLLMTimer(); 
+        // this.experimentTask.StartLLMTimer(); 
     }
 
     public void  StopLLMResponse(string prompt)
     {
-        this.experimentTask.StopLLMTimer();
-        this.experimentTask.AddCurrentQueryAttempt(prompt, this.currentArrange);
+        // this.experimentTask.StopLLMTimer();
+        // this.experimentTask.AddCurrentQueryAttempt(prompt, this.currentArrange);
     }
 
     public void BackToShowDevice() 

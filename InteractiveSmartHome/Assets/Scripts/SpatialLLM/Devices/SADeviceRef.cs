@@ -43,10 +43,12 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
     public SADevice GetDeviceById(string id)
     {
-        SADevice foundDevice = saDevices.Find(device => { 
-            
-            
-            return device.GetDBDeviceData().device_id == id;});
+        SADevice foundDevice = saDevices.Find(device =>
+        {
+
+          
+            return device.GetDBDeviceData().device_id == id;
+        });
 
         return foundDevice; 
     }

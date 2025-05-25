@@ -5,13 +5,13 @@ from langchain_core.messages import ToolMessage
 from pydantic import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
 from typing import Literal
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from sr_app_types.node_types import NODE
 from agents.device_filter_agent.no_tool_filter_algorithm import getDeviceInFov, getDeviceInDirection, getDevices, getDeviceAroundFurniture
 import os
 
 from utils.callbacks import CustomCallbackHandler
-from sr_app_types.no_tool_agent_types import State
+from sr_app_types.no_tool_agent_types import FilterAgentOutput, State
 
 
 from pydantic import BaseModel
@@ -70,43 +70,50 @@ parser = JsonOutputParser(pydantic_object=FilterOutputData)
 
 
 def filter_preprocess(state : State):
+    callback.system_start()
     user_prompt = state.user_prompt
     input_msg = [
         filter_message, 
-        user_prompt
+        HumanMessage(content=user_prompt)
     ]
 
     state.filterAgent.input_prompt = input_msg
     return state
 
 
+def filter_agent_node(state: State):
 
-def filter_agent_node(state : State):
     res = filter_agent.invoke(state.filterAgent.input_prompt)
-    output = parser.invoke(res.content)
-
-    state.filterAgent.selected_tool = output
+    output_dict = parser.invoke(res.content)
+    
+    # 🔧 明示的に型変換
+    output = FilterAgentOutput(**output_dict)
+    state.filterAgent.output_tool_selection = output
 
     state.filterAgent.metrics = {
+        "model_name": callback.model_name,
         "tokens": callback.last_tokens,
         "cost_usd": callback.last_cost,
-        "elapsed_seconds": callback.last_time
+        "agent_time_elapsed": callback.last_time
     }
     return state
 
 
 
-def filter_tool_node(state : State):
-    toolType = state.filterAgent.selected_tool["filter_type"]
-
-    if toolType is not None:
-        toolType = filter_tool_map[toolType]
-        params = state.filterAgent.selected_tool["params"]
-       
-        result = toolType.invoke(input={"params": params})
-      
-        state.filterAgent.devices = result
-        return state
-    else:
+def filter_tool_node(state: State):
+    # print(state.filterAgent.output_tool_selection)
+    output = state.filterAgent.output_tool_selection
+    if output is None:
         return None
-    
+    # print(output)
+    tool_func = filter_tool_map.get(output.filter_type)
+
+    if tool_func:
+        result = tool_func.invoke(input={"params": output.params})
+        print("result: ", result)
+        state.filterAgent.devices = result["devices"]
+        
+        state.filterAgent.metrics["system_time_elapsed"] = callback.system_end()
+        return state
+    state.filterAgent.metrics["system_time_elapsed"] = callback.system_end()
+    return None

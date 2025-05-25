@@ -38,21 +38,33 @@ class CustomCallbackHandler(BaseCallbackHandler):
 
     def on_llm_start(self, serialized, prompts, **kwargs):
         self.start_time = time.time()
+    
+    def system_start(self):
+        self.system_start_time = time.time()
+    
+    def system_end(self):
+        self.system_end_time = time.time()
+        return self.system_end_time - self.system_start_time
+
 
     def on_llm_end(self, response: LLMResult, **kwargs):
         elapsed_time = time.time() - self.start_time if self.start_time else 0.0
+
+
         self.last_time = elapsed_time
+        
 
         try:
             usage = response.llm_output.get("token_usage", {})
             prompt_tokens = usage.get("prompt_tokens", 0)
             completion_tokens = usage.get("completion_tokens", 0)
             total_tokens = prompt_tokens + completion_tokens
-
+            self.model_name = response.llm_output.get("model_name", "gpt-4o")
             self.last_tokens = {
+            
                 "prompt_tokens": prompt_tokens,
                 "completion_tokens": completion_tokens,
-                "total_tokens": total_tokens
+                "total_tokens": total_tokens,
             }
 
             # モデル取得と単価取得

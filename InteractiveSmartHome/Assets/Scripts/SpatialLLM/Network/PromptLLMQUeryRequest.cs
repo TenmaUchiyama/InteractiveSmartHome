@@ -14,7 +14,6 @@ namespace SpatialLLM.Network
         [SerializeField] private int port = 8800;
         [SerializeField] private bool speechRequired = true;
         [SerializeField] private string debugText = "";
-        [SerializeField] private ExperimentManager experimentManager;
 
         public UnityEvent<string> OnReceiveResponseFromLLM;
         private bool _isRequesting = false;
@@ -30,12 +29,13 @@ namespace SpatialLLM.Network
             }
         }
 
-        
 
-        public void SendQueryForDebug(string text)
+
+
+        public async Task SendQueryForDebug(string text)
         {
             string useText = string.IsNullOrEmpty(debugText) ? text : debugText;
-            OnVoiceRecognized(useText);
+            await SendQuery(useText);
         }
 
         private async void OnVoiceRecognized(string recognizedText)
@@ -58,9 +58,7 @@ namespace SpatialLLM.Network
             string jsonData = JsonConvert.SerializeObject(data);
             _isRequesting = true;
 
-                experimentManager?.StartLLMResponse();
                 await PostRequestAsync(url, jsonData);
-                experimentManager?.StopLLMResponse(userMessage);
 
             _isRequesting = false;
         }
