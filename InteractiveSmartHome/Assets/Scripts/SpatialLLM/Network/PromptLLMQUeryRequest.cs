@@ -14,6 +14,7 @@ namespace SpatialLLM.Network
         [SerializeField] private int port = 8800;
         [SerializeField] private bool speechRequired = true;
         [SerializeField] private string debugText = "";
+        [SerializeField] private ExperimentManager experimentManager;
 
         public UnityEvent<string> OnReceiveResponseFromLLM;
         private bool _isRequesting = false;
@@ -35,7 +36,8 @@ namespace SpatialLLM.Network
         public async Task SendQueryForDebug(string text)
         {
             string useText = string.IsNullOrEmpty(debugText) ? text : debugText;
-            await SendQuery(useText);
+            var task_id = experimentManager ? experimentManager.GetCurrentTaskId().ToString() : "test_id";
+            await SendQuery(useText, taskId: task_id);
         }
 
         private async void OnVoiceRecognized(string recognizedText)

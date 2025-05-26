@@ -15,7 +15,7 @@ from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
 
-
+OUTPUT_FILE_NAME="TEST"
 app = FastAPI()
 
 
@@ -156,20 +156,34 @@ def llm_agent_no_tool(message: InputMessage):
         output = response["spatialAgent"].output_data
         serialized = serialize_value(response)
 
-        # ⬇️ input_prompt を削除
         if "filterAgent" in serialized:
             serialized["filterAgent"].pop("input_prompt", None)
         if "spatialAgent" in serialized:
             serialized["spatialAgent"].pop("input_prompt", None)
+        
+        serialized["task_id"] = task_id
 
-        save_path = f"./logs/RESULTS/TEST/{task_id}.json"
+        save_path = f"./logs/RESULTS/{OUTPUT_FILE_NAME}.json"
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+        # 既存ログを読み込み（なければ空リスト）
+        if os.path.exists(save_path):
+            with open(save_path, "r", encoding="utf-8") as f:
+                existing_logs = json.load(f)
+        else:
+            existing_logs = []
+
+        # データを追加
+        existing_logs.append(serialized)
+
+        # ファイルに書き戻し
         with open(save_path, "w", encoding="utf-8") as f:
-            json.dump(serialized, f, indent=2, ensure_ascii=False)
+            json.dump(existing_logs, f, indent=2, ensure_ascii=False)
 
         return {
             "output": serialized["spatialAgent"]["output_data"]["response"] if output else None
         }
+
     except Exception as e:
         import traceback
         print("************ EXCEPTION OCCURRED **************")

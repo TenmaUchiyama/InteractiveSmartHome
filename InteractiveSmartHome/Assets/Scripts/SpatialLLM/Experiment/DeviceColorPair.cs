@@ -50,5 +50,6 @@ namespace SpatialLLM.Experiment
     {
         public string deviceName;
         public string colorName;
+        public string deviceId;
     }
 }

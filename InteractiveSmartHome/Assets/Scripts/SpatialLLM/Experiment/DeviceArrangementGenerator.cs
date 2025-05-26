@@ -112,9 +112,12 @@ namespace SpatialLLM.Experiment
                     Debug.LogWarning("Invalid DeviceColorPair encountered during serialization");
                     return null;
                 }
+                
+                string id = SADeviceRef.Instance.GetDeviceIdByName(d.device.gameObject?.name); ;
                 return new DeviceColorPairSerializable
                 {
                     deviceName = d.device.gameObject?.name ?? "Unknown",
+                    deviceId = id ?? "Unknown",
                     colorName = d.color.ToString()
                 };
             })
