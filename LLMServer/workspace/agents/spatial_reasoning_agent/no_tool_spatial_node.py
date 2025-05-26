@@ -68,6 +68,7 @@ def sr_tool_node(state: State):
     # print("=========[SR TOOL NODE]=========")
   
     outputDevice = {"devices": state.spatialAgent.output_data["devices"]}
+    state.selected_devices = outputDevice["devices"]
     result = operateDevice.invoke(outputDevice)
     state.spatialAgent.metrics["system_time_elapsed"] = callback.system_end()
     

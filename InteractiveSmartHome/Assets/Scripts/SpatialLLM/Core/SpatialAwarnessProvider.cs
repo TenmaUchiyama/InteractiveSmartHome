@@ -19,7 +19,7 @@ namespace SpatialLLM.Core
 public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
 {
    
-    [SerializeField] private Transform userCameraTransform;
+    [SerializeField] private Camera userCamera;
     // [SerializeField] private Camera frustalCamera; // 使用するカメラ
 
     public const float verticalFOV = 96f;
@@ -66,7 +66,7 @@ public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
 // ユーザーのカメラ（またはTransform）を基準に対象のローカル座標を取得
 private Vector3 GetLocalPosition(Transform target)
 {
-    return userCameraTransform.InverseTransformPoint(target.position);
+    return userCamera.transform.InverseTransformPoint(target.position);
 }
 
 // 指定方向（Front, Back, Right, Left, Up, Down）に対象があるかを判定
@@ -157,7 +157,7 @@ public List<SADevice> FindDevicesInDirection(Direction direction, string device_
 
 public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = true)
 {
-    InitCamera();
+
 
     List<SADevice> returnDevices = new List<SADevice>();
     List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
@@ -187,8 +187,8 @@ public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = 
         if (!bounds.HasValue) continue;
 
         // カメラの後ろにあるかチェック
-        Vector3 directionToDevice = (device.transform.position - cam.transform.position).normalized;
-        float dot = Vector3.Dot(cam.transform.forward, directionToDevice);
+        Vector3 directionToDevice = (device.transform.position - userCamera.transform.position).normalized;
+        float dot = Vector3.Dot(userCamera.transform.forward, directionToDevice);
         if (dot < 0f) continue;
 
         // FOVチェック
@@ -396,7 +396,7 @@ public List<DeviceSpatialData> GetDeviceInFov(string device_type, FOVRequest fov
         try
         {
 
-            var positionalData = device.GetDevicePositionalRelativeToUser(userCameraTransform);
+            var positionalData = device.GetDevicePositionalRelativeToUser(userCamera.transform);
             if (positionalData == null)
             {
                 Debug.LogError("Device positional data is null for device: " + device.name);
@@ -458,11 +458,11 @@ public List<FurnitureData> FilterFurnitureData(List<FurnitureData> data, string 
     private float ComputeAngle(Vector3 devicePosition)
     {
         // デバイスの相対位置を計算（ユーザーから見たデバイスの位置）
-        Vector3 directionToDevice = devicePosition - userCameraTransform.position;
+        Vector3 directionToDevice = devicePosition - userCamera.transform.position;
         directionToDevice.y = 0; // 水平面での角度を計算するためにY軸を無視
 
         // ユーザーの前方方向を取得
-        Vector3 forward = userCameraTransform.forward;
+        Vector3 forward = userCamera.transform.forward;
         forward.y = 0; // 水平面での方向
 
         // ユーザーの前方からデバイスへの方向の角度を計算
@@ -640,7 +640,7 @@ public  List<DeviceSpatialData> GetDevicesAroundFurniture(string furnitureID, st
     }
 
     // ユーザーのローカル座標系でのFurnitureの位置を取得
-    Vector3 furnitureLocalPos = userCameraTransform.InverseTransformPoint(targetFurniture.transform.position);
+    Vector3 furnitureLocalPos = userCamera.transform.InverseTransformPoint(targetFurniture.transform.position);
 
     // 全SADeviceを取得し、範囲内にあるものを調べる
     List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
@@ -652,7 +652,7 @@ public  List<DeviceSpatialData> GetDevicesAroundFurniture(string furnitureID, st
         if (range == 0 || distance <= range)
         {
             // ユーザーのローカル座標系でのdeviceの位置を取得
-            Vector3 deviceLocalPos = userCameraTransform.InverseTransformPoint(device.transform.position);
+            Vector3 deviceLocalPos = userCamera.transform.InverseTransformPoint(device.transform.position);
             // Furnitureを基準とした相対位置を算出
             Vector3 relativePos = deviceLocalPos - furnitureLocalPos;
 

@@ -31,7 +31,6 @@ class FilterAgentType:
 @dataclass
 class SpatialAgentType:
     input_prompt: List[BaseMessage] = field(default_factory=list)
-    selected_devices: List[str] = field(default_factory=list)  # Device IDs
     output_data: Optional[SpatialOutput] = None
     metrics: Optional[Dict] = None  # e.g., is_correct, error_type
 
@@ -40,6 +39,8 @@ class State:
     user_prompt: str
     filterAgent: FilterAgentType = field(default_factory=FilterAgentType)
     spatialAgent: SpatialAgentType = field(default_factory=SpatialAgentType)
+    selected_devices: List[str] = field(default_factory=list) 
+    
     system_metrics: Optional[Dict] = None
 
 
