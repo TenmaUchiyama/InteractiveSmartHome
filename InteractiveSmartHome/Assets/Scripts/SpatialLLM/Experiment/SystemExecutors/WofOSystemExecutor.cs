@@ -1,99 +1,141 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
+using Cysharp.Threading.Tasks;
+using UnityEngine.Events;
 using SpatialLLM.Core;
 using SpatialLLM.Device;
-using SpatialLLM.Experiment;
-using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
-public class WofOSystemExecutor : SystemExecutor
+namespace SpatialLLM.Experiment
 {
-
-
-       private bool isGripHolding = false;
-        private bool isOperationDone = false;
-
-        private bool isTriggarable = false;
-
-
-    // Start is called before the first frame update
-    protected virtual void Start()
+    public class WofOSystemExecutor : SystemExecutor
     {
-        if(SASpeechRecognizer.Instance)
+        private bool isGripHolding = false;
+        private string currentState = "preparation";
+        [SerializeField] private WordLogger wordLogger;
+        string recognizedWord = "";
+
+        protected override void Start()
         {
-            SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
-        }
-    }
+            base.Start();
 
-    void Onestroy()
-    {
-        if(SASpeechRecognizer.Instance)
+            if (SASpeechRecognizer.Instance)
+            {
+                SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+            }
+
+        }
+
+        private void OnVoiceRecognized(string recognizedText)
         {
-            SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
-        }
-    }
-
-    private void OnVoiceRecognized(string recognizedText)
-    {
-        saUIManager.SetRecognizedTxt(recognizedText);
+            saUIManager.SetRecognizedTxt(recognizedText);
 
             if (!saUIManager.IsRecognizedWordEmplty())
             {
                 saUIManager.SetInstructionText("Press Y to confirm");
+                recognizedWord = saUIManager.GetRecognizedWord();
+
+                currentState = "recorded";
             }
-    }
+        }
 
-    // Update is called once per frame
-    protected override void Update()
-    {
-          base.Update();
-
+        protected override void Update()
+        {
+            base.Update();
             if (!isStarted) return;
 
-
-
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-            {
-           
-
-                SASpeechRecognizer.Instance.ActivateVoice();
-                Debug.Log("[LabelExecutor] Trigger押下：録音開始");
-            }
-
-            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
-            {
-               
         
-                SASpeechRecognizer.Instance.DeactivateVoice();
-                Debug.Log("[LabelExecutor] Trigger離す：録音終了");
-            }
 
-
-
-             if (OVRInput.GetDown(OVRInput.RawButton.Y))
+            // --- Trigger録音処理 ---
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
             {
-                if (!saUIManager.IsRecognizedWordEmplty())
-                {
-                    if (!isOperationDone)
-                    {
-                        experimentManager.DisplayCurrentOperation();
-                        isOperationDone = true;
-                        saUIManager.SetInstructionText("Press Y to complete");
-                    }
-                    else
-                    {
-                        CompleteOperation();
-                        isOperationDone = false;
-                        saUIManager.ClearRecognizedWord();
-                    }
-                }
+                SASpeechRecognizer.Instance.ActivateVoice();
+                Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
             }
 
-            // --- キャンセル（XボタンまたはESC） ---
+            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            {
+                SASpeechRecognizer.Instance.DeactivateVoice();
+                Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");
+            }
+
+            // --- Yボタン処理 ---
+            if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
+            {
+                YOperation();
+            }
+
+            // --- キャンセル処理 ---
             if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
             {
                 experimentManager.BackToShowDevice();
             }
+        }
+private async void YOperation()
+{
+    Debug.Log($"<color=green>YOperation: {currentState}</color>");
 
+    switch (currentState)
+    {
+        case "preparation":
+            // 準備中。録音前なので何もしない。
+            break;
+
+        case "recorded":
+            // 音声認識が完了した直後
+             saUIManager.StartSendLLM();
+            await UniTask.Delay(System.TimeSpan.FromSeconds(2));
+                    string outputText = "";
+            experimentManager.GetCurrentArrangeData().devices.ForEach(device =>
+            {
+                outputText += $"{device.device.name}";
+            });
+            outputText += "を操作しました";
+            saUIManager.FinishLoadingAndDisplayResponse(outputText);
+            currentState = "checking";
+                    YOperation();
+            break;
+
+
+        case "checking":
+            // 処理結果（操作内容など）を表示
+            experimentManager.DisplayCurrentOperation();
+
+            saUIManager.SetInstructionText("Press Y to complete");
+             wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
+            currentState = "done";
+            break;
+
+        case "done":
+                    // 完了。リセット。
+           
+            CompleteOperation();
+            saUIManager.ClearRecognizedWord();
+            currentState = "preparation";
+            break;
     }
 }
+
+        public override void BeginOperation()
+        {
+            base.BeginOperation();
+            currentState = "preparation";
+            saUIManager.SetInstructionText("Press Trigger to Record, Grip to Show Labels");
+        }
+
+        public override void CompleteOperation()
+        {
+            base.CompleteOperation();
+
+            // ラベル非表示
+            foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
+            {
+                device.DisplayShowLabel(false);
+            }
+        }
+    }
+}
+
+

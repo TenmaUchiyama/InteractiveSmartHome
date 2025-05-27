@@ -56,12 +56,12 @@ public class VRCircleSelector : MonoBehaviour
             currentLine = null;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var candidates = GameObject.FindGameObjectsWithTag(selectableTag);
-            foreach (var candidate in candidates)
-                candidate.GetComponent<MeshRenderer>().material.color = Color.white;
-        }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     var candidates = GameObject.FindGameObjectsWithTag(selectableTag);
+        //     foreach (var candidate in candidates)
+        //         candidate.GetComponent<MeshRenderer>().material.color = Color.white;
+        // }
     }
 
     void StartLine()

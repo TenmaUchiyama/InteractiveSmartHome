@@ -164,8 +164,9 @@ public class DrawOnHover : MonoBehaviour
     public void VisualizeTargetDevice(Color targetColor)
     {
         lineRenderer.startColor = targetColor;
-        lineRenderer.endColor   = targetColor;
-        lineRenderer.enabled    = true;
+        lineRenderer.endColor = targetColor;
+        lineRenderer.enabled = true;
+        Debug.Log($"<color=yellow>VisualizeTargetDevice: {targetColor} is enabled = {lineRenderer.enabled}</color>");
     }
 
     /// <summary>
@@ -222,7 +223,7 @@ public void DrawBoundingBox()
     lineRenderer.useWorldSpace = false;
     lineRenderer.positionCount = points.Count;
     lineRenderer.SetPositions(points.ToArray());
-    lineRenderer.enabled = true;
+
 }
 
 }

@@ -51,9 +51,12 @@ def sr_agent_node(state: State):
     # print("=========[SR AGENT NODE]=========")
 
     res = spatial_agent.invoke(state.spatialAgent.input_prompt)
-   
+    print("Devices", state.filterAgent.devices)
     output = parser.invoke(res.content)
-
+    print("==========[SR AGENT NODE]=========")
+   
+    print("OUTPUT: ", output["reasoning"])
+    print("OUTPUT: ", output["response"])
     state.spatialAgent.output_data = output
     state.spatialAgent.metrics = {
         "model_name": callback.model_name,

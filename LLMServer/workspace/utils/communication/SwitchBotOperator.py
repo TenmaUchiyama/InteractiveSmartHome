@@ -37,7 +37,7 @@ class SwitchBotOperator:
         body = {"command": command, "parameter": parameter, "commandType": "command"}
         headers = self._generate_headers()
         resp = await client.post(url, headers=headers, json=body)
-        print(f"[{command}] {device_id} => {resp.status_code}")
+        # print(f"[{command}] {device_id} => {resp.status_code}")
         return resp
 
 

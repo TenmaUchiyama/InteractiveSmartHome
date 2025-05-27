@@ -9,9 +9,9 @@ using UnityEngine;
 [CustomEditor(typeof(SpatialAwarnessProvider))]
 public class SpatialAwarnessProviderHelper : Editor
 {
-    public override void OnInspectorGUI() 
+    public override void OnInspectorGUI()
     {
-        DrawDefaultInspector(); 
+        DrawDefaultInspector();
 
         SpatialAwarnessProvider spatialAwarnessProvider = (SpatialAwarnessProvider)target;
 
@@ -23,11 +23,21 @@ public class SpatialAwarnessProviderHelper : Editor
 
         if (GUILayout.Button("TEST FOV DEVICE"))
         {
-            FOVRequest request = new FOVRequest(); 
+            FOVRequest request = new FOVRequest();
             request.isInFov = true;
             request.order = "proximity";
 
             spatialAwarnessProvider.GetDeviceInFov("Light", request);
+        }
+        
+
+          if (GUILayout.Button("TEST DIRECTION DEVICE"))
+        {
+            DirectionRequest request = new DirectionRequest();
+            request.direction = "Front";
+            request.order = "proximity";
+
+            spatialAwarnessProvider.GetDevicesInDirection("Light", request);
         }
     }
 }

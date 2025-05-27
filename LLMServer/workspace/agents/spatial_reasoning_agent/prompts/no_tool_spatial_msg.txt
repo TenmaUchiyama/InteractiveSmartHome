@@ -25,7 +25,7 @@ Your role is to interpret the user's natural language instructions and select ap
 {
   "filter_type": "fov" | "direction" | "all" | "around_furniture",
   "params": {
-    "direction": "Back" | "Right" | ...,
+    
     "order": "proximity" | "right" | "high",
     "range": 0.0
   },
@@ -103,14 +103,17 @@ Your role is to interpret the user's natural language instructions and select ap
   },
   "user_prompt": "Turn on the back three lights in blue and the front three in red",
   "reasoning": "The instruction includes visual spatial references without body-relative phrases, so 'fov' was selected with proximity ordering.",
+  {
   "devices": [
-  {"id": "light_2","position": { "x": 0.0, "y": 2.0, "z": 1.1 },"distance_from_user": 2.28},
-  {  "id": "light_1",  "position": { "x": -1.0, "y": 2.0, "z": 1.0 },  "distance_from_user": 2.45},
-  {  "id": "light_3",  "position": { "x": 1.0, "y": 2.0, "z": 1.2 },  "distance_from_user": 2.54},
-  {  "id": "light_5",  "position": { "x": 0.0, "y": 2.0, "z": 3.2 },  "distance_from_user": 3.77},
-  {  "id": "light_4",  "position": { "x": -1.0, "y": 2.0, "z": 3.1 },  "distance_from_user": 3.82},
-  {  "id": "light_6",  "position": { "x": 1.0, "y": 2.0, "z": 3.3 },  "distance_from_user": 3.99}
-]
+    {"id": "light_2","position": { "x": 0.0, "y": 2.0, "z": 1.1 }, "distance_from_user": 2.28, "hAngle": 0.0, vAngle": 0.0, "central_angle": 0.0 },
+    {"id": "light_1","position": { "x": -1.0, "y": 2.0, "z": 1.0 },"distance_from_user": 2.45,"hAngle": -24.1,"vAngle": 2.2,"central_angle": 24.2},
+    {"id": "light_3","position": { "x": 1.0, "y": 2.0, "z": 1.2 },"distance_from_user": 2.54,"hAngle": 23.2,"vAngle": -2.2,"central_angle": 23.3},
+    {"id": "light_5","position": { "x": 0.0, "y": 2.0, "z": 3.2 },"distance_from_user": 3.77,"hAngle": 0.0,"vAngle": -29.2,"central_angle": 29.2},
+    {"id": "light_4","position": { "x": -1.0, "y": 2.0, "z": 3.1 },"distance_from_user": 3.82,"hAngle": -17.1,"vAngle": -28.4,"central_angle": 31.9},
+    {"id": "light_6","position": { "x": 1.0, "y": 2.0, "z": 3.3 },"distance_from_user": 3.99,"hAngle": 16.7,"vAngle": -30.0, "central_angle": 33.0}
+  ]
+}
+
 }
 ```
 

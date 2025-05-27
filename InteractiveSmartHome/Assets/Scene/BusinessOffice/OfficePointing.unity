@@ -5217,7 +5217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 4
+  _meshType: 0
 --- !u!114 &195063359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5248,7 +5248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 4
+  _skeletonType: 0
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -7556,7 +7556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3b62ebea00e9d449bcbcc2e3f8ea38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentPrefab: {fileID: 1914743778}
+  parentObject: {fileID: 0}
 --- !u!1001 &324814593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9307,7 +9307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 5
+  _meshType: 1
 --- !u!114 &386976278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9338,7 +9338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 5
+  _skeletonType: 1
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -10596,7 +10596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd5d9632da475884a8ab1818044b6032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userCameraTransform: {fileID: 1892515104}
+  userCamera: {fileID: 0}
 --- !u!1 &458056589
 GameObject:
   m_ObjectHideFlags: 0
@@ -24232,6 +24232,7 @@ MonoBehaviour:
   currentArrangeIndex: 0
   systemExecutor: {fileID: 0}
   saUIManager: {fileID: 1625405782}
+  SEED: 0
 --- !u!4 &1178553825
 Transform:
   m_ObjectHideFlags: 0
@@ -24259,14 +24260,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c7fa8ac0bd56c43af7af2e415adf1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jsonFileRelativePath: TaskDeviceData.json
   arrangementName: "\u30C6\u30EC\u30D3\u306E\u5468\u308A"
   selectingDeviceColor: 0
-  isTutorial: 0
   arrangementType: 0100000004000000
   inputTaskDevices: []
   arrangementDataList:
-  - device_arrange_name: "\u5929\u4E956"
-    device_arrange_id: 2e16269c-2569-4496-8959-62ec4f8ef5cd
+  - device_arrange_id: 2e16269c-2569-4496-8959-62ec4f8ef5cd
+    device_arrange_name: "\u5929\u4E956"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 82875391}
@@ -24281,8 +24282,8 @@ MonoBehaviour:
       color: 0
     - device: {fileID: 658398985}
       color: 0
-  - device_arrange_name: "\u5965\u4E09\u3064\u9752\u624B\u524D\u4E09\u3064\u8D64"
-    device_arrange_id: 06c5c0a8-47f7-41af-baed-4d7f495f36d8
+  - device_arrange_id: 06c5c0a8-47f7-41af-baed-4d7f495f36d8
+    device_arrange_name: "\u5965\u4E09\u3064\u9752\u624B\u524D\u4E09\u3064\u8D64"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 82875391}
@@ -24297,8 +24298,8 @@ MonoBehaviour:
       color: 1
     - device: {fileID: 658398985}
       color: 1
-  - device_arrange_name: "\u5F8C\u308D\u306E\u58C1\u4E09\u3064"
-    device_arrange_id: cbf3e918-8060-4615-936a-b359cb24ab38
+  - device_arrange_id: cbf3e918-8060-4615-936a-b359cb24ab38
+    device_arrange_name: "\u5F8C\u308D\u306E\u58C1\u4E09\u3064"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 630874981}
@@ -24307,40 +24308,40 @@ MonoBehaviour:
       color: 0
     - device: {fileID: 2011894813}
       color: 0
-  - device_arrange_name: "\u5F8C\u308D\u306E\u58C1\u771F\u3093\u4E2D"
-    device_arrange_id: f76848ad-0380-40f5-9443-025b065a4918
+  - device_arrange_id: f76848ad-0380-40f5-9443-025b065a4918
+    device_arrange_name: "\u5F8C\u308D\u306E\u58C1\u771F\u3093\u4E2D"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 1923748991}
       color: 0
-  - device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u5DE6\u4E0B"
-    device_arrange_id: ec9ab332-c859-42fc-9411-9be2d33b9abd
+  - device_arrange_id: ec9ab332-c859-42fc-9411-9be2d33b9abd
+    device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u5DE6\u4E0B"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 1679370459}
       color: 0
-  - device_arrange_name: "\u5965\u306E\u96FB\u6C17"
-    device_arrange_id: 8b64f743-437c-4762-a559-f64405b3cced
+  - device_arrange_id: 8b64f743-437c-4762-a559-f64405b3cced
+    device_arrange_name: "\u5965\u306E\u96FB\u6C17"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 1175443067}
       color: 0
-  - device_arrange_name: "\u76EE\u306E\u524D\u306E\u96FB\u6C17"
-    device_arrange_id: dd3235c2-1b06-4593-86b0-8cdd83f0e6e5
+  - device_arrange_id: dd3235c2-1b06-4593-86b0-8cdd83f0e6e5
+    device_arrange_name: "\u76EE\u306E\u524D\u306E\u96FB\u6C17"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 1060589694}
       color: 0
-  - device_arrange_name: "\u68DA\u306E\u5DE6\u4E0A\u3068\u53F3\u4E0A"
-    device_arrange_id: 23c399fe-a942-4364-9ee1-3de4a8b4f2b2
+  - device_arrange_id: 23c399fe-a942-4364-9ee1-3de4a8b4f2b2
+    device_arrange_name: "\u68DA\u306E\u5DE6\u4E0A\u3068\u53F3\u4E0A"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 2140889787}
       color: 0
     - device: {fileID: 1078023825}
       color: 0
-  - device_arrange_name: "\u5965\u306E\u5929\u4E95\u4E09\u3064"
-    device_arrange_id: 33a5a513-fd6e-4eee-926b-aebfa3f02749
+  - device_arrange_id: 33a5a513-fd6e-4eee-926b-aebfa3f02749
+    device_arrange_name: "\u5965\u306E\u5929\u4E95\u4E09\u3064"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 299854477}
@@ -24349,8 +24350,8 @@ MonoBehaviour:
       color: 0
     - device: {fileID: 96181515}
       color: 0
-  - device_arrange_name: "\u68DA\u306E\u6A2A\u771F\u3093\u4E2D\u306E\u5217\u5168\u90E8"
-    device_arrange_id: 559e7e6d-99ce-4535-81f3-7339289e56ff
+  - device_arrange_id: 559e7e6d-99ce-4535-81f3-7339289e56ff
+    device_arrange_name: "\u68DA\u306E\u6A2A\u771F\u3093\u4E2D\u306E\u5217\u5168\u90E8"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 2073908125}
@@ -24359,8 +24360,8 @@ MonoBehaviour:
       color: 0
     - device: {fileID: 1098094268}
       color: 0
-  - device_arrange_name: "\u68DA\u306E\u6A2A\u5DE6\u524D\u90E8"
-    device_arrange_id: 8d5563e4-4fa7-47e8-80f2-24f213093c8b
+  - device_arrange_id: 8d5563e4-4fa7-47e8-80f2-24f213093c8b
+    device_arrange_name: "\u68DA\u306E\u6A2A\u5DE6\u524D\u90E8"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 2140889787}
@@ -24369,14 +24370,14 @@ MonoBehaviour:
       color: 0
     - device: {fileID: 1169282909}
       color: 0
-  - device_arrange_name: "\u68DA\u306E\u53F3\u4E0B"
-    device_arrange_id: 9a4fc565-59a7-45d3-a4de-b2cc8dbdf0a5
+  - device_arrange_id: 9a4fc565-59a7-45d3-a4de-b2cc8dbdf0a5
+    device_arrange_name: "\u68DA\u306E\u53F3\u4E0B"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 1101761856}
       color: 0
-  - device_arrange_name: "\u5DE6\u5074\u306E\u898B\u3048\u3066\u3044\u308B\u3084\u3064"
-    device_arrange_id: 738210ef-785a-4c88-b942-0b08416e29ac
+  - device_arrange_id: 738210ef-785a-4c88-b942-0b08416e29ac
+    device_arrange_name: "\u5DE6\u5074\u306E\u898B\u3048\u3066\u3044\u308B\u3084\u3064"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 0}
@@ -24389,14 +24390,14 @@ MonoBehaviour:
       color: 0
     - device: {fileID: 96181515}
       color: 0
-  - device_arrange_name: "\u4FFA\u306E\u5F8C\u308D\u306E\u4E0A\u306E\u96FB\u6C17"
-    device_arrange_id: 157b5b72-0320-4233-8b82-56bc9f8b88d6
+  - device_arrange_id: 157b5b72-0320-4233-8b82-56bc9f8b88d6
+    device_arrange_name: "\u4FFA\u306E\u5F8C\u308D\u306E\u4E0A\u306E\u96FB\u6C17"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 1384988470}
       color: 0
-  - device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u5468\u308A"
-    device_arrange_id: bf97882a-6578-428c-a415-ccb6d78664c5
+  - device_arrange_id: bf97882a-6578-428c-a415-ccb6d78664c5
+    device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u5468\u308A"
     device_arrange_type: 0100000004000000
     devices:
     - device: {fileID: 1985503820}
@@ -28801,6 +28802,180 @@ Transform:
   m_Children:
   - {fileID: 812011504}
   m_Father: {fileID: 1476037747}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1398001730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1398001734}
+  - component: {fileID: 1398001733}
+  - component: {fileID: 1398001732}
+  - component: {fileID: 1398001731}
+  m_Layer: 0
+  m_Name: CircleDrawer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1398001731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398001730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e5e39b6520e48429505bdc0dfc919f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selector: {fileID: 0}
+  selectorColor: {r: 1, g: 0, b: 0, a: 0}
+  drawDistance: 1
+  minSegmentDistance: 0.01
+  linePrefab: {fileID: 1398001732}
+  surfaceMaterial: {fileID: 0}
+  selectableTag: Selectable
+  beamMaxDistance: 10
+--- !u!120 &1398001732
+LineRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398001730}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: b2032feca8d6a9543bbb61e1c825c541, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.017173767
+        value: 0.012461621
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 1}
+      key1: {r: 1, g: 0, b: 0, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    textureScale: {x: 0.1, y: 0.1}
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_MaskInteraction: 0
+  m_UseWorldSpace: 1
+  m_Loop: 0
+  m_ApplyActiveColorSpace: 1
+--- !u!114 &1398001733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398001730}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 806f34f21f201c7458ae92e69fdbf1c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseButton: 0
+  drawDistance: 1
+  minSegmentDistance: 0.01
+  linePrefab: {fileID: 1398001732}
+  selectableTag: Selectable
+--- !u!4 &1398001734
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398001730}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.2414572, y: -0.9091873, z: 0.8162327}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1398614025
 GameObject:
@@ -37182,6 +37357,7 @@ MonoBehaviour:
   port: 8800
   saDeviceRef: {fileID: 320839872}
   queryMode: 0
+  experimentManager: {fileID: 0}
   experimentalDataManager: {fileID: 1178553827}
   speechRequired: 1
   debugText: Could you please turn on all the light I can see now with red
@@ -38024,7 +38200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57fd2e69b123c7d4f858968c80417378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sAUIManager: {fileID: 0}
   OnVoiceRecogStart:
     m_PersistentCalls:
       m_Calls:
@@ -39059,6 +39234,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1908088546}
   m_Mesh: {fileID: -5605446020509194904, guid: e4708155fd5dc0e4aa5bcdf6fc506b96, type: 3}
+--- !u!1 &1908565394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1908565396}
+  - component: {fileID: 1908565395}
+  m_Layer: 0
+  m_Name: ControllerPointer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1908565395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908565394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c40f27e9201ab46b4888e8d7388385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawerOffset: {fileID: 0}
+  laserLength: 1000
+  lineRenderer: {fileID: 0}
+--- !u!4 &1908565396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908565394}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -45.940876, y: 19.175417, z: -186.56213}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1913260102
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41458,70 +41680,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 696538450}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2039894699
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2039894702}
-  - component: {fileID: 2039894701}
-  - component: {fileID: 2039894700}
-  m_Layer: 0
-  m_Name: Pointing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2039894700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039894699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9944dcaecaa9c034ca844b2a887369d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  experimentManager: {fileID: 1178553824}
-  pointerSystemExecutor: {fileID: 925221669}
-  selectedDevices: []
---- !u!114 &2039894701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039894699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d77f432a7d0dc744c931b245d585d1c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rightHand: {fileID: 386976280}
-  rayInteractor: {fileID: 1359485374}
-  maxRayLength: 10
-  rayColor: {r: 0, g: 1, b: 0, a: 1}
---- !u!4 &2039894702
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039894699}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.26139885, y: 0.9003426, z: 0.8962796}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2041935472
 GameObject:
   m_ObjectHideFlags: 0
@@ -42766,7 +42924,15 @@ MonoBehaviour:
   resetHmdPoseOnRelease: 1
   resetHmdPoseByMiddleMouseButton: 1
   activateKeys: 3201000031010000
+  activateKeyBindings:
+  - <Keyboard>/leftCtrl
+  - <Keyboard>/rightCtrl
+  - <Keyboard>/f1
   pitchKeys: 3401000033010000
+  pitchKeyBindings:
+  - <Keyboard>/leftAlt
+  - <Keyboard>/rightAlt
+  - <Keyboard>/f2
 --- !u!114 &2115785929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42782,7 +42948,7 @@ MonoBehaviour:
   useRecommendedMSAALevel: 1
   _monoscopic: 0
   _sharpenType: 0
-  enableDynamicResolution: 0
+  _enableDynamicResolution: 0
   minDynamicResolutionScale: 1
   maxDynamicResolutionScale: 1
   quest2MinDynamicResolutionScale: 0.7
@@ -44010,4 +44176,5 @@ SceneRoots:
   - {fileID: 471813994}
   - {fileID: 1914743779}
   - {fileID: 970027829}
-  - {fileID: 2039894702}
+  - {fileID: 1908565396}
+  - {fileID: 1398001734}

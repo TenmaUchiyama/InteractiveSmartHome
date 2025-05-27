@@ -75,10 +75,10 @@ public class PointingDevices : MonoBehaviour
 
 
 [ContextMenu("Pointing Done")]
-public void PointingDone() {
-    this.pointerSystemExecutor.PointSystemDone();
+// public void PointingDone() {
+//     this.pointerSystemExecutor.PointSystemDone();
 
-}
+// }
 
  // 🎯 **Inspector にボタンを追加し、押されたときに `TurnOnWithColor()` を呼び出す**
     [ContextMenu("Turn On Selected Devices")]

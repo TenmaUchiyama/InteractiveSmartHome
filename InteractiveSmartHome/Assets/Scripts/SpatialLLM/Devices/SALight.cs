@@ -27,10 +27,10 @@ public class SALight : SADevice
         private void Awake() {
 
             this.saDeviceType = SADeviceType.Light;
-            string id = Guid.NewGuid().ToString();
+            string id = SADeviceRef.Instance.GetDeviceID(this.gameObject.name) ?? Guid.NewGuid().ToString();
 
             this.deviceData = new DBDeviceData(
-                Guid.NewGuid().ToString(),
+                id,
                 "light",
                 this.gameObject.name,
                  "", 
@@ -99,8 +99,8 @@ public class SALight : SADevice
         public override void OperateDevice(OperatingDeviceData operatingDeviceData )
         {
 
-
-            Debug.Log($"<color=blue>[{this.gameObject.name}] State {operatingDeviceData.state}, Intensity: {operatingDeviceData.intensity}</color>");
+            
+            
              light.enabled = operatingDeviceData.state;
              isDeviceOn = operatingDeviceData.state;
              currentOperatingData = operatingDeviceData;

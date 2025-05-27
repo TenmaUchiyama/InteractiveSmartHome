@@ -39,7 +39,7 @@ def getDeviceInFov(
 
             # `param` が存在しない場合は作成する
             response_data.setdefault("param", {})
-            print(response_data)
+            # print(response_data)
             # `param` に値を追加
             response_data["param"]["filter_type"] = "fov"
             response_data["param"]["isInFov"] = params["isInFov"]
@@ -138,7 +138,7 @@ def getDevices(
             response_data = response.json()
             response_data.setdefault("param", {})
             if response_data.get("status") == "success":
-                print(response_data)
+                # print(response_data)
                 response_data["param"]["filter_type"] = "all"
                 response_data["param"]["order"] = params["order"]
                 if params["range"] != 0:
@@ -168,7 +168,7 @@ def getDeviceAroundFurniture(
             "furniture_type": params["furniture_type"],
             "range": 5 if params["range"] is None else params["range"],
         }
-        print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
+        # print(f"Sending POST request to {base_url}/around_furniture with body: {request_body}")
         response = httpx.post(f"{base_url}/furniture/get", json=request_body)
         if response.status_code == 200:
             response_data = response.json()

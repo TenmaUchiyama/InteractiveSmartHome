@@ -163,7 +163,7 @@ def llm_agent_no_tool(message: InputMessage):
         
         serialized["task_id"] = task_id
 
-        save_path = f"./logs/RESULTS/{OUTPUT_FILE_NAME}.json"
+        save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}.json"
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
         # 既存ログを読み込み（なければ空リスト）

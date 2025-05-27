@@ -88,6 +88,10 @@ def filter_agent_node(state: State):
     
     # 🔧 明示的に型変換
     output = FilterAgentOutput(**output_dict)
+    print("========[FILTER AGENT NODE]=========")
+    print("Filter Type: ", output) 
+    print("Output: ", output.reasoning)
+
     state.filterAgent.output_tool_selection = output
 
     state.filterAgent.metrics = {
@@ -110,7 +114,7 @@ def filter_tool_node(state: State):
 
     if tool_func:
         result = tool_func.invoke(input={"params": output.params})
-        print("result: ", result)
+        # print("result: ", result)
         state.filterAgent.devices = result["devices"]
         
         state.filterAgent.metrics["system_time_elapsed"] = callback.system_end()

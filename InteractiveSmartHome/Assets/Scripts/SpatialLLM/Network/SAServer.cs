@@ -113,7 +113,7 @@ public class SAServer : HttpServer
                 Debug.Log("Received Fov"); 
                 Debug.Log(SpatialAwarnessProvider.Instance);
                 List<DeviceSpatialData> fovResult = SpatialAwarnessProvider.Instance.GetDeviceInFov("Light", data);
-                Debug.Log($"<color=yellow>FOV Result: {fovResult.Count}</color>");
+               
                 string sendingFovData = this.SendingDeviceData(fovResult);
                 Debug.Log($"<color=yellow>[SAServer] {sendingFovData}</color>");
                 await context.Respond(200, sendingFovData);
@@ -126,7 +126,7 @@ public class SAServer : HttpServer
         Post("/device/all", async (context) => {
             try {
                 AllRequest data = await context.ReadBodyAsJsonAsync<AllRequest>();
-                List<DeviceSpatialData> allResult = SpatialAwarnessProvider.Instance.GetAllDevices("Light", data);
+                List<DeviceSpatialData> allResult = SpatialAwarnessProvider.Instance.GetAllDevices("Light",data  );
                 string sendingAllData = this.SendingDeviceData(allResult);
                 Debug.Log($"<color=yellow>[SAServer] order : {data.order}, range: {data.range}</color>");
                 await context.Respond(200, sendingAllData);
@@ -140,7 +140,9 @@ public class SAServer : HttpServer
             try {
                 DirectionRequest data = await context.ReadBodyAsJsonAsync<DirectionRequest>();
                 List<DeviceSpatialData> directionResult = SpatialAwarnessProvider.Instance.GetDevicesInDirection("Light", data);
+                Debug.Log($"Count: {directionResult.Count}");
                 string sendingDirectionData = this.SendingDeviceData(directionResult);
+
                 Debug.Log($"<color=yellow>[SAServer] direction: {data.direction}, order : {data.order}, range: {data.range}</color>");
                 await context.Respond(200, sendingDirectionData);
             } catch (Exception ex) {
@@ -211,23 +213,23 @@ public class SAServer : HttpServer
         // }); 
 
 
-        Post("/furniture/direction", async (context) => {
-            try{
+        // Post("/furniture/direction", async (context) => {
+        //     try{
 
-                DirFurnitureRequest data = await context.ReadBodyAsJsonAsync<DirFurnitureRequest>();
-                Debug.Log("Received Direction"); 
-                Debug.Log(data);
+        //         DirFurnitureRequest data = await context.ReadBodyAsJsonAsync<DirFurnitureRequest>();
+        //         Debug.Log("Received Direction"); 
+        //         Debug.Log(data);
                 
-                List<FurnitureData> fovResult = SpatialAwarnessProvider.Instance.GetFurnitureInDirection(data);
-                string sendingFovData = this.SendingFurnitureData(fovResult);
-                Debug.Log($"<color=yellow>[SAServer] direction: {data.direction}, order : {data.order}, range: {data.range}</color>");
+        //         List<FurnitureData> fovResult = SpatialAwarnessProvider.Instance.GetFurnitureInDirection(data);
+        //         string sendingFovData = this.SendingFurnitureData(fovResult);
+        //         Debug.Log($"<color=yellow>[SAServer] direction: {data.direction}, order : {data.order}, range: {data.range}</color>");
 
-                await context.Respond(200, sendingFovData);
-            }catch(Exception e)
-            {
-                Debug.LogError($"Error processing /furniture/fov request: {e.Message}");
-            };
-        }); 
+        //         await context.Respond(200, sendingFovData);
+        //     }catch(Exception e)
+        //     {
+        //         Debug.LogError($"Error processing /furniture/fov request: {e.Message}");
+        //     };
+        // }); 
 
 
 

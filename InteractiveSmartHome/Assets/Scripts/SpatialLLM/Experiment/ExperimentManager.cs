@@ -117,6 +117,7 @@ public class ExperimentManager : MonoBehaviour
 
     // DeviceColorPair のリストから SADevice のリストに変換
     List<DeviceColorPair> deviceArrangeDatas = this.currentArrange.devices; 
+    
 
     // DisplayDevices は void を返すので、await しない
     DisplayDevices(deviceArrangeDatas);
@@ -144,19 +145,47 @@ public class ExperimentManager : MonoBehaviour
     }
 
 
-// OPERATING STATE 
-private async UniTask Operation() 
-{
-    
-    DebugLogging($"[{this.currentState.ToString()}] Operating"); 
-    systemExecutor.BeginOperation(); 
-    // this.experimentTask.StartTaskTimer();
-    await systemExecutor.WaitForExecution();
-    saUIManager.ClearInstruction();
-    // this.experimentTask.StopTaskTimer();
-    TransitionToState(ExperimentFlowState.DONE);
 
-}
+        public void DisableAllDevices()
+        {
+            List<SADevice> allDevices = SADeviceRef.Instance.GetAllDevices();
+            foreach (SADevice device in allDevices)
+            {
+                device.Init();
+            }
+        }
+
+
+    public void TurnOnSelectedDevices()
+    {
+       DeviceColorPair[] deviceColorPairs = this.currentArrange.devices.ToArray();
+        foreach (DeviceColorPair devicePair in deviceColorPairs)
+        {
+            SADevice saDevice = devicePair.device;
+            DrawOnHover drawOnHover = saDevice.gameObject.GetComponent<DrawOnHover>();
+            saDevice.TurnOnWithColor(devicePair.GetUnityColor());
+            if (drawOnHover != null)
+            {
+                drawOnHover.VisualizeTargetDevice(Color.blue);
+            }
+        }
+        DebugLogging("Selected Devices Turned On");
+    }
+
+
+// OPERATING STATE 
+        private async UniTask Operation()
+        {
+
+            DebugLogging($"[{this.currentState.ToString()}] Operating");
+            systemExecutor.BeginOperation();
+            // this.experimentTask.StartTaskTimer();
+            await systemExecutor.WaitForExecution();
+            saUIManager.ClearInstruction();
+            // this.experimentTask.StopTaskTimer();
+            TransitionToState(ExperimentFlowState.DONE);
+
+        }
 
  
 // DONE STATE
@@ -228,16 +257,17 @@ private async UniTask Operation()
     }
 
     private void DisplayDevices(List<DeviceColorPair> deviceColorPairs)
-    {
+    {   
         foreach(DeviceColorPair devicePair in this.currentArrange.devices)
         {
             SADevice saDevice = devicePair.device; 
             DrawOnHover drawOnHover = saDevice.gameObject.GetComponent<DrawOnHover>();
             saDevice.TurnOnWithColor(devicePair.GetUnityColor());
+            Debug.Log($"<color=yellow>Device: {saDevice.gameObject.name}, Is drawOnHoverNull {drawOnHover == null}</color>");
             if (drawOnHover != null)
-            {
-                drawOnHover.VisualizeTargetDevice(Color.red); 
-            }
+                {
+                    drawOnHover.VisualizeTargetDevice(Color.red);
+                }
         }
     }
 

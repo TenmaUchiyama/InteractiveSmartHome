@@ -59,13 +59,26 @@ namespace SpatialLLM.Device
                 return null;
             }
          
+            Vector3 toObject = (transform.position - Camera.main.transform.position).normalized;
+            Vector3 cameraForward = Camera.main.transform.forward;
+            Vector3 cameraRight = Camera.main.transform.right;
+            Vector3 cameraUp = Camera.main.transform.up;
+
+            // 水平角度（左右）
+            float hAngle = Vector3.SignedAngle(cameraForward, toObject, cameraUp);
+
+            // 垂直角度（上下）
+            float vAngle = Vector3.SignedAngle(cameraForward, toObject, cameraRight);
+
+            // DeviceSpatialData の生成
             DeviceSpatialData spatialData = new DeviceSpatialData(
                 this.spatialData.id,
                 this.spatialData.name,
                 relativePos,
-                Vector3.Distance(transform.position, Camera.main.transform.position)
+                Vector3.Distance(transform.position, Camera.main.transform.position),
+                hAngle,
+                vAngle
             );
-
             return spatialData;
         }
 
@@ -89,37 +102,49 @@ namespace SpatialLLM.Device
             return spatialDataForFurniture;
         }
 
-        public DeviceSpatialData GetDevicePositionalRelativeToUser(Transform referenceCamera = null)
-        {
-            try{Transform camTransfrom = referenceCamera != null ? referenceCamera : Camera.main.transform; 
+       public DeviceSpatialData GetDevicePositionalRelativeToUser(Transform referenceCamera = null)
+{
+    Debug.Log("[SADevice] Start GetDevicePositionalRelativeToUser");
+
+    try
+    {
+        Transform camTransform = referenceCamera != null ? referenceCamera : Camera.main.transform;
         
-            Vector3 relativePosition = camTransfrom.InverseTransformPoint(this.transform.position);
-            Vector3 position  = new Vector3(relativePosition.x, relativePosition.y, relativePosition.z);
-     
-            float distance_from_user = Vector3.Distance(transform.position, camTransfrom.position);
 
-            if(this.spatialData == null)
-            {
-                this.spatialData = new DeviceSpatialData(
-                    id: this.GetDeviceID(),
-                    name: this.gameObject.name,
-                    position: position, 
-                    distance_from_user: distance_from_user
-                ); 
-            }else{
-                this.spatialData.position = new Position(position); 
-                this.spatialData.distance_from_user= distance_from_user;
+        Vector3 relativePosition = camTransform.InverseTransformPoint(this.transform.position);
+      
 
-            }
-            
-          
-            return this.spatialData;
-            }catch (Exception ex)
-            {
-                Debug.LogError("[SADevice]Error getting positional data for device: " + this.name + " - " + ex.Message);
-            }
-            return null; 
+        Vector3 position = new Vector3(relativePosition.x, relativePosition.y, relativePosition.z);
+        float distance_from_user = Vector3.Distance(transform.position, camTransform.position);
+       
+
+        if (this.spatialData == null)
+        {
+            Debug.Log("[SADevice] Creating new DeviceSpatialData");
+            this.spatialData = new DeviceSpatialData(
+                id: this.GetDeviceID(),
+                name: this.gameObject.name,
+                position: position,
+                distance_from_user: distance_from_user
+            );
         }
+        else
+        {
+            Debug.Log("[SADevice] Updating existing DeviceSpatialData");
+            this.spatialData.position = new Position(position);
+            this.spatialData.distance_from_user = distance_from_user;
+        }
+
+        return this.spatialData;
+    }
+    catch (Exception ex)
+    {
+        Debug.LogError("[SADevice] Error getting positional data for device: " + this.name + " - " + ex.Message + "\n" + ex.StackTrace);
+    }
+
+    return null;
+}
+
 
         public DeviceSpatialData GetDevicePositionalData() 
         {
@@ -156,7 +181,6 @@ namespace SpatialLLM.Device
 
         public bool CompareDeviceType(string device_type)
         {
-            Debug.Log($"<color=red>Compare Device Type.  This Device: {this.saDeviceType}, ComingDeviceType: {device_type}</color>");
             return device_type.Equals(saDeviceType.ToString()) || device_type == "";
         }
 

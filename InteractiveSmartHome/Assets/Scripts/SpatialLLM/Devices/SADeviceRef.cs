@@ -39,16 +39,31 @@ public class SADeviceRef : Singleton<SADeviceRef>
         LoadOrGenerateDeviceIds();
 
         // 各デバイスにIDを適用
-        foreach (var device in saDevices)
+       
+    }
+
+
+    public string GetDeviceID(string deviceName)
+    {
+        if (deviceNameToId.TryGetValue(deviceName, out string deviceId))
         {
-            string name = device.gameObject.name;
-            if (deviceNameToId.TryGetValue(name, out string id))
+            return deviceId;
+        }
+        else
+        {
+            LoadOrGenerateDeviceIds(); // 再読み込みして最新のIDを取得
+            if (deviceNameToId.TryGetValue(deviceName, out deviceId))
             {
-                device.GetDBDeviceData().device_id = id;
-                Debug.Log($"[ID割当] {name} → {id}");
+                return deviceId;
+            }
+            else
+            {
+                Debug.LogWarning($"[GetDeviceID] デバイス名 '{deviceName}' に対応するIDが見つかりません。");
+                return null;
             }
         }
     }
+    
 
     private void LoadOrGenerateDeviceIds()
     {
@@ -113,6 +128,7 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
     public SADevice GetDeviceById(string id)
     {
+
         return saDevices.Find(device => device.GetDBDeviceData().device_id == id);
     }
 

@@ -35,13 +35,11 @@ class DeviceOperator():
             print("[WARN] fetch_all_devices failed, using empty list instead. Error:", e)
             all_devs = []
 
-        print("ALL_DEVS", all_devs)
 
         test_data = []
         for dev in llm_devices:
             if dev["id"] not in [d["device_id"] for d in all_devs]:
                 test_data.append(dev)
-        print("TEST_DATA", test_data)
 
         sb_map, mq_map = self._build_maps(all_devs)
         mq_reqs, sb_reqs = self._prepare_requests(llm_devices, sb_map, mq_map)

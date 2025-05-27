@@ -3,73 +3,134 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Oculus.Interaction;
 using SpatialLLM.Core;
+using SpatialLLM.Device;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace SpatialLLM.Experiment
 {
     public class PointerSystemExecutor : SystemExecutor
-    {
-        [SerializeField] private RayInteractor rayInteractor;
-        [SerializeField] private HandPointing pointing;
-
-        private bool isMovable = false;
-
-        private void DisablePointing() 
-        {
-            this.pointing.gameObject.SetActive(false);
-            this.rayInteractor.gameObject.SetActive(false);
-        }
-
-        private void EnablePointing() 
-        {
-            this.pointing.gameObject.SetActive(true); 
-            this.rayInteractor.gameObject.SetActive(false);
-        }
+    {   private bool isGripHolding = false;
+        private string currentState = "preparation";
+        [SerializeField] private WordLogger wordLogger;
+        string recognizedWord = "";
 
         protected override void Start()
         {
-            // Pointer 用は最初に rayInteractor を非アクティブにしておく
-            DisablePointing();
             base.Start();
+
+            if (SASpeechRecognizer.Instance)
+            {
+                SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
+            }
+
         }
+
+        private void OnVoiceRecognized(string recognizedText)
+        {
+            saUIManager.SetRecognizedTxt(recognizedText);
+
+            if (!saUIManager.IsRecognizedWordEmplty())
+            {
+                saUIManager.SetInstructionText("Press Y to confirm");
+                recognizedWord = saUIManager.GetRecognizedWord();
+
+                currentState = "recorded";
+            }
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            if (!isStarted) return;
+
+        
+
+            // --- Trigger録音処理 ---
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            {
+                SASpeechRecognizer.Instance.ActivateVoice();
+                Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
+            }
+
+            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            {
+                SASpeechRecognizer.Instance.DeactivateVoice();
+                Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");
+            }
+
+            // --- Yボタン処理 ---
+            if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
+            {
+                YOperation();
+            }
+
+            // --- キャンセル処理 ---
+            if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
+            {
+                experimentManager.BackToShowDevice();
+            }
+        }
+private async void YOperation()
+{
+    Debug.Log($"<color=green>YOperation: {currentState}</color>");
+
+    switch (currentState)
+    {
+        case "preparation":
+            // 準備中。録音前なので何もしない。
+            break;
+
+        case "recorded":
+            // 音声認識が完了した直後
+             saUIManager.StartSendLLM();
+            await UniTask.Delay(System.TimeSpan.FromSeconds(2));
+                    string outputText = "";
+            experimentManager.GetCurrentArrangeData().devices.ForEach(device =>
+            {
+                outputText += $"{device.device.name}";
+            });
+            outputText += "を操作しました";
+            saUIManager.FinishLoadingAndDisplayResponse(outputText);
+            currentState = "checking";
+                    YOperation();
+            break;
+
+
+        case "checking":
+            // 処理結果（操作内容など）を表示
+            experimentManager.DisplayCurrentOperation();
+
+            saUIManager.SetInstructionText("Press Y to complete");
+             wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
+            currentState = "done";
+            break;
+
+        case "done":
+                    // 完了。リセット。
+           
+            CompleteOperation();
+            saUIManager.ClearRecognizedWord();
+            currentState = "preparation";
+            break;
+    }
+}
 
         public override void BeginOperation()
         {
             base.BeginOperation();
-            EnablePointing();
+            currentState = "preparation";
+            saUIManager.SetInstructionText("Press Trigger to Record, Grip to Show Labels");
         }
 
         public override void CompleteOperation()
         {
-            DisablePointing();
             base.CompleteOperation();
-        }
 
-        public void PointSystemDone()
-        {
-            this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
-        }
-
-         protected override void Update()
-        {
-            if (!isStarted) return;
-
-            // 「戻る」操作
-            if (OVRInput.GetDown(OVRInput.RawButton.X))
+            // ラベル非表示
+            foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
             {
-                isMovable = true;
-                this.saUIManager.SetInstructionText("Press Y to proceed to the next step");
-            }
-
-            // 操作完了
-            if (OVRInput.GetDown(OVRInput.RawButton.Y))
-            {
-                if (isMovable)
-                {
-                    this.CompleteOperation(); 
-                    saUIManager.ClearRecognizedWord();
-                }
+                device.DisplayShowLabel(false);
             }
         }
     }

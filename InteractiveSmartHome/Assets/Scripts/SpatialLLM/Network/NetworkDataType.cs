@@ -28,16 +28,22 @@ public static class NetworkDataType
      
         public Position position; 
         public float distance_from_user;
+    
+        public float hAngle; // 0: front, 90: right, 180: back, 270: left
+        public float vAngle;
+            public float central_angle;
 
-
-
-        public DeviceSpatialData(string id , string name, Vector3 position, float distance_from_user, float angle = 0)
-        {
-            this.id = id;
-            this.name = name;
-            this.position = new Position(position);
-            this.distance_from_user = distance_from_user;
-        }
+            public DeviceSpatialData(string id, string name, Vector3 position, float distance_from_user, float hAngle = 0, float vAngle = 0)
+            {
+                this.id = id;
+                this.name = name;
+                this.position = new Position(position);
+                this.distance_from_user = distance_from_user;
+                this.hAngle = hAngle;
+                this.vAngle = vAngle;
+                this.central_angle = Mathf.Sqrt(hAngle * hAngle + vAngle * vAngle);
+            }
+            
    
 
     }
