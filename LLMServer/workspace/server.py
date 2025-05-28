@@ -15,7 +15,7 @@ from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
 
-OUTPUT_FILE_NAME="TEST"
+OUTPUT_FILE_NAME="NittaSan"
 app = FastAPI()
 
 
@@ -167,7 +167,7 @@ def llm_agent_no_tool(message: InputMessage):
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
         # 既存ログを読み込み（なければ空リスト）
-        if os.path.exists(save_path):
+        if os.path.exists(save_path) and os.path.getsize(save_path) > 0:
             with open(save_path, "r", encoding="utf-8") as f:
                 existing_logs = json.load(f)
         else:

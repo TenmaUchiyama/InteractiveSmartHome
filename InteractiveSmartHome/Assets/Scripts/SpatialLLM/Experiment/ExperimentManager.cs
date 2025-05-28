@@ -27,8 +27,8 @@ public class ExperimentManager : MonoBehaviour
     private DeviceArrangementGenerator arrangementGenerator;
     private List<DeviceArrangeData> arrangeDataList;
     private DeviceArrangeData currentArrange;
-    
-    
+
+        [SerializeField] private bool isTutorial= false;
     [SerializeField]private  int currentArrangeIndex;
     [SerializeField] private SystemExecutor systemExecutor;
 
@@ -310,7 +310,7 @@ public class ExperimentManager : MonoBehaviour
     {
         Debug.Log($"{arrangementGenerator.ReadTaskData().Count}");
        arrangeDataList = arrangementGenerator.ReadTaskData();
-       Shuffle(arrangeDataList, SEED);
+       if(!isTutorial)Shuffle(arrangeDataList, SEED);
        
     }
 

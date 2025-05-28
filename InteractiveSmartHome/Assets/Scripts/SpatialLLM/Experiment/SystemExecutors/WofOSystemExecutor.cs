@@ -49,13 +49,13 @@ namespace SpatialLLM.Experiment
         
 
             // --- Trigger録音処理 ---
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) )
             {
                 SASpeechRecognizer.Instance.ActivateVoice();
                 Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
             }
 
-            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) )
             {
                 SASpeechRecognizer.Instance.DeactivateVoice();
                 Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");

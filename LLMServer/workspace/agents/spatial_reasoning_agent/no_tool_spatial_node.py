@@ -19,7 +19,7 @@ with open(file_path, "r", encoding="utf-8") as f:
 
 # コールバック設定と LLM の初期化
 callback = CustomCallbackHandler("logs/spatial_logs.md")
-spatial_agent = ChatOpenAI(model="gpt-4o", verbose=True, callbacks=[callback])
+spatial_agent = ChatOpenAI(model=os.getenv("GPT_MODEL"), verbose=True, callbacks=[callback])
 
 parser = JsonOutputParser(pydantic_object=SpatialOutput)
 

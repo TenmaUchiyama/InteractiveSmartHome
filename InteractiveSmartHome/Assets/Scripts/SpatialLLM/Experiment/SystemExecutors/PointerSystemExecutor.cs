@@ -12,8 +12,13 @@ namespace SpatialLLM.Experiment
     public class PointerSystemExecutor : SystemExecutor
     {   private bool isGripHolding = false;
         private string currentState = "preparation";
+        [SerializeField] private RayInteractor rayInteractor; 
+        [SerializeField] private VRCircleSelector circleSelector;
         [SerializeField] private WordLogger wordLogger;
         string recognizedWord = "";
+
+
+
 
         protected override void Start()
         {
@@ -23,6 +28,10 @@ namespace SpatialLLM.Experiment
             {
                 SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
             }
+
+
+
+             rayInteractor.gameObject.SetActive(false);
 
         }
 
@@ -64,6 +73,23 @@ namespace SpatialLLM.Experiment
             {
                 YOperation();
             }
+
+
+
+            if (OVRInput.GetDown(OVRInput.RawButton.A))
+            {
+                Debug.Log("[PointerSystemExecutor] Aボタン押下：Ray Interactorを有効化");
+                rayInteractor.gameObject.SetActive(true);
+                circleSelector.SetSelectionStarted(false);
+            }
+            if (OVRInput.GetUp(OVRInput.RawButton.A))
+            {
+                Debug.Log("[PointerSystemExecutor] Aボタン離す：Ray Interactorを無効化");
+
+                rayInteractor.gameObject.SetActive(false);
+                circleSelector.SetSelectionStarted(true);
+            }
+
 
             // --- キャンセル処理 ---
             if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))

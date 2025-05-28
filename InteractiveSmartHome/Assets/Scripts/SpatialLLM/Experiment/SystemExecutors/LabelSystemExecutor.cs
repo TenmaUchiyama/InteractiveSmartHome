@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 namespace SpatialLLM.Experiment
 {
@@ -47,13 +48,16 @@ namespace SpatialLLM.Experiment
             base.Update();
             if (!isStarted) return;
 
-        
+
+
+            bool isRecording = false;
 
             // --- Trigger録音処理 ---
             if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
             {
                 SASpeechRecognizer.Instance.ActivateVoice();
                 Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
+                isRecording = true;
             }
 
             if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
@@ -62,6 +66,15 @@ namespace SpatialLLM.Experiment
                 Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");
             }
 
+
+            isGripHolding = OVRInput.Get(OVRInput.RawButton.LHandTrigger);
+            if (!isRecording)
+            {
+                foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
+                {
+                    device.DisplayShowLabel(isGripHolding);
+                }
+            }
             // --- Yボタン処理 ---
             if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
             {

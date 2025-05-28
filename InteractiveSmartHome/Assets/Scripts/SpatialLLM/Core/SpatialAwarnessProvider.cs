@@ -15,7 +15,7 @@ namespace SpatialLLM.Core
     public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     {
         [SerializeField] private Camera userCamera;
-        public const float verticalFOV = 75f;
+        public const float verticalFOV = 70f;
         public const float horizontalFOV = 70f;
 
         private Vector3 GetLocalPosition(Transform target)
