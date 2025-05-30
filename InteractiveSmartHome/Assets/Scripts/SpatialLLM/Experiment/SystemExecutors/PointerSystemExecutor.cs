@@ -56,7 +56,7 @@ namespace SpatialLLM.Experiment
         
 
             // --- Trigger録音処理 ---
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && !isGripHolding )
             {
                 SASpeechRecognizer.Instance.ActivateVoice();
                 Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
@@ -75,13 +75,19 @@ namespace SpatialLLM.Experiment
             }
 
 
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                OnVoiceRecognized("テスト");
+            }
+
+
 
             if (OVRInput.GetDown(OVRInput.RawButton.A))
-            {
-                Debug.Log("[PointerSystemExecutor] Aボタン押下：Ray Interactorを有効化");
-                rayInteractor.gameObject.SetActive(true);
-                circleSelector.SetSelectionStarted(false);
-            }
+                {
+                    Debug.Log("[PointerSystemExecutor] Aボタン押下：Ray Interactorを有効化");
+                    rayInteractor.gameObject.SetActive(true);
+                    circleSelector.SetSelectionStarted(false);
+                }
             if (OVRInput.GetUp(OVRInput.RawButton.A))
             {
                 Debug.Log("[PointerSystemExecutor] Aボタン離す：Ray Interactorを無効化");
@@ -110,7 +116,11 @@ private async void YOperation()
         case "recorded":
             // 音声認識が完了した直後
              saUIManager.StartSendLLM();
-            await UniTask.Delay(System.TimeSpan.FromSeconds(2));
+            this.isDeviceOperated = false;
+            this.deviceOperatable = true;
+            await UniTask.WaitUntil(() => this.isDeviceOperated); 
+            this.deviceOperatable = false;
+            this.isDeviceOperated = false;
                     string outputText = "";
             experimentManager.GetCurrentArrangeData().devices.ForEach(device =>
             {

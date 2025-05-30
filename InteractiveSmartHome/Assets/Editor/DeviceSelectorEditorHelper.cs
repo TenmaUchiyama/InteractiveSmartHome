@@ -46,7 +46,7 @@ public class DeviceArrangementEditorHelper : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    [MenuItem("Tools/Set Selected Devices to Arrangement %#d")] // Ctrl+Shift+D
+    [MenuItem("Tools/Set Selected Devices to Arrangement %#x")] // Ctrl+Shift+X
     private static void SetSelectedObjectsToArrangement()
     {
         DeviceArrangementGenerator selectedObject = FindObjectOfType<DeviceArrangementGenerator>();

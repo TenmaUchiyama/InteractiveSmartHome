@@ -1,5 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
+using SpatialLLM.Device;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,6 +17,69 @@ namespace SpatialLLM.Experiment
 
         public UnityEvent onBeginOperation;
         public UnityEvent onCompleteOperation;
+        
+
+        protected bool isDeviceOperated = false;
+        protected bool deviceOperatable = false;
+
+
+         #if UNITY_EDITOR
+        void FixedUpdate()
+    {
+
+            if (!deviceOperatable) return;
+            bool isWhite = Input.GetKeyDown(KeyCode.W); 
+            bool isBlue = Input.GetKeyDown(KeyCode.Q); 
+            bool isRed = Input.GetKeyDown(KeyCode.E);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                isDeviceOperated = true;
+            }
+            Color lightColor = Color.white; // デフォルトは白色
+        if (Application.isPlaying && (isWhite || isBlue || isRed))
+            {
+
+                if (isWhite)
+                {
+                    lightColor = Color.white;
+                }
+                else if (isBlue)
+                {
+                    lightColor = Color.blue;
+                }
+                else if (isRed)
+                {
+                    lightColor = Color.red;
+                }
+
+               
+                GameObject[] selectedObjects = Selection.gameObjects;
+
+                Debug.Log($"選択中のオブジェクト数: {selectedObjects.Length}");
+
+                foreach (var obj in selectedObjects)
+                {
+                    // 自身にSADeviceがあるか
+                    SADevice saDevice = obj.GetComponent<SADevice>();
+
+                    // なければ親をたどる（GetComponentInParent で親も含めて検索）
+                    if (saDevice == null)
+                    {
+                        saDevice = obj.GetComponentInParent<SADevice>();
+                    }
+
+                    if (saDevice != null)
+                    {
+
+                        saDevice.TurnOnWithColor(lightColor);
+                        saDevice.GetComponent<DrawOnHover>()?.VisualizeTargetDevice(Color.blue);
+                    }
+                }
+            }
+    }
+#endif
+
+
 
         public virtual void BeginOperation()
         {

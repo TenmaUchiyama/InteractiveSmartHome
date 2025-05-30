@@ -12,11 +12,133 @@ using static SpatialLLM.Type.DirectionUtil;
 
 namespace SpatialLLM.Core
 {
+    
+    
+    
+    
+
+public class FOVDeviceDetectorUtil
+{
+    private Camera userCamera;
+
+    private float horizontalFOV = 70f;
+    private float verticalFOV = 70f;
+
+    // 視線方向のオフセット（度単位）
+    private float horizontalAngleOffset = 0f; // 例: 右に5度傾けたい → +5
+    private float verticalAngleOffset = 0f;   // 例: 下に10度傾けたい → -10
+    private float pValue = 5f; // 丸みの強さ（2: 楕円, ∞: 長方形, 4〜6: 角丸推奨）
+    public FOVDeviceDetectorUtil(Camera cam, float hFov = 70f, float vFov = 70f, float hOffset = 0f, float vOffset = 0f, float p = 5f)
+    {
+        userCamera = cam;
+        horizontalFOV = hFov;
+        verticalFOV = vFov;
+        horizontalAngleOffset = hOffset;
+        verticalAngleOffset = vOffset;
+        pValue = p;
+    }
+
+
+
+
+private Vector3 GetAdjustedForward()
+{
+    // ユーザーの視線方向を基準に、pitch/yawオフセットを適用
+    Quaternion offsetRotation = Quaternion.Euler(verticalAngleOffset, horizontalAngleOffset, 0f);
+    return userCamera.transform.rotation * offsetRotation * Vector3.forward;
+}
+
+
+/// <summary>
+/// 丸みを持った視野内判定（ローカル空間 + オフセット対応）
+/// </summary>
+private bool IsWithinRoundedFov(Vector3 targetPos)
+{
+    Vector3 dirToTarget = (targetPos - userCamera.transform.position).normalized;
+
+    // ローカル空間に変換（カメラ空間基準）
+    Vector3 localDir = Quaternion.Inverse(userCamera.transform.rotation) * dirToTarget;
+
+    // オフセットを加味
+    Quaternion offsetRotation = Quaternion.Euler(verticalAngleOffset, horizontalAngleOffset, 0f);
+    localDir = Quaternion.Inverse(offsetRotation) * localDir;
+
+    float hAngle = Mathf.Atan2(localDir.x, localDir.z) * Mathf.Rad2Deg;
+    float vAngle = Mathf.Atan2(localDir.y, localDir.z) * Mathf.Rad2Deg;
+
+    float a = horizontalFOV * 0.5f;
+    float b = verticalFOV * 0.5f;
+
+    float normalized = Mathf.Pow(Mathf.Abs(hAngle / a), this.pValue) + Mathf.Pow(Mathf.Abs(vAngle / b), this.pValue);
+
+    return normalized <= 1f;
+}
+    
+ /// <summary>
+/// 中心からのスコアを計算（視野の中心とのズレ）
+/// </summary>
+private float GetCentralityScore(Vector3 targetPos)
+{
+    Vector3 dirToTarget = (targetPos - userCamera.transform.position).normalized;
+
+    // カメラ空間 + オフセット考慮
+    Vector3 localDir = Quaternion.Inverse(userCamera.transform.rotation) * dirToTarget;
+    Quaternion offsetRotation = Quaternion.Euler(verticalAngleOffset, horizontalAngleOffset, 0f);
+    localDir = Quaternion.Inverse(offsetRotation) * localDir;
+
+    float hAngle = Mathf.Atan2(localDir.x, localDir.z) * Mathf.Rad2Deg;
+    float vAngle = Mathf.Atan2(localDir.y, localDir.z) * Mathf.Rad2Deg;
+
+    return Mathf.Sqrt(hAngle * hAngle + vAngle * vAngle);
+}
+
+
+
+    public bool IsInFov(SADevice device, out float centralityScore)
+    {
+        centralityScore = float.MaxValue;
+
+        if (device == null) return false;
+
+        var obj = device.gameObject;
+
+        Collider col = obj.GetComponent<Collider>();
+        Renderer renderer = obj.GetComponent<Renderer>();
+        if (col == null && renderer == null) return false;
+
+        Vector3 position = obj.transform.position;
+        Vector3 dirToObj = (position - userCamera.transform.position).normalized;
+
+        // 背面除外（カメラのforwardに対して）
+        if (Vector3.Dot(userCamera.transform.forward, dirToObj) < 0f) return false;
+
+        bool isInFov = IsWithinRoundedFov(position);
+        if (isInFov)
+        {
+            centralityScore = GetCentralityScore(position);
+        }
+
+        return isInFov;
+    }
+
+}
+
+
     public class SpatialAwarnessProvider : Singleton<SpatialAwarnessProvider>
     {
         [SerializeField] private Camera userCamera;
-        public const float verticalFOV = 70f;
-        public const float horizontalFOV = 70f;
+        
+        private FOVDeviceDetectorUtil fovDetector;
+
+
+
+
+
+
+        void Start()
+        {
+            fovDetector = new FOVDeviceDetectorUtil(userCamera, hFov: 65, vFov:50, hOffset: 0, vOffset: 10, p:5f);
+        }
 
         private Vector3 GetLocalPosition(Transform target)
         {
@@ -37,24 +159,6 @@ namespace SpatialLLM.Core
             }
         }
 
-        private Plane[] GetCustomFrustumPlanes()
-        {
-            GameObject tempCamObj = new GameObject("TempFrustumCam");
-            Camera tempCam = tempCamObj.AddComponent<Camera>();
-
-            tempCam.transform.position = userCamera.transform.position;
-            tempCam.transform.rotation = userCamera.transform.rotation;
-
-            tempCam.fieldOfView = verticalFOV;
-            float halfHRad = horizontalFOV * Mathf.Deg2Rad * 0.5f;
-            float halfVRad = verticalFOV * Mathf.Deg2Rad * 0.5f;
-            tempCam.aspect = Mathf.Tan(halfHRad) / Mathf.Tan(halfVRad);
-
-            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(tempCam);
-            GameObject.Destroy(tempCamObj);
-            return planes;
-        }
-
         public List<SADevice> FindDevicesInDirection(Direction direction, string device_type)
         {
             return SADeviceRef.Instance.GetAllDevices()
@@ -65,22 +169,15 @@ namespace SpatialLLM.Core
 
         public List<SADevice> FindDevicesInFov(string device_type = "", bool getInFov = true)
         {
-            Plane[] camPlanes = GetCustomFrustumPlanes();
+           
 
             return SADeviceRef.Instance.GetAllDevices()
                 .Where(device => device != null && device.CompareDeviceType(device_type))
                 .Where(device =>
                 {
-                    Collider col = device.GetComponent<Collider>();
-                    Renderer renderer = device.GetComponent<Renderer>();
-                    Bounds? bounds = col != null ? col.bounds : renderer?.bounds;
-                    if (!bounds.HasValue) return false;
-
-                    Vector3 directionToDevice = (device.transform.position - userCamera.transform.position).normalized;
-                    if (Vector3.Dot(userCamera.transform.forward, directionToDevice) < 0f) return false;
-
-                    bool isInFov = GeometryUtility.TestPlanesAABB(camPlanes, bounds.Value);
-                    return (getInFov && isInFov) || (!getInFov && !isInFov);
+                   float centralityScore;
+                bool isInFov = fovDetector.IsInFov(device, out centralityScore);
+                return getInFov ? isInFov : !isInFov;
                 })
                 .ToList();
         }
@@ -114,7 +211,7 @@ namespace SpatialLLM.Core
 
             foreach (var device in devices)
             {
-               Debug.Log($"<color=cyan>Device: {device.gameObject.name}, Position: {device.transform.position}</color>");
+                Debug.Log($"<color=cyan>Device: {device.gameObject.name}, Position: {device.transform.position}</color>");
             }
             float range = fovData.range ?? float.MaxValue;
             string order = fovData.order;

@@ -5236,7 +5236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 0
+  _meshType: 4
 --- !u!114 &195063359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5267,7 +5267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 0
+  _skeletonType: 4
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -9366,7 +9366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 1
+  _meshType: 5
 --- !u!114 &386976278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9397,7 +9397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 1
+  _skeletonType: 5
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -24213,6 +24213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 216e289f004ca6548bfdd5240997f334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLabelExperiment: 0
+  isTutorial: 0
   currentArrangeIndex: 0
   systemExecutor: {fileID: 925221671}
   saUIManager: {fileID: 704704747}
@@ -24248,7 +24250,13 @@ MonoBehaviour:
   arrangementName: "\u30C6\u30EC\u30D3\u306E\u5468\u308A"
   selectingDeviceColor: 0
   arrangementType: 0100000004000000
-  inputTaskDevices: []
+  inputTaskDevices:
+  - device: {fileID: 82875391}
+    color: 0
+  - device: {fileID: 1459677476}
+    color: 0
+  - device: {fileID: 169966029}
+    color: 0
   arrangementDataList:
   - device_arrange_id: 3a642a22-d8be-466d-ae3d-8ee4ae7e730f
     device_arrange_name: "6\u500B\u306E\u5929\u4E95\u306E\u30C7\u30D0\u30A4\u30B9"

@@ -20,13 +20,15 @@ public enum ExperimentFlowState
     SHOW_DEVICE, 
     MOVING_TO_POINT, 
     OPERATION, 
-    DONE
-}
+    DONE,
+    LABEL_EXPERIMENT
+    }
 public class ExperimentManager : MonoBehaviour
 {
     private DeviceArrangementGenerator arrangementGenerator;
     private List<DeviceArrangeData> arrangeDataList;
     private DeviceArrangeData currentArrange;
+    [SerializeField]private bool isLabelExperiment = false;
 
         [SerializeField] private bool isTutorial= false;
     [SerializeField]private  int currentArrangeIndex;
@@ -45,32 +47,38 @@ public class ExperimentManager : MonoBehaviour
 
     public int CurrentArrangeIndex  => currentArrangeIndex;
 
-    
 
-    //とりあえずデバイスの色をつける
 
-    private void Start() {
-        // experimentalDataManager = GetComponent<ExperimentalDataManager>();
-        arrangementGenerator = GetComponent<DeviceArrangementGenerator>();
-        // // experimentTask = GetComponent<ExperimentTask>();
+        //とりあえずデバイスの色をつける
 
-    
+        public bool isDeviceTurnedOn = false;
 
-        ReadTaskData();
-        
+   
 
-        stateActions = new Dictionary<ExperimentFlowState, Func<UniTask>>
+        private void Start()
+        {
+            // experimentalDataManager = GetComponent<ExperimentalDataManager>();
+            arrangementGenerator = GetComponent<DeviceArrangementGenerator>();
+            // // experimentTask = GetComponent<ExperimentTask>();
+
+
+
+            ReadTaskData();
+
+
+            stateActions = new Dictionary<ExperimentFlowState, Func<UniTask>>
         {
             { ExperimentFlowState.START_TASK, StartTask },
             { ExperimentFlowState.SHOW_DEVICE, ShowDevice },
             { ExperimentFlowState.MOVING_TO_POINT, MoveToPoint },
             {ExperimentFlowState.OPERATION, Operation},
-            { ExperimentFlowState.DONE, DoneState }
+            { ExperimentFlowState.DONE, DoneState },
+            { ExperimentFlowState.LABEL_EXPERIMENT, ShowLabelForMinute }
         };
-        
-    
-        Init();
-    }
+
+
+            Init();
+        }
 
 
     private async void Init()
@@ -90,13 +98,43 @@ public class ExperimentManager : MonoBehaviour
              });
 
 
-        TransitionToState(ExperimentFlowState.START_TASK);
+      
+        var firstTask = isLabelExperiment ? ExperimentFlowState.LABEL_EXPERIMENT : ExperimentFlowState.START_TASK;
+        TransitionToState(firstTask);
     }
 
-    private void SendAllDeviceDataToSocket() 
-    {
-        List<DeviceArrangeDataSerializable> data  = arrangementGenerator.GetAllSerializedDeviceArrangeData(); 
+
+
+
+
+        // START TASK STATE
+        private async UniTask ShowLabelForMinute()
+        {
+
+
+
+              saUIManager.SetInstructionText("Press Y To Show Device Labels For 1 Minute");
+            await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y));           
+            
+            Debug.Log("<color=yellow>Label for 1 Minute</color>");
+            foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
+                {
+                    device.DisplayShowLabel(true);
+                }
+            for (int i = 60; i > 0; i--)
+            {
+                saUIManager.SetInstructionText(i.ToString());
+                Debug.Log($"<color=yellow>Remaining Time: {i} seconds</color>");
+                await UniTask.Delay(System.TimeSpan.FromSeconds(1));
+            }
+              foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
+                {
+                    device.DisplayShowLabel(false);  
+            }
+            Debug.Log("<color=yellow>Countdown Complete</color>");
+            TransitionToState(ExperimentFlowState.START_TASK);
     }
+
 
 
 
@@ -110,31 +148,33 @@ public class ExperimentManager : MonoBehaviour
 
 
 
-// SHOW DEVICE STATE
-    private async UniTask ShowDevice()
-{
-    DebugLogging("Show Device");
 
-    // DeviceColorPair のリストから SADevice のリストに変換
-    List<DeviceColorPair> deviceArrangeDatas = this.currentArrange.devices; 
-    
 
-    // DisplayDevices は void を返すので、await しない
-    DisplayDevices(deviceArrangeDatas);
+        // SHOW DEVICE STATE
+        private async UniTask ShowDevice()
+        {
+            DebugLogging("Show Device");
 
-    foreach(DeviceColorPair pair in deviceArrangeDatas)
-    {
-        Debug.Log($"<color=yellow>paris {pair.device.name}</color>");
-    }
-    Debug.Log("<color=red>[ShowDevice] Press A to Go To Operation</color>");
-    saUIManager.SetDeviceCountText(deviceArrangeDatas.Count().ToString());
-    saUIManager.SetInstructionText("Press Y If You Are Ready"); 
-    await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y));
-    saUIManager.ClearInstruction();
-    ClearDeviceVisual();
+            // DeviceColorPair のリストから SADevice のリストに変換
+            List<DeviceColorPair> deviceArrangeDatas = this.currentArrange.devices;
 
-    TransitionToState(ExperimentFlowState.OPERATION);
-}
+
+            // DisplayDevices は void を返すので、await しない
+            DisplayDevices(deviceArrangeDatas);
+
+            foreach (DeviceColorPair pair in deviceArrangeDatas)
+            {
+                Debug.Log($"<color=yellow>paris {pair.device.name}</color>");
+            }
+            Debug.Log($"<color=red>[ShowDevice] Press A to Go To Operation. Device   {this.currentArrange.device_arrange_name}  </color>");
+            saUIManager.SetDeviceCountText(deviceArrangeDatas.Count().ToString());
+            saUIManager.SetInstructionText("Press Y If You Are Ready");
+            await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y));
+            saUIManager.ClearInstruction();
+            ClearDeviceVisual();
+
+            TransitionToState(ExperimentFlowState.OPERATION);
+        }
 
 // MOVE TO POINT STATE
     private async UniTask MoveToPoint()

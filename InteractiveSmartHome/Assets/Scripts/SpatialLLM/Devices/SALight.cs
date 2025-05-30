@@ -18,7 +18,7 @@ public class SALight : SADevice
          
         Light light;
 
-        DrawOnHover drawOnHover;
+    
 
         public bool isDebug = false;
 
@@ -50,7 +50,7 @@ public class SALight : SADevice
 
 
         private void Start() {
-        drawOnHover = GetComponent<DrawOnHover>();
+        this.drawOnHover = GetComponent<DrawOnHover>();
        
             
         light = GetComponentInChildren<Light>();

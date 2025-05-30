@@ -67,19 +67,28 @@ namespace SpatialLLM.Experiment
             }
 
 
-            isGripHolding = OVRInput.Get(OVRInput.RawButton.LHandTrigger);
-            if (!isRecording)
-            {
-                foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
-                {
-                    device.DisplayShowLabel(isGripHolding);
-                }
-            }
+            // isGripHolding = OVRInput.Get(OVRInput.RawButton.LHandTrigger);
+            // if (!isRecording)
+            // {
+            //     foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
+            //     {
+            //         device.DisplayShowLabel(isGripHolding);
+            //     }
+            // }
             // --- Yボタン処理 ---
             if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
             {
                 YOperation();
             }
+
+
+            
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                OnVoiceRecognized("テスト");
+            }
+
+
 
             // --- キャンセル処理 ---
             if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
@@ -100,8 +109,12 @@ private async void YOperation()
         case "recorded":
             // 音声認識が完了した直後
              saUIManager.StartSendLLM();
-            await UniTask.Delay(System.TimeSpan.FromSeconds(2));
-                    string outputText = "";
+           this.isDeviceOperated = false;
+            this.deviceOperatable = true;
+            await UniTask.WaitUntil(() => this.isDeviceOperated); 
+            this.deviceOperatable = false;
+            this.isDeviceOperated = false;
+            string outputText = "";
             experimentManager.GetCurrentArrangeData().devices.ForEach(device =>
             {
                 outputText += $"{device.device.name}";
@@ -115,7 +128,7 @@ private async void YOperation()
 
         case "checking":
             // 処理結果（操作内容など）を表示
-            experimentManager.DisplayCurrentOperation();
+       
 
             saUIManager.SetInstructionText("Press Y to complete");
              wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);

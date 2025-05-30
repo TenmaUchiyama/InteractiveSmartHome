@@ -61,6 +61,11 @@ namespace SpatialLLM.Experiment
                 Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");
             }
 
+
+              if (Input.GetKeyDown(KeyCode.V))
+            {
+                OnVoiceRecognized("テスト");
+            }
             // --- Yボタン処理 ---
             if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
             {
@@ -85,8 +90,12 @@ private async void YOperation()
 
         case "recorded":
             // 音声認識が完了した直後
-             saUIManager.StartSendLLM();
-            await UniTask.Delay(System.TimeSpan.FromSeconds(2));
+            saUIManager.StartSendLLM();
+            this.isDeviceOperated = false;
+            this.deviceOperatable = true;
+            await UniTask.WaitUntil(() => this.isDeviceOperated); 
+            this.deviceOperatable = false;
+            this.isDeviceOperated = false;
                     string outputText = "";
             experimentManager.GetCurrentArrangeData().devices.ForEach(device =>
             {
@@ -101,7 +110,7 @@ private async void YOperation()
 
         case "checking":
             // 処理結果（操作内容など）を表示
-            experimentManager.DisplayCurrentOperation();
+            // experimentManager.DisplayCurrentOperation();
 
             saUIManager.SetInstructionText("Press Y to complete");
              wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);

@@ -38,16 +38,37 @@ namespace SpatialLLM.Device
         public abstract void TurnOff();
 
         public abstract void Init();
-        
 
+        protected DrawOnHover drawOnHover;
+
+
+        public void TEMP_DrawHover()
+        {
+
+            this.drawOnHover.DrawHover(); 
+    
+        }
+
+
+        
+        public void TEMP_DrawUnHover()
+        {
+
+            this.drawOnHover.ClearDrawing(); 
+    
+        }
+   
 
         public void DisplayShowLabel(bool showing)
         {
-            if(showing){
-                this.showLabel.DisplayLabel();}
-            else{
+            if (showing)
+            {
+                this.showLabel.DisplayLabel();
+            }
+            else
+            {
                 this.showLabel.HideLabel();
-            }   
+            }
         }
 
         public DeviceSpatialData GenerateFurnitureRelativePositionData(Vector3 relativePos)
