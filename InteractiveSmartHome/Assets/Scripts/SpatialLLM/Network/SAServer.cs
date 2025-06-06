@@ -112,7 +112,7 @@ public class SAServer : HttpServer
                 FOVRequest data = await context.ReadBodyAsJsonAsync<FOVRequest>();
                 Debug.Log("Received Fov"); 
                 Debug.Log(SpatialAwarnessProvider.Instance);
-                List<DeviceSpatialData> fovResult = SpatialAwarnessProvider.Instance.GetDeviceInFov("Light", data);
+                List<DeviceSpatialData> fovResult = SpatialAwarnessProvider.Instance.GetDevicesInFov("Light", data);
                
                 string sendingFovData = this.SendingDeviceData(fovResult);
                 Debug.Log($"<color=yellow>[SAServer] {sendingFovData}</color>");

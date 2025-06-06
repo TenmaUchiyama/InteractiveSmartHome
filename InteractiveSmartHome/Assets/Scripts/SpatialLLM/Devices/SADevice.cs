@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Meta.WitAi.Json;
 using MRFlow.Network;
 using Oculus.Interaction;
+using SpatialLLM.Core;
 using SpatialLLM.Network;
 using SpatialLLM.Type;
 using TMPro;
@@ -85,20 +86,15 @@ namespace SpatialLLM.Device
             Vector3 cameraRight = Camera.main.transform.right;
             Vector3 cameraUp = Camera.main.transform.up;
 
-            // 水平角度（左右）
-            float hAngle = Vector3.SignedAngle(cameraForward, toObject, cameraUp);
-
-            // 垂直角度（上下）
-            float vAngle = Vector3.SignedAngle(cameraForward, toObject, cameraRight);
-
+          
+            
             // DeviceSpatialData の生成
             DeviceSpatialData spatialData = new DeviceSpatialData(
                 this.spatialData.id,
                 this.spatialData.name,
                 relativePos,
                 Vector3.Distance(transform.position, Camera.main.transform.position),
-                hAngle,
-                vAngle
+                SpatialAwarnessProvider.Instance != null ? SpatialAwarnessProvider.Instance.GetFovCentralityScore(this) : (float?)null
             );
             return spatialData;
         }
@@ -123,38 +119,35 @@ namespace SpatialLLM.Device
             return spatialDataForFurniture;
         }
 
-       public DeviceSpatialData GetDevicePositionalRelativeToUser(Transform referenceCamera = null)
+ public DeviceSpatialData GetDevicePositionalRelativeToUser(Transform referenceCamera = null)
 {
     Debug.Log("[SADevice] Start GetDevicePositionalRelativeToUser");
 
     try
     {
         Transform camTransform = referenceCamera != null ? referenceCamera : Camera.main.transform;
-        
 
-        Vector3 relativePosition = camTransform.InverseTransformPoint(this.transform.position);
-      
+        // ワールド座標の差分
+        Vector3 worldDelta = this.transform.position - camTransform.position;
 
-        Vector3 position = new Vector3(relativePosition.x, relativePosition.y, relativePosition.z);
-        float distance_from_user = Vector3.Distance(transform.position, camTransform.position);
-       
+        // Yaw（Y軸回転）のみ抽出
+        Quaternion yawOnlyRotation = Quaternion.Euler(0, camTransform.eulerAngles.y, 0);
 
-        if (this.spatialData == null)
-        {
-            Debug.Log("[SADevice] Creating new DeviceSpatialData");
-            this.spatialData = new DeviceSpatialData(
-                id: this.GetDeviceID(),
-                name: this.gameObject.name,
-                position: position,
-                distance_from_user: distance_from_user
-            );
-        }
-        else
-        {
-            Debug.Log("[SADevice] Updating existing DeviceSpatialData");
-            this.spatialData.position = new Position(position);
-            this.spatialData.distance_from_user = distance_from_user;
-        }
+        // Yawのみに基づく相対位置（回転を逆適用してローカル化）
+        Vector3 relativePosition = Quaternion.Inverse(yawOnlyRotation) * worldDelta;
+
+        // 距離（ベクトルの長さ）そのまま
+        float distance_from_user = worldDelta.magnitude;
+
+        Debug.Log("[SADevice] Creating new DeviceSpatialData");
+        Debug.Log($"[SADevice] <color=yellow> centrality_score: {(SpatialAwarnessProvider.Instance != null ? SpatialAwarnessProvider.Instance.GetFovCentralityScore(this) : (float?)null)}</color>");
+        this.spatialData = new DeviceSpatialData(
+            id: this.GetDeviceID(),
+            name: this.gameObject.name,
+            position: relativePosition, // 傾きの影響を排除した相対位置
+            distance_from_user: distance_from_user,
+            centrality_score: SpatialAwarnessProvider.Instance != null ? SpatialAwarnessProvider.Instance.GetFovCentralityScore(this) : (float?)null
+        );
 
         return this.spatialData;
     }

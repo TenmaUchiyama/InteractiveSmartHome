@@ -36,27 +36,17 @@ def getSystemRunner():
 
 
 
-def getSystemRunner():
+def getFilterRunner():
     graph = StateGraph(State)
 
     graph.add_node(NODE.FILTER_PREPROCESS.value, filter_preprocess)
     graph.add_node(NODE.FILTER_AGENT.value, filter_agent_node)
     graph.add_node(NODE.FILTER_TOOL.value, filter_tool_node)
 
-    graph.add_node(NODE.SR_PREPROCESS.value, sr_preprocess_node)
-    graph.add_node(NODE.SR_AGENT.value, sr_agent_node)
-    graph.add_node(NODE.SR_TOOL.value, sr_tool_node)
-    graph.add_node(NODE.SYSTEM_POST_PROCESS.value, system_post_process_node)
-
     graph.add_edge(START, NODE.FILTER_PREPROCESS.value)
     graph.add_edge(NODE.FILTER_PREPROCESS.value, NODE.FILTER_AGENT.value)
     graph.add_edge(NODE.FILTER_AGENT.value, NODE.FILTER_TOOL.value)
-    graph.add_edge(NODE.FILTER_TOOL.value, NODE.SR_PREPROCESS.value)
-
-    graph.add_edge(NODE.SR_PREPROCESS.value, NODE.SR_AGENT.value)
-    graph.add_edge(NODE.SR_AGENT.value, NODE.SR_TOOL.value)
-    graph.add_edge(NODE.SR_TOOL.value, NODE.SYSTEM_POST_PROCESS.value)
-    graph.add_edge(NODE.SYSTEM_POST_PROCESS.value, END) 
+    graph.add_edge(NODE.FILTER_TOOL.value, END)
 
     runner  = graph.compile()   
     return runner

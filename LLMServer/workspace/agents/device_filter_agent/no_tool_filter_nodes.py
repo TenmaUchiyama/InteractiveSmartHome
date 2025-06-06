@@ -90,7 +90,9 @@ def filter_agent_node(state: State):
     output = FilterAgentOutput(**output_dict)
     print("========[FILTER AGENT NODE]=========")
     print("Filter Type: ", output) 
+    print()
     print("Output: ", output.reasoning)
+    print()
 
     state.filterAgent.output_tool_selection = output
 

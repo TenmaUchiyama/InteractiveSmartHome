@@ -28,9 +28,7 @@ namespace SpatialLLM.Experiment
 
     public class DeviceArrangementGenerator : MonoBehaviour
     {
-        [Header("File Settings")]
-        [Tooltip("EXPERIMENT フォルダ内の相対パスを指定（例: TaskDeviceData.json または ArrangeData/Test.json）")]
-        [SerializeField] private string jsonFileRelativePath = "TaskDeviceData.json";
+       
 
         [Header("Arrangement Settings")]
         [Tooltip("新しい配置データの名前")]
@@ -50,11 +48,22 @@ namespace SpatialLLM.Experiment
         [SerializeField] private List<DeviceArrangeData> arrangementDataList = new List<DeviceArrangeData>();
         public IReadOnlyList<DeviceArrangeData> ArrangementDataList => arrangementDataList;
 
+
+
+        void Start()
+        {
+            LoadTaskData();
+        }
+
         [ContextMenu("Update Task Data")]
         public void UpdateTaskData()
         {
             WriteTaskDataJson(arrangementDataList);
         }
+
+
+
+    
 
         [ContextMenu("Add Task Data")]
         public void AddTaskData()
@@ -92,15 +101,17 @@ namespace SpatialLLM.Experiment
         }
 
         private string GetJsonFilePath()
-        {
-            // EXPERIMENT フォルダを基点とした相対パスを結合
-            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", jsonFileRelativePath);
-            // フォルダ部分を取得して存在確認・作成
-            var directory = Path.GetDirectoryName(filePath);
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-            return filePath;
-        }
+            {
+
+                string jsonFileRelativePath =  $"ArrangeData/PreTaskArrangement{EXDataHolder.Instance.TaskSetName}.json";
+
+                string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", jsonFileRelativePath);
+                var directory = Path.GetDirectoryName(filePath);
+                if (!Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
+                return filePath;
+            }
+
 
         private List<DeviceColorPairSerializable> ConvertToSerializable(List<DeviceColorPair> devicePairs)
         {
@@ -112,7 +123,7 @@ namespace SpatialLLM.Experiment
                     Debug.LogWarning("Invalid DeviceColorPair encountered during serialization");
                     return null;
                 }
-                
+
                 string id = SADeviceRef.Instance.GetDeviceIdByName(d.device.gameObject?.name); ;
                 return new DeviceColorPairSerializable
                 {
@@ -195,6 +206,17 @@ namespace SpatialLLM.Experiment
             arrangementName = string.Empty;
             arrangementType.Clear();
             inputTaskDevices.Clear();
+        }
+
+
+
+        public List<DeviceArrangeData> GetDeviceArrangeDatas()
+        {
+            if (arrangementDataList == null || arrangementDataList.Count == 0)
+            {
+                LoadTaskData();
+            }
+            return arrangementDataList;
         }
     }
 }

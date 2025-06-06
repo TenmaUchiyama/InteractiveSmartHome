@@ -131,7 +131,7 @@ private async void YOperation()
         {
             base.BeginOperation();
             currentState = "preparation";
-            saUIManager.SetInstructionText("Press Trigger to Record, Grip to Show Labels");
+            saUIManager.SetInstructionText("Press Trigger to Record");
         }
 
         public override void CompleteOperation()

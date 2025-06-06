@@ -143,10 +143,11 @@ def serialize_value(value):
 
 @app.post("/llm_agent")
 def llm_agent_no_tool(message: InputMessage):
+
     runner = getSystemRunner()
     user_prompt = message.llm_message
     task_id = message.task_id
-
+    print("PROMPT: ", user_prompt)
     print("ID: ", task_id)
 
     state = State(user_prompt=user_prompt)

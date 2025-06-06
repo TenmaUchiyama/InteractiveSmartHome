@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SpatialLLM.Device;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -23,6 +24,7 @@ public class DeviceIdListWrapper
     public List<DeviceIdEntry> devices = new List<DeviceIdEntry>();
 }
 
+
 public class SADeviceRef : Singleton<SADeviceRef>
 {
     [SerializeField] GameObject parentObject;
@@ -37,9 +39,6 @@ public class SADeviceRef : Singleton<SADeviceRef>
         saDevices = parentObject.GetComponentsInChildren<SADevice>(false).ToList();
 
         LoadOrGenerateDeviceIds();
-
-        // 各デバイスにIDを適用
-       
     }
 
 
@@ -63,7 +62,7 @@ public class SADeviceRef : Singleton<SADeviceRef>
             }
         }
     }
-    
+
 
     private void LoadOrGenerateDeviceIds()
     {
@@ -99,30 +98,30 @@ public class SADeviceRef : Singleton<SADeviceRef>
     }
 
 
-   public string GetDeviceIdByName(string deviceName)
-{
-    string path = Path.Combine(Application.persistentDataPath, "device_ids.json");
-
-    if (!File.Exists(path))
+    public string GetDeviceIdByName(string deviceName)
     {
-        Debug.LogWarning("[GetDeviceIdByName] device_ids.json が存在しません");
+        string path = Path.Combine(Application.persistentDataPath, "device_ids.json");
+
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning("[GetDeviceIdByName] device_ids.json が存在しません");
+            return null;
+        }
+
+        string json = File.ReadAllText(path);
+        DeviceIdListWrapper wrapper = JsonUtility.FromJson<DeviceIdListWrapper>(json);
+
+        foreach (var entry in wrapper.devices)
+        {
+            if (entry.deviceName == deviceName)
+            {
+                return entry.deviceId;
+            }
+        }
+
+        Debug.LogWarning($"[GetDeviceIdByName] {deviceName} は device_ids.json に見つかりませんでした");
         return null;
     }
-
-    string json = File.ReadAllText(path);
-    DeviceIdListWrapper wrapper = JsonUtility.FromJson<DeviceIdListWrapper>(json);
-
-    foreach (var entry in wrapper.devices)
-    {
-        if (entry.deviceName == deviceName)
-        {
-            return entry.deviceId;
-        }
-    }
-
-    Debug.LogWarning($"[GetDeviceIdByName] {deviceName} は device_ids.json に見つかりませんでした");
-    return null;
-}
 
     public List<SADevice> GetAllDevices() => parentObject.GetComponentsInChildren<SADevice>(false).ToList();
 
@@ -139,6 +138,81 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
     public GameObject GetSADeviceParent() => this.parentObject;
     public List<SADevice> GetAllDevicesRealTime() => GetAllDevices();
+
+
+
+   [MenuItem("Tools/Rename SADevices Children")]
+    public static void RenameSADeviceChildren()
+    {
+        GameObject parent = GameObject.Find("SADevices");
+        if (parent == null)
+        {
+            Debug.LogError("GameObject 'SADevices' が見つかりませんでした。");
+            return;
+        }
+
+        var saDevices = parent.GetComponentsInChildren<SADevice>(true);
+        if (saDevices.Length == 0)
+        {
+            Debug.LogWarning("子オブジェクトに SADevice コンポーネントが見つかりませんでした。");
+            return;
+        }
+
+        foreach (var device in saDevices)
+        {
+            string oldName = device.gameObject.name;
+            string newName = ConvertToEnglishName(oldName);
+            if (!string.IsNullOrEmpty(newName))
+            {
+                device.gameObject.name = newName;
+                Debug.Log($"[Rename] {oldName} → {newName}");
+            }
+            else
+            {
+                Debug.LogWarning($"[Rename] {oldName} は変換対象ではありません。");
+            }
+        }
+    }
+
+    private static string ConvertToEnglishName(string oldName)
+    {
+        // var match = System.Text.RegularExpressions.Regex.Match(
+        //     oldName,
+        //     @"^(天井ライト|壁ライト|テーブルライト|ランプスタンド|フロアライト|棚ライト)(\d*)$");
+        var match = System.Text.RegularExpressions.Regex.Match(
+        oldName, @"^(CeilingLight|WallLight|TableLight|StandLight|FloorLight|ShelfLight|TVLight)(\d+)$");
+
+
+        if (!match.Success) return null;
+
+        string prefix = match.Groups[1].Value;
+        string number = match.Groups[2].Value;
+
+        // return prefix switch
+        // {
+        //     "天井ライト" => $"CeilingLight{number}",
+        //     "壁ランプ" => $"WallLight{number}",
+        //     "テーブルライト" => $"TableLight{number}",
+        //     "ランプスタンド" => $"StandLight{number}",
+        //     "フロアライト" => $"FloorLight{number}",
+        //     "棚ライト" => $"ShelfLight{number}",
+        //     "テレビライト" => $"TVLight{number}",
+
+        //     _ => null,
+        // };
+         return prefix switch
+    {
+        "CeilingLight" => $"Ceiling Light {number}",
+        "WallLight"    => $"Wall Light {number}",
+        "TableLight"   => $"Table Light {number}",
+        "StandLight"   => $"Stand Light {number}",
+        "FloorLight"   => $"Floor Light {number}",
+        "ShelfLight"   => $"Shelf Light {number}",
+        "TVLight"      => $"TV Light {number}",
+        _ => null,
+    };
+    }
+
 }
 
 

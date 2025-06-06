@@ -41,7 +41,7 @@ public class SALight : SADevice
 
             Debug.Log($"<color=green>Device data initialized for {this.gameObject.name}. ID: {this.deviceData.device_id}</color>");
 
-            this.spatialData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
+            this.spatialData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position), null);
 
 
 

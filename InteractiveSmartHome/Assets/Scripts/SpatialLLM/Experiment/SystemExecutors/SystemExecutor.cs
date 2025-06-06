@@ -11,6 +11,8 @@ namespace SpatialLLM.Experiment
     {
         [SerializeField] protected SAUIManager saUIManager;
         [SerializeField] protected ExperimentManager experimentManager;
+        
+        [SerializeField] protected WordLogger wordLogger;
 
         protected bool isStarted = false;
         protected UniTaskCompletionSource<bool> completionSource;

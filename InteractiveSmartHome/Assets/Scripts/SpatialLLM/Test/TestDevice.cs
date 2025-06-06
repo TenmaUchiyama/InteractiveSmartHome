@@ -63,7 +63,7 @@ namespace SpatialLLM.Core{
             );
 
 
-            debugDeviceData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
+            debugDeviceData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position), null);
         
         }
 

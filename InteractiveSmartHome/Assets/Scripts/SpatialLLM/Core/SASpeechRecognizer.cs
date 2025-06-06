@@ -10,13 +10,14 @@ using System;
 using TMPro;
 using UnityEngine.Events;
 using SpatialLLM.Network;
+using Meta.WitAi.Data;
 
 
 namespace SpatialLLM.Core
 {
 public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
     {
-
+        
         public UnityEvent OnVoiceRecogStart; 
         public UnityEvent OnVoiceRecogStop; 
 
@@ -26,10 +27,12 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
 
 
         [SerializeField] private VoiceService _voiceService;
+        
 
         private string _activateText = "Activate";
 
         [SerializeField] private bool _activateImmediately = false;
+        
         private string _deactivateText = "Deactivate";
 
 
@@ -40,34 +43,87 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
         public bool IsActive => _isActive;
 
 
-        private void Awake()
+       private void Awake()
+{
+    if (_voiceService == null)
+    {
+        _voiceService = FindObjectOfType<VoiceService>();
+        if (_voiceService == null)
         {
-            if (_voiceService == null)
-            {
-                _voiceService = FindObjectOfType<VoiceService>();
-                if (_voiceService == null)
-                {
-                    Debug.LogError("VoiceService not found in the scene.");
-                }
-            }
+            Debug.LogError("VoiceService not found in the scene.");
         }
+    }
 
+    // Platform Integrations を無効化（Unityマイクを使うため）
+    if (_voiceService != null)
+    {
+        _voiceService.UsePlatformIntegrations = false;
+    }
+}
 
+private void SetMicWhenReady()
+{
+    string preferredMicName = "マイク (USBAudio1.0)";
+    string selectedMic = null;
+
+    float timeout = 5f;
+    float elapsed = 0f;
+
+    while (Microphone.devices.Length == 0 && elapsed < timeout)
+    {
+        System.Threading.Thread.Sleep(100); // 100ms待機
+        elapsed += 0.1f; // 0.1秒を加算
+    }
+
+    if (Microphone.devices.Length == 0)
+    {
+        Debug.LogWarning("マイクが検出できませんでした（5秒待っても見つからない）");
+        return;
+    }
+
+    foreach (var mic in Microphone.devices)
+    {
+        if (mic.Contains(preferredMicName))
+        {
+            selectedMic = mic;
+            break;
+        }
+    }
+
+    if (string.IsNullOrEmpty(selectedMic))
+    {
+        selectedMic = Microphone.devices[0];
+        Debug.LogWarning($"指定されたマイクが見つかりませんでした。代わりに {selectedMic} を使用します。");
+    }
+    
+    
     
 
- 
-        private void Start()
-        {
-            if (_voiceService != null)
+    if (!_voiceService.UsePlatformIntegrations &&
+                                AudioBuffer.Instance != null &&
+                                AudioBuffer.Instance.MicInput is Meta.WitAi.Lib.Mic micInput)
             {
-                _voiceService.VoiceEvents.OnStartListening.AddListener(OnStartListening);
-                _voiceService.VoiceEvents.OnStoppedListening.AddListener(OnStopListening);
-                _voiceService.VoiceEvents.OnFullTranscription.AddListener(OnFullTranscription);
+                int micIndex = Array.IndexOf(Microphone.devices, selectedMic);
+                if (micIndex >= 0)
+                {
+                    micInput.ChangeMicDevice(micIndex);
+                    Debug.Log($"使用マイクを設定しました: {selectedMic} (Index: {micIndex})");
+                }
             }
+}
 
-        }
 
+ private void Start()
+{
+            SetMicWhenReady();
 
+    if (_voiceService != null)
+    {
+        _voiceService.VoiceEvents.OnStartListening.AddListener(OnStartListening);
+        _voiceService.VoiceEvents.OnStoppedListening.AddListener(OnStopListening);
+        _voiceService.VoiceEvents.OnFullTranscription.AddListener(OnFullTranscription);
+    }
+}
 
 
 
@@ -173,12 +229,9 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
 
 
 
-
-
-            Debug.Log("iwiojfoiwejfiojwejfiowjefoeo");
             if (!_deactivateAndAbort)
             {
-                  _voiceService.Deactivate();
+                _voiceService.Deactivate();
                 if (_request != null)
                 {
                     _request.DeactivateAudio();
@@ -188,7 +241,7 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
                     _voiceService.Deactivate();
                 }
 
-                
+
             }
             else
             {
@@ -196,7 +249,7 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
                 {
                     _request.Cancel();
                 }
-                
+
             }
         }
 

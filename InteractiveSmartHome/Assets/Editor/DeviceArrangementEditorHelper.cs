@@ -59,7 +59,7 @@ public class DeviceArrangementEditorHelper : Editor
         Undo.RecordObject(selectedObject, "Set Selected Objects");
 
         GameObject[] selectedObjects = Selection.gameObjects;
-    
+
 
         Debug.Log($"{selectedObjects.Count()}");
 
@@ -67,7 +67,7 @@ public class DeviceArrangementEditorHelper : Editor
 
         foreach (GameObject obj in selectedObjects)
         {
-            SADevice saDevice = obj.GetComponent<SADevice>(); 
+            SADevice saDevice = obj.GetComponent<SADevice>();
             if (saDevice != null)
             {
                 DeviceColorPair deviceColorPair = new DeviceColorPair()
@@ -83,4 +83,5 @@ public class DeviceArrangementEditorHelper : Editor
 
         Debug.Log("選択したオブジェクトで DeviceArrangementGenerator を上書きしました。");
     }
+
 }

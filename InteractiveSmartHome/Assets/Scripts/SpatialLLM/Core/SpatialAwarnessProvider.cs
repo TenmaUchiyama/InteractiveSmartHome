@@ -19,6 +19,7 @@ namespace SpatialLLM.Core
 
 public class FOVDeviceDetectorUtil
 {
+
     private Camera userCamera;
 
     private float horizontalFOV = 70f;
@@ -81,16 +82,19 @@ private float GetCentralityScore(Vector3 targetPos)
 {
     Vector3 dirToTarget = (targetPos - userCamera.transform.position).normalized;
 
-    // カメラ空間 + オフセット考慮
-    Vector3 localDir = Quaternion.Inverse(userCamera.transform.rotation) * dirToTarget;
+    // カメラの向きにオフセットを加味した回転
     Quaternion offsetRotation = Quaternion.Euler(verticalAngleOffset, horizontalAngleOffset, 0f);
-    localDir = Quaternion.Inverse(offsetRotation) * localDir;
+    Quaternion adjustedRotation = userCamera.transform.rotation * offsetRotation;
+
+    // ワールド空間からオフセット考慮したカメラ空間へ変換
+    Vector3 localDir = Quaternion.Inverse(adjustedRotation) * dirToTarget;
 
     float hAngle = Mathf.Atan2(localDir.x, localDir.z) * Mathf.Rad2Deg;
     float vAngle = Mathf.Atan2(localDir.y, localDir.z) * Mathf.Rad2Deg;
 
-    return Mathf.Sqrt(hAngle * hAngle + vAngle * vAngle);
+    return Mathf.Sqrt(hAngle * hAngle + vAngle * vAngle); // 中心からのズレ（ピクセル距離のような指標）
 }
+
 
 
 
@@ -135,7 +139,7 @@ private float GetCentralityScore(Vector3 targetPos)
 
 
 
-        void Start()
+        void Awake()
         {
             fovDetector = new FOVDeviceDetectorUtil(userCamera, hFov: 65, vFov:50, hOffset: 0, vOffset: 10, p:5f);
         }
@@ -176,10 +180,21 @@ private float GetCentralityScore(Vector3 targetPos)
                 .Where(device =>
                 {
                    float centralityScore;
+                 
                 bool isInFov = fovDetector.IsInFov(device, out centralityScore);
                 return getInFov ? isInFov : !isInFov;
                 })
                 .ToList();
+        }
+
+
+        public float GetFovCentralityScore(SADevice device)
+        {
+            if (device == null) return float.MaxValue;
+
+            float centralityScore;
+            fovDetector.IsInFov(device, out centralityScore);
+            return centralityScore;
         }
 
         public List<DeviceSpatialData> GetAllDevices(string device_type, AllRequest allRequest)
@@ -198,14 +213,17 @@ private float GetCentralityScore(Vector3 targetPos)
         {
             Direction dir = GetDirection(directionRequest.direction);
             List<SADevice> devices = FindDevicesInDirection(dir, device_type);
-            Debug.Log($"<color=cyan>Found {devices.Count} devices in direction {dir}.</color>");
+            foreach (var device in devices)
+            {
+                Debug.Log($"<color=cyan>Device: {device.gameObject.name}, Position: {device.transform.position}</color>");
+            }
             float range = directionRequest.range ?? float.MaxValue;
             string order = directionRequest.order;
 
             return FilterDeviceData(devices, order, range);
         }
 
-        public List<DeviceSpatialData> GetDeviceInFov(string device_type, FOVRequest fovData)
+        public List<DeviceSpatialData>  GetDevicesInFov(string device_type, FOVRequest fovData)
         {
             List<SADevice> devices = FindDevicesInFov(device_type, fovData.isInFov);
 
@@ -225,6 +243,8 @@ private float GetCentralityScore(Vector3 targetPos)
             foreach (var device in devices)
             {
                 var posData = device.GetDevicePositionalRelativeToUser(userCamera.transform);
+
+                Debug.Log($"<color=cyan>Device: {device.gameObject.name}, Position: {posData.position.x} {posData.position.y} {posData.position.z} , Distance: {posData.distance_from_user}</color>");
                 if (posData != null && (range == 0.0f || posData.distance_from_user <= range)) // 0.0の場合は無制限
                     deviceData.Add(posData);
             }
@@ -251,6 +271,9 @@ private float GetCentralityScore(Vector3 targetPos)
                 .Where(f => IsInDirection(GetLocalPosition(f.transform), direction))
                 .ToList();
         }
+
+
+   
 
         public SAFurniture FindFurnitureByType(string furniture_type)
         {

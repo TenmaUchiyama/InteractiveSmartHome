@@ -47,7 +47,7 @@ public class SASwitchbot : SADevice
     public async void CreateDeviceData(string anchor_id)
     {   
 
-        this.spatialData = new DeviceSpatialData(fixedId =="" ? Guid.NewGuid().ToString() : fixedId , "test", transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
+        this.spatialData = new DeviceSpatialData(fixedId =="" ? Guid.NewGuid().ToString() : fixedId , "test", transform.position, Vector3.Distance(transform.position, Camera.main.transform.position), null);
 
         
         DBDeviceData dbData = new DBDeviceData(

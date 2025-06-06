@@ -29,16 +29,29 @@ public class ControllerInput : Singleton<MonoBehaviour>
 
    private void Update() {
 
-       
-        if(!isControllable) return;
 
-        if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+
+        if (Input.GetKeyDown(KeyCode.J))
+        { 
+            SASpeechRecognizer.Instance.ActivateVoice();
+            
+        }
+        if (Input.GetKeyUp(KeyCode.J))
+        {
+            SASpeechRecognizer.Instance.DeactivateVoice();
+        }
+
+        if (!isControllable) return;
+        
+
+
+        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
         {
 
 
             Debug.Log("[ControllerInput] Pressed");
 
-            if(LLMQueryRequest.Instance.IsRequesting) return;
+            if (LLMQueryRequest.Instance.IsRequesting) return;
             SASpeechRecognizer.Instance.ActivateVoice();
             IsActive = true;
         }

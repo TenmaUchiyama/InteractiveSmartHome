@@ -27,7 +27,7 @@ public class SpatialAwarnessProviderHelper : Editor
             request.isInFov = true;
             request.order = "proximity";
 
-            spatialAwarnessProvider.GetDeviceInFov("Light", request);
+            spatialAwarnessProvider.GetDevicesInFov("Light", request);
         }
         
 

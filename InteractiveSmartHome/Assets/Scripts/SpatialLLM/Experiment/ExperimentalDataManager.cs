@@ -17,11 +17,15 @@ namespace SpatialLLM.Experiment
 public class ExperimentalDataManager : MonoBehaviour
 {
     
-    [SerializeField] private string user_name; 
+    [SerializeField] private string user_name;
+        [SerializeField] SystemExecutor systemExecutor;
     private ExperimentManager experimentManager;
 
 
-
+        public void TurnOnSend()
+        {
+        
+    }
 
 
         void Start()

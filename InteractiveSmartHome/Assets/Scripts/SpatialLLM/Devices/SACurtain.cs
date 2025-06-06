@@ -40,7 +40,7 @@ public class SACurtain : SADevice
                 
             );
 
-            this.spatialData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position));
+            this.spatialData = new DeviceSpatialData(id , gameObject.name, transform.position, Vector3.Distance(transform.position, Camera.main.transform.position), null);
             // Debug.Log($"[SACurtain]{this.spatialData}");
 
         }

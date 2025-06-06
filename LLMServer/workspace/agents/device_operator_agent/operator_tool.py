@@ -22,7 +22,7 @@ class DeviceControlData(BaseModel):
 deviceOperator = DeviceOperator()
 testOperator = TestOperator()
 
-is_simulation = False
+is_simulation = True
 
 @tool
 def operateDevice(   devices: List[DeviceControlData]) -> str:

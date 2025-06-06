@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
-
-
 
 [System.Serializable]
 public class RecognizedEntry
@@ -13,31 +10,38 @@ public class RecognizedEntry
     public string text;
 }
 
-
-
 public class WordLogger : MonoBehaviour
 {
-    [SerializeField] private string fileName = "recognized_history.json";
-    [SerializeField] private string folderName = "default_folder"; // Default folder name
-    private string filePath;
-
+    [SerializeField] private string folderRoot = "VOICE_LOG"; // root folder under EXPERIMENT
 
     private List<RecognizedEntry> recognizedEntries = new List<RecognizedEntry>();
+    private string filePath;
 
     void Start()
     {
-        filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "VOICE_LOG", folderName, fileName);
+        UpdateFilePathFromEXDataHolder();
         LoadIfExists();
     }
 
+    private void UpdateFilePathFromEXDataHolder()
+    {
+        string participant = EXDataHolder.Instance.ParticipantName;
+        string condition = EXDataHolder.Instance.ConditionName;
 
+        string directoryPath = Path.Combine(Application.dataPath, "EXPERIMENT", folderRoot, participant);
+        Directory.CreateDirectory(directoryPath); // なければ作る
 
+        filePath = Path.Combine(directoryPath, $"{condition}_{EXDataHolder.Instance.TaskSetName}.json");
+    }
 
     public void AddRecognizedEntry(string taskId, string recognizedText)
     {
-
         Debug.Log($"Adding recognized entry: {taskId} - {recognizedText}");
         if (string.IsNullOrWhiteSpace(recognizedText)) return;
+
+        // 毎回ファイルパスを確認（途中で参加者や条件が変わっていた場合にも対応）
+        UpdateFilePathFromEXDataHolder();
+        LoadIfExists(); // 再読込してマージ（既存のJSONを保持）
 
         var entry = new RecognizedEntry
         {
@@ -57,6 +61,7 @@ public class WordLogger : MonoBehaviour
             {
                 string json = File.ReadAllText(filePath);
                 recognizedEntries = JsonConvert.DeserializeObject<List<RecognizedEntry>>(json) ?? new List<RecognizedEntry>();
+                Debug.Log($"Loaded {recognizedEntries.Count} entries from {filePath}");
             }
             catch (System.Exception e)
             {
@@ -66,7 +71,7 @@ public class WordLogger : MonoBehaviour
         }
         else
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            recognizedEntries = new List<RecognizedEntry>();
         }
     }
 
@@ -84,4 +89,3 @@ public class WordLogger : MonoBehaviour
         }
     }
 }
-

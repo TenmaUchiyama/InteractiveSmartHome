@@ -32,6 +32,5 @@ def main():
         pool.starmap(run_for_model, [(model, data_path, output_root) for model in models])
 
 
-if __name__ == "__main__":
-    multiprocessing.freeze_support()  # Windowsで必要なことがある
-    main()
+    
+    

@@ -1,91 +1,113 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEngine;
-using SpatialLLM.Experiment;
 using SpatialLLM.Device;
+using SpatialLLM.Experiment;
 
 [CustomEditor(typeof(ExperimentManager))]
 public class ExperimentManagerHelper : Editor
 {
+    private static Dictionary<GameObject, Color> selectedDeviceColorMap = new();
 
-    [MenuItem("Tool/Turn On Selected Item - White %#w")]
-    private static void TurnOnWhiteDevice()
+    // === 色割り当て ===
+    [MenuItem("Tool/Set Light Color - Red %#q")] // Ctrl + Shift + Q
+    private static void SetRed() => SetLightColor(Color.red);
+
+    [MenuItem("Tool/Set Light Color - White %#w")] // Ctrl + Shift + W
+    private static void SetWhite() => SetLightColor(Color.white);
+
+    [MenuItem("Tool/Set Light Color - Blue %#e")] // Ctrl + Shift + E
+    private static void SetBlue() => SetLightColor(Color.blue);
+
+    private static void SetLightColor(Color color)
     {
-        TurnOnDevicesWithColor(Color.white);
-    }
-
-    [MenuItem("Tool/Turn On Selected Item - Blue %#q")]
-    private static void TurnOnBlueDevice()
-    {
-        TurnOnDevicesWithColor(Color.blue);
-    }
-
-    [MenuItem("Tool/Turn On Selected Item - Red %#e")]
-    private static void TurnOnRedDevice()
-    {
-        TurnOnDevicesWithColor(Color.red);
-    }
-
-
-    [MenuItem("Tool/Turn Off Devices - Red %#d")]
-    private static void TurnOffDevices()
-    {
-        SADevice[] sADevices = GameObject.FindObjectsOfType<SADevice>();
-
-
-        foreach (SADevice device in sADevices)
-        {
-            device.TurnOff();
-        }
-    }
-
-
-    private static void TurnOnDevicesWithColor(Color lightColor)
-    {
-
-
-        Debug.Log($"Turning on the selected lights with color: {lightColor}");
-
         foreach (var obj in Selection.gameObjects)
         {
-            // 自身にSADeviceがあるか
-            SADevice saDevice = obj.GetComponent<SADevice>();
-
-            // なければ親をたどる（GetComponentInParent で親も含めて検索）
-            if (saDevice == null)
-            {
-                saDevice = obj.GetComponentInParent<SADevice>();
-            }
-
-            if (saDevice != null)
-            {
-               
-                saDevice.TurnOnWithColor(lightColor);
-                saDevice.GetComponent<DrawOnHover>()?.VisualizeTargetDevice(Color.blue);
-            }
+            selectedDeviceColorMap[obj] = color;
+            Debug.Log($"✅ Assigned {ColorToName(color)} to {obj.name}");
         }
+
+        Debug.Log("=== 📋 Current Device Assignments ===");
+        foreach (var kvp in selectedDeviceColorMap)
+        {
+            Debug.Log($"{kvp.Key.name}: {ColorToName(kvp.Value)}");
+        }
+    }
+
+    // === 一括点灯 ===
+    // === 一括点灯 ===
+[MenuItem("Tool/Execute: Turn On Assigned Lights %#a")] // Ctrl + Shift + A
+private static void TurnOnAssignedLights()
+{
+    Debug.Log("=== 💡 Executing Light Activation ===");
+
+    foreach (var kvp in selectedDeviceColorMap)
+    {
+        GameObject obj = kvp.Key;
+        Color color = kvp.Value;
+
+        if (obj == null) continue;
+
+        // SADevice を自身または親から取得
+        SADevice saDevice = obj.GetComponent<SADevice>() ?? obj.GetComponentInParent<SADevice>();
+        if (saDevice != null)
+        {
+            Debug.Log($"🔷 Turning on {obj.name} with color {ColorToName(color)}");
+            saDevice.TurnOnWithColor(color);
+
+            // DrawOnHover も自身または親から取得してビジュアライズ
+            DrawOnHover draw = saDevice.GetComponent<DrawOnHover>() ?? saDevice.GetComponentInChildren<DrawOnHover>();
+            draw?.VisualizeTargetDevice(color);
+        }
+        else
+        {
+            Debug.LogWarning($"⚠️ SADevice not found on {obj.name} or its parents.");
+        }
+    }
+
+    Debug.Log("✅ All assigned lights have been turned on.");
+}
+
+    // === 割り当て削除 ===
+    [MenuItem("Tool/Clear All Assignments %#d")] // Ctrl + Shift + D
+    private static void ClearAssignments()
+    {
+        selectedDeviceColorMap.Clear();
+        Debug.Log("🧹 Cleared all device color assignments.");
+    }
+
+    // === 実験送信処理 ===
+    [MenuItem("Tool/End Experiment and Submit %#t")] // Ctrl + Shift + T
+    private static void SubmitExperiment()
+    {
+        Debug.Log("📤 Submitting experiment results...");
+        // TODO: 実際の送信処理をここに記述する
+        Debug.Log("✅ Experiment submitted successfully.");
+
+
+
+        
 
     }
 
+    // === カラー → 名前 ===
+    private static string ColorToName(Color color)
+    {
+        if (color == Color.white) return "White";
+        if (color == Color.blue) return "Blue";
+        if (color == Color.red) return "Red";
+        return $"R:{color.r:F2} G:{color.g:F2} B:{color.b:F2}";
+    }
 
-
-
- 
-
+    // === Inspector拡張 ===
     public override void OnInspectorGUI()
     {
-        // デフォルトの Inspector を描画
         DrawDefaultInspector();
 
-        // ExperimentManager スクリプトのインスタンスを取得
         ExperimentManager script = (ExperimentManager)target;
 
-        // **Inspector にボタンを追加**
         if (GUILayout.Button("Turn Off All Devices"))
         {
-            // すべてのデバイスをオンにするメソッドを呼び出す
             script.DisableAllDevices();
         }
 
@@ -93,11 +115,5 @@ public class ExperimentManagerHelper : Editor
         {
             script.TurnOnSelectedDevices();
         }
-
-
     }
-    
-
- 
 }
-

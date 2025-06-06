@@ -22,7 +22,7 @@ def getDeviceInFov(
     
     try:
         # print("\n[TOOL FOV] getDevicesInFov")
- 
+        
         request_body = {
             "isInFov": params["isInFov"],
             "order": params["order"]
@@ -31,7 +31,7 @@ def getDeviceInFov(
         if params["range"] != 0.0:
             request_body["range"] = params["range"]
 
-        # print(f"Sending POST request to {base_url}/fov with body: {request_body}")
+        print(f"Sending POST request to {base_url}/fov with body: {request_body}")
         response = httpx.post(f"{base_url}/device/fov", json=request_body)
 
         if response.status_code == 200:

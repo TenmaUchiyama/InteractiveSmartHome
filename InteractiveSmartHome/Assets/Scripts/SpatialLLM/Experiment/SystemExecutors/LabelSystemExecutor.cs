@@ -15,7 +15,6 @@ namespace SpatialLLM.Experiment
     {
         private bool isGripHolding = false;
         private string currentState = "preparation";
-        [SerializeField] private WordLogger wordLogger;
         string recognizedWord = "";
 
         protected override void Start()
@@ -131,7 +130,7 @@ private async void YOperation()
        
 
             saUIManager.SetInstructionText("Press Y to complete");
-             wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
+            this.wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
             currentState = "done";
             break;
 
@@ -149,7 +148,7 @@ private async void YOperation()
         {
             base.BeginOperation();
             currentState = "preparation";
-            saUIManager.SetInstructionText("Press Trigger to Record, Grip to Show Labels");
+            saUIManager.SetInstructionText("Press Trigger to Record");
         }
 
         public override void CompleteOperation()
