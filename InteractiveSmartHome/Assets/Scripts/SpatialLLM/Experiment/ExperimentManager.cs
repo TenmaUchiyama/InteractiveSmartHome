@@ -37,7 +37,8 @@ public class ExperimentManager : MonoBehaviour
     [SerializeField] private SAUIManager saUIManager;
 
     [SerializeField] private int SEED;
-    
+    [SerializeField] private int displayTime = 60; // デバイスの表示時間
+            
     private ExperimentalDataManager experimentalDataManager;
     // private ExperimentTask experimentTask;
     private int currentTaskId; 
@@ -121,7 +122,7 @@ public class ExperimentManager : MonoBehaviour
                 {
                     device.DisplayShowLabel(true);
                 }
-            for (int i = 60; i > 0; i--)
+            for (int i = this.displayTime; i > 0; i--)
             {
                 saUIManager.SetInstructionText(i.ToString());
                 Debug.Log($"<color=yellow>Remaining Time: {i} seconds</color>");

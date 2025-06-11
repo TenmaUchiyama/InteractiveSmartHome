@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
+using Meta.WitAi.Json;
 using SpatialLLM.Device;
 using UnityEditor;
 using UnityEngine;
@@ -39,6 +41,10 @@ public class SADeviceRef : Singleton<SADeviceRef>
         saDevices = parentObject.GetComponentsInChildren<SADevice>(false).ToList();
 
         LoadOrGenerateDeviceIds();
+
+
+
+        WriteAllDeviceList();
     }
 
 
@@ -141,77 +147,40 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
 
 
-   [MenuItem("Tools/Rename SADevices Children")]
-    public static void RenameSADeviceChildren()
+
+    public void WriteAllDeviceList()
     {
-        GameObject parent = GameObject.Find("SADevices");
-        if (parent == null)
+        List<SADevice> devices = GetAllDevices();
+
+        List<object> deviceList = new List<object>();
+
+        foreach (var device in devices)
         {
-            Debug.LogError("GameObject 'SADevices' が見つかりませんでした。");
-            return;
+            deviceList.Add(new
+            {
+                id = device.GetDBDeviceData().device_id,
+                name = device.gameObject.name,
+            });
+
+
+            Debug.Log($"[WriteAllDeviceList] Device ID: {device.GetDBDeviceData().device_id}, Name: {device.gameObject.name}");
+
+
+
         }
 
-        var saDevices = parent.GetComponentsInChildren<SADevice>(true);
-        if (saDevices.Length == 0)
-        {
-            Debug.LogWarning("子オブジェクトに SADevice コンポーネントが見つかりませんでした。");
-            return;
-        }
 
-        foreach (var device in saDevices)
-        {
-            string oldName = device.gameObject.name;
-            string newName = ConvertToEnglishName(oldName);
-            if (!string.IsNullOrEmpty(newName))
-            {
-                device.gameObject.name = newName;
-                Debug.Log($"[Rename] {oldName} → {newName}");
-            }
-            else
-            {
-                Debug.LogWarning($"[Rename] {oldName} は変換対象ではありません。");
-            }
-        }
+
+
+       string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", "device_list.json");
+        string json = JsonConvert.SerializeObject(deviceList);
+
+        File.WriteAllText(filePath, json);
+            
+        Debug.Log($"[WriteAllDeviceList] デバイスリストを {filePath} に書き込みました。");
     }
 
-    private static string ConvertToEnglishName(string oldName)
-    {
-        // var match = System.Text.RegularExpressions.Regex.Match(
-        //     oldName,
-        //     @"^(天井ライト|壁ライト|テーブルライト|ランプスタンド|フロアライト|棚ライト)(\d*)$");
-        var match = System.Text.RegularExpressions.Regex.Match(
-        oldName, @"^(CeilingLight|WallLight|TableLight|StandLight|FloorLight|ShelfLight|TVLight)(\d+)$");
 
-
-        if (!match.Success) return null;
-
-        string prefix = match.Groups[1].Value;
-        string number = match.Groups[2].Value;
-
-        // return prefix switch
-        // {
-        //     "天井ライト" => $"CeilingLight{number}",
-        //     "壁ランプ" => $"WallLight{number}",
-        //     "テーブルライト" => $"TableLight{number}",
-        //     "ランプスタンド" => $"StandLight{number}",
-        //     "フロアライト" => $"FloorLight{number}",
-        //     "棚ライト" => $"ShelfLight{number}",
-        //     "テレビライト" => $"TVLight{number}",
-
-        //     _ => null,
-        // };
-         return prefix switch
-    {
-        "CeilingLight" => $"Ceiling Light {number}",
-        "WallLight"    => $"Wall Light {number}",
-        "TableLight"   => $"Table Light {number}",
-        "StandLight"   => $"Stand Light {number}",
-        "FloorLight"   => $"Floor Light {number}",
-        "ShelfLight"   => $"Shelf Light {number}",
-        "TVLight"      => $"TV Light {number}",
-        _ => null,
-    };
-    }
 
 }
 

@@ -8,6 +8,16 @@ from typing import List, Dict, Any
 
 
 
+
+
+@dataclass 
+class LabelState: 
+    user_prompt: str
+    all_devices: List[Dict[str, Any]] = field(default_factory=list)
+    agent_output: Optional[Dict[str, Any]] = None
+    reasoning: str 
+    selected_devices = field(default_factory=list)  # 選択されたデバイスのリスト
+
 @dataclass
 class FilterAgentOutput:
     filter_type: str
@@ -40,7 +50,10 @@ class State:
     filterAgent: FilterAgentType = field(default_factory=FilterAgentType)
     spatialAgent: SpatialAgentType = field(default_factory=SpatialAgentType)
     selected_devices: List[str] = field(default_factory=list) 
-    
     system_metrics: Optional[Dict] = None
+
+
+
+
 
 

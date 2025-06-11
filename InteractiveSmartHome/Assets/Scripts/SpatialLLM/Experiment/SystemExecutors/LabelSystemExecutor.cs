@@ -114,9 +114,14 @@ private async void YOperation()
             this.deviceOperatable = false;
             this.isDeviceOperated = false;
             string outputText = "";
-            experimentManager.GetCurrentArrangeData().devices.ForEach(device =>
+           SADeviceRef.Instance.GetAllDevices().ForEach(device =>
             {
-                outputText += $"{device.device.name}";
+                if (device.IsDeviceOn)
+                {
+                    outputText += $"{device.gameObject.name} ";
+
+
+                }
             });
             outputText += "を操作しました";
             saUIManager.FinishLoadingAndDisplayResponse(outputText);
@@ -130,13 +135,12 @@ private async void YOperation()
        
 
             saUIManager.SetInstructionText("Press Y to complete");
-            this.wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
             currentState = "done";
             break;
 
         case "done":
                     // 完了。リセット。
-           
+            this.wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
             CompleteOperation();
             saUIManager.ClearRecognizedWord();
             currentState = "preparation";

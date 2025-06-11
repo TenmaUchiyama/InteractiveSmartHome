@@ -15,7 +15,7 @@ from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
 
-OUTPUT_FILE_NAME="NittaSan"
+OUTPUT_FILE_NAME="P2"
 app = FastAPI()
 
 
@@ -36,6 +36,8 @@ app.add_middleware(
 )
 
 
+
+
 class InputMessage(BaseModel):
     llm_message: str
     task_id: str
@@ -50,7 +52,7 @@ def test():
 
 
 
-@app.get("/simple")
+@app.get("/simple") 
 def simple():
 
     user_prompt = "Turn on all the lights i can see"
@@ -63,66 +65,17 @@ def simple():
     return {"output" : response['spatialAgent'].final_output}
 
 
-@app.get("/turn_off_all")
-async def turn_off_all():
-    try:
-        print("TURNING OFF")
-        devices = {
-            "LED1": "9C9E6EDCDB72",
-            "LED2": "9C9E6EDE6E06",
-            "LED3": "9C9E6EDE9D12"
-        }
 
-        sb = SwitchBotOperator()  # ここで例外発生中
-        async with httpx.AsyncClient() as client:
-            for name, device_id in devices.items():
-                await sb.send_command(client, device_id=device_id, command="turnOff")
-                print(f"Turned OFF {name} with ID {device_id}")
-
-    except Exception as e:
-        print("An error occurred:", e)
-        return {"error": "Failed to turn off devices", "detail": str(e)}
-
-    return "TURNING OFF"
-
-
-def llm_agent(message: InputMessage):
-
-
-    
+@app.post("/label")
+def llm_label(message: InputMessage):
+    """
+    受け取ったメッセージをラベル付けするエンドポイント
+    """
     user_prompt = message.llm_message
     task_id = message.task_id
-    print("ID: ", task_id)
-    # グローバルLogger初期化（インスタンス共有）
-   
-    
-    # loggerをStateに注入してrunnerに渡す
-    state: State = State(
-        user_prompt=user_prompt,
-    )
-
-    try:
-        response = runner.invoke(state)
-        output = response['spatialAgent'].final_output
-
- 
-        print("********************OUTPUT*********************")
-        print(output)
-        return {"output": output}
-
-    except Exception as e:
-        # 例外の詳細ログ
-        import traceback
-        print("************ EXCEPTION OCCURRED **************")
-        traceback.print_exc()
-
-        return {
-            "error": "LLM processing failed.",
-            "detail": str(e)
-        }
     
 
-
+    return labeled_data
 
 def serialize_value(value):
     if isinstance(value, BaseMessage):
