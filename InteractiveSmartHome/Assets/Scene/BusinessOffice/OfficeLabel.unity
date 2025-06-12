@@ -943,6 +943,7 @@ Transform:
   - {fileID: 1865804238}
   - {fileID: 859498795}
   - {fileID: 320839871}
+  - {fileID: 2059639140}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &38961980
@@ -21302,10 +21303,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 859498795}
-  - component: {fileID: 859498799}
-  - component: {fileID: 859498798}
   - component: {fileID: 859498797}
   - component: {fileID: 859498796}
+  - component: {fileID: 859498798}
   m_Layer: 0
   m_Name: Network
   m_TagString: Untagged
@@ -21361,27 +21361,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 859498794}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64481e7ac67dc544b96d05552a262d7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brokerAddress: localhost
-  brokerPort: 1883
-  isEncrypted: 0
-  connectionDelay: 500
-  timeoutOnConnection: 30000
-  autoConnect: 0
-  mqttUserName: 
-  mqttPassword: 
---- !u!114 &859498799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 859498794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4288468ea1c47ee419308561a3ad227c, type: 3}
+  m_Script: {fileID: 11500000, guid: b96387119b8620d4b818e2e95fb080b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   host: 127.0.0.1
@@ -23162,6 +23142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saUIManager: {fileID: 747588388}
   experimentManager: {fileID: 1178553824}
+  experimentTask: {fileID: 1178553828}
   wordLogger: {fileID: 925221670}
   onBeginOperation:
     m_PersistentCalls:
@@ -28285,7 +28266,7 @@ MonoBehaviour:
   systemExecutor: {fileID: 925221669}
   saUIManager: {fileID: 747588388}
   SEED: 0
-  displayTime: 30
+  displayTime: 0
   isDeviceTurnedOn: 0
 --- !u!4 &1178553825
 Transform:
@@ -28437,7 +28418,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4fb0e8045a8e249adcc482855e968c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saWebsocket: {fileID: 0}
 --- !u!1 &1182261345
 GameObject:
   m_ObjectHideFlags: 0
@@ -40252,7 +40232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63cd6ed40f97f55449e20dabe455c131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participantName: P2
+  participantName: TEST
   taskSetName: D
   conditionNum: 2
 --- !u!4 &1686398844
@@ -48724,6 +48704,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 712334710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2059639139
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2059639140}
+  - component: {fileID: 2059639141}
+  m_Layer: 0
+  m_Name: LLMQueryRequest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2059639140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059639139}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -14.3584175, y: -5.052041, z: 8.845677}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 38043417}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2059639141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059639139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4023145a6cb5b445b58896fddfe2b36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  host: 127.0.0.1
+  port: 8800
+  speechRequired: 1
+  debugText: 
+  experimentManager: {fileID: 1178553824}
+  OnReceiveResponseFromLLM:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2060924294
 GameObject:
   m_ObjectHideFlags: 0

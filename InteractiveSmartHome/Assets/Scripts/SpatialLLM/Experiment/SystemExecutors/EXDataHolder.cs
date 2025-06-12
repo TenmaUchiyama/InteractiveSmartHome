@@ -8,7 +8,7 @@ public class EXDataHolder : Singleton<EXDataHolder>
     [Header("Experiment Metadata")]
     [SerializeField] private string participantName = "P1";
     [SerializeField] private string taskSetName = "A";
-    
+
     [SerializeField] private string conditionNum = "ConditionA";
 
     // 外部アクセス用プロパティ
@@ -17,4 +17,7 @@ public class EXDataHolder : Singleton<EXDataHolder>
     public string TaskSetName => taskSetName;
 
     // Singleton化されたインスタンスは `EXDataHolder.Instance` でアクセス可能
+    
+
+
 }

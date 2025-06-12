@@ -1,7 +1,8 @@
 from io import BytesIO
+from agents.label_agent.label_node import label_agent_node, label_tool_node
 from langgraph.graph import Graph, START, END, StateGraph
 from IPython.display import Image, display
-from sr_app_types.no_tool_agent_types import State
+from sr_app_types.no_tool_agent_types import LabelState, State
 from sr_app_types.node_types import NODE
 from agents.device_filter_agent.no_tool_filter_nodes import filter_preprocess, filter_agent_node, filter_tool_node
 from agents.spatial_reasoning_agent.no_tool_spatial_node import sr_agent_node, sr_preprocess_node, sr_tool_node, system_post_process_node
@@ -74,4 +75,21 @@ def getSpatialRunner():
 
 
 
+
+
+
+def getLabelRunner():
+    graph = StateGraph(LabelState)
+
+    # ノード定義
+    graph.add_node("label_agent_node", label_agent_node)
+    graph.add_node("label_tool_node", label_tool_node)
+
+    # エッジ定義
+    graph.add_edge(START, "label_agent_node")
+    graph.add_edge("label_agent_node", "label_tool_node")
+    graph.add_edge("label_tool_node", END)
+
+    runner = graph.compile()
+    return runner
 

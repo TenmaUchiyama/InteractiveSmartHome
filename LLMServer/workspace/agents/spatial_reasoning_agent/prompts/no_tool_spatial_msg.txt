@@ -38,7 +38,7 @@ Your role is to interpret the user's natural language instruction and select app
       "name": "light1",
       "position": { "x": 0.5, "y": 2.0, "z": 3.0 },
       "distance_from_user": 3.1,
-      "centrality_score": 14.8
+      "eye_centrality_score": 14.8
     },
     ...
   ]
@@ -95,10 +95,12 @@ Instead, infer left / center / right bands from the overall distribution pattern
 
 This prevents misclassification of center-aligned devices and ensures directional commands reflect the user's likely intent.
 
+The eye_centrality_score is 0 exactly at the center of the field of view. It represents the angular distance from the cente
+
 
 ### Ranking & Disambiguation
 
-* Use `centrality_score`, `distance_from_user`, or other scalar metrics **only after** spatial grouping is inferred.
+* Use `eye_centrality_score`, `distance_from_user`, or other scalar metrics **only after** spatial grouping is inferred.
 * These values are for **ranking within groups**, not for determining the groups themselves.
 
 ---
@@ -112,10 +114,7 @@ This prevents misclassification of center-aligned devices and ensures directiona
   * `intensity`: 100
   * `state`: true
 
----
-
-### FilterAgent Interpretation
-
+---9
 * Respect any prior filtering already applied (`filter_type`, `params`, `reasoning`).
 * Use this information to refine interpretation or resolve ambiguities in spatial instruction.
 
@@ -135,12 +134,12 @@ This prevents misclassification of center-aligned devices and ensures directiona
   "user_prompt": "手前の列を赤色に、奥の列を青色にして下さい",
   "reasoning": "User instruction referenced relative depth. '列' was interpreted based on spatial groupings along the depth axis without assuming fixed axis-row mappings.",
   "devices": [
-    { "id": "light_10", "position": { "x": -1.65, "y": 2.33, "z": 1.93 }, "distance_from_user": 3.45, "centrality_score": 29.65 },
-    { "id": "light_6",  "position": { "x": 0.23,  "y": 2.33, "z": 2.60 }, "distance_from_user": 3.50, "centrality_score": 9.27 },
-    { "id": "light_2",  "position": { "x": 2.12,  "y": 2.32, "z": 3.27 }, "distance_from_user": 4.54, "centrality_score": 31.04 },
-    { "id": "light_9",  "position": { "x": -2.31, "y": 2.33, "z": 3.80 }, "distance_from_user": 5.03, "centrality_score": 25.39 },
-    { "id": "light_5",  "position": { "x": -0.41, "y": 2.33, "z": 4.48 }, "distance_from_user": 5.07, "centrality_score": 8.17 },
-    { "id": "light_1",  "position": { "x": 1.45,  "y": 2.32, "z": 5.15 }, "distance_from_user": 5.83, "centrality_score": 20.58 }
+    { "id": "light_10", "position": { "x": -1.65, "y": 2.33, "z": 1.93 }, "distance_from_user": 3.45, "eye_centrality_score": 29.65 },
+    { "id": "light_6",  "position": { "x": 0.23,  "y": 2.33, "z": 2.60 }, "distance_from_user": 3.50, "eye_centrality_score": 9.27 },
+    { "id": "light_2",  "position": { "x": 2.12,  "y": 2.32, "z": 3.27 }, "distance_from_user": 4.54, "eye_centrality_score": 31.04 },
+    { "id": "light_9",  "position": { "x": -2.31, "y": 2.33, "z": 3.80 }, "distance_from_user": 5.03, "eye_centrality_score": 25.39 },
+    { "id": "light_5",  "position": { "x": -0.41, "y": 2.33, "z": 4.48 }, "distance_from_user": 5.07, "eye_centrality_score": 8.17 },
+    { "id": "light_1",  "position": { "x": 1.45,  "y": 2.32, "z": 5.15 }, "distance_from_user": 5.83, "eye_centrality_score": 20.58 }
   ]
 }
 ```

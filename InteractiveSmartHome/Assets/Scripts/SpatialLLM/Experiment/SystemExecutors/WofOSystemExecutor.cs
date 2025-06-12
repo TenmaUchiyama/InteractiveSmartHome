@@ -123,7 +123,7 @@ private async void YOperation()
 
         case "done":
                     // 完了。リセット。
-            wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
+            // wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
             CompleteOperation();
             saUIManager.ClearRecognizedWord();
             currentState = "preparation";

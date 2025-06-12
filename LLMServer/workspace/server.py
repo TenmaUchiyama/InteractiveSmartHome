@@ -2,8 +2,8 @@ import dotenv
 from utils.communication.SwitchBotOperator import SwitchBotOperator
 dotenv.load_dotenv("../.env")
 import os
-from sr_app_types.no_tool_agent_types import State
-from no_tool_agent_runner import getSystemRunner
+from sr_app_types.no_tool_agent_types import LabelState, State
+from no_tool_agent_runner import getLabelRunner, getSystemRunner
 from fastapi import FastAPI # type: ignore
 import httpx # type: ignore
 from starlette.middleware.cors import CORSMiddleware # type: ignore
@@ -41,14 +41,13 @@ app.add_middleware(
 class InputMessage(BaseModel):
     llm_message: str
     task_id: str
+    attempt_id: str
 
 
 @app.get("/")
 def test():
     print("Hello")
     return "HELO"
-
-
 
 
 
@@ -64,18 +63,72 @@ def simple():
 
     return {"output" : response['spatialAgent'].final_output}
 
-
-
+# ラベルエンドポイント
 @app.post("/label")
 def llm_label(message: InputMessage):
     """
-    受け取ったメッセージをラベル付けするエンドポイント
+    LabelAgentを実行し、デバイス制御と結果のログ出力を行うエンドポイント
     """
     user_prompt = message.llm_message
     task_id = message.task_id
-    
+    attempt_id = message.attempt_id
 
-    return labeled_data
+    print("LABEL PROMPT:", user_prompt)
+    print("TASK ID:", task_id)
+
+    # ① LangGraph用状態の初期化
+    state = LabelState(user_prompt=user_prompt)
+    label_runner = getLabelRunner()
+
+    try:
+        # ② LangGraphの推論実行
+        response = label_runner.invoke(state)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return {"error": "LabelAgent failure", "detail": str(e)}
+
+    # ③ 出力の取り出し
+    agent_output = response.get("agent_output")
+    if not agent_output:
+        return {"error": "No agent output produced."}
+
+    devices = agent_output["devices"]
+    reply = agent_output["response"]
+    reasoning = agent_output["reasoning"]
+
+
+
+    # ⑤ ログ構造の整備
+    serialized = serialize_value(response)
+    serialized.pop("input_prompt", None)
+    serialized.pop("all_devices", None)
+    serialized["task_id"] = task_id
+    serialized["attempt_id"] = attempt_id 
+
+
+
+    save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}_label.json"
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+    # ⑥ 既存ログへ追記
+    if os.path.exists(save_path) and os.path.getsize(save_path) > 0:
+        with open(save_path, "r", encoding="utf-8") as f:
+            existing_logs = json.load(f)
+    else:
+        existing_logs = []
+
+    existing_logs.append(serialized)
+    with open(save_path, "w", encoding="utf-8") as f:
+        json.dump(existing_logs, f, indent=2, ensure_ascii=False)
+
+    # ⑦ 結果返却
+    return {
+        "output": reply,
+        "reasoning": reasoning,
+        "matched_devices": devices
+    }
+
 
 def serialize_value(value):
     if isinstance(value, BaseMessage):
@@ -100,6 +153,8 @@ def llm_agent_no_tool(message: InputMessage):
     runner = getSystemRunner()
     user_prompt = message.llm_message
     task_id = message.task_id
+    attempt_id = message.attempt_id     
+
     print("PROMPT: ", user_prompt)
     print("ID: ", task_id)
 
@@ -116,6 +171,7 @@ def llm_agent_no_tool(message: InputMessage):
             serialized["spatialAgent"].pop("input_prompt", None)
         
         serialized["task_id"] = task_id
+        serialized["attempt_id"] = attempt_id
 
         save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}.json"
         os.makedirs(os.path.dirname(save_path), exist_ok=True)

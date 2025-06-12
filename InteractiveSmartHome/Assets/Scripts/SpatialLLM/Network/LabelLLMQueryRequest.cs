@@ -8,7 +8,7 @@ using SpatialLLM.Core;
 
 namespace SpatialLLM.Network
 {
-    public class PromptLLMQueryRequest : Singleton<PromptLLMQueryRequest>
+    public class LabelLLMQueryRequest : Singleton<LabelLLMQueryRequest>
     {
         [SerializeField] private string host = "localhost";
         [SerializeField] private int port = 8800;
@@ -20,17 +20,7 @@ namespace SpatialLLM.Network
         private bool _isRequesting = false;
         public bool IsRequesting => _isRequesting;
 
-        private const string endpoint = "llm_agent";
-
-        private void Start()
-        {
-            if (speechRequired)
-            {
-                SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
-            }
-        }
-
-
+        private const string endpoint = "label";
 
 
         public async Task SendQueryForDebug(string text)
@@ -40,14 +30,10 @@ namespace SpatialLLM.Network
             await SendQuery(useText, taskId: task_id);
         }
 
-        private async void OnVoiceRecognized(string recognizedText)
-        {
-            // await SendQuery(recognizedText);
-        }
 
         public async Task SendQuery(string userMessage, string taskId = "test_id", string attemptId = "0")
         {
-            Debug.Log($"<color=yellow>Sending Query: {userMessage}, {taskId}</color>");
+            Debug.Log($"<color=yellow>Sending Label Query: {userMessage}, {taskId}</color>");
             string url = $"http://{host}:{port}/{endpoint}";
 
             var data = new
@@ -60,7 +46,7 @@ namespace SpatialLLM.Network
             string jsonData = JsonConvert.SerializeObject(data);
             _isRequesting = true;
 
-                await PostRequestAsync(url, jsonData);
+            await PostRequestAsync(url, jsonData);
 
             _isRequesting = false;
         }
@@ -81,12 +67,12 @@ namespace SpatialLLM.Network
 
                 if (request.result == UnityWebRequest.Result.Success)
                 {
-                    Debug.Log($"<color=cyan>Response: {request.downloadHandler.text}</color>");
+                    Debug.Log($"<color=cyan>Label Response: {request.downloadHandler.text}</color>");
                     OnReceiveResponseFromLLM?.Invoke(request.downloadHandler.text);
                 }
                 else
                 {
-                    Debug.LogError($"<color=red>Error: {request.error}</color>");
+                    Debug.LogError($"<color=red>Label Error: {request.error}</color>");
                 }
             }
         }

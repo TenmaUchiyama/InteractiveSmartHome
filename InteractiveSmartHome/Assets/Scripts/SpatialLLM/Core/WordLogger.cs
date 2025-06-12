@@ -1,20 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using SpatialLLM.Experiment;
 using UnityEngine;
 
-[System.Serializable]
-public class RecognizedEntry
-{
-    public string id;
-    public string text;
-}
 
 public class WordLogger : MonoBehaviour
 {
-    [SerializeField] private string folderRoot = "VOICE_LOG"; // root folder under EXPERIMENT
+    [SerializeField] private string folderRoot = "VOICE_LOG";
 
-    private List<RecognizedEntry> recognizedEntries = new List<RecognizedEntry>();
+    private List<ExperimentTaskDataForSave> taskDataList = new List<ExperimentTaskDataForSave>();
     private string filePath;
 
     void Start()
@@ -29,27 +24,28 @@ public class WordLogger : MonoBehaviour
         string condition = EXDataHolder.Instance.ConditionName;
 
         string directoryPath = Path.Combine(Application.dataPath, "EXPERIMENT", folderRoot, participant);
-        Directory.CreateDirectory(directoryPath); // なければ作る
+        Directory.CreateDirectory(directoryPath);
 
         filePath = Path.Combine(directoryPath, $"{condition}_{EXDataHolder.Instance.TaskSetName}.json");
     }
 
-    public void AddRecognizedEntry(string taskId, string recognizedText)
+    public void AddOrUpdateTaskData(ExperimentTaskDataForSave newData)
     {
-        Debug.Log($"Adding recognized entry: {taskId} - {recognizedText}");
-        if (string.IsNullOrWhiteSpace(recognizedText)) return;
-
-        // 毎回ファイルパスを確認（途中で参加者や条件が変わっていた場合にも対応）
         UpdateFilePathFromEXDataHolder();
-        LoadIfExists(); // 再読込してマージ（既存のJSONを保持）
+        LoadIfExists();
 
-        var entry = new RecognizedEntry
+        var existing = taskDataList.Find(d => d.taskId == newData.taskId);
+        if (existing != null)
         {
-            id = taskId,
-            text = recognizedText
-        };
+            existing.taskAttempts.AddRange(newData.taskAttempts);
+            existing.taskAttemptCount = existing.taskAttempts.Count;
+            existing.finalId = newData.finalId;
+        }
+        else
+        {
+            taskDataList.Add(newData);
+        }
 
-        recognizedEntries.Add(entry);
         SaveToFile();
     }
 
@@ -60,18 +56,18 @@ public class WordLogger : MonoBehaviour
             try
             {
                 string json = File.ReadAllText(filePath);
-                recognizedEntries = JsonConvert.DeserializeObject<List<RecognizedEntry>>(json) ?? new List<RecognizedEntry>();
-                Debug.Log($"Loaded {recognizedEntries.Count} entries from {filePath}");
+                taskDataList = JsonConvert.DeserializeObject<List<ExperimentTaskDataForSave>>(json) ?? new List<ExperimentTaskDataForSave>();
+                Debug.Log($"Loaded {taskDataList.Count} task entries from {filePath}");
             }
             catch (System.Exception e)
             {
-                Debug.LogWarning("Failed to load recognized entries: " + e.Message);
-                recognizedEntries = new List<RecognizedEntry>();
+                Debug.LogWarning("Failed to load task entries: " + e.Message);
+                taskDataList = new List<ExperimentTaskDataForSave>();
             }
         }
         else
         {
-            recognizedEntries = new List<RecognizedEntry>();
+            taskDataList = new List<ExperimentTaskDataForSave>();
         }
     }
 
@@ -79,13 +75,13 @@ public class WordLogger : MonoBehaviour
     {
         try
         {
-            string json = JsonConvert.SerializeObject(recognizedEntries, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(taskDataList, Formatting.Indented);
             File.WriteAllText(filePath, json);
-            Debug.Log($"Saved recognized entries to {filePath}");
+            Debug.Log($"Saved task entries to {filePath}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError("Failed to save recognized entries: " + e.Message);
+            Debug.LogError("Failed to save task entries: " + e.Message);
         }
     }
 }

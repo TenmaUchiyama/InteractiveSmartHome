@@ -45,6 +45,10 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
 
         WriteAllDeviceList();
+
+
+
+        
     }
 
 
@@ -137,6 +141,29 @@ public class SADeviceRef : Singleton<SADeviceRef>
         return saDevices.Find(device => device.GetDBDeviceData().device_id == id);
     }
 
+    public List<SADevice> GetAllOperatedDevices()
+    {
+        List<SADevice> operatedDevice = new List<SADevice>();
+
+        foreach (SADevice device in this.GetAllDevices())
+        {
+            if (device.IsDeviceOn)
+            {
+                operatedDevice.Add(device);
+            }
+         
+        }
+     
+
+        return operatedDevice;
+    }
+    public void ClearAllDeviceOperation()
+    {
+        foreach (SADevice device in this.GetAllDevices())
+        {
+            device.TurnOff();
+        }
+    }
     public void AddSADevice(SADevice saDevice)
     {
         saDevice.transform.SetParent(parentObject.transform, true);

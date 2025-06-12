@@ -28,16 +28,16 @@ public static class NetworkDataType
 
             public Position position;
             public float distance_from_user;
-            public float? centrality_score;
+            public float? eye_centrality_score;
 
 
-            public DeviceSpatialData(string id, string name, Vector3 position, float distance_from_user, float? centrality_score)
+            public DeviceSpatialData(string id, string name, Vector3 position, float distance_from_user, float? eye_centrality_score)
             {
                 this.id = id;
                 this.name = name;
                 this.position = new Position(position);
                 this.distance_from_user = distance_from_user;
-                this.centrality_score = centrality_score;
+                this.eye_centrality_score = eye_centrality_score;
             }   
      
 

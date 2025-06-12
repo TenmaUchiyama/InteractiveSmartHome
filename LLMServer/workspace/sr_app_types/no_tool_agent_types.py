@@ -11,12 +11,19 @@ from typing import List, Dict, Any
 
 
 @dataclass 
-class LabelState: 
-    user_prompt: str
+class LabelAgentOutput:
+    selected_devices: List[Dict[str, Any]]
+    response: str
+    reasoning: str
+
+@dataclass 
+class LabelState:
+    input_prompt: List[BaseMessage] = field(default_factory=list)
+    user_prompt: str = ""
     all_devices: List[Dict[str, Any]] = field(default_factory=list)
-    agent_output: Optional[Dict[str, Any]] = None
-    reasoning: str 
-    selected_devices = field(default_factory=list)  # 選択されたデバイスのリスト
+    agent_output: Optional[LabelAgentOutput] = None
+    metrics: Optional[Dict[str, Any]] = None
+
 
 @dataclass
 class FilterAgentOutput:

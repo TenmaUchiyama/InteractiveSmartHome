@@ -146,7 +146,7 @@ namespace SpatialLLM.Device
             name: this.gameObject.name,
             position: relativePosition, // 傾きの影響を排除した相対位置
             distance_from_user: distance_from_user,
-            centrality_score: SpatialAwarnessProvider.Instance != null ? SpatialAwarnessProvider.Instance.GetFovCentralityScore(this) : (float?)null
+            eye_centrality_score: SpatialAwarnessProvider.Instance != null ? SpatialAwarnessProvider.Instance.GetFovCentralityScore(this) : (float?)null
         );
 
         return this.spatialData;

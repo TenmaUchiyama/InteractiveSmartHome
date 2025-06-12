@@ -11,8 +11,18 @@ namespace SpatialLLM.Experiment
     {
         [SerializeField] protected SAUIManager saUIManager;
         [SerializeField] protected ExperimentManager experimentManager;
-        
+        [SerializeField] protected ExperimentTask experimentTask;
         [SerializeField] protected WordLogger wordLogger;
+
+
+
+
+
+
+            protected float elapsedTime = 0f;
+            protected bool timerStarted = false;
+
+        
 
         protected bool isStarted = false;
         protected UniTaskCompletionSource<bool> completionSource;
@@ -28,7 +38,10 @@ namespace SpatialLLM.Experiment
          #if UNITY_EDITOR
         void FixedUpdate()
     {
-
+            if (timerStarted)
+            {
+                elapsedTime += Time.fixedDeltaTime;
+            }
             if (!deviceOperatable) return;
             bool isWhite = Input.GetKeyDown(KeyCode.W); 
             bool isBlue = Input.GetKeyDown(KeyCode.Q); 
@@ -85,8 +98,11 @@ namespace SpatialLLM.Experiment
 
         public virtual void BeginOperation()
         {
+           this.experimentTask.InitExperimentTask(experimentManager.GetCurrentTaskId());
             onBeginOperation?.Invoke();
             isStarted = true;
+            elapsedTime = 0f;
+            timerStarted = true;
             saUIManager.SetInstructionText("Press Trigger to Record");
             Debug.Log("Operation Begun");
         }

@@ -3,19 +3,19 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
 using SpatialLLM.Core;
 using SpatialLLM.Device;
+using SpatialLLM.Network;
 using System.Collections.Generic;
-using System.IO;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 
 namespace SpatialLLM.Experiment
 {
     public class LabelSystemExecutor : SystemExecutor
     {
-        private bool isGripHolding = false;
         private string currentState = "preparation";
-        string recognizedWord = "";
+        private string recognizedWord = "";
+        private string latestLLMOutput = "[No output]";
+
+
 
         protected override void Start()
         {
@@ -26,7 +26,10 @@ namespace SpatialLLM.Experiment
                 SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
             }
 
-           
+            if (LabelLLMQueryRequest.Instance)
+            {
+                LabelLLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener(OnReceiveResponseFromLLM);
+            }
         }
 
         private void OnVoiceRecognized(string recognizedText)
@@ -35,9 +38,9 @@ namespace SpatialLLM.Experiment
 
             if (!saUIManager.IsRecognizedWordEmplty())
             {
-                saUIManager.SetInstructionText("Press Y to confirm");
+                Debug.Log($"<color=green>Recognized Word: {recognizedText}</color>");
                 recognizedWord = saUIManager.GetRecognizedWord();
-
+                saUIManager.SetInstructionText("Press Y to send to Agent");
                 currentState = "recorded";
             }
         }
@@ -47,106 +50,122 @@ namespace SpatialLLM.Experiment
             base.Update();
             if (!isStarted) return;
 
-
-
-            bool isRecording = false;
-
-            // --- Trigger録音処理 ---
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
             {
                 SASpeechRecognizer.Instance.ActivateVoice();
                 Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
-                isRecording = true;
             }
 
-            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && !isGripHolding)
+            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
             {
                 SASpeechRecognizer.Instance.DeactivateVoice();
                 Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");
             }
 
+            bool isYPressed = OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y);
+            bool isGripped = OVRInput.Get(OVRInput.RawButton.LHandTrigger) || Input.GetKey(KeyCode.G);
 
-            // isGripHolding = OVRInput.Get(OVRInput.RawButton.LHandTrigger);
-            // if (!isRecording)
-            // {
-            //     foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
-            //     {
-            //         device.DisplayShowLabel(isGripHolding);
-            //     }
-            // }
-            // --- Yボタン処理 ---
-            if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
+            if (isYPressed)
             {
-                YOperation();
+                if (isGripped)
+                {
+                    currentState = "done";
+                }
+                OperationProceed();
             }
 
-
-            
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                OnVoiceRecognized("テスト");
-            }
-
-
-
-            // --- キャンセル処理 ---
             if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
             {
                 experimentManager.BackToShowDevice();
             }
         }
-private async void YOperation()
-{
-    Debug.Log($"<color=green>YOperation: {currentState}</color>");
 
-    switch (currentState)
-    {
-        case "preparation":
-            // 準備中。録音前なので何もしない。
-            break;
+        private async void OperationProceed()
+        {
+            Debug.Log($"<color=green>LabelExecutor State: {currentState}</color>");
 
-        case "recorded":
-            // 音声認識が完了した直後
-             saUIManager.StartSendLLM();
-           this.isDeviceOperated = false;
-            this.deviceOperatable = true;
-            await UniTask.WaitUntil(() => this.isDeviceOperated); 
-            this.deviceOperatable = false;
-            this.isDeviceOperated = false;
-            string outputText = "";
-           SADeviceRef.Instance.GetAllDevices().ForEach(device =>
+            switch (currentState)
             {
-                if (device.IsDeviceOn)
-                {
-                    outputText += $"{device.gameObject.name} ";
+                case "preparation":
+                    SADeviceRef.Instance.ClearAllDeviceOperation();
+                    saUIManager.SetInstructionText("Press Trigger to Record");
+                    this.timerStarted = true;
+                    break;
 
+                case "recorded":
+                    saUIManager.DisplaySendingLLM(recognizedWord);
+                    saUIManager.StartSendLLM();
+                    string taskId = experimentManager.GetCurrentTaskId();
+                    if (!LabelLLMQueryRequest.Instance.IsRequesting)
+                    {
+                        await LabelLLMQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid);
+                    }
+                    break;
 
-                }
-            });
-            outputText += "を操作しました";
-            saUIManager.FinishLoadingAndDisplayResponse(outputText);
-            currentState = "checking";
-                    YOperation();
-            break;
+                case "received":
 
+                List<string> operatedIds = new List<string>();
+                    var devices = SADeviceRef.Instance.GetAllOperatedDevices(); // 型を確認
+                    foreach (var d in devices)
+                    {
+                        string id = d.GetDeviceID();  // ここでエラーが出るなら GetDeviceID が曖昧な定義
+                        operatedIds.Add(id);
+                    }
 
-        case "checking":
-            // 処理結果（操作内容など）を表示
-       
+                    // 1. 発話記録を追加
+                    this.experimentTask.AddTaskAttempt(
+                        recognizedWord,
+                        this.elapsedTime.ToString(),
+                        operatedIds
+                    );
 
-            saUIManager.SetInstructionText("Press Y to complete");
-            currentState = "done";
-            break;
+                    // 2. ログ保存
+                    this.wordLogger.AddOrUpdateTaskData(this.experimentTask.GetExperimentTaskData());
 
-        case "done":
-                    // 完了。リセット。
-            this.wordLogger.AddRecognizedEntry(experimentManager.GetCurrentTaskId(), recognizedWord);
-            CompleteOperation();
-            saUIManager.ClearRecognizedWord();
-            currentState = "preparation";
-            break;
-    }
-}
+                    saUIManager.FinishLoadingAndDisplayResponse(latestLLMOutput);
+                    currentState = "checking";
+                    this.timerStarted = false; 
+                    this.elapsedTime = 0f; // タイマーをリセット
+                    break;
+
+                case "checking":
+                    saUIManager.SetInstructionText("Grip+Y to confirm, or press Y to retry");
+                   this.currentState = "preparation";
+                    break;
+
+                case "done":
+                // 操作されたデバイスIDを取得
+             
+
+           
+
+    // 2. ログ保存
+    this.wordLogger.AddOrUpdateTaskData(this.experimentTask.GetExperimentTaskData());
+                    saUIManager.ClearRecognizedWord();
+                    CompleteOperation();
+                    currentState = "preparation";
+                    break;
+            }
+        }
+
+        private void OnReceiveResponseFromLLM(string json)
+        {
+            try
+            {
+                var response = JsonConvert.DeserializeObject<LLMResponse>(json);
+                latestLLMOutput = response.output ?? "[No output]";
+                Debug.Log($"<color=cyan>LLM Output Saved: {latestLLMOutput}</color>");
+                currentState = "received";
+                OperationProceed();
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("LLMレスポンスの解析に失敗: " + e.Message);
+                latestLLMOutput = "[LLM Error]";
+                currentState = "received";
+                OperationProceed();
+            }
+        }
 
         public override void BeginOperation()
         {
@@ -158,8 +177,6 @@ private async void YOperation()
         public override void CompleteOperation()
         {
             base.CompleteOperation();
-
-            // ラベル非表示
             foreach (SADevice device in SADeviceRef.Instance.GetAllDevices())
             {
                 device.DisplayShowLabel(false);
@@ -167,5 +184,3 @@ private async void YOperation()
         }
     }
 }
-
-
