@@ -2,10 +2,11 @@ from io import BytesIO
 from agents.label_agent.label_node import label_agent_node, label_tool_node
 from langgraph.graph import Graph, START, END, StateGraph
 from IPython.display import Image, display
-from sr_app_types.no_tool_agent_types import LabelState, State
+from sr_app_types.no_tool_agent_types import LabelState, State, PointingState
 from sr_app_types.node_types import NODE
 from agents.device_filter_agent.no_tool_filter_nodes import filter_preprocess, filter_agent_node, filter_tool_node
-from agents.spatial_reasoning_agent.no_tool_spatial_node import sr_agent_node, sr_preprocess_node, sr_tool_node, system_post_process_node
+from agents.spatial_reasoning_agent.no_tool_spatial_node import pointing_spatial_node, sr_agent_node, sr_preprocess_node, sr_tool_node, system_post_process_node
+from agents.pointing_agent.point_node import pointing_agent_node, pointing_tool_node
 
 
 
@@ -93,3 +94,33 @@ def getLabelRunner():
     runner = graph.compile()
     return runner
 
+
+
+def getPointingRunner():
+    graph = StateGraph(PointingState)
+
+
+    graph.add_node("pointing_agent_node", pointing_agent_node)
+    graph.add_node("pointing_tool_node", pointing_tool_node)
+
+    graph.add_edge(START, "pointing_agent_node")
+    graph.add_edge("pointing_agent_node", "pointing_tool_node")
+    graph.add_edge("pointing_tool_node", END)
+
+    runner = graph.compile()
+    return runner
+
+
+
+def getPointingSpatialRunner():
+    graph = StateGraph(PointingState)
+
+    graph.add_node("pointing_spatial_node", pointing_spatial_node)
+    graph.add_node("pointing_spatial_tool_node", pointing_tool_node)
+
+    graph.add_edge(START, "pointing_spatial_node")
+    graph.add_edge("pointing_spatial_node", "pointing_spatial_tool_node")
+    graph.add_edge("pointing_spatial_tool_node", END)
+
+    runner = graph.compile()
+    return runner

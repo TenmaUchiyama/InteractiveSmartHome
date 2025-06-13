@@ -5,8 +5,26 @@ from enum import Enum
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
+from utils.callbacks import CustomCallbackHandler
 
 
+
+
+@dataclass
+class PointingAgentOutput:
+    selected_devices: List[Dict[str, Any]]
+    response: str
+    reasoning: str
+
+
+@dataclass 
+class PointingState: 
+    input_prompt: List[BaseMessage] = field(default_factory=list)
+    user_prompt: str = ""
+    pointed_devices: List[Dict[str, Any]] = field(default_factory=list)
+    agent_output: Optional[PointingAgentOutput] = None
+    metrics: Optional[Dict[str, Any]] = None
+    callback: Optional[CustomCallbackHandler] = None
 
 
 
@@ -50,6 +68,8 @@ class SpatialAgentType:
     input_prompt: List[BaseMessage] = field(default_factory=list)
     output_data: Optional[SpatialOutput] = None
     metrics: Optional[Dict] = None  # e.g., is_correct, error_type
+
+
 
 @dataclass
 class State:

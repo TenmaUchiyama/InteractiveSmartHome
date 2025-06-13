@@ -8,7 +8,7 @@ import json
 import os
 from utils.callbacks import CustomCallbackHandler
 from sr_app_types.node_types import NODE
-from sr_app_types.no_tool_agent_types import State,  SpatialOutput
+from sr_app_types.no_tool_agent_types import PointingState, State,  SpatialOutput
 from agents.device_operator_agent.operator_tool import operateDevice
 
 # プロンプトの読み込み
@@ -108,4 +108,70 @@ def system_post_process_node(state: State):
         "total_system_time_elapsed": round(total_system_time, 4)
     }
 
+    return state
+
+
+
+
+
+
+
+"""
+{
+  "filter_type": "fov" | "direction" | "all" | "around_furniture",
+  "params": {
+    "order": "proximity" | "right" | "high",
+    "range": 0.0
+  },
+  "user_prompt": "<user's natural language instruction>",
+  "reasoning": "<reasoning from FilterDeviceAgent>",
+  "devices": [
+    {
+      "id": "device_id",
+      "name": "light1",
+      "position": { "x": 0.5, "y": 2.0, "z": 3.0 },
+      "distance_from_user": 3.1,
+      "eye_centrality_score": 14.8
+    },
+    ...
+  ]
+}
+"""
+
+
+
+
+
+
+def pointing_spatial_node(state: PointingState):
+    state.callback = callback
+    state.callback.system_start()
+    
+
+
+    input_content = {
+        "filter_type": "pointer",
+        "user_prompt": state.user_prompt,
+        "pointed_devices": state.pointed_devices,
+        "reasoning": "Selected devices are pointed by user", 
+        "devices": state.pointed_devices
+    }
+
+    state.input_prompt = [
+        spatial_message,
+        HumanMessage(content=json.dumps(input_content, ensure_ascii=False))
+    ]
+
+    response = spatial_agent.invoke(state.input_prompt)
+
+   
+
+    parsed = parser.parse(response.content)
+    state.agent_output = parsed
+    state.metrics = {
+        "model_name": state.callback.model_name,
+        "tokens": state.callback.last_tokens,
+        "cost_usd": state.callback.last_cost,
+        "agent_time_elapsed": state.callback.last_time
+    }
     return state

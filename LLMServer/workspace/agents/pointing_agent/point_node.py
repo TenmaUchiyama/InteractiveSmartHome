@@ -3,7 +3,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_openai import ChatOpenAI
 from utils.callbacks import CustomCallbackHandler
-from sr_app_types.no_tool_agent_types import LabelState
+from sr_app_types.no_tool_agent_types import LabelState, PointingState
 import os, json
 
 from agents.device_operator_agent.operator_tool import operateDevice
@@ -12,30 +12,35 @@ from agents.device_operator_agent.operator_tool import operateDevice
 
 # プロンプトと全デバイスの読み込み
 script_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(script_dir, "prompts", "label_msg.txt")
-device_list_path = os.path.join(script_dir, "device_list.json")
+file_path = os.path.join(script_dir, "prompts", "pointing_msg.txt")
 
 with open(file_path, "r", encoding="utf-8") as f:
     label_message = SystemMessage(f.read())
 
-with open(device_list_path, "r", encoding="utf-8") as f:
-    all_devices = json.load(f)
+
 
 # モデルとコールバック設定
 callback = CustomCallbackHandler("logs/label_logs.md")
 model = os.getenv("GPT_MODEL") or "gpt-4o"
-label_agent = ChatOpenAI(model=model.strip(), temperature=0.0, callbacks=[callback])
+pointing_agent = ChatOpenAI(model=model.strip(), temperature=0.0, callbacks=[callback])
 
 parser = JsonOutputParser(pydantic_object=Dict)
 
-def label_agent_node(state: LabelState):
+
+
+
+
+
+
+
+def pointing_agent_node(state: PointingState):
     callback.system_start()
     
-    state.all_devices = all_devices  # ← 忘れずに状態に反映
+
 
     input_content = {
         "user_prompt": state.user_prompt,
-        "devices": state.all_devices
+        "pointed_devices": state.pointed_devices,
     }
 
     state.input_prompt = [
@@ -43,7 +48,7 @@ def label_agent_node(state: LabelState):
         HumanMessage(content=json.dumps(input_content, ensure_ascii=False))
     ]
 
-    response = label_agent.invoke(state.input_prompt)
+    response = pointing_agent.invoke(state.input_prompt)
 
     print("========[LABEL AGENT OUTPUT]========")
     print(response.content)
@@ -61,9 +66,15 @@ def label_agent_node(state: LabelState):
 
 
 
-def label_tool_node(state: LabelState):
+
+def pointing_tool_node(state: PointingState):
     devices = state.agent_output.get("devices", [])
     result = operateDevice.invoke({"devices": devices})
-    state.metrics["system_time_elapsed"] = callback.system_end()
-    state.callback = None
+    state.metrics["system_time_elapsed"] = state.callback.system_end()
     return state
+
+
+
+
+
+
