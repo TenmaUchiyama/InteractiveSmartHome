@@ -25,10 +25,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
     private string recognizedWord = "";
 
     private string currentState = "waiting";
-
-
-    [SerializeField] private SAUIManager saUIManager;
-
+    private string latestLLMOutput = "[No output]";
     private string agentMsg = "";
 
     protected virtual void Start()
@@ -44,8 +41,8 @@ public class SpatialLLMSystemExecutor : SystemExecutor
             SASpeechRecognizer.Instance.OnVoiceRecognized.AddListener(OnVoiceRecognized);
         }
 
-        if (PromptLLMQueryRequest.Instance)
-            PromptLLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener(OnReiveResponseFromLLM);
+        if (LLMQueryRequest.Instance)
+            LLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener(OnReiveResponseFromLLM);
     }
 
     private void OnReiveResponseFromLLM(string arg0)
@@ -53,12 +50,14 @@ public class SpatialLLMSystemExecutor : SystemExecutor
         try
         {
             LLMResponse response = JsonConvert.DeserializeObject<LLMResponse>(arg0);
+            latestLLMOutput = response.output ?? "[No output]";
             saUIManager.FinishLoadingAndDisplayResponse(response.output);
             currentState = "received";
             OperationProceed(); // 成功した場合のみ処理を継続
         }
         catch (System.Exception ex)
         {
+             latestLLMOutput = "[LLM Error]";
             Debug.LogError("Failed to parse LLM response: " + ex.Message);
         }
     }
@@ -73,11 +72,14 @@ public class SpatialLLMSystemExecutor : SystemExecutor
 
     private void OnVoiceRecognized(string recognizedText)
     {
+
+        Debug.Log($"[LabelExecutor] 音声認識結果: {recognizedText}");
         saUIManager.SetRecognizedTxt(recognizedText);
 
         if (!saUIManager.IsRecognizedWordEmplty())
         {
             saUIManager.SetInstructionText("Press Y to send to Agent");
+        
             recognizedWord = saUIManager.GetRecognizedWord();
             currentState = "recorded";
         }
@@ -146,12 +148,19 @@ public class SpatialLLMSystemExecutor : SystemExecutor
             case "recorded":
 
                 
-                string userInput = saUIManager.GetRecognizedWord();
-                saUIManager.DisplaySendingLLM(userInput);
+              
+                saUIManager.DisplaySendingLLM(recognizedWord);
                 saUIManager.StartSendLLM();
-                if (!PromptLLMQueryRequest.Instance.IsRequesting)
+                if (!LLMQueryRequest.Instance.IsRequesting)
                 {
-                    await PromptLLMQueryRequest.Instance.SendQuery(userInput, experimentManager.GetCurrentTaskId(), this.experimentTask.NextGuid);
+                    var sendinData = new
+                    {
+                        llm_message = recognizedWord, 
+                        task_id = experimentManager.GetCurrentTaskId().ToString(),
+                        attempt_id = this.experimentTask.NextGuid
+                    };
+                    string json = JsonConvert.SerializeObject(sendinData);
+                    await LLMQueryRequest.Instance.SendQuery("llm_agent", json);
                 }
                 break;
 

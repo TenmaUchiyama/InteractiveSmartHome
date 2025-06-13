@@ -28,7 +28,7 @@ public class TestLLMUI : MonoBehaviour
     private void OnButtonClick()
     {
         TestDeviceManager.Instance.ResetAllColor();
-       llmQueryRequest.SendQuery(inputText.text);
+    //    llmQueryRequest.SendQuery(inputText.text);
     }
 
 
@@ -39,8 +39,8 @@ public class TestLLMUI : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Return))
         {
-            Debug.Log("<color=green>[TestLLMUI] Enter Button Pressed </color>");
-             llmQueryRequest.SendQuery(inputText.text);
+            // Debug.Log("<color=green>[TestLLMUI] Enter Button Pressed </color>");
+            //  llmQueryRequest.SendQuery(inputText.text);
         }
     }
 }

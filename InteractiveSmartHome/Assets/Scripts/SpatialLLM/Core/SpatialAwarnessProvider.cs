@@ -255,6 +255,7 @@ private float GetCentralityScore(Vector3 targetPos)
         {
             switch (order.ToLower())
             {
+                case "centrality": return list.OrderBy(d => d.eye_centrality_score).ToList();
                 case "right": return list.OrderByDescending(d => d.position.x).ToList();
                 case "left": return list.OrderBy(d => d.position.x).ToList();
                 case "high": return list.OrderByDescending(d => d.position.y).ToList();

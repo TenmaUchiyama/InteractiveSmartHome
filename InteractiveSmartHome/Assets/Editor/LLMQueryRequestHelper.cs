@@ -13,7 +13,7 @@ public class LLMQueryRequestHelper : Editor
 
         if (GUILayout.Button("Send Query For Debug"))
         {
-            llmQueryRequest.SendQueryForDebug("Debug Text");
+            // llmQueryRequest.SendQueryForDebug("Debug Text");
         }
     }
 }

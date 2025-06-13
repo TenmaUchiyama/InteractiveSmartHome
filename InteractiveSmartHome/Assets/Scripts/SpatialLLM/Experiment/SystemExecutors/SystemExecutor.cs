@@ -14,15 +14,10 @@ namespace SpatialLLM.Experiment
         [SerializeField] protected ExperimentTask experimentTask;
         [SerializeField] protected WordLogger wordLogger;
 
+        protected float elapsedTime = 0f;
+        protected bool timerStarted = false;
 
-
-
-
-
-            protected float elapsedTime = 0f;
-            protected bool timerStarted = false;
-
-        
+    
 
         protected bool isStarted = false;
         protected UniTaskCompletionSource<bool> completionSource;
@@ -37,62 +32,62 @@ namespace SpatialLLM.Experiment
 
          #if UNITY_EDITOR
         void FixedUpdate()
-    {
-            if (timerStarted)
-            {
-                elapsedTime += Time.fixedDeltaTime;
-            }
-            if (!deviceOperatable) return;
-            bool isWhite = Input.GetKeyDown(KeyCode.W); 
-            bool isBlue = Input.GetKeyDown(KeyCode.Q); 
-            bool isRed = Input.GetKeyDown(KeyCode.E);
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                isDeviceOperated = true;
-            }
-            Color lightColor = Color.white; // デフォルトは白色
-        if (Application.isPlaying && (isWhite || isBlue || isRed))
-            {
-
-                if (isWhite)
+        {
+                if (timerStarted)
                 {
-                    lightColor = Color.white;
+                    elapsedTime += Time.fixedDeltaTime;
                 }
-                else if (isBlue)
+                if (!deviceOperatable) return;
+                bool isWhite = Input.GetKeyDown(KeyCode.W); 
+                bool isBlue = Input.GetKeyDown(KeyCode.Q); 
+                bool isRed = Input.GetKeyDown(KeyCode.E);
+                if (Input.GetKeyDown(KeyCode.R))
                 {
-                    lightColor = Color.blue;
+                    isDeviceOperated = true;
                 }
-                else if (isRed)
+                Color lightColor = Color.white; // デフォルトは白色
+            if (Application.isPlaying && (isWhite || isBlue || isRed))
                 {
-                    lightColor = Color.red;
-                }
 
-               
-                GameObject[] selectedObjects = Selection.gameObjects;
-
-                Debug.Log($"選択中のオブジェクト数: {selectedObjects.Length}");
-
-                foreach (var obj in selectedObjects)
-                {
-                    // 自身にSADeviceがあるか
-                    SADevice saDevice = obj.GetComponent<SADevice>();
-
-                    // なければ親をたどる（GetComponentInParent で親も含めて検索）
-                    if (saDevice == null)
+                    if (isWhite)
                     {
-                        saDevice = obj.GetComponentInParent<SADevice>();
+                        lightColor = Color.white;
+                    }
+                    else if (isBlue)
+                    {
+                        lightColor = Color.blue;
+                    }
+                    else if (isRed)
+                    {
+                        lightColor = Color.red;
                     }
 
-                    if (saDevice != null)
-                    {
+                
+                    GameObject[] selectedObjects = Selection.gameObjects;
 
-                        saDevice.TurnOnWithColor(lightColor);
-                        saDevice.GetComponent<DrawOnHover>()?.VisualizeTargetDevice(Color.blue);
+                    Debug.Log($"選択中のオブジェクト数: {selectedObjects.Length}");
+
+                    foreach (var obj in selectedObjects)
+                    {
+                        // 自身にSADeviceがあるか
+                        SADevice saDevice = obj.GetComponent<SADevice>();
+
+                        // なければ親をたどる（GetComponentInParent で親も含めて検索）
+                        if (saDevice == null)
+                        {
+                            saDevice = obj.GetComponentInParent<SADevice>();
+                        }
+
+                        if (saDevice != null)
+                        {
+
+                            saDevice.TurnOnWithColor(lightColor);
+                            saDevice.GetComponent<DrawOnHover>()?.VisualizeTargetDevice(Color.blue);
+                        }
                     }
                 }
-            }
-    }
-#endif
+        }
+    #endif
 
 
 

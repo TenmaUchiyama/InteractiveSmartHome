@@ -94,7 +94,7 @@ public class RecordingButton : MonoBehaviour
          string json = JsonConvert.SerializeObject(labelQueryDataType, settings);
             Debug.Log($"<color=yellow>[RecordingButton] Send Query: {json}</color>");
 
-        await LLMQueryRequest.Instance.SendQuery(json);
+        // await LLMQueryRequest.Instance.SendQuery(json);
 
     }
 }

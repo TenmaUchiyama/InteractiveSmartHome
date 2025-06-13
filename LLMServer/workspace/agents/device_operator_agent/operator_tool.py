@@ -24,6 +24,9 @@ testOperator = TestOperator()
 
 is_simulation = True
 
+
+
+
 @tool
 def operateDevice(   devices: List[DeviceControlData]) -> str:
     """
@@ -36,7 +39,7 @@ def operateDevice(   devices: List[DeviceControlData]) -> str:
 
         print()
         print("=====================[OPERATOR TOOL] operateDevice=====================")
-
+        print("Devices to operate: ", devices)
 
 
         # デバイスデータを取得

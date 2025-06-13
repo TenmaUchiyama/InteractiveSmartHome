@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 import dotenv
 from utils.communication.SwitchBotOperator import SwitchBotOperator
 dotenv.load_dotenv("../.env")
@@ -16,7 +16,7 @@ from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
 
-OUTPUT_FILE_NAME="TEST"
+OUTPUT_FILE_NAME="P1"
 app = FastAPI()
 
 
@@ -129,11 +129,12 @@ class InputMessage(BaseModel):
     attempt_id: str
 
 class InputMessageWithPointing(InputMessage):
-    pointed_devices: List[Dict[str, str]]
+    pointed_devices: List[Dict[str, Any]]
 
 # ----------- エンドポイント定義 -------------
 @app.post("/pointing")
 def llm_pointing(message: InputMessageWithPointing):
+    print("POINTING")
     state = PointingState(
         user_prompt=message.llm_message,
         pointed_devices=message.pointed_devices
@@ -148,6 +149,7 @@ def llm_pointing(message: InputMessageWithPointing):
 
 @app.post("/label")
 def llm_label(message: InputMessage):
+    print("LABEL")
     state = LabelState(user_prompt=message.llm_message)
     runner = getLabelRunner()
     save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}_label.json"
@@ -158,6 +160,7 @@ def llm_label(message: InputMessage):
 
 @app.post("/llm_agent")
 def llm_agent_no_tool(message: InputMessage):
+    print("SpatialReference")
     state = State(user_prompt=message.llm_message)
     runner = getSystemRunner()  # Spatial agent runner 呼び出し
     save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}.json"
@@ -201,6 +204,7 @@ def llm_agent_no_tool(message: InputMessage):
 
 @app.post("/pointing_spatial")
 def llm_pointing_spatial(message: InputMessageWithPointing):
+    print("SR POINTING")
     is_pointing = message.pointed_devices and len(message.pointed_devices) > 0
 
     if is_pointing:

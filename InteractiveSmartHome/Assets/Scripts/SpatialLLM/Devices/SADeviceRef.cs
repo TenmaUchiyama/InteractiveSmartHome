@@ -157,6 +157,13 @@ public class SADeviceRef : Singleton<SADeviceRef>
 
         return operatedDevice;
     }
+
+
+
+    public List<SADevice> GetAllSelectedDevices()
+    {
+        return saDevices.Where(device => device.IsDeviceSelected()).ToList();
+    }
     public void ClearAllDeviceOperation()
     {
         foreach (SADevice device in this.GetAllDevices())
@@ -173,7 +180,13 @@ public class SADeviceRef : Singleton<SADeviceRef>
     public List<SADevice> GetAllDevicesRealTime() => GetAllDevices();
 
 
-
+    public void UnSelectAllDevices()
+    {
+        foreach (SADevice device in this.GetAllDevices())
+        {
+            device.SetIsSelected(false);
+        }
+    }
 
     public void WriteAllDeviceList()
     {

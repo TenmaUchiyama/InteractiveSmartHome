@@ -70,7 +70,8 @@ def pointing_agent_node(state: PointingState):
 def pointing_tool_node(state: PointingState):
     devices = state.agent_output.get("devices", [])
     result = operateDevice.invoke({"devices": devices})
-    state.metrics["system_time_elapsed"] = state.callback.system_end()
+    if(state.callback.system_end()):
+        state.metrics["system_time_elapsed"] = state.callback.system_end()
     return state
 
 

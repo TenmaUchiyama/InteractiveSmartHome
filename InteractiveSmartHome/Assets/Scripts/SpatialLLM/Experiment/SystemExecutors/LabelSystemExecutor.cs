@@ -96,9 +96,32 @@ namespace SpatialLLM.Experiment
                     saUIManager.DisplaySendingLLM(recognizedWord);
                     saUIManager.StartSendLLM();
                     string taskId = experimentManager.GetCurrentTaskId();
-                    if (!LabelLLMQueryRequest.Instance.IsRequesting)
+                    if (!LLMQueryRequest.Instance.IsRequesting)
                     {
-                        await LabelLLMQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid);
+                        LLMQueryRequestType llmQueryRequest = new LLMQueryRequestType()
+                        {
+                            task_id = taskId,
+                            attempt_id = this.experimentTask.NextGuid,
+                            llm_message = recognizedWord,
+                        };
+
+
+
+
+                        try
+                        {
+                            await LabelLLMQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid);
+                        }
+                        catch
+                        {
+                            Debug.LogError("Failed to send LLM query for label operation.");
+                            saUIManager.FinishLoadingAndDisplayResponse("[LLM Error]");
+                            currentState = "received";
+                            this.timerStarted = false;
+                            this.elapsedTime = 0f; // タイマーをリセット
+                            return;
+                        }
+                       
                     }
                     break;
 

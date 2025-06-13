@@ -4,9 +4,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SpatialLLM.Core;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using static SpatialLLM.Network.NetworkDataType;
 
 
 
@@ -17,7 +19,7 @@ public class PointingQueryRequest :Singleton<PointingQueryRequest>
      private bool _isRequesting = false; 
     public bool IsRequesting => _isRequesting;
     // 任意のコマンドを指定
-    [SerializeField] private string host = "localhost";
+    [SerializeField] private string host = "127.0.0.1";
     [SerializeField] private int port = 8800;
 
     [SerializeField] public bool speechRequired = true;
@@ -30,17 +32,40 @@ public class PointingQueryRequest :Singleton<PointingQueryRequest>
   
     }
 
+        public async Task SendQuery(string sending_text, string task_id, string attempt_id, List<DeviceSpatialData> deviceSpatialData)
+        {
+            string jsonData = JsonConvert.SerializeObject(new
+            {
+                 llm_message = sending_text,
+                task_id = task_id,
+                attempt_id = attempt_id,
+                pointed_devices = deviceSpatialData
+            });
 
-  
+            Debug.Log($"<color=yellow>Sending Pointing Query SPATIAL: {jsonData}</color>");
+            
+            await _SendQuery("pointing_spatial", jsonData);
+        }
 
-  public async Task SendQuery(string sending_text)
+        public async Task SendQuery(string sending_text, string task_id, string attempt_id, List<DeviceLabelData> deviceLabelData)
+        {
+            string jsonData = JsonConvert.SerializeObject(new
+            {
+                llm_message = sending_text,
+                task_id = task_id,
+                attempt_id = attempt_id,
+                pointed_devices = deviceLabelData
+            });
+
+            Debug.Log($"<color=yellow>Sending Pointing Query ONLY_POINTING: {jsonData}</color>");
+            await _SendQuery("pointing", jsonData);
+        }
+
+  private async Task _SendQuery(string path,string jsonData)
     {
-        Debug.Log($"<color=yellow>Sending Query: {sending_text}</color>");
-        string url = $"http://{host}:{port}/pointing_agent";
+        Debug.Log($"<color=yellow>Sending Query: {jsonData}</color>");
+        string url = $"http://{host}:{port}/{path}";
 
-        // JSONデータの生成
-        var data = new { llm_message = sending_text };
-        string jsonData = JsonConvert.SerializeObject(data);
 
         // 非同期POSTリクエストの送信
         _isRequesting = true;
