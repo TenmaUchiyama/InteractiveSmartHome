@@ -1,0 +1,33 @@
+[
+  {
+    "user_prompt": "ボールライト1を点けて",
+    "agent_output": {
+      "selected_devices": [
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 1.",
+      "reasoning": "Matched 'ボールライト1' to 'Wall Light 1' using phonetic similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1729,
+        "completion_tokens": 122,
+        "total_tokens": 1851
+      },
+      "cost_usd": 0.005543,
+      "agent_time_elapsed": 1.9151103496551514,
+      "system_time_elapsed": 2.100842237472534
+    },
+    "task_id": "string"
+  }
+]
