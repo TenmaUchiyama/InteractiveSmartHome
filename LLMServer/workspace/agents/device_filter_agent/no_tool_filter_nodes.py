@@ -22,8 +22,16 @@ from typing import Any
 
 
 
-script_dir = os.path.dirname(os.path.abspath(__file__))  # スクリプトのあるディレクトリ
-file_path = os.path.join(script_dir, "prompts", "no_tool_filter_msg.txt")
+script_dir = os.path.dirname(os.path.abspath(__file__))  
+language = os.getenv("LANG", "en").strip() if os.getenv("LANG") else "en"
+if language == "ja":
+    file_path = os.path.join(script_dir, "prompts", "jp_filter_msg.txt")
+else:
+    file_path = os.path.join(script_dir, "prompts", "no_tool_filter_msg.txt")
+
+
+
+
 
 with open(file_path, "r", encoding="utf-8") as f:
     filter_message = SystemMessage(f.read())

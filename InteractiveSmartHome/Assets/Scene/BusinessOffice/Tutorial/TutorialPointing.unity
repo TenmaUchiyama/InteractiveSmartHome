@@ -19313,7 +19313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29e5e39b6520e48429505bdc0dfc919f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selector: {fileID: 0}
+  selector: {fileID: 79060328}
   selectorColor: {r: 1, g: 0, b: 0, a: 0}
   drawDistance: 1
   minSegmentDistance: 0.01
@@ -20866,22 +20866,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 925221667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4067d6323ad1be842a81e200f06f6649, type: 3}
+  m_Script: {fileID: 11500000, guid: e97bf1da74dec384284b7fc60516c60d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rayInteractor: {fileID: 292418335}
+  circleSelector: {fileID: 851885101}
+  IS_SPATIAL_POINTING: 0
   saUIManager: {fileID: 1369065701}
-  experimentManager: {fileID: 1178553824}
-  wordLogger: {fileID: 0}
-  onBeginOperation:
-    m_PersistentCalls:
-      m_Calls: []
-  onCompleteOperation:
-    m_PersistentCalls:
-      m_Calls: []
-  rayInteractor: {fileID: 0}
-  circleSelector: {fileID: 0}
-  isPointer: 0
-  isLabel: 0
+  userCamera: {fileID: 1541526150}
 --- !u!1 &926680397
 GameObject:
   m_ObjectHideFlags: 0
@@ -22161,8 +22153,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996579931}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0026945781, y: 0.01763311, z: -0.00089790585, w: 0.9998405}
-  m_LocalPosition: {x: -3.6219997, y: 1.231, z: -7.4900002}
+  m_LocalRotation: {x: -0.046301305, y: -0.7177137, z: 0.047814608, w: -0.6931501}
+  m_LocalPosition: {x: 4.2599535, y: 1.0944991, z: 6.0421476}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -25894,6 +25886,7 @@ MonoBehaviour:
   systemExecutor: {fileID: 0}
   saUIManager: {fileID: 0}
   SEED: 0
+  displayTime: 60
   isDeviceTurnedOn: 0
 --- !u!4 &1178553825
 Transform:
@@ -26037,7 +26030,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4fb0e8045a8e249adcc482855e968c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saWebsocket: {fileID: 0}
 --- !u!1 &1179182417
 GameObject:
   m_ObjectHideFlags: 0
@@ -38653,14 +38645,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1815866207}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eeee8aa2f9c485e45a8378160c77a736, type: 3}
+  m_Script: {fileID: 11500000, guid: b74f8e4e953f3e242b33470aab0b499d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   host: 127.0.0.1
   port: 8800
   speechRequired: 1
-  debugText: 
-  experimentManager: {fileID: 1178553824}
   OnReceiveResponseFromLLM:
     m_PersistentCalls:
       m_Calls: []
