@@ -102,6 +102,7 @@ namespace SpatialLLM.Experiment
                 case "preparation":
                     SADeviceRef.Instance.ClearAllDeviceOperation();
                     saUIManager.SetInstructionText("Point and Press Y to send");
+                    elapsedTime = 0f;
                     timerStarted = true;
                     break;
 
@@ -155,11 +156,12 @@ namespace SpatialLLM.Experiment
                         operatedIds.Add(d.GetDeviceID());
                     }
 
-                    this.experimentTask.AddTaskAttempt(
-                        "[Pointing Input]",
-                        elapsedTime.ToString(),
+                     this.experimentTask.AddTaskAttempt(
+                        recognizedText,
+                        this.elapsedTime.ToString(),
                         operatedIds
                     );
+
 
                     this.wordLogger.AddOrUpdateTaskData(this.experimentTask.GetExperimentTaskData());
 
