@@ -349,13 +349,37 @@ public class ExperimentManager : MonoBehaviour
 
     private void ReadTaskData() 
     {
-        Debug.Log($"{arrangementGenerator.ReadTaskData().Count}");
-       arrangeDataList = arrangementGenerator.ReadTaskData();
-       if(!isTutorial)Shuffle(arrangeDataList, SEED);
+          Debug.Log($"{arrangementGenerator.ReadTaskData().Count}");
+    arrangeDataList = arrangementGenerator.ReadTaskData();
+
+            if (!isTutorial)
+            {
+                // P1 → 1 のように、整数を抽出
+                string participantName = EXDataHolder.Instance.ParticipantName; // e.g., "P1"
+                int participantNumber = ExtractParticipantNumber(participantName);
+
+                // 参加者番号をシードとして使用
+                Shuffle(arrangeDataList, participantNumber);
+
+
+                // シード値を出力
+                Debug.Log($"<color=blue>Participant Number: {participantNumber}</color>");
+    }
        
     }
-
-
+private int ExtractParticipantNumber(string name)
+{
+    // Pの後ろの数値を抽出する（失敗時は1を返す）
+    if (!string.IsNullOrEmpty(name) && name.StartsWith("P"))
+    {
+        string numberPart = name.Substring(1);
+        if (int.TryParse(numberPart, out int result))
+        {
+            return result;
+        }
+    }
+    return 1;
+}
     private void Shuffle<T>(List<T> list, int seed)
 {
     System.Random rng = new System.Random(seed);

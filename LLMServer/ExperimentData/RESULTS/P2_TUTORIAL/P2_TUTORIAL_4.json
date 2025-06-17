@@ -1,0 +1,623 @@
+[
+  {
+    "user_prompt": "と、ウォールライトの一、二、三を青色で付けて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 1, Wall Light 2, and Wall Light 3 in blue.",
+      "reasoning": "Matched 'ウォールライトの一、二、三' to 'Wall Light 1', 'Wall Light 2', and 'Wall Light 3' using Katakana similarity and numerical context."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1741,
+        "completion_tokens": 295,
+        "total_tokens": 2036
+      },
+      "cost_usd": 0.007303,
+      "agent_time_elapsed": 2.154572010040283,
+      "system_time_elapsed": 2.595834732055664
+    },
+    "task_id": "4ce91266-e46f-44c8-a184-fca8ac872733",
+    "attempt_id": "b9ed9ca1-f5fb-4d7a-b69a-3dda40185285"
+  },
+  {
+    "user_prompt": "ウォールランプの七と九を赤色で付け",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 7 and Wall Light 9 in red.",
+      "reasoning": "Matched 'ウォールランプの七' to 'Wall Light 7' and 'ウォールランプの九' to 'Wall Light 9' using Katakana similarity and numeric matching."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1737,
+        "completion_tokens": 210,
+        "total_tokens": 1947
+      },
+      "cost_usd": 0.006443,
+      "agent_time_elapsed": 1.9985730648040771,
+      "system_time_elapsed": 2.3851399421691895
+    },
+    "task_id": "5419457b-2e8f-4fc8-837d-f5d92db30a2f",
+    "attempt_id": "c3cf74d4-b128-41ee-b1f6-6d87825fa50b"
+  },
+  {
+    "user_prompt": "右側のランプの内、七と九を電気つけて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 7 and Ceiling Light 9.",
+      "reasoning": "Matched '七' to 'Ceiling Light 7' and '九' to 'Ceiling Light 9' based on numerical reference."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1740,
+        "completion_tokens": 207,
+        "total_tokens": 1947
+      },
+      "cost_usd": 0.00642,
+      "agent_time_elapsed": 5.630113840103149,
+      "system_time_elapsed": 6.013443470001221
+    },
+    "task_id": "5419457b-2e8f-4fc8-837d-f5d92db30a2f",
+    "attempt_id": "21ea96be-2806-492f-8d0d-2c41222c8d18"
+  },
+  {
+    "user_prompt": "ウォールライトの七と九を電気でつけて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 1 and Wall Light 2.",
+      "reasoning": "Matched 'ウォールライトの七と九' to 'Wall Light 1' and 'Wall Light 2' using phonetic similarity and numeric context."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1737,
+        "completion_tokens": 218,
+        "total_tokens": 1955
+      },
+      "cost_usd": 0.006523,
+      "agent_time_elapsed": 2.839676856994629,
+      "system_time_elapsed": 3.2207183837890625
+    },
+    "task_id": "5419457b-2e8f-4fc8-837d-f5d92db30a2f",
+    "attempt_id": "a55d3280-ee89-43d1-85d5-15d67624a4d2"
+  },
+  {
+    "user_prompt": "ランプ、ランプの位置と二を電気つけて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 1 and Ceiling Light 2.",
+      "reasoning": "Matched 'ランプの位置' to 'Ceiling Light 1' and 'ランプの二' to 'Ceiling Light 2' using phonetic similarity and numerical context."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1738,
+        "completion_tokens": 223,
+        "total_tokens": 1961
+      },
+      "cost_usd": 0.006575,
+      "agent_time_elapsed": 3.2143309116363525,
+      "system_time_elapsed": 3.6232872009277344
+    },
+    "task_id": "3f64a507-9eeb-4de9-99a8-cc5b99cbfc5a",
+    "attempt_id": "e5e935cf-01d9-4a56-a2fd-0f395e8aa9e8"
+  },
+  {
+    "user_prompt": "ウォールライトの三を電気",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 3.",
+      "reasoning": "Matched 'ウォールライトの三' to 'Wall Light 3' using Katakana similarity and the number reference."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1731,
+        "completion_tokens": 128,
+        "total_tokens": 1859
+      },
+      "cost_usd": 0.005608,
+      "agent_time_elapsed": 4.132282018661499,
+      "system_time_elapsed": 4.530076742172241
+    },
+    "task_id": "fdeae907-962e-43d4-a4cf-441a4f8c06cc",
+    "attempt_id": "da49bfdc-b597-4215-bd65-7adedc8c0bea"
+  },
+  {
+    "user_prompt": "オールライトの三を赤色",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 3 in red.",
+      "reasoning": "Matched 'オールライトの三' to 'Ceiling Light 3' using phonetic similarity and the number reference."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1731,
+        "completion_tokens": 127,
+        "total_tokens": 1858
+      },
+      "cost_usd": 0.005598,
+      "agent_time_elapsed": 1.3462023735046387,
+      "system_time_elapsed": 1.790348768234253
+    },
+    "task_id": "fdeae907-962e-43d4-a4cf-441a4f8c06cc",
+    "attempt_id": "715ede51-2568-4a62-abfd-977f8b86351a"
+  },
+  {
+    "user_prompt": "色",
+    "agent_output": {
+      "devices": [],
+      "response": "No devices were matched for the command.",
+      "reasoning": "The user prompt '色' does not specify any device or color change command that can be matched to the available devices."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1724,
+        "completion_tokens": 50,
+        "total_tokens": 1774
+      },
+      "cost_usd": 0.00481,
+      "agent_time_elapsed": 1.4747633934020996,
+      "system_time_elapsed": 1.8964223861694336
+    },
+    "task_id": "fdeae907-962e-43d4-a4cf-441a4f8c06cc",
+    "attempt_id": "b1b2d288-5aac-4c7c-ae63-4de654a2d750"
+  },
+  {
+    "user_prompt": "ウォールライトの三番を赤色の電気でつけ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 3 in red.",
+      "reasoning": "Matched 'ウォールライトの三番' to 'Wall Light 3' using Katakana similarity and the number reference."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1738,
+        "completion_tokens": 126,
+        "total_tokens": 1864
+      },
+      "cost_usd": 0.005605,
+      "agent_time_elapsed": 4.7261552810668945,
+      "system_time_elapsed": 5.104140281677246
+    },
+    "task_id": "fdeae907-962e-43d4-a4cf-441a4f8c06cc",
+    "attempt_id": "c11e498a-8dce-4303-a9ea-cd39987cea75"
+  },
+  {
+    "user_prompt": "テーブルランプを赤色、フロアーランプの二を 青色で付けて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on TableLight in red and Floor Light 2 in blue.",
+      "reasoning": "Matched 'テーブルランプ' to 'TableLight' using Katakana similarity; matched 'フロアーランプの二' to 'Floor Light 2' using phonetic similarity and numeric reference."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1746,
+        "completion_tokens": 216,
+        "total_tokens": 1962
+      },
+      "cost_usd": 0.006525,
+      "agent_time_elapsed": 3.473550796508789,
+      "system_time_elapsed": 3.8557844161987305
+    },
+    "task_id": "62ba3e41-6526-4572-a06a-13d313dc9cb8",
+    "attempt_id": "23f8eabb-9025-4df3-929c-63967d145b82"
+  },
+  {
+    "user_prompt": "フロアランプの位置を赤色、 右奥のランプを青色で付けて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Floor Light 1 in red and Wall Light 1 in blue.",
+      "reasoning": "Matched 'フロアランプ' to 'Floor Light 1' using Katakana similarity; '右奥のランプ' was interpreted as 'Wall Light 1' based on typical room layout."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1747,
+        "completion_tokens": 220,
+        "total_tokens": 1967
+      },
+      "cost_usd": 0.006568,
+      "agent_time_elapsed": 3.0729551315307617,
+      "system_time_elapsed": 3.4578909873962402
+    },
+    "task_id": "6c2d6213-8cca-47b5-a497-c8078e3df7e1",
+    "attempt_id": "91614b4e-bbc3-4791-8afe-b7be0d5b4344"
+  },
+  {
+    "user_prompt": "ティービーライトの位置を赤、ティービーライトの二を青でつけて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on TV Light 1 in red and TV Light 2 in blue.",
+      "reasoning": "Matched 'ティービーライトの位置' to 'TV Light 1' and 'ティービーライトの二' to 'TV Light 2' using Katakana similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1744,
+        "completion_tokens": 217,
+        "total_tokens": 1961
+      },
+      "cost_usd": 0.00653,
+      "agent_time_elapsed": 3.5215606689453125,
+      "system_time_elapsed": 3.9051151275634766
+    },
+    "task_id": "1be997cb-c0c6-4426-aa06-6c4b20d791ad",
+    "attempt_id": "afeff93d-647d-43ea-b3d0-0ddb69048464"
+  },
+  {
+    "user_prompt": "では、 TBライトの一をティービーライトの二を赤でつけて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on TV Light 1 and TV Light 2 in red.",
+      "reasoning": "Matched 'TBライトの一' to 'TV Light 1' and 'ティービーライトの二' to 'TV Light 2' using phonetic similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1742,
+        "completion_tokens": 213,
+        "total_tokens": 1955
+      },
+      "cost_usd": 0.006485,
+      "agent_time_elapsed": 3.2121517658233643,
+      "system_time_elapsed": 3.5950191020965576
+    },
+    "task_id": "1be997cb-c0c6-4426-aa06-6c4b20d791ad",
+    "attempt_id": "f4ba3daa-a7f0-4df2-84bc-b36cb1121ac0"
+  },
+  {
+    "user_prompt": "ティービーライトの位置を青色、ティービーライトの二を赤色で付けて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on TV Light 1 in blue and TV Light 2 in red.",
+      "reasoning": "Matched 'ティービーライトの位置' to 'TV Light 1' and 'ティービーライトの二' to 'TV Light 2' using Katakana similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1746,
+        "completion_tokens": 217,
+        "total_tokens": 1963
+      },
+      "cost_usd": 0.006535,
+      "agent_time_elapsed": 3.1885030269622803,
+      "system_time_elapsed": 3.592930555343628
+    },
+    "task_id": "1be997cb-c0c6-4426-aa06-6c4b20d791ad",
+    "attempt_id": "59fc7e4a-899c-453e-9722-2ebf49218625"
+  },
+  {
+    "user_prompt": "シーリングライトの十二を 電気でつける",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 12.",
+      "reasoning": "Matched 'シーリングライトの十二' to 'Ceiling Light 12' using Katakana similarity and the number '十二' which means '12'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1736,
+        "completion_tokens": 139,
+        "total_tokens": 1875
+      },
+      "cost_usd": 0.00573,
+      "agent_time_elapsed": 1.3425641059875488,
+      "system_time_elapsed": 1.7621824741363525
+    },
+    "task_id": "6154739d-83cc-42d3-b6b2-d4a950b2acc6",
+    "attempt_id": "85ec1bc6-3f65-4521-95fa-100ef80882d3"
+  },
+  {
+    "user_prompt": "シーリングライトの一と二を赤色で付けて",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 1 and Ceiling Light 2 in red.",
+      "reasoning": "Matched 'シーリングライトの一' to 'Ceiling Light 1' and 'シーリングライトの二' to 'Ceiling Light 2' using Katakana similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1738,
+        "completion_tokens": 216,
+        "total_tokens": 1954
+      },
+      "cost_usd": 0.006505,
+      "agent_time_elapsed": 1.5280790328979492,
+      "system_time_elapsed": 1.927112340927124
+    },
+    "task_id": "6712e794-1692-4c29-84c4-473a541297ce",
+    "attempt_id": "3a991f3b-bf8b-4483-be4b-e4d8d4638cda"
+  }
+]

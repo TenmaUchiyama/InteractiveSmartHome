@@ -1,0 +1,1670 @@
+[
+  {
+    "user_prompt": "目の前の三つの電気をつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『目の前の』という視界内の配置を示す表現があり、身体基準ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+          "name": "植物ライト３",
+          "position": {
+            "x": -0.19709383,
+            "y": -1.0487957,
+            "z": 1.638665
+          },
+          "distance_from_user": 1.95551562,
+          "eye_centrality_score": 9.860457
+        },
+        {
+          "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+          "name": "フロアライト２",
+          "position": {
+            "x": 0.797995269,
+            "y": -1.0487957,
+            "z": 1.737895
+          },
+          "distance_from_user": 2.1810658,
+          "eye_centrality_score": 22.8071251
+        },
+        {
+          "id": "7618eca7-5537-4f20-9eb1-8c6f78efcb50",
+          "name": "テーブルライト2",
+          "position": {
+            "x": 1.31865144,
+            "y": -0.35279572,
+            "z": 5.114924
+          },
+          "distance_from_user": 5.293936,
+          "eye_centrality_score": 25.799
+        },
+        {
+          "id": "9376bf2a-a9ea-4c04-98f2-1bd7c4a5be08",
+          "name": "テーブルライト1",
+          "position": {
+            "x": -1.94636321,
+            "y": -0.351795673,
+            "z": 4.812404
+          },
+          "distance_from_user": 5.203011,
+          "eye_centrality_score": 30.6493759
+        },
+        {
+          "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+          "name": "フロアライト１",
+          "position": {
+            "x": -1.19347453,
+            "y": -1.0487957,
+            "z": 1.55337524
+          },
+          "distance_from_user": 2.22201014,
+          "eye_centrality_score": 34.0416451
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1352,
+          "completion_tokens": 89,
+          "total_tokens": 1441
+        },
+        "cost_usd": 0.00427,
+        "agent_time_elapsed": 1.3628969192504883,
+        "system_time_elapsed": 1.8666791915893555
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "目の前の三つの電気を点けました。",
+        "reasoning": "デバイスはeye_centrality_scoreに基づいて視界内の中央に近い順に並べました。上位3つのデバイスが視界中央付近に位置し、それらを選択しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2622,
+          "completion_tokens": 285,
+          "total_tokens": 2907
+        },
+        "cost_usd": 0.009405,
+        "agent_time_elapsed": 5.482074499130249,
+        "system_time_elapsed": 5.922999143600464
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "c4370790-6ac1-4b3b-911d-68d7018d0ad4",
+    "attempt_id": "15810fd2-db40-4fa5-87ed-e5f6fbdaef63"
+  },
+  {
+    "user_prompt": "今視界の中にある電気を全てつけて、",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『視界の中にある』という表現があり、身体基準ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "9376bf2a-a9ea-4c04-98f2-1bd7c4a5be08",
+          "name": "テーブルライト1",
+          "position": {
+            "x": -1.089123,
+            "y": -0.372696757,
+            "z": 5.09008074
+          },
+          "distance_from_user": 5.21862173,
+          "eye_centrality_score": 16.4184856
+        },
+        {
+          "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+          "name": "植物ライト３",
+          "position": {
+            "x": 0.101652861,
+            "y": -1.06969678,
+            "z": 1.66741836
+          },
+          "distance_from_user": 1.98365033,
+          "eye_centrality_score": 17.4526
+        },
+        {
+          "id": "7618eca7-5537-4f20-9eb1-8c6f78efcb50",
+          "name": "テーブルライト2",
+          "position": {
+            "x": 2.180277,
+            "y": -0.3736968,
+            "z": 4.83935547
+          },
+          "distance_from_user": 5.32096,
+          "eye_centrality_score": 27.5810146
+        },
+        {
+          "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+          "name": "フロアライト１",
+          "position": {
+            "x": -0.8948842,
+            "y": -1.06969678,
+            "z": 1.75086176
+          },
+          "distance_from_user": 2.23843384,
+          "eye_centrality_score": 28.6992226
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1355,
+          "completion_tokens": 83,
+          "total_tokens": 1438
+        },
+        "cost_usd": 0.004218,
+        "agent_time_elapsed": 3.226253032684326,
+        "system_time_elapsed": 3.6276137828826904
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "9376bf2a-a9ea-4c04-98f2-1bd7c4a5be08",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "7618eca7-5537-4f20-9eb1-8c6f78efcb50",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界に入っているすべての照明を点灯しました。",
+        "reasoning": "ユーザーの『視界の中にある』という指示に基づき、現在の視界内にあるすべてのデバイスを特定し、中央性スコアによってさらに特定される範囲内のデバイスをすべて照明しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2527,
+          "completion_tokens": 372,
+          "total_tokens": 2899
+        },
+        "cost_usd": 0.010038,
+        "agent_time_elapsed": 6.830112934112549,
+        "system_time_elapsed": 7.234117031097412
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "9376bf2a-a9ea-4c04-98f2-1bd7c4a5be08",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "7618eca7-5537-4f20-9eb1-8c6f78efcb50",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "636eafb4-6b2c-4ee1-a024-b2a836f24b59",
+    "attempt_id": "9e9b3aa3-b419-4a3a-b56c-bf06d764c548"
+  },
+  {
+    "user_prompt": "俺の右後ろのスタンドライトを付けて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Back",
+          "order": "right",
+          "range": 0.0
+        },
+        "reasoning": "『俺の右後ろ』という身体基準の空間表現が含まれているため、directionを使用した。"
+      },
+      "devices": [
+        {
+          "id": "bce898b8-d5d6-45ac-b337-a2820b37c357",
+          "name": "天井ライト4",
+          "position": {
+            "x": 2.13761663,
+            "y": 2.37941933,
+            "z": -1.595731
+          },
+          "distance_from_user": 3.57454872,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "e97046ef-2251-4e58-a0ad-c5b82fd91f71",
+          "name": "ランプスタンド 2",
+          "position": {
+            "x": 1.57227552,
+            "y": -1.08058059,
+            "z": -2.99978
+          },
+          "distance_from_user": 3.55505037,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "1c33a40f-f48c-49f5-8383-d1c006559204",
+          "name": "天井ライト8",
+          "position": {
+            "x": 0.13725993,
+            "y": 2.37941933,
+            "z": -1.792388
+          },
+          "distance_from_user": 2.9821353,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "4a111ff1-bf41-4b12-9436-af3abf8a750a",
+          "name": "ランプスタンド 1",
+          "position": {
+            "x": -0.8162099,
+            "y": -1.08058059,
+            "z": -3.234594
+          },
+          "distance_from_user": 3.50662971,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "b7d746c6-2959-4d49-8ac1-369420305a8c",
+          "name": "フロアライト 3",
+          "position": {
+            "x": -1.0196979,
+            "y": -1.08058059,
+            "z": -0.1426687
+          },
+          "distance_from_user": 1.49257922,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "d1c918ff-09b4-4fb2-8aca-e7bebd8cc49e",
+          "name": "天井ライト12",
+          "position": {
+            "x": -1.84319234,
+            "y": 2.37941933,
+            "z": -1.987088
+          },
+          "distance_from_user": 3.606593,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "3a2f3e0c-c1c4-4ebd-80db-ec50833f83d6",
+          "name": "天井ライト11",
+          "position": {
+            "x": -2.03691387,
+            "y": 2.37941933,
+            "z": -0.0165879913
+          },
+          "distance_from_user": 3.1322403,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1352,
+          "completion_tokens": 79,
+          "total_tokens": 1431
+        },
+        "cost_usd": 0.00417,
+        "agent_time_elapsed": 3.440599203109741,
+        "system_time_elapsed": 3.8783066272735596
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "e97046ef-2251-4e58-a0ad-c5b82fd91f71",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "右後ろにあるランプスタンド 2を付けました。",
+        "reasoning": "ユーザーの右後ろの方向にあるデバイスを探し、その中で右側に位置するものとしてランプスタンド 2が最も適していました。z軸がマイナスで後方、右方向はx軸がプラスです。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2832,
+          "completion_tokens": 172,
+          "total_tokens": 3004
+        },
+        "cost_usd": 0.0088,
+        "agent_time_elapsed": 4.5461266040802,
+        "system_time_elapsed": 4.943627119064331
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "e97046ef-2251-4e58-a0ad-c5b82fd91f71",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "0f3a22e6-9f63-4c36-8361-eaecb62789f2",
+    "attempt_id": "36ce583d-4e2f-4eb5-83fc-4c50c4781112"
+  },
+  {
+    "user_prompt": "今見えてる中で 一番右は青、 一番左は赤で付けてください",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "right",
+          "range": 0.0
+        },
+        "reasoning": "『一番右』と『一番左』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "7618eca7-5537-4f20-9eb1-8c6f78efcb50",
+          "name": "テーブルライト2",
+          "position": {
+            "x": 1.71210837,
+            "y": -0.361582756,
+            "z": 4.9254055
+          },
+          "distance_from_user": 5.227014,
+          "eye_centrality_score": 31.018919
+        },
+        {
+          "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+          "name": "フロアライト２",
+          "position": {
+            "x": 0.927172,
+            "y": -1.05758274,
+            "z": 1.5998553
+          },
+          "distance_from_user": 2.13018,
+          "eye_centrality_score": 26.5954018
+        },
+        {
+          "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+          "name": "植物ライト３",
+          "position": {
+            "x": -0.07264088,
+            "y": -1.05758274,
+            "z": 1.57928348
+          },
+          "distance_from_user": 1.90207624,
+          "eye_centrality_score": 6.81319332
+        },
+        {
+          "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+          "name": "フロアライト１",
+          "position": {
+            "x": -1.07264376,
+            "y": -1.05758274,
+            "z": 1.57271039
+          },
+          "distance_from_user": 2.17771983,
+          "eye_centrality_score": 30.4181538
+        },
+        {
+          "id": "9376bf2a-a9ea-4c04-98f2-1bd7c4a5be08",
+          "name": "テーブルライト1",
+          "position": {
+            "x": -1.56658947,
+            "y": -0.3605827,
+            "z": 4.88090134
+          },
+          "distance_from_user": 5.138815,
+          "eye_centrality_score": 30.10388
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1361,
+          "completion_tokens": 92,
+          "total_tokens": 1453
+        },
+        "cost_usd": 0.004322,
+        "agent_time_elapsed": 3.1866815090179443,
+        "system_time_elapsed": 3.630223035812378
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "7618eca7-5537-4f20-9eb1-8c6f78efcb50",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "9376bf2a-a9ea-4c04-98f2-1bd7c4a5be08",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          }
+        ],
+        "response": "今見えている中で一番右を青色、一番左を赤色にしました。",
+        "reasoning": "デバイスはx座標に基づいて左右の空間的配置で並び替え、一番右のデバイスを青色に、一番左のデバイスを赤色に設定しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2637,
+          "completion_tokens": 237,
+          "total_tokens": 2874
+        },
+        "cost_usd": 0.008962,
+        "agent_time_elapsed": 19.72734022140503,
+        "system_time_elapsed": 20.125345468521118
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "7618eca7-5537-4f20-9eb1-8c6f78efcb50",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "9376bf2a-a9ea-4c04-98f2-1bd7c4a5be08",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "3e0f6b78-a42d-4d0e-890f-0a33e0261238",
+    "attempt_id": "d9d39ed4-03f8-448b-a4e2-0a4b83999ca7"
+  },
+  {
+    "user_prompt": "目の前のライトのうち 右側を青、左側を赤で付けてください。",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "right",
+          "range": 0.0
+        },
+        "reasoning": "『目の前の』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+          "name": "フロアライト２",
+          "position": {
+            "x": 1.00458908,
+            "y": -1.03368866,
+            "z": 1.48470283
+          },
+          "distance_from_user": 2.06931233,
+          "eye_centrality_score": 29.3833771
+        },
+        {
+          "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+          "name": "植物ライト３",
+          "position": {
+            "x": 0.00503020966,
+            "y": -1.03368866,
+            "z": 1.51521766
+          },
+          "distance_from_user": 1.834236,
+          "eye_centrality_score": 2.39146781
+        },
+        {
+          "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+          "name": "フロアライト１",
+          "position": {
+            "x": -0.994003534,
+            "y": -1.03368866,
+            "z": 1.55972242
+          },
+          "distance_from_user": 2.1187942,
+          "eye_centrality_score": 27.8642464
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1363,
+          "completion_tokens": 87,
+          "total_tokens": 1450
+        },
+        "cost_usd": 0.004278,
+        "agent_time_elapsed": 2.4155123233795166,
+        "system_time_elapsed": 2.7973873615264893
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          }
+        ],
+        "response": "目の前のライトの右側を青に、左側を赤にしました。",
+        "reasoning": "ユーザーの指示に基づき、視野内で右側に位置するデバイスを青色、左側に位置するデバイスを赤色にしました。x座標を元にデバイスを左右に分け、空間的なまとまりを考慮しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2444,
+          "completion_tokens": 252,
+          "total_tokens": 2696
+        },
+        "cost_usd": 0.00863,
+        "agent_time_elapsed": 4.298173904418945,
+        "system_time_elapsed": 4.777191400527954
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "3e0f6b78-a42d-4d0e-890f-0a33e0261238",
+    "attempt_id": "fd985e4c-3574-42b0-95cf-d845ba56b688"
+  },
+  {
+    "user_prompt": "私の周りの 近くの電気をつけ",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Front",
+          "order": "proximity",
+          "range": 2.0
+        },
+        "reasoning": "『私の周りの近くの』という身体基準と距離に基づく表現が含まれているため、directionを使用し、proximityを考慮した。"
+      },
+      "devices": [
+        {
+          "id": "3adad386-6aac-4253-9f24-32e282e922c5",
+          "name": "フロアライト 4",
+          "position": {
+            "x": 0.959856451,
+            "y": -1.044131,
+            "z": -0.1568723
+          },
+          "distance_from_user": 1.42693484,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "b7d746c6-2959-4d49-8ac1-369420305a8c",
+          "name": "フロアライト 3",
+          "position": {
+            "x": -1.039632,
+            "y": -1.044131,
+            "z": -0.202098161
+          },
+          "distance_from_user": 1.48724174,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+          "name": "植物ライト３",
+          "position": {
+            "x": -0.07801316,
+            "y": -1.044131,
+            "z": 1.50608337
+          },
+          "distance_from_user": 1.83428,
+          "eye_centrality_score": 4.918669
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1353,
+          "completion_tokens": 95,
+          "total_tokens": 1448
+        },
+        "cost_usd": 0.004333,
+        "agent_time_elapsed": 1.4644801616668701,
+        "system_time_elapsed": 1.8791654109954834
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "3adad386-6aac-4253-9f24-32e282e922c5",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "b7d746c6-2959-4d49-8ac1-369420305a8c",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "あなたの周りで近い位置にあるフロアライトをつけました。",
+        "reasoning": "ユーザーから2.0メートル以内と指定されているため、距離で近い順に並べられたデバイスから 'フロアライト 4' と 'フロアライト 3' を操作対象として選びました。'植物ライト3' は距離が1.83428と指示に対して少し遠かったため対象外としました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2443,
+          "completion_tokens": 271,
+          "total_tokens": 2714
+        },
+        "cost_usd": 0.008818,
+        "agent_time_elapsed": 4.497684001922607,
+        "system_time_elapsed": 4.900256872177124
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "3adad386-6aac-4253-9f24-32e282e922c5",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "b7d746c6-2959-4d49-8ac1-369420305a8c",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "a2e5324c-d947-44bf-9ac8-da16739c117c",
+    "attempt_id": "af455f4b-310b-4912-9fe9-3dfe63a41240"
+  },
+  {
+    "user_prompt": "私の えー、 三メートル以内にある電気を全てつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "all",
+        "params": {
+          "order": "proximity",
+          "range": 3.0
+        },
+        "reasoning": "『三メートル以内』という具体的な距離の指定があるため、proximityベースのallフィルタを使用した。"
+      },
+      "devices": [
+        {
+          "id": "3adad386-6aac-4253-9f24-32e282e922c5",
+          "name": "フロアライト 4",
+          "position": {
+            "x": 0.652742267,
+            "y": -1.02516615,
+            "z": 0.5315467
+          },
+          "distance_from_user": 1.32649171,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "b7d746c6-2959-4d49-8ac1-369420305a8c",
+          "name": "フロアライト 3",
+          "position": {
+            "x": -0.6185317,
+            "y": -1.02516615,
+            "z": -1.01242936
+          },
+          "distance_from_user": 1.56797969,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+          "name": "植物ライト３",
+          "position": {
+            "x": -1.28446639,
+            "y": -1.02516615,
+            "z": 0.831242561
+          },
+          "distance_from_user": 1.84167969,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+          "name": "フロアライト２",
+          "position": {
+            "x": -0.654233336,
+            "y": -1.02516615,
+            "z": 1.60768
+          },
+          "distance_from_user": 2.015843,
+          "eye_centrality_score": 19.1065331
+        },
+        {
+          "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+          "name": "フロアライト１",
+          "position": {
+            "x": -1.92550731,
+            "y": -1.02516615,
+            "z": 0.06370395
+          },
+          "distance_from_user": 2.18233871,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+          "name": "天井ライト7",
+          "position": {
+            "x": -0.162948072,
+            "y": 2.434834,
+            "z": -0.105143435
+          },
+          "distance_from_user": 2.44254446,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1360,
+          "completion_tokens": 77,
+          "total_tokens": 1437
+        },
+        "cost_usd": 0.00417,
+        "agent_time_elapsed": 2.379744291305542,
+        "system_time_elapsed": 2.850602626800537
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "3adad386-6aac-4253-9f24-32e282e922c5",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "b7d746c6-2959-4d49-8ac1-369420305a8c",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "三メートル以内の電気を全て点けました。",
+        "reasoning": "ユーザーからの指示に基づき、三メートル以内に位置する全てのライトを特定し、ONにしました。この距離内のすべてのデバイスは、距離情報により含まれていると判定され、一括操作を行いました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2738,
+          "completion_tokens": 527,
+          "total_tokens": 3265
+        },
+        "cost_usd": 0.012115,
+        "agent_time_elapsed": 6.070343971252441,
+        "system_time_elapsed": 6.495792388916016
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "3adad386-6aac-4253-9f24-32e282e922c5",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "b7d746c6-2959-4d49-8ac1-369420305a8c",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "b06c7439-5dba-4b29-8806-ade848614bba",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "9999d84e-27ae-4f11-8d54-428eeff6f770",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "a9dbc6ec-9b2f-4542-a232-39d41493d4d0",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "a2e5324c-d947-44bf-9ac8-da16739c117c",
+    "attempt_id": "505f7d73-96e6-4067-8cc0-150efcad3f80"
+  },
+  {
+    "user_prompt": "俺よりも高いところにある電気気を付けて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Up",
+          "order": "high",
+          "range": 0.0
+        },
+        "reasoning": "『俺よりも高いところ』という身体基準の空間表現が含まれているため、directionを使用した。"
+      },
+      "devices": [
+        {
+          "id": "01ed37d3-f6df-46c6-ad5a-595d04ec9eed",
+          "name": "天井ライト2",
+          "position": {
+            "x": 1.643805,
+            "y": 2.30672812,
+            "z": 2.451154
+          },
+          "distance_from_user": 3.7458303,
+          "eye_centrality_score": 29.0554485
+        },
+        {
+          "id": "6798cacb-70ee-451b-b218-d15b9a544e5d",
+          "name": "天井ライト3",
+          "position": {
+            "x": 1.91131258,
+            "y": 2.30672812,
+            "z": 0.430786
+          },
+          "distance_from_user": 3.02649736,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "bce898b8-d5d6-45ac-b337-a2820b37c357",
+          "name": "天井ライト4",
+          "position": {
+            "x": 2.171207,
+            "y": 2.30672812,
+            "z": -1.5320828
+          },
+          "distance_from_user": 3.51886487,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+          "name": "天井ライト7",
+          "position": {
+            "x": -0.0812972859,
+            "y": 2.30672812,
+            "z": 0.1669538
+          },
+          "distance_from_user": 2.31419039,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "1c33a40f-f48c-49f5-8383-d1c006559204",
+          "name": "天井ライト8",
+          "position": {
+            "x": 0.178597048,
+            "y": 2.30672812,
+            "z": -1.795915
+          },
+          "distance_from_user": 2.92885661,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "3a2f3e0c-c1c4-4ebd-80db-ec50833f83d6",
+          "name": "天井ライト11",
+          "position": {
+            "x": -2.05407977,
+            "y": 2.30672812,
+            "z": -0.094253175
+          },
+          "distance_from_user": 3.09016514,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "d1c918ff-09b4-4fb2-8aca-e7bebd8cc49e",
+          "name": "天井ライト12",
+          "position": {
+            "x": -1.7941854,
+            "y": 2.30672812,
+            "z": -2.057122
+          },
+          "distance_from_user": 3.573772,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "4a111ff1-bf41-4b12-9436-af3abf8a750a",
+          "name": "ランプスタンド 1",
+          "position": {
+            "x": -0.7258214,
+            "y": -1.15327191,
+            "z": -3.26937723
+          },
+          "distance_from_user": 3.541988,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "e97046ef-2251-4e58-a0ad-c5b82fd91f71",
+          "name": "ランプスタンド 2",
+          "position": {
+            "x": 1.65341413,
+            "y": -1.15327191,
+            "z": -2.95435381
+          },
+          "distance_from_user": 3.57659316,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1354,
+          "completion_tokens": 80,
+          "total_tokens": 1434
+        },
+        "cost_usd": 0.004185,
+        "agent_time_elapsed": 2.0893146991729736,
+        "system_time_elapsed": 2.5225698947906494
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "01ed37d3-f6df-46c6-ad5a-595d04ec9eed",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "6798cacb-70ee-451b-b218-d15b9a544e5d",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "bce898b8-d5d6-45ac-b337-a2820b37c357",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "1c33a40f-f48c-49f5-8383-d1c006559204",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "3a2f3e0c-c1c4-4ebd-80db-ec50833f83d6",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "d1c918ff-09b4-4fb2-8aca-e7bebd8cc49e",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "天井のライトをすべてONにしました。",
+        "reasoning": "ユーザーより高いところに位置するすべての天井ライトを対象として選択しました。floor levelはy=0と仮定し、高度2.30672812のデバイスがすべて天井にあるため、これらを操作対象としました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3024,
+          "completion_tokens": 556,
+          "total_tokens": 3580
+        },
+        "cost_usd": 0.01312,
+        "agent_time_elapsed": 8.444557666778564,
+        "system_time_elapsed": 8.863099336624146
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "01ed37d3-f6df-46c6-ad5a-595d04ec9eed",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "6798cacb-70ee-451b-b218-d15b9a544e5d",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "bce898b8-d5d6-45ac-b337-a2820b37c357",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "1c33a40f-f48c-49f5-8383-d1c006559204",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "3a2f3e0c-c1c4-4ebd-80db-ec50833f83d6",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "d1c918ff-09b4-4fb2-8aca-e7bebd8cc49e",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "35c2a29a-3da2-452a-bbc9-cdbb283329b1",
+    "attempt_id": "3fc0da41-cd0b-4865-b1fe-4931509bbdc6"
+  },
+  {
+    "user_prompt": "俺よりも頭上にある電気を全部つけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Up",
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『俺よりも頭上にある』という身体基準の空間表現が含まれているため、directionを使用した。"
+      },
+      "devices": [
+        {
+          "id": "4a111ff1-bf41-4b12-9436-af3abf8a750a",
+          "name": "ランプスタンド 1",
+          "position": {
+            "x": -0.462876469,
+            "y": -1.15626967,
+            "z": -3.225765
+          },
+          "distance_from_user": 3.45785666,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "e97046ef-2251-4e58-a0ad-c5b82fd91f71",
+          "name": "ランプスタンド 2",
+          "position": {
+            "x": 1.88320148,
+            "y": -1.15626967,
+            "z": -2.71988058
+          },
+          "distance_from_user": 3.50444818,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6798cacb-70ee-451b-b218-d15b9a544e5d",
+          "name": "天井ライト3",
+          "position": {
+            "x": 1.86724591,
+            "y": 2.30373049,
+            "z": 0.675031066
+          },
+          "distance_from_user": 3.04129052,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "bce898b8-d5d6-45ac-b337-a2820b37c357",
+          "name": "天井ライト4",
+          "position": {
+            "x": 2.2846005,
+            "y": 2.30373049,
+            "z": -1.26048267
+          },
+          "distance_from_user": 3.48071671,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+          "name": "天井ライト7",
+          "position": {
+            "x": -0.09759456,
+            "y": 2.30373049,
+            "z": 0.2513529
+          },
+          "distance_from_user": 2.319456,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "1c33a40f-f48c-49f5-8383-d1c006559204",
+          "name": "天井ライト8",
+          "position": {
+            "x": 0.319759935,
+            "y": 2.30373049,
+            "z": -1.684161
+          },
+          "distance_from_user": 2.87155318,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "3a2f3e0c-c1c4-4ebd-80db-ec50833f83d6",
+          "name": "天井ライト11",
+          "position": {
+            "x": -2.04288387,
+            "y": 2.30373049,
+            "z": -0.1681095
+          },
+          "distance_from_user": 3.08363581,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "d1c918ff-09b4-4fb2-8aca-e7bebd8cc49e",
+          "name": "天井ライト12",
+          "position": {
+            "x": -1.62552941,
+            "y": 2.30373049,
+            "z": -2.10362339
+          },
+          "distance_from_user": 3.51777625,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1353,
+          "completion_tokens": 82,
+          "total_tokens": 1435
+        },
+        "cost_usd": 0.004203,
+        "agent_time_elapsed": 1.0600569248199463,
+        "system_time_elapsed": 1.5238404273986816
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "6798cacb-70ee-451b-b218-d15b9a544e5d",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "bce898b8-d5d6-45ac-b337-a2820b37c357",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "1c33a40f-f48c-49f5-8383-d1c006559204",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "3a2f3e0c-c1c4-4ebd-80db-ec50833f83d6",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "d1c918ff-09b4-4fb2-8aca-e7bebd8cc49e",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "天井にある全ての電気をつけました。",
+        "reasoning": "入力には『頭上』という方向基準が含まれ、y座標がユーザーよりも高い位置にあるデバイスを天井にあるものと推測しました。y座標が2.30373049であるデバイスが全て天井にあるものとして選択しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2934,
+          "completion_tokens": 500,
+          "total_tokens": 3434
+        },
+        "cost_usd": 0.012335,
+        "agent_time_elapsed": 7.323364734649658,
+        "system_time_elapsed": 7.733712434768677
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "6798cacb-70ee-451b-b218-d15b9a544e5d",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "bce898b8-d5d6-45ac-b337-a2820b37c357",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "36b0460e-36d2-4f5a-88a5-5174657039f1",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "1c33a40f-f48c-49f5-8383-d1c006559204",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "3a2f3e0c-c1c4-4ebd-80db-ec50833f83d6",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "d1c918ff-09b4-4fb2-8aca-e7bebd8cc49e",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "35c2a29a-3da2-452a-bbc9-cdbb283329b1",
+    "attempt_id": "f645cd5a-2d47-426f-8336-49f15f26aaa5"
+  }
+]

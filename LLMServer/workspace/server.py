@@ -16,7 +16,7 @@ from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
 
-OUTPUT_FILE_NAME="TUTORIAL  "
+OUTPUT_FILE_NAME="P4"
 app = FastAPI()
 
 
@@ -122,6 +122,12 @@ def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_ke
         traceback.print_exc()
         return {"error": "Agent processing failed.", "detail": str(e)}
 
+
+
+def make_save_path(name: str) -> str:
+    return f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}/{OUTPUT_FILE_NAME}_{name}.json"
+
+
 # ----------- 入力データモデル -------------
 class InputMessage(BaseModel):
     llm_message: str
@@ -140,7 +146,23 @@ def llm_pointing(message: InputMessageWithPointing):
         pointed_devices=message.pointed_devices
     )
     runner = getPointingRunner()
-    save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}_pointing.json"
+    save_path = make_save_path("3")
+    return run_agent_and_log(
+        state, runner, message.task_id, message.attempt_id, save_path,
+        pop_keys=["input_prompt", "all_devices"],
+        additional_data={"pointed_devices": message.pointed_devices}
+    )
+
+
+@app.post("/pointing_only")
+def llm_pointing(message: InputMessageWithPointing):
+    print("POINTING")
+    state = PointingState(
+        user_prompt=message.llm_message,
+        pointed_devices=message.pointed_devices
+    )
+    runner = getPointingRunner()
+    save_path = make_save_path("3")
     return run_agent_and_log(
         state, runner, message.task_id, message.attempt_id, save_path,
         pop_keys=["input_prompt", "all_devices"],
@@ -152,7 +174,7 @@ def llm_label(message: InputMessage):
     print("LABEL")
     state = LabelState(user_prompt=message.llm_message)
     runner = getLabelRunner()
-    save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}_label.json"
+    save_path = make_save_path("4")
     return run_agent_and_log(
         state, runner, message.task_id, message.attempt_id, save_path,
         pop_keys=["input_prompt", "all_devices"]
@@ -163,7 +185,7 @@ def llm_agent_no_tool(message: InputMessage):
     print("SpatialReference")
     state = State(user_prompt=message.llm_message)
     runner = getSystemRunner()  # Spatial agent runner 呼び出し
-    save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}.json"
+    save_path = make_save_path("1")
 
     try:
         response = runner.invoke(state)
@@ -214,7 +236,7 @@ def llm_pointing_spatial(message: InputMessageWithPointing):
         )
         print("POINTING SPATIAL STATE:" )
         runner = getPointingSpatialRunner()
-        save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}_pointing_spatial.json"
+        save_path = make_save_path("2")
 
 
 
@@ -227,7 +249,7 @@ def llm_pointing_spatial(message: InputMessageWithPointing):
     else:
         state = State(user_prompt=message.llm_message)
         runner = getSystemRunner()
-        save_path = f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}_pointing_spatial.json"
+        save_path = make_save_path("2")
         return run_agent_and_log(
             state, runner, message.task_id, message.attempt_id, save_path,
             pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt"]

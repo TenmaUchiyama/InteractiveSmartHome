@@ -3003,7 +3003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 4
+  _meshType: 0
 --- !u!114 &107221279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3034,7 +3034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 4
+  _skeletonType: 0
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -6188,7 +6188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 5
+  _meshType: 1
 --- !u!114 &239422981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6219,7 +6219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 5
+  _skeletonType: 1
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -29552,6 +29552,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1265265229478385044, guid: 62273b4404675b142b7d341d5ecb65d6, type: 3}
   m_PrefabInstance: {fileID: 1369065700}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1369065704 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3042394258151234940, guid: 62273b4404675b142b7d341d5ecb65d6, type: 3}
+  m_PrefabInstance: {fileID: 1369065700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1373078522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39697,6 +39702,7 @@ MonoBehaviour:
   _voiceService: {fileID: 1084679892}
   _activateImmediately: 0
   _deactivateAndAbort: 0
+  recordingIndicator: {fileID: 1369065704}
 --- !u!1 &1865852560
 GameObject:
   m_ObjectHideFlags: 0

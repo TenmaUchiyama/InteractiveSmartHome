@@ -54,6 +54,22 @@ public class PointerTutorialExecutor : MonoBehaviour
       public void  Update()
     {
 
+
+
+
+          if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+            {
+                SASpeechRecognizer.Instance.ActivateVoice();
+                Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
+            }
+
+            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+            {
+                SASpeechRecognizer.Instance.DeactivateVoice();
+                Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");
+            }
+
+
         if (OVRInput.GetDown(OVRInput.RawButton.A))
         {
             Debug.Log("[PointerSystemExecutor] Aボタン押下：Ray Interactorを有効化");

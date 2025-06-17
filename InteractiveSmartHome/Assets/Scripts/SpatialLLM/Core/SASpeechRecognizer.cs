@@ -38,6 +38,9 @@ public class SASpeechRecognizer : Singleton<SASpeechRecognizer>
 
         [SerializeField] private bool _deactivateAndAbort = false;
 
+
+        [SerializeField] GameObject recordingIndicator;
+
         private VoiceServiceRequest _request;
         private bool _isActive = false;
         public bool IsActive => _isActive;
@@ -259,6 +262,10 @@ private void SetMicWhenReady()
         private void OnStartListening()
         {
             OnVoiceRecogStart.Invoke();
+            if (recordingIndicator != null)
+            {
+                recordingIndicator.SetActive(true);
+            }
             Debug.Log("<color=yellow>Recognition Started...</color>");
             _isActive = true;
         }
@@ -269,6 +276,10 @@ private void SetMicWhenReady()
         private void OnStopListening()
         {
             OnVoiceRecogStop.Invoke();
+            if (recordingIndicator != null)
+            {
+                recordingIndicator.SetActive(false);
+            }
             Debug.Log("<color=yellow>Recognition Stopped...</color>");
             _isActive = false;
             _request = null;
