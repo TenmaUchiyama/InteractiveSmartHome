@@ -1,0 +1,4306 @@
+[
+  {
+    "user_prompt": "棚の真ん中のライトとその下のライトをつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『真ん中』と『その下』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "name": "Shelf Light 5",
+          "position": {
+            "x": 0.476686448,
+            "y": 0.5023999,
+            "z": 3.82113814
+          },
+          "distance_from_user": 3.88339186,
+          "eye_centrality_score": 7.13161755
+        },
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "name": "Shelf Light 4",
+          "position": {
+            "x": -0.014360371,
+            "y": 1.28839993,
+            "z": 4.07978439
+          },
+          "distance_from_user": 4.2784133,
+          "eye_centrality_score": 8.170437
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "name": "Shelf Light 6",
+          "position": {
+            "x": 0.543044,
+            "y": -0.2046001,
+            "z": 3.786186
+          },
+          "distance_from_user": 3.83039975,
+          "eye_centrality_score": 14.8887262
+        },
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "name": "Shelf Light 2",
+          "position": {
+            "x": -1.64764476,
+            "y": 0.5023999,
+            "z": 4.94007444
+          },
+          "distance_from_user": 5.23177528,
+          "eye_centrality_score": 18.89429
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "name": "Shelf Light 1",
+          "position": {
+            "x": -1.78036022,
+            "y": 1.27039981,
+            "z": 5.009979
+          },
+          "distance_from_user": 5.466579,
+          "eye_centrality_score": 19.8626251
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 1.28978956,
+            "y": 0.5023999,
+            "z": 3.392857
+          },
+          "distance_from_user": 3.66434741,
+          "eye_centrality_score": 20.4621239
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 1.229625,
+            "y": 1.27039981,
+            "z": 3.4245472
+          },
+          "distance_from_user": 3.8540132,
+          "eye_centrality_score": 21.7161636
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "name": "Shelf Light 3",
+          "position": {
+            "x": -1.60959959,
+            "y": -0.2046001,
+            "z": 4.920035
+          },
+          "distance_from_user": 5.18067741,
+          "eye_centrality_score": 22.0200768
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 1.30483043,
+            "y": -0.2046001,
+            "z": 3.384935
+          },
+          "distance_from_user": 3.633487,
+          "eye_centrality_score": 24.9283257
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1355,
+          "completion_tokens": 92,
+          "total_tokens": 1447
+        },
+        "cost_usd": 0.004308,
+        "agent_time_elapsed": 2.0402255058288574,
+        "system_time_elapsed": 2.434903621673584
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "棚の真ん中のライトとその下のライトをつけました。",
+        "reasoning": "視覚的なレイアウトから、棚の中央位置にあるライト（Shelf Light 5）とそのすぐ下にあるライト（Shelf Light 6）を選択しました。中央に基づいたグルーピングとして、最もeye_centrality_scoreが低いライトを判別し、その下のライトをそのy座標から判断しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3054,
+          "completion_tokens": 260,
+          "total_tokens": 3314
+        },
+        "cost_usd": 0.010235,
+        "agent_time_elapsed": 3.0278913974761963,
+        "system_time_elapsed": 3.345069408416748
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "ef939725-d1d9-4f96-8c1e-84439f9685ed",
+    "attempt_id": "128ce31a-db51-42f7-9022-5e6efcf822ab"
+  },
+  {
+    "user_prompt": "視界にある天井ライトの内、自分から遠いものを二つつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "『視界にある』という表現があり、身体基準ではないためfovを選んだ。『遠いもの』という距離に基づく表現があるため、proximityを使用した。"
+      },
+      "devices": [
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": -0.5786643,
+            "y": 2.105988,
+            "z": 3.94603753
+          },
+          "distance_from_user": 4.51012754,
+          "eye_centrality_score": 19.66765
+        },
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "name": "Stand Light 2",
+          "position": {
+            "x": 0.5608035,
+            "y": -1.352012,
+            "z": 4.67496967
+          },
+          "distance_from_user": 4.89875269,
+          "eye_centrality_score": 28.02071
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": -2.4284358,
+            "y": 2.105988,
+            "z": 4.68253374
+          },
+          "distance_from_user": 5.67966652,
+          "eye_centrality_score": 26.5938416
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1360,
+          "completion_tokens": 104,
+          "total_tokens": 1464
+        },
+        "cost_usd": 0.00444,
+        "agent_time_elapsed": 2.3530194759368896,
+        "system_time_elapsed": 2.6711885929107666
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界にある天井ライトの中で、遠い2つのライトを点灯しました。",
+        "reasoning": "視界内にある天井ライトのうち、距離が遠い順にソートして選択しました。このため、Ceiling Light 1とCeiling Light 2を点灯しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2506,
+          "completion_tokens": 233,
+          "total_tokens": 2739
+        },
+        "cost_usd": 0.008595,
+        "agent_time_elapsed": 2.871328830718994,
+        "system_time_elapsed": 3.175525426864624
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "7067fd6d-160b-4aed-995d-72160cab090e",
+    "attempt_id": "b0b0c27a-a790-47e7-8565-082b21103675"
+  },
+  {
+    "user_prompt": "俺の右後ろと左後ろのライトをつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Back",
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『右後ろ』と『左後ろ』という身体基準の空間表現が含まれているため、directionを使用した。"
+      },
+      "devices": [
+        {
+          "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+          "name": "Ceiling Light 11",
+          "position": {
+            "x": -0.117836006,
+            "y": 2.12534714,
+            "z": -0.5360687
+          },
+          "distance_from_user": 2.19507527,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "name": "Ceiling Light 12",
+          "position": {
+            "x": 1.85420167,
+            "y": 2.12534714,
+            "z": -0.8868903
+          },
+          "distance_from_user": 2.956643,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "name": "Floor Light １",
+          "position": {
+            "x": -4.745048,
+            "y": -1.345653,
+            "z": 0.133733019
+          },
+          "distance_from_user": 4.933979,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "name": "Floor Light 2",
+          "position": {
+            "x": 1.27866435,
+            "y": -1.221653,
+            "z": 0.18853803
+          },
+          "distance_from_user": 1.77847266,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "name": "Wall Light 1",
+          "position": {
+            "x": 0.209840223,
+            "y": 1.12053907,
+            "z": -1.50780356
+          },
+          "distance_from_user": 1.89026773,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "name": "Wall Light 2",
+          "position": {
+            "x": 1.8266468,
+            "y": 1.12053907,
+            "z": -1.7954303
+          },
+          "distance_from_user": 2.79567814,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "name": "Wall Light 3",
+          "position": {
+            "x": -1.38099122,
+            "y": 1.12053907,
+            "z": -1.22479773
+          },
+          "distance_from_user": 2.159369,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 3.64743018,
+            "y": 0.517347,
+            "z": -0.2216884
+          },
+          "distance_from_user": 3.69060159,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 3.64445281,
+            "y": -0.189653039,
+            "z": -0.238425344
+          },
+          "distance_from_user": 3.65716434,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1354,
+          "completion_tokens": 84,
+          "total_tokens": 1438
+        },
+        "cost_usd": 0.004225,
+        "agent_time_elapsed": 2.263868570327759,
+        "system_time_elapsed": 2.6085777282714844
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "右後ろと左後ろのライトをつけました。",
+        "reasoning": "xとz座標を考慮して、ユーザーの右後ろと左後ろに該当するライトを選択しました。xがプラスでzがマイナスのデバイスを右後ろ、xがマイナスでzがマイナスのデバイスを左後ろと解釈しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3085,
+          "completion_tokens": 387,
+          "total_tokens": 3472
+        },
+        "cost_usd": 0.011583,
+        "agent_time_elapsed": 3.918571710586548,
+        "system_time_elapsed": 4.2545154094696045
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "57c4ca5c-5e47-4b6c-aa58-66d939bdaf0f",
+    "attempt_id": "638e57a3-47e6-4c8f-b62b-8633d7f79095"
+  },
+  {
+    "user_prompt": "俺の右後ろと左後ろのライトの内、 天井ライト以外をつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Back",
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『俺の右後ろと左後ろ』という身体基準の空間表現が含まれているため、directionを使用した。天井ライト以外の条件はフィルタリングの範囲外。"
+      },
+      "devices": [
+        {
+          "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+          "name": "Ceiling Light 11",
+          "position": {
+            "x": -0.201425925,
+            "y": 2.13325715,
+            "z": -0.505589545
+          },
+          "distance_from_user": 2.20158553,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "name": "Ceiling Light 12",
+          "position": {
+            "x": 1.68816292,
+            "y": 2.13325715,
+            "z": -1.17001617
+          },
+          "distance_from_user": 2.961354,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "name": "Floor Light 2",
+          "position": {
+            "x": 1.29369521,
+            "y": -1.21374285,
+            "z": -0.0158131123
+          },
+          "distance_from_user": 1.773998,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "name": "Wall Light 1",
+          "position": {
+            "x": -0.03483974,
+            "y": 1.1284492,
+            "z": -1.5174638
+          },
+          "distance_from_user": 1.89137721,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "name": "Wall Light 2",
+          "position": {
+            "x": 1.51436985,
+            "y": 1.1284492,
+            "z": -2.0622046
+          },
+          "distance_from_user": 2.79631925,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "name": "Wall Light 3",
+          "position": {
+            "x": -1.55916011,
+            "y": 1.1284492,
+            "z": -0.981474638
+          },
+          "distance_from_user": 2.16047931,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 3.58778477,
+            "y": 1.293257,
+            "z": -0.7387308
+          },
+          "distance_from_user": 3.88464117,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 3.565228,
+            "y": 0.5252571,
+            "z": -0.8028809
+          },
+          "distance_from_user": 3.69206762,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "name": "Shelf Light 6",
+          "position": {
+            "x": 3.84519625,
+            "y": -0.1817429,
+            "z": -0.00666835438
+          },
+          "distance_from_user": 3.8494947,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 3.559589,
+            "y": -0.1817429,
+            "z": -0.818918049
+          },
+          "distance_from_user": 3.65709329,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1362,
+          "completion_tokens": 102,
+          "total_tokens": 1464
+        },
+        "cost_usd": 0.004425,
+        "agent_time_elapsed": 2.9757587909698486,
+        "system_time_elapsed": 3.3250372409820557
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "右後ろと左後ろの壁や床にあるライトをつけました。",
+        "reasoning": "ユーザーの『右後ろと左後ろ』という指示に基づき、-z方向でx座標がユーザーの位置から見て右（x > 0）または左（x < 0）のデバイスを選択しました。また、天井ライトは含まないとの指定があるため、それ以外のデバイスから選びました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3212,
+          "completion_tokens": 415,
+          "total_tokens": 3627
+        },
+        "cost_usd": 0.01218,
+        "agent_time_elapsed": 4.502798795700073,
+        "system_time_elapsed": 4.827532052993774
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "57c4ca5c-5e47-4b6c-aa58-66d939bdaf0f",
+    "attempt_id": "d013a1b8-9ac6-493b-8634-026f9484cfb9"
+  },
+  {
+    "user_prompt": "俺の右後ろと左後ろの壁のライトをつけて真後ろは付けないで",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Back",
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "『右後ろ』と『左後ろ』という身体基準の空間表現が含まれているため、directionを使用した。真後ろは除外するため、proximityで近いものを選択する。"
+      },
+      "devices": [
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "name": "Floor Light 2",
+          "position": {
+            "x": 1.31857979,
+            "y": -1.23122048,
+            "z": 0.07602457
+          },
+          "distance_from_user": 1.8056401,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "name": "Wall Light 1",
+          "position": {
+            "x": 0.121377595,
+            "y": 1.11097157,
+            "z": -1.53228724
+          },
+          "distance_from_user": 1.896548,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "name": "Wall Light 3",
+          "position": {
+            "x": -1.44270444,
+            "y": 1.11097157,
+            "z": -1.12672043
+          },
+          "distance_from_user": 2.141297,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+          "name": "Ceiling Light 11",
+          "position": {
+            "x": -0.129925638,
+            "y": 2.1157794,
+            "z": -0.5380603
+          },
+          "distance_from_user": 2.186987,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "name": "Wall Light 2",
+          "position": {
+            "x": 1.71099794,
+            "y": 1.11097157,
+            "z": -1.94447613
+          },
+          "distance_from_user": 2.81829,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "name": "Ceiling Light 12",
+          "position": {
+            "x": 1.80895269,
+            "y": 2.1157794,
+            "z": -1.0408119
+          },
+          "distance_from_user": 2.97188854,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 3.64411521,
+            "y": -0.199220538,
+            "z": -0.5331857
+          },
+          "distance_from_user": 3.68829918,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 3.64838219,
+            "y": 0.5077795,
+            "z": -0.5167302
+          },
+          "distance_from_user": 3.719616,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 3.66545,
+            "y": 1.27577937,
+            "z": -0.450906783
+          },
+          "distance_from_user": 3.907231,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1364,
+          "completion_tokens": 104,
+          "total_tokens": 1468
+        },
+        "cost_usd": 0.00445,
+        "agent_time_elapsed": 2.7531065940856934,
+        "system_time_elapsed": 3.104671001434326
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "右後ろのWall Light 2と左後ろのWall Light 3を点灯しました。",
+        "reasoning": "デバイスの位置から、右後ろと左後ろの壁のライトを特定。x座標が正でz座標が負のWall Light 2が右後ろ、x座標が負でz座標が負のWall Light 3が左後ろと判定。真後ろのデバイスは除外。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3113,
+          "completion_tokens": 270,
+          "total_tokens": 3383
+        },
+        "cost_usd": 0.010483,
+        "agent_time_elapsed": 3.4797310829162598,
+        "system_time_elapsed": 3.8346428871154785
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "57c4ca5c-5e47-4b6c-aa58-66d939bdaf0f",
+    "attempt_id": "80897bab-73f5-4028-8cf1-94d07bb8e491"
+  },
+  {
+    "user_prompt": "視界の真ん中にあるライトを付けて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『視界の真ん中』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "name": "Stand Light 2",
+          "position": {
+            "x": -0.0328234881,
+            "y": -1.35815477,
+            "z": 4.69761467
+          },
+          "distance_from_user": 4.890117,
+          "eye_centrality_score": 18.3489857
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1352,
+          "completion_tokens": 90,
+          "total_tokens": 1442
+        },
+        "cost_usd": 0.00428,
+        "agent_time_elapsed": 2.3976340293884277,
+        "system_time_elapsed": 2.7015788555145264
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界の真ん中にあるライトを点灯しました。",
+        "reasoning": "デバイスのeye_centrality_scoreが18.3489857であり、他のデバイスがないため、視界中央に位置することが確認できました。そのためこのデバイスを選んで点灯しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2293,
+          "completion_tokens": 164,
+          "total_tokens": 2457
+        },
+        "cost_usd": 0.007373,
+        "agent_time_elapsed": 2.4770116806030273,
+        "system_time_elapsed": 2.798398017883301
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "3e5150e3-4377-405c-b76b-ca076bc34f12",
+    "attempt_id": "73451498-eda4-40c8-b73d-74c1bfdba17c"
+  },
+  {
+    "user_prompt": "テレビの右側のライトを一つつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "right",
+          "range": 0.0
+        },
+        "reasoning": "『テレビの右側』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "name": "Stand Light 1",
+          "position": {
+            "x": 2.35538745,
+            "y": -1.35099339,
+            "z": 6.49208546
+          },
+          "distance_from_user": 7.03706,
+          "eye_centrality_score": 24.629303
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 1.77666736,
+            "y": 2.10700655,
+            "z": 4.97146368
+          },
+          "distance_from_user": 5.68431854,
+          "eye_centrality_score": 28.85816
+        },
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "name": "TV Light 1",
+          "position": {
+            "x": 1.0853883,
+            "y": -0.5709933,
+            "z": 5.79453945
+          },
+          "distance_from_user": 5.922904,
+          "eye_centrality_score": 13.40404
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": -0.0637600347,
+            "y": 2.11900663,
+            "z": 4.241241
+          },
+          "distance_from_user": 4.741559,
+          "eye_centrality_score": 24.5698414
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "name": "TV Light 2",
+          "position": {
+            "x": -1.57765508,
+            "y": -0.5909933,
+            "z": 4.73793
+          },
+          "distance_from_user": 5.02854347,
+          "eye_centrality_score": 20.2988625
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1351,
+          "completion_tokens": 87,
+          "total_tokens": 1438
+        },
+        "cost_usd": 0.004248,
+        "agent_time_elapsed": 1.2252552509307861,
+        "system_time_elapsed": 1.5564329624176025
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "テレビの右側にある『Stand Light 1』を点灯しました。",
+        "reasoning": "テレビの右側という指示に基づき、x座標が正の値でありテレビに近いライトを選択しました。Stand Light 1はテレビの位置（TV Light 1）の右側の位置にあるため選ばれました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2663,
+          "completion_tokens": 166,
+          "total_tokens": 2829
+        },
+        "cost_usd": 0.008318,
+        "agent_time_elapsed": 2.716153860092163,
+        "system_time_elapsed": 3.015658140182495
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "8ec33bee-662a-44ca-8b72-d185da2f980a",
+    "attempt_id": "80cc73dd-9ddd-46c1-ab8c-5ff5a8faa990"
+  },
+  {
+    "user_prompt": "テレビの右側にあって、テレビに一番近いものを一つ付けて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Right",
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "『テレビの右側』という身体基準の空間表現が含まれているため、directionを使用し、最も近いものを選ぶためにproximityを指定した。"
+      },
+      "devices": [
+        {
+          "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+          "name": "TableLight",
+          "position": {
+            "x": 0.8880077,
+            "y": -0.591419,
+            "z": 1.17891586
+          },
+          "distance_from_user": 1.59002411,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "name": "Floor Light 2",
+          "position": {
+            "x": 0.882929564,
+            "y": -1.228419,
+            "z": -1.01339734
+          },
+          "distance_from_user": 1.82086575,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "name": "Ceiling Light 7",
+          "position": {
+            "x": 1.38749123,
+            "y": 2.118581,
+            "z": 0.5271552
+          },
+          "distance_from_user": 2.586776,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "name": "Ceiling Light 12",
+          "position": {
+            "x": 0.27077648,
+            "y": 2.118581,
+            "z": -2.06841278
+          },
+          "distance_from_user": 2.97322,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "name": "Ceiling Light 6",
+          "position": {
+            "x": 0.6493784,
+            "y": 2.118581,
+            "z": 2.38812113
+          },
+          "distance_from_user": 3.2577908,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "name": "Ceiling Light 8",
+          "position": {
+            "x": 2.124498,
+            "y": 2.118581,
+            "z": -1.331022
+          },
+          "distance_from_user": 3.28230047,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 1.76367748,
+            "y": -0.196419,
+            "z": -3.25025558
+          },
+          "distance_from_user": 3.70314741,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 1.77947962,
+            "y": 0.510581,
+            "z": -3.243988
+          },
+          "distance_from_user": 3.73506355,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "name": "Shelf Light 6",
+          "position": {
+            "x": 2.564023,
+            "y": -0.196419,
+            "z": -2.93281555
+          },
+          "distance_from_user": 3.90053868,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 1.84268951,
+            "y": 1.2785809,
+            "z": -3.21891713
+          },
+          "distance_from_user": 3.92322588,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "name": "Shelf Light 5",
+          "position": {
+            "x": 2.63373923,
+            "y": 0.510581,
+            "z": -2.905164
+          },
+          "distance_from_user": 3.95439672,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "name": "Ceiling Light 3",
+          "position": {
+            "x": 3.24994755,
+            "y": 2.106581,
+            "z": 1.26693487
+          },
+          "distance_from_user": 4.074919,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "name": "Shelf Light 4",
+          "position": {
+            "x": 3.14964128,
+            "y": 1.296581,
+            "z": -2.70054245
+          },
+          "distance_from_user": 4.34675646,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": 2.51146626,
+            "y": 2.106581,
+            "z": 3.12883019
+          },
+          "distance_from_user": 4.53152561,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "name": "Ceiling Light 4",
+          "position": {
+            "x": 3.98806024,
+            "y": 2.106581,
+            "z": -0.594030738
+          },
+          "distance_from_user": 4.549196,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "name": "Stand Light 2",
+          "position": {
+            "x": 3.823689,
+            "y": -1.35141909,
+            "z": 2.80050087
+          },
+          "distance_from_user": 4.928462,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "name": "Shelf Light 3",
+          "position": {
+            "x": 4.825626,
+            "y": -0.196419,
+            "z": -2.03579855
+          },
+          "distance_from_user": 5.24115658,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "name": "Shelf Light 2",
+          "position": {
+            "x": 4.865597,
+            "y": 0.510581,
+            "z": -2.019945
+          },
+          "distance_from_user": 5.29291058,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "name": "Shelf Light 1",
+          "position": {
+            "x": 5.00502968,
+            "y": 1.2785809,
+            "z": -1.96464169
+          },
+          "distance_from_user": 5.526745,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 1.777409,
+            "y": 2.106581,
+            "z": 4.979571
+          },
+          "distance_from_user": 5.69148445,
+          "eye_centrality_score": 27.5805683
+        },
+        {
+          "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+          "name": "Stand Light 3",
+          "position": {
+            "x": 5.40535927,
+            "y": -1.35141909,
+            "z": -1.18728292
+          },
+          "distance_from_user": 5.69683075,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "name": "TV Light 1",
+          "position": {
+            "x": 1.086229,
+            "y": -0.571419,
+            "z": 5.80272961
+          },
+          "distance_from_user": 5.93111134,
+          "eye_centrality_score": 14.3400564
+        },
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "name": "Stand Light 1",
+          "position": {
+            "x": 2.356312,
+            "y": -1.35141909,
+            "z": 6.500123
+          },
+          "distance_from_user": 7.044866,
+          "eye_centrality_score": 25.58902
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1360,
+          "completion_tokens": 95,
+          "total_tokens": 1455
+        },
+        "cost_usd": 0.00435,
+        "agent_time_elapsed": 1.6424219608306885,
+        "system_time_elapsed": 2.0287225246429443
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "TableLight",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "テレビの右側にあって、テレビに一番近いものを点灯しました。",
+        "reasoning": "x軸に基づいてデバイスを右側にあるものから選択しました。さらに、テレビに最も近いデバイスとしてTableLightが選ばれました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 4449,
+          "completion_tokens": 135,
+          "total_tokens": 4584
+        },
+        "cost_usd": 0.012473,
+        "agent_time_elapsed": 2.593094825744629,
+        "system_time_elapsed": 2.8996098041534424
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "TableLight",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "8ec33bee-662a-44ca-8b72-d185da2f980a",
+    "attempt_id": "72340ba2-0f13-4184-8bb1-4f6e93d98019"
+  },
+  {
+    "user_prompt": "テレビの右側にあって、テレビに一番近いライトを一つつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Right",
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "『テレビの右側』という身体基準の空間表現が含まれているため、directionを使用し、最も近いライトを選ぶためにproximityを指定した。"
+      },
+      "devices": [
+        {
+          "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+          "name": "TableLight",
+          "position": {
+            "x": 0.9913943,
+            "y": -0.5600983,
+            "z": 1.10996926
+          },
+          "distance_from_user": 1.5901587,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "name": "Floor Light 2",
+          "position": {
+            "x": 0.897412658,
+            "y": -1.19709826,
+            "z": -1.08033431
+          },
+          "distance_from_user": 1.84540415,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "name": "Ceiling Light 7",
+          "position": {
+            "x": 1.46403527,
+            "y": 2.14990187,
+            "z": 0.4384886
+          },
+          "distance_from_user": 2.63775468,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "name": "Ceiling Light 12",
+          "position": {
+            "x": 0.242977887,
+            "y": 2.14990187,
+            "z": -2.10965657
+          },
+          "distance_from_user": 3.02188158,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "name": "Ceiling Light 6",
+          "position": {
+            "x": 0.801999867,
+            "y": 2.14990187,
+            "z": 2.327857
+          },
+          "distance_from_user": 3.26866961,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "name": "Ceiling Light 8",
+          "position": {
+            "x": 2.12507844,
+            "y": 2.14990187,
+            "z": -1.44804859
+          },
+          "distance_from_user": 3.35184765,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 1.68672168,
+            "y": -0.16509831,
+            "z": -3.3510704
+          },
+          "distance_from_user": 3.755258,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 1.70276511,
+            "y": 0.5419017,
+            "z": -3.345449
+          },
+          "distance_from_user": 3.792769,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "name": "Shelf Light 6",
+          "position": {
+            "x": 2.49928236,
+            "y": -0.16509831,
+            "z": -3.066349
+          },
+          "distance_from_user": 3.959314,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 1.76693976,
+            "y": 1.3099016,
+            "z": -3.322962
+          },
+          "distance_from_user": 3.98497128,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "name": "Shelf Light 5",
+          "position": {
+            "x": 2.57006264,
+            "y": 0.5419017,
+            "z": -3.04154754
+          },
+          "distance_from_user": 4.018693,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "name": "Ceiling Light 3",
+          "position": {
+            "x": 3.35496044,
+            "y": 2.13790178,
+            "z": 1.1021291
+          },
+          "distance_from_user": 4.12808371,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "name": "Shelf Light 4",
+          "position": {
+            "x": 3.09383845,
+            "y": 1.32790172,
+            "z": -2.85801625
+          },
+          "distance_from_user": 4.4162674,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": 2.69259453,
+            "y": 2.13790178,
+            "z": 2.99244118
+          },
+          "distance_from_user": 4.55800343,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "name": "Ceiling Light 4",
+          "position": {
+            "x": 4.016996,
+            "y": 2.13790178,
+            "z": -0.7872394
+          },
+          "distance_from_user": 4.61807632,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": 0.165591046,
+            "y": 2.14990187,
+            "z": 4.21666861
+          },
+          "distance_from_user": 4.73601,
+          "eye_centrality_score": 23.63872
+        },
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "name": "Stand Light 2",
+          "position": {
+            "x": 3.99042249,
+            "y": -1.3200984,
+            "z": 2.61116576
+          },
+          "distance_from_user": 4.94816351,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "name": "Shelf Light 3",
+          "position": {
+            "x": 4.79540253,
+            "y": -0.16509831,
+            "z": -2.26178765
+          },
+          "distance_from_user": 5.30460453,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "name": "Shelf Light 2",
+          "position": {
+            "x": 4.83598328,
+            "y": 0.5419017,
+            "z": -2.24756813
+          },
+          "distance_from_user": 5.36022,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "name": "Shelf Light 1",
+          "position": {
+            "x": 4.977545,
+            "y": 1.3099016,
+            "z": -2.197965
+          },
+          "distance_from_user": 5.59668159,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 2.03419662,
+            "y": 2.13790178,
+            "z": 4.87142849
+          },
+          "distance_from_user": 5.6955595,
+          "eye_centrality_score": 30.1008663
+        },
+        {
+          "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+          "name": "Stand Light 3",
+          "position": {
+            "x": 5.40906954,
+            "y": -1.3200984,
+            "z": -1.43748069
+          },
+          "distance_from_user": 5.750396,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "name": "TV Light 1",
+          "position": {
+            "x": 1.37696791,
+            "y": -0.5400983,
+            "z": 5.72194052
+          },
+          "distance_from_user": 5.91002131,
+          "eye_centrality_score": 16.3630848
+        },
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "name": "Stand Light 1",
+          "position": {
+            "x": 2.67428827,
+            "y": -1.3200984,
+            "z": 6.36725235
+          },
+          "distance_from_user": 7.0311017,
+          "eye_centrality_score": 27.72299
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1360,
+          "completion_tokens": 95,
+          "total_tokens": 1455
+        },
+        "cost_usd": 0.00435,
+        "agent_time_elapsed": 2.4049417972564697,
+        "system_time_elapsed": 2.7750232219696045
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "テレビの右側にある、テレビに一番近いライトを点灯しました。",
+        "reasoning": "テレビの右側にあるデバイスを選択するためにx座標を基に空間的な配置を確認しました。その中で、テレビに最も近いデバイスとして『Ceiling Light 7』の距離が2.64と最も近かったため、このデバイスを選択しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 4569,
+          "completion_tokens": 184,
+          "total_tokens": 4753
+        },
+        "cost_usd": 0.013262,
+        "agent_time_elapsed": 4.142061233520508,
+        "system_time_elapsed": 4.4574010372161865
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "8ec33bee-662a-44ca-8b72-d185da2f980a",
+    "attempt_id": "6d77c64e-06eb-4cdd-88f7-e21460630384"
+  },
+  {
+    "user_prompt": "視界の真ん中にあるライトを付けて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『視界の真ん中』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "name": "TV Light 1",
+          "position": {
+            "x": 0.195115551,
+            "y": -0.5375607,
+            "z": 5.88703156
+          },
+          "distance_from_user": 5.914743,
+          "eye_centrality_score": 6.76024866
+        },
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "name": "Stand Light 1",
+          "position": {
+            "x": 1.33172214,
+            "y": -1.31756079,
+            "z": 6.785694
+          },
+          "distance_from_user": 7.039538,
+          "eye_centrality_score": 16.5787849
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 1.01341856,
+            "y": 2.14043927,
+            "z": 5.19010925
+          },
+          "distance_from_user": 5.704887,
+          "eye_centrality_score": 23.8199577
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "name": "TV Light 2",
+          "position": {
+            "x": -2.25561643,
+            "y": -0.5575607,
+            "z": 4.40307236
+          },
+          "distance_from_user": 4.97852659,
+          "eye_centrality_score": 28.47803
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1352,
+          "completion_tokens": 90,
+          "total_tokens": 1442
+        },
+        "cost_usd": 0.00428,
+        "agent_time_elapsed": 1.0160789489746094,
+        "system_time_elapsed": 1.3324949741363525
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界の真ん中にあるTV Light 1を点灯しました。",
+        "reasoning": "視界の真ん中にあるライトは、eye_centrality_score が最も低いデバイスとして識別されました。そのため、TV Light 1を選択しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2573,
+          "completion_tokens": 155,
+          "total_tokens": 2728
+        },
+        "cost_usd": 0.007983,
+        "agent_time_elapsed": 3.1245830059051514,
+        "system_time_elapsed": 3.45857310295105
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "8ec33bee-662a-44ca-8b72-d185da2f980a",
+    "attempt_id": "4e7eef53-7967-4670-95f3-42a6d5c110fc"
+  },
+  {
+    "user_prompt": "視界にある天井ライトの内、右側を青、左側を赤につけて真ん中はつけないで",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "right",
+          "range": 0.0
+        },
+        "reasoning": "『右側』『左側』『真ん中』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "name": "Ceiling Light 4",
+          "position": {
+            "x": 2.1340096,
+            "y": 2.12246537,
+            "z": 3.50581241
+          },
+          "distance_from_user": 4.62056,
+          "eye_centrality_score": 32.8842735
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "name": "Ceiling Light 3",
+          "position": {
+            "x": 0.133009389,
+            "y": 2.12246537,
+            "z": 3.56907821
+          },
+          "distance_from_user": 4.15462,
+          "eye_centrality_score": 15.6340218
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": -1.8689903,
+            "y": 2.12246537,
+            "z": 3.63237548
+          },
+          "distance_from_user": 4.603492,
+          "eye_centrality_score": 28.6752319
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1369,
+          "completion_tokens": 92,
+          "total_tokens": 1461
+        },
+        "cost_usd": 0.004343,
+        "agent_time_elapsed": 3.048220634460449,
+        "system_time_elapsed": 3.363708734512329
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+            "state": false,
+            "intensity": 0,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          }
+        ],
+        "response": "視界にある天井ライトのうち、右側は青色に、左側は赤色にしました。真ん中のライトはつけていません。",
+        "reasoning": "デバイスを左右の視覚的なまとまりでグループ化しました。x座標に基づき、xが最も大きいCeiling Light 4を右に、xが最も小さいCeiling Light 2を左に、xが中央に近いCeiling Light 3を真ん中のライトと判断しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2505,
+          "completion_tokens": 356,
+          "total_tokens": 2861
+        },
+        "cost_usd": 0.009823,
+        "agent_time_elapsed": 5.9439661502838135,
+        "system_time_elapsed": 6.271085977554321
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+        "state": false,
+        "intensity": 0,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "3a642a22-d8be-466d-ae3d-8ee4ae7e730f",
+    "attempt_id": "2b21c734-da7f-4048-9603-ea7b3941d5bc"
+  },
+  {
+    "user_prompt": "棚の上の段の三つのライトをつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Up",
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『棚の上の段』という身体基準の空間表現が含まれているため、directionを使用した。"
+      },
+      "devices": [
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "name": "Shelf Light 4",
+          "position": {
+            "x": 0.06373489,
+            "y": 1.32238626,
+            "z": 4.146264
+          },
+          "distance_from_user": 4.352502,
+          "eye_centrality_score": 10.2149019
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 1.28317893,
+            "y": 1.30438614,
+            "z": 3.446413
+          },
+          "distance_from_user": 3.90201664,
+          "eye_centrality_score": 23.1794567
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": -5.09118462,
+            "y": 2.13238621,
+            "z": -1.70984185
+          },
+          "distance_from_user": 5.77847672,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": -4.10014343,
+            "y": 2.13238621,
+            "z": 0.01698198
+          },
+          "distance_from_user": 4.62152958,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "name": "Ceiling Light 3",
+          "position": {
+            "x": -3.10312963,
+            "y": 2.13238621,
+            "z": 1.75421321
+          },
+          "distance_from_user": 4.15376329,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "name": "Ceiling Light 4",
+          "position": {
+            "x": -2.10661364,
+            "y": 2.13238621,
+            "z": 3.490577
+          },
+          "distance_from_user": 4.60098028,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": -3.373902,
+            "y": 2.14438629,
+            "z": -2.695407
+          },
+          "distance_from_user": 4.82149649,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "name": "Ceiling Light 6",
+          "position": {
+            "x": -2.36104941,
+            "y": 2.14438629,
+            "z": -0.97879523
+          },
+          "distance_from_user": 3.33631349,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "name": "Ceiling Light 7",
+          "position": {
+            "x": -1.36453331,
+            "y": 2.14438629,
+            "z": 0.7575687
+          },
+          "distance_from_user": 2.652217,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "name": "Ceiling Light 8",
+          "position": {
+            "x": -0.369510442,
+            "y": 2.14438629,
+            "z": 2.49133086
+          },
+          "distance_from_user": 3.307818,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "name": "Ceiling Light 9",
+          "position": {
+            "x": -1.62279332,
+            "y": 2.14438629,
+            "z": -3.70038533
+          },
+          "distance_from_user": 4.57435274,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "541d973c-4101-4118-ae52-f8f192b69655",
+          "name": "Ceiling Light 10",
+          "position": {
+            "x": -0.6332455,
+            "y": 2.14438629,
+            "z": -1.97616327
+          },
+          "distance_from_user": 2.98405981,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+          "name": "Ceiling Light 11",
+          "position": {
+            "x": 0.364763826,
+            "y": 2.14438629,
+            "z": -0.237197489
+          },
+          "distance_from_user": 2.18808317,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "name": "Ceiling Light 12",
+          "position": {
+            "x": 1.36177766,
+            "y": 2.14438629,
+            "z": 1.50003362
+          },
+          "distance_from_user": 2.95007324,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "name": "TV Light 1",
+          "position": {
+            "x": -5.30488,
+            "y": -0.545613766,
+            "z": -2.7632432
+          },
+          "distance_from_user": 6.006243,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "name": "TV Light 2",
+          "position": {
+            "x": -2.82002425,
+            "y": -0.565613747,
+            "z": -4.18932724
+          },
+          "distance_from_user": 5.08162546,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "name": "Floor Light １",
+          "position": {
+            "x": -1.83030581,
+            "y": -1.32661378,
+            "z": -4.36532
+          },
+          "distance_from_user": 4.915887,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "name": "Wall Light 1",
+          "position": {
+            "x": 1.39005959,
+            "y": 1.13957834,
+            "z": -0.2574242
+          },
+          "distance_from_user": 1.81581151,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "name": "Wall Light 2",
+          "position": {
+            "x": 2.20747733,
+            "y": 1.13957834,
+            "z": 1.1668725
+          },
+          "distance_from_user": 2.744665,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "name": "Wall Light 3",
+          "position": {
+            "x": 0.585774243,
+            "y": 1.13957834,
+            "z": -1.65883851
+          },
+          "distance_from_user": 2.09607148,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1353,
+          "completion_tokens": 80,
+          "total_tokens": 1433
+        },
+        "cost_usd": 0.004183,
+        "agent_time_elapsed": 1.2378344535827637,
+        "system_time_elapsed": 1.6147785186767578
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "棚の上の段の三つのライトをつけました。",
+        "reasoning": "デバイスの中から高さ（y座標）が最も高いデバイスを選定し、中央性が高い順に三つのライトを選びました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 4168,
+          "completion_tokens": 276,
+          "total_tokens": 4444
+        },
+        "cost_usd": 0.01318,
+        "agent_time_elapsed": 4.474565744400024,
+        "system_time_elapsed": 4.789230108261108
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "e5813fa8-3be0-4d47-bf14-6e995f2a7951",
+    "attempt_id": "0bc8da30-da3e-484d-98c6-33b5ebcaa29a"
+  },
+  {
+    "user_prompt": "棚にあるライトのうち、上の三つのライトを付けて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "high",
+          "range": 0.0
+        },
+        "reasoning": "『上の三つのライト』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "name": "Ceiling Light 4",
+          "position": {
+            "x": -1.9723177,
+            "y": 2.128005,
+            "z": 3.58932829
+          },
+          "distance_from_user": 4.615379,
+          "eye_centrality_score": 33.0195961
+        },
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "name": "Shelf Light 4",
+          "position": {
+            "x": 0.223427042,
+            "y": 1.3180052,
+            "z": 4.154167
+          },
+          "distance_from_user": 4.3639617,
+          "eye_centrality_score": 6.445765
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "name": "Shelf Light 1",
+          "position": {
+            "x": -1.46490681,
+            "y": 1.30000508,
+            "z": 5.218848
+          },
+          "distance_from_user": 5.57425737,
+          "eye_centrality_score": 15.7770481
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 1.41270387,
+            "y": 1.30000508,
+            "z": 3.40419674
+          },
+          "distance_from_user": 3.908235,
+          "eye_centrality_score": 22.95581
+        },
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "name": "Shelf Light 2",
+          "position": {
+            "x": -1.338028,
+            "y": 0.5320052,
+            "z": 5.13883734
+          },
+          "distance_from_user": 5.336759,
+          "eye_centrality_score": 16.0174313
+        },
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "name": "Shelf Light 5",
+          "position": {
+            "x": 0.692878366,
+            "y": 0.5320052,
+            "z": 3.85812616
+          },
+          "distance_from_user": 3.95578671,
+          "eye_centrality_score": 10.4914055
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 1.47022247,
+            "y": 0.5320052,
+            "z": 3.367925
+          },
+          "distance_from_user": 3.71315265,
+          "eye_centrality_score": 23.177496
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "name": "Shelf Light 3",
+          "position": {
+            "x": -1.301656,
+            "y": -0.174994826,
+            "z": 5.11590052
+          },
+          "distance_from_user": 5.28179646,
+          "eye_centrality_score": 20.3098125
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "name": "Shelf Light 6",
+          "position": {
+            "x": 0.7563176,
+            "y": -0.174994826,
+            "z": 3.81812072
+          },
+          "distance_from_user": 3.89624,
+          "eye_centrality_score": 18.1536064
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 1.48460186,
+            "y": -0.174994826,
+            "z": 3.35885715
+          },
+          "distance_from_user": 3.676491,
+          "eye_centrality_score": 28.3245716
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1357,
+          "completion_tokens": 89,
+          "total_tokens": 1446
+        },
+        "cost_usd": 0.004282,
+        "agent_time_elapsed": 1.2691805362701416,
+        "system_time_elapsed": 1.6068165302276611
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "棚にあるライトのうち、上の三つのライトを付けました。",
+        "reasoning": "デバイスをy軸の高さに基づいてソートし、最も高い位置にある3つのライト（Ceiling Light 4, Shelf Light 4, Shelf Light 1）を選びました。ユーザーの指示に基づき、これらのライトを付けることにしました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3146,
+          "completion_tokens": 308,
+          "total_tokens": 3454
+        },
+        "cost_usd": 0.010945,
+        "agent_time_elapsed": 3.5250637531280518,
+        "system_time_elapsed": 3.8377277851104736
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "e5813fa8-3be0-4d47-bf14-6e995f2a7951",
+    "attempt_id": "b1887d1e-2019-4b9a-ae80-d86d5f87a4b1"
+  },
+  {
+    "user_prompt": "視界にあるライトの内、高いところにある三つのライトを付けて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "high",
+          "range": 0.0
+        },
+        "reasoning": "『視界にある』という表現があり、身体基準ではないため、fovを選んだ。また、『高いところにある』という高さに基づく選択が求められている。"
+      },
+      "devices": [
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "name": "Shelf Light 4",
+          "position": {
+            "x": -0.06309435,
+            "y": 1.33261132,
+            "z": 4.14999151
+          },
+          "distance_from_user": 4.35915852,
+          "eye_centrality_score": 13.1319647
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "name": "Shelf Light 1",
+          "position": {
+            "x": -1.82255852,
+            "y": 1.3146112,
+            "z": 5.09249
+          },
+          "distance_from_user": 5.56627131,
+          "eye_centrality_score": 22.3694439
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 1.17628729,
+            "y": 1.3146112,
+            "z": 3.4860878
+          },
+          "distance_from_user": 3.90700173,
+          "eye_centrality_score": 23.5741844
+        },
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "name": "Shelf Light 2",
+          "position": {
+            "x": -1.6903342,
+            "y": 0.5466113,
+            "z": 5.021661
+          },
+          "distance_from_user": 5.32663965,
+          "eye_centrality_score": 19.2653885
+        },
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "name": "Shelf Light 5",
+          "position": {
+            "x": 0.426135182,
+            "y": 0.5466113,
+            "z": 3.88792443
+          },
+          "distance_from_user": 3.949219,
+          "eye_centrality_score": 6.401393
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 1.23622918,
+            "y": 0.5466113,
+            "z": 3.45397854
+          },
+          "distance_from_user": 3.709045,
+          "eye_centrality_score": 19.2703018
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "name": "Shelf Light 3",
+          "position": {
+            "x": -1.65242994,
+            "y": -0.160388708,
+            "z": 5.0013566
+          },
+          "distance_from_user": 5.26970768,
+          "eye_centrality_score": 20.1356487
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "name": "Shelf Light 6",
+          "position": {
+            "x": 0.492247134,
+            "y": -0.160388708,
+            "z": 3.85251
+          },
+          "distance_from_user": 3.887141,
+          "eye_centrality_score": 9.749331
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 1.25121439,
+            "y": -0.160388708,
+            "z": 3.44595146
+          },
+          "distance_from_user": 3.66958332,
+          "eye_centrality_score": 20.82941
+        },
+        {
+          "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+          "name": "Stand Light 3",
+          "position": {
+            "x": -2.674737,
+            "y": -1.3153888,
+            "z": 4.89667845
+          },
+          "distance_from_user": 5.732532,
+          "eye_centrality_score": 35.7396774
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1359,
+          "completion_tokens": 102,
+          "total_tokens": 1461
+        },
+        "cost_usd": 0.004418,
+        "agent_time_elapsed": 1.2952606678009033,
+        "system_time_elapsed": 1.6466031074523926
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          },
+          {
+            "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界にあるライトのうち、高いところにある三つのライトを点灯しました。",
+        "reasoning": "視界にあるデバイスに限定し、その中でy座標に基づいて高さの順に並べました。上位三つのデバイスを選びました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3165,
+          "completion_tokens": 290,
+          "total_tokens": 3455
+        },
+        "cost_usd": 0.010813,
+        "agent_time_elapsed": 5.081609725952148,
+        "system_time_elapsed": 5.407349586486816
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      },
+      {
+        "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "e5813fa8-3be0-4d47-bf14-6e995f2a7951",
+    "attempt_id": "5cde0bab-9725-42fa-a631-851e4a7de8df"
+  },
+  {
+    "user_prompt": "視界にある天井ライトの内、遠くにある一列を赤、 近くにある一列を青につけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "『視界にある』という表現があり、身体基準ではないため、fovを選んだ。遠くと近くのライトを区別するためにproximityを使用した。"
+      },
+      "devices": [
+        {
+          "id": "541d973c-4101-4118-ae52-f8f192b69655",
+          "name": "Ceiling Light 10",
+          "position": {
+            "x": -1.28976727,
+            "y": 2.125101,
+            "z": 1.75774932
+          },
+          "distance_from_user": 3.04454231,
+          "eye_centrality_score": 28.6075439
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "name": "Ceiling Light 6",
+          "position": {
+            "x": 0.5221105,
+            "y": 2.125101,
+            "z": 2.592703
+          },
+          "distance_from_user": 3.39275169,
+          "eye_centrality_score": 12.8819962
+        },
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "name": "Ceiling Light 9",
+          "position": {
+            "x": -2.1263113,
+            "y": 2.125101,
+            "z": 3.56117368
+          },
+          "distance_from_user": 4.66038752,
+          "eye_centrality_score": 25.1717587
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": 2.33920765,
+            "y": 2.113101,
+            "z": 3.437794
+          },
+          "distance_from_user": 4.664281,
+          "eye_centrality_score": 32.77733
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": -0.294765,
+            "y": 2.125101,
+            "z": 4.41076231
+          },
+          "distance_from_user": 4.904872,
+          "eye_centrality_score": 7.56905842
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 1.50140131,
+            "y": 2.113101,
+            "z": 5.24394
+          },
+          "distance_from_user": 5.849642,
+          "eye_centrality_score": 20.72005
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1370,
+          "completion_tokens": 100,
+          "total_tokens": 1470
+        },
+        "cost_usd": 0.004425,
+        "agent_time_elapsed": 1.7849690914154053,
+        "system_time_elapsed": 2.1355299949645996
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "541d973c-4101-4118-ae52-f8f192b69655",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          }
+        ],
+        "response": "視界にある天井ライトの近くの一列を青色に、遠くの一列を赤色にしました。",
+        "reasoning": "z座標に基づいて奥行き方向の近いグループと遠いグループに分けて、それぞれのまとまりとして自然な位置を判断しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2784,
+          "completion_tokens": 480,
+          "total_tokens": 3264
+        },
+        "cost_usd": 0.01176,
+        "agent_time_elapsed": 4.961539030075073,
+        "system_time_elapsed": 5.287319660186768
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "541d973c-4101-4118-ae52-f8f192b69655",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "c286155d-b180-4fbe-b367-de60d489486a",
+    "attempt_id": "77dc8864-b98b-4303-bbdd-23ed297dc0eb"
+  },
+  {
+    "user_prompt": "視界にある天井ライトの内、遠くにある一列の三つを赤、 近くにある一列を青につけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "視界内の天井ライトに関する指示であり、遠近の距離に基づく表現があるため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "541d973c-4101-4118-ae52-f8f192b69655",
+          "name": "Ceiling Light 10",
+          "position": {
+            "x": -1.280668,
+            "y": 2.12652087,
+            "z": 1.76002467
+          },
+          "distance_from_user": 3.04300642,
+          "eye_centrality_score": 27.3436584
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "name": "Ceiling Light 6",
+          "position": {
+            "x": 0.5279822,
+            "y": 2.12652087,
+            "z": 2.601947
+          },
+          "distance_from_user": 3.40161514,
+          "eye_centrality_score": 12.3851137
+        },
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "name": "Ceiling Light 9",
+          "position": {
+            "x": -2.12414813,
+            "y": 2.12652087,
+            "z": 3.56021547
+          },
+          "distance_from_user": 4.65931654,
+          "eye_centrality_score": 25.2939873
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": 2.34181261,
+            "y": 2.11452079,
+            "z": 3.45402646
+          },
+          "distance_from_user": 4.678203,
+          "eye_centrality_score": 32.8954353
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": -0.29588595,
+            "y": 2.12652087,
+            "z": 4.41684866
+          },
+          "distance_from_user": 4.91102743,
+          "eye_centrality_score": 9.07433
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 1.49705982,
+            "y": 2.11452079,
+            "z": 5.25693369
+          },
+          "distance_from_user": 5.860695,
+          "eye_centrality_score": 21.7181473
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1373,
+          "completion_tokens": 92,
+          "total_tokens": 1465
+        },
+        "cost_usd": 0.004353,
+        "agent_time_elapsed": 1.6270132064819336,
+        "system_time_elapsed": 1.981950283050537
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "541d973c-4101-4118-ae52-f8f192b69655",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          }
+        ],
+        "response": "遠くにある一列の三つの天井ライトを赤色に、近くにある一列の三つを青色にしました。",
+        "reasoning": "視界にある天井ライトをz座標の値をもとに近い列（青色）と遠い列（赤色）に分類しました。近い列はz座標が2.601947以下で、遠い列はz座標が3.45402646以上のものを選び、自然な配置での遠近の距離を考慮しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2789,
+          "completion_tokens": 560,
+          "total_tokens": 3349
+        },
+        "cost_usd": 0.012573,
+        "agent_time_elapsed": 7.470176458358765,
+        "system_time_elapsed": 7.812975168228149
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "541d973c-4101-4118-ae52-f8f192b69655",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "c286155d-b180-4fbe-b367-de60d489486a",
+    "attempt_id": "ace16a8e-0187-4b6e-b082-2029e2950639"
+  },
+  {
+    "user_prompt": "視界にある天井ライトの内、奥の壁に近いものを 赤、遠いものを青につけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "『視界にある』という表現があり、身体基準ではないため、fovを選んだ。『奥の壁に近い』という距離に基づく表現があるため、proximityを使用した。"
+      },
+      "devices": [
+        {
+          "id": "541d973c-4101-4118-ae52-f8f192b69655",
+          "name": "Ceiling Light 10",
+          "position": {
+            "x": -1.28783309,
+            "y": 2.12592554,
+            "z": 1.73304737
+          },
+          "distance_from_user": 3.03010321,
+          "eye_centrality_score": 29.6372261
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "name": "Ceiling Light 6",
+          "position": {
+            "x": 0.52907753,
+            "y": 2.12592554,
+            "z": 2.55699253
+          },
+          "distance_from_user": 3.367149,
+          "eye_centrality_score": 13.8264313
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": 2.35126877,
+            "y": 2.11392546,
+            "z": 3.391043
+          },
+          "distance_from_user": 4.636412,
+          "eye_centrality_score": 33.26387
+        },
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "name": "Ceiling Light 9",
+          "position": {
+            "x": -2.11341977,
+            "y": 2.12592554,
+            "z": 3.5415144
+          },
+          "distance_from_user": 4.639873,
+          "eye_centrality_score": 24.9544983
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": -0.2767522,
+            "y": 2.12592554,
+            "z": 4.379975
+          },
+          "distance_from_user": 4.87650776,
+          "eye_centrality_score": 6.3453474
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 1.52443647,
+            "y": 2.11392546,
+            "z": 5.20223856
+          },
+          "distance_from_user": 5.81857967,
+          "eye_centrality_score": 20.329958
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1367,
+          "completion_tokens": 108,
+          "total_tokens": 1475
+        },
+        "cost_usd": 0.004498,
+        "agent_time_elapsed": 3.1536519527435303,
+        "system_time_elapsed": 3.501725673675537
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "541d973c-4101-4118-ae52-f8f192b69655",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          }
+        ],
+        "response": "視界にある天井ライトのうち、奥の壁に近いものを赤色、遠いものを青色にしました。",
+        "reasoning": "z値に基づいてデバイスを距離の順に並べ替えた結果、z座標が4以上のデバイスを奥に近いと判断し赤色、それ以下を遠いと判断し青色にしました。自然な空間的配置に基づき、指示に従ってライトの色を設定しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2797,
+          "completion_tokens": 550,
+          "total_tokens": 3347
+        },
+        "cost_usd": 0.012493,
+        "agent_time_elapsed": 6.338196754455566,
+        "system_time_elapsed": 6.645083904266357
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "541d973c-4101-4118-ae52-f8f192b69655",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "c286155d-b180-4fbe-b367-de60d489486a",
+    "attempt_id": "c76d1d17-d3c5-455e-87a3-a594949fa1f7"
+  },
+  {
+    "user_prompt": "視界にある天井ライトの内、奥の壁に近い三つを赤 遠いものを青につけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "proximity",
+          "range": 0.0
+        },
+        "reasoning": "『視界にある』という表現があり、身体基準ではないためfovを選んだ。『奥の壁に近い』という距離に基づく表現があるため、proximityを使用した。"
+      },
+      "devices": [
+        {
+          "id": "541d973c-4101-4118-ae52-f8f192b69655",
+          "name": "Ceiling Light 10",
+          "position": {
+            "x": -1.463286,
+            "y": 2.129468,
+            "z": 1.625471
+          },
+          "distance_from_user": 3.05253935,
+          "eye_centrality_score": 30.94327
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "name": "Ceiling Light 6",
+          "position": {
+            "x": 0.326292872,
+            "y": 2.129468,
+            "z": 2.507206
+          },
+          "distance_from_user": 3.305629,
+          "eye_centrality_score": 9.081361
+        },
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "name": "Ceiling Light 2",
+          "position": {
+            "x": 2.120826,
+            "y": 2.11746788,
+            "z": 3.39921021
+          },
+          "distance_from_user": 4.53168869,
+          "eye_centrality_score": 30.662323
+        },
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "name": "Ceiling Light 9",
+          "position": {
+            "x": -2.346391,
+            "y": 2.129468,
+            "z": 3.4065578
+          },
+          "distance_from_user": 4.65239954,
+          "eye_centrality_score": 28.7234573
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": -0.537530363,
+            "y": 2.129468,
+            "z": 4.30343342
+          },
+          "distance_from_user": 4.83147144,
+          "eye_centrality_score": 10.6657019
+        },
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "name": "Ceiling Light 1",
+          "position": {
+            "x": 1.23638856,
+            "y": 2.11746788,
+            "z": 5.18298435
+          },
+          "distance_from_user": 5.73373,
+          "eye_centrality_score": 20.6779175
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1368,
+          "completion_tokens": 107,
+          "total_tokens": 1475
+        },
+        "cost_usd": 0.00449,
+        "agent_time_elapsed": 2.7532544136047363,
+        "system_time_elapsed": 3.095393419265747
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "541d973c-4101-4118-ae52-f8f192b69655",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          },
+          {
+            "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 255
+            }
+          }
+        ],
+        "response": "奥の壁に近い三つの天井ライトを赤色、遠いものを青色にしました。",
+        "reasoning": "z座標でソートし奥行きの順序を特定、最も奥の位置にある3つのライトを赤色、残りのライトを青色に設定しました。それぞれのデバイスは視界内にあり、自然な距離感に基づく判断を行いました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2790,
+          "completion_tokens": 535,
+          "total_tokens": 3325
+        },
+        "cost_usd": 0.012325,
+        "agent_time_elapsed": 6.181408643722534,
+        "system_time_elapsed": 6.518210172653198
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "541d973c-4101-4118-ae52-f8f192b69655",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      },
+      {
+        "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "c286155d-b180-4fbe-b367-de60d489486a",
+    "attempt_id": "c6ba7c2f-7091-4725-8ab6-bbe9da11668d"
+  },
+  {
+    "user_prompt": "視界にあるフロアライトを一つつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『視界にある』という表現があり、身体基準ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "name": "Floor Light １",
+          "position": {
+            "x": -0.1585976,
+            "y": -1.3153882,
+            "z": 4.67874765
+          },
+          "distance_from_user": 4.86272335,
+          "eye_centrality_score": 8.197527
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "name": "TV Light 2",
+          "position": {
+            "x": 0.8168855,
+            "y": -0.554388165,
+            "z": 4.92154169
+          },
+          "distance_from_user": 5.019583,
+          "eye_centrality_score": 9.473348
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1353,
+          "completion_tokens": 81,
+          "total_tokens": 1434
+        },
+        "cost_usd": 0.004193,
+        "agent_time_elapsed": 1.1261560916900635,
+        "system_time_elapsed": 1.490574836730957
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界にあるフロアライトを1つつけました。",
+        "reasoning": "デバイスの中で、最も中央に近いフロアライトをfov内で選びました。『Floor Light 1』はフロアライトであり、他のデバイスよりeye_centrality_scoreが低く、より中央に位置しているため選択されました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2378,
+          "completion_tokens": 178,
+          "total_tokens": 2556
+        },
+        "cost_usd": 0.007725,
+        "agent_time_elapsed": 3.0685923099517822,
+        "system_time_elapsed": 3.406721353530884
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "eb0c17ca-5ab4-4a6d-b2eb-72974412f785",
+    "attempt_id": "8df1e565-1abd-47c4-b9a7-4b8113ee22da"
+  },
+  {
+    "user_prompt": "俺の真後ろにある電気を一つつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "direction",
+        "params": {
+          "direction": "Back",
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『俺の真後ろ』という身体基準の空間表現が含まれているため、directionを使用した。"
+      },
+      "devices": [
+        {
+          "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+          "name": "Ceiling Light 11",
+          "position": {
+            "x": -0.123066,
+            "y": 2.15366983,
+            "z": -0.518248439
+          },
+          "distance_from_user": 2.2185626,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "name": "Ceiling Light 12",
+          "position": {
+            "x": 1.81883788,
+            "y": 2.15366983,
+            "z": -1.00918365
+          },
+          "distance_from_user": 2.994147,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "name": "Floor Light 2",
+          "position": {
+            "x": 1.321673,
+            "y": -1.19333017,
+            "z": 0.104645893
+          },
+          "distance_from_user": 1.7837621,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "name": "Wall Light 1",
+          "position": {
+            "x": 0.134287044,
+            "y": 1.14886189,
+            "z": -1.5109266
+          },
+          "distance_from_user": 1.90284407,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "name": "Wall Light 2",
+          "position": {
+            "x": 1.726388,
+            "y": 1.14886189,
+            "z": -1.91342759
+          },
+          "distance_from_user": 2.82161379,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "name": "Wall Light 3",
+          "position": {
+            "x": -1.43223572,
+            "y": 1.14886189,
+            "z": -1.114892
+          },
+          "distance_from_user": 2.14806128,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "name": "Shelf Light 7",
+          "position": {
+            "x": 3.67170858,
+            "y": 1.31366968,
+            "z": -0.4079841
+          },
+          "distance_from_user": 3.92092133,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "name": "Shelf Light 8",
+          "position": {
+            "x": 3.65504169,
+            "y": 0.5456698,
+            "z": -0.473910272
+          },
+          "distance_from_user": 3.7258122,
+          "eye_centrality_score": 3.40282347e+38
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "name": "Shelf Light 9",
+          "position": {
+            "x": 3.650875,
+            "y": -0.161330223,
+            "z": -0.490391463
+          },
+          "distance_from_user": 3.687194,
+          "eye_centrality_score": 3.40282347e+38
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1354,
+          "completion_tokens": 80,
+          "total_tokens": 1434
+        },
+        "cost_usd": 0.004185,
+        "agent_time_elapsed": 2.7391014099121094,
+        "system_time_elapsed": 3.09757399559021
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "あなたの真後ろにある電気を一つつけました。",
+        "reasoning": "『俺の真後ろ』という指示に基づいて、ユーザーの背後に最も近い位置にあるデバイスを特定した。x軸とz軸の位置情報を考慮し、ユーザーの座標からz方向に最も大きく、かつ距離が近いデバイスを選択した。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 3079,
+          "completion_tokens": 192,
+          "total_tokens": 3271
+        },
+        "cost_usd": 0.009618,
+        "agent_time_elapsed": 3.422323226928711,
+        "system_time_elapsed": 3.7439780235290527
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "7ab7ff90-5bd1-4f82-858a-dcc110e978db",
+    "attempt_id": "99fb9d71-3a65-4fda-a700-b2fd1daacba0"
+  },
+  {
+    "user_prompt": "視界の真ん中にあるライトを一つつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『視界の真ん中』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+          "name": "TableLight",
+          "position": {
+            "x": 0.012440253,
+            "y": -0.5401684,
+            "z": 1.44189847
+          },
+          "distance_from_user": 1.53980768,
+          "eye_centrality_score": 10.4383364
+        },
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "name": "Stand Light 1",
+          "position": {
+            "x": -1.9094193,
+            "y": -1.30016851,
+            "z": 6.616608
+          },
+          "distance_from_user": 7.00826836,
+          "eye_centrality_score": 15.5847368
+        },
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "name": "Stand Light 2",
+          "position": {
+            "x": 1.44486737,
+            "y": -1.30016851,
+            "z": 4.47437525
+          },
+          "distance_from_user": 4.878331,
+          "eye_centrality_score": 18.5895061
+        },
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "name": "TV Light 1",
+          "position": {
+            "x": -2.5315752,
+            "y": -0.5201684,
+            "z": 5.308025
+          },
+          "distance_from_user": 5.90377665,
+          "eye_centrality_score": 25.5749836
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1354,
+          "completion_tokens": 90,
+          "total_tokens": 1444
+        },
+        "cost_usd": 0.004285,
+        "agent_time_elapsed": 2.4858028888702393,
+        "system_time_elapsed": 2.832329034805298
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界の真ん中にあるライトを一つつけました。",
+        "reasoning": "視界の中心に最も近いものを選択するため、eye_centrality_scoreが最も低い'TableLight'を選びました。他のデバイスに比べ、中心に配置されています。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2572,
+          "completion_tokens": 154,
+          "total_tokens": 2726
+        },
+        "cost_usd": 0.00797,
+        "agent_time_elapsed": 2.4984240531921387,
+        "system_time_elapsed": 2.857306718826294
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "d8bac779-0d43-430b-9011-52868713e7cd",
+    "attempt_id": "95b6d6dc-df80-4b79-b992-c7d2a93dca94"
+  },
+  {
+    "user_prompt": "視界の真ん中にある天井ライトを一つつけて",
+    "filterAgent": {
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "centrality",
+          "range": 0.0
+        },
+        "reasoning": "『視界の真ん中』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "name": "Ceiling Light 9",
+          "position": {
+            "x": -0.05735288,
+            "y": 2.11198688,
+            "z": 4.03865242
+          },
+          "distance_from_user": 4.55790424,
+          "eye_centrality_score": 1.67118084
+        },
+        {
+          "id": "541d973c-4101-4118-ae52-f8f192b69655",
+          "name": "Ceiling Light 10",
+          "position": {
+            "x": -0.255987525,
+            "y": 2.11198688,
+            "z": 2.06060052
+          },
+          "distance_from_user": 2.961772,
+          "eye_centrality_score": 20.0270538
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "name": "Ceiling Light 5",
+          "position": {
+            "x": 1.95154428,
+            "y": 2.11198688,
+            "z": 3.83692026
+          },
+          "distance_from_user": 4.79489,
+          "eye_centrality_score": 23.5887146
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1356,
+          "completion_tokens": 90,
+          "total_tokens": 1446
+        },
+        "cost_usd": 0.00429,
+        "agent_time_elapsed": 1.5017952919006348,
+        "system_time_elapsed": 1.8309311866760254
+      }
+    },
+    "spatialAgent": {
+      "output_data": {
+        "devices": [
+          {
+            "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 255,
+              "b": 255
+            }
+          }
+        ],
+        "response": "視界の真ん中にある天井ライトを一つつけました。",
+        "reasoning": "ユーザーの指示に基づき、視界の中央に位置する天井ライトを選択しました。eye_centrality_scoreが最も低い、Ceiling Light 9が視界の中心に最も近いため、これを操作対象としました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2480,
+          "completion_tokens": 170,
+          "total_tokens": 2650
+        },
+        "cost_usd": 0.0079,
+        "agent_time_elapsed": 3.1898391246795654,
+        "system_time_elapsed": 3.509538173675537
+      }
+    },
+    "selected_devices": [
+      {
+        "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 255,
+          "b": 255
+        }
+      }
+    ],
+    "system_metrics": null,
+    "task_id": "7517acb0-0a93-4cd3-9b89-4aa747e3ea32",
+    "attempt_id": "91b3a21b-0175-44bd-990d-ba1738dd72db"
+  }
+]

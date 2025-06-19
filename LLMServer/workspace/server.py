@@ -16,7 +16,7 @@ from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
 
-OUTPUT_FILE_NAME="P4"
+OUTPUT_FILE_NAME="P6_TUTORIAL"
 app = FastAPI()
 
 
