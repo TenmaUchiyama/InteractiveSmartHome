@@ -45,10 +45,14 @@ public class SpatialLLMSystemExecutor : SystemExecutor
             LLMQueryRequest.Instance.OnReceiveResponseFromLLM.AddListener(OnReiveResponseFromLLM);
     }
 
+
+ 
+
     private void OnReiveResponseFromLLM(string arg0)
     {
         try
         {
+            recognizedWord = ""; // 音声認識結果をクリア
             LLMResponse response = JsonConvert.DeserializeObject<LLMResponse>(arg0);
             latestLLMOutput = response.output ?? "[No output]";
             saUIManager.FinishLoadingAndDisplayResponse(response.output);
@@ -57,7 +61,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
         }
         catch (System.Exception ex)
         {
-             latestLLMOutput = "[LLM Error]";
+            latestLLMOutput = "[LLM Error]";
             Debug.LogError("Failed to parse LLM response: " + ex.Message);
         }
     }
@@ -71,25 +75,44 @@ public class SpatialLLMSystemExecutor : SystemExecutor
     }
 
     private void OnVoiceRecognized(string recognizedText)
+{
+
+        saUIManager.SetInstructionText("Press Y to send to Agent");
+
+        // 上書きから追記に変更 ↓↓↓
+        recognizedWord += recognizedText + " "; // スペースで区切る
+        saUIManager.SetRecognizedTxt(recognizedWord);
+        currentState = "recorded";
+        Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
+}
+
+    protected override void OnLeftThumbstickLeftFlick()
     {
+        base.OnLeftThumbstickLeftFlick();
 
-        Debug.Log($"[LabelExecutor] 音声認識結果: {recognizedText}");
-        saUIManager.SetRecognizedTxt(recognizedText);
-
-        if (!saUIManager.IsRecognizedWordEmplty())
+        // recognizedWordの一番後ろの文字を消す
+        if (recognizedWord.Length > 0)
         {
-            saUIManager.SetInstructionText("Press Y to send to Agent");
-        
-            recognizedWord = saUIManager.GetRecognizedWord();
-            currentState = "recorded";
+            recognizedWord = recognizedWord.Substring(0, recognizedWord.Length - 1);
+            saUIManager.SetRecognizedTxt(recognizedWord);
         }
+    }
+    
+       private void ResetRecognizedWord()
+    {
+        recognizedWord = "";
+        saUIManager.ClearRecognizedWord(); // もし存在しなければ SetRecognizedTxt("") などで代用
+        saUIManager.SetInstructionText("Press Y to start recording");
     }
 
     protected override void Update()
     {
+
+
+
         base.Update();
 
-    
+
 
         if (!isStarted) return;
 
@@ -108,7 +131,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
 
         // --- Yボタン + Bボタン同時押し時のみ進める ---
         bool isYPressed = OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y);
-        bool isGripped    = OVRInput.Get(OVRInput.RawButton.LHandTrigger)     || Input.GetKey(KeyCode.G);
+        bool isGripped = OVRInput.Get(OVRInput.RawButton.LHandTrigger) || Input.GetKey(KeyCode.G);
 
 
         if (isYPressed)
@@ -117,17 +140,23 @@ public class SpatialLLMSystemExecutor : SystemExecutor
             {
                 currentState = "done";
             }
-            
+
             OperationProceed();
-            
+
 
         }
 
-
+        if (OVRInput.GetDown(OVRInput.RawButton.X))
+        {
+            ResetRecognizedWord();
+         
+        }
 
         // --- キャンセル（XボタンまたはESC） ---
-        if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
+        if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
         {
+            ResetRecognizedWord();
+            currentState = "preparation";
             experimentManager.BackToShowDevice();
         }
     }

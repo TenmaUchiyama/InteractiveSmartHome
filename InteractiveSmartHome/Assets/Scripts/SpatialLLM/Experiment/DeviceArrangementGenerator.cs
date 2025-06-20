@@ -36,6 +36,7 @@ namespace SpatialLLM.Experiment
 
         [Tooltip("選択中のデバイス色")]
         public DeviceColor selectingDeviceColor = DeviceColor.White;
+        public Color selectingCustomColor = Color.white;
 
         [Tooltip("利用する空間タイプ一覧")]
         [SerializeField] public List<SpatialType> arrangementType = new List<SpatialType>();
@@ -63,25 +64,34 @@ namespace SpatialLLM.Experiment
 
 
 
-    
+    [ContextMenu("Add Task Data")]
+public void AddTaskData()
+{
+    LoadTaskData();
 
-        [ContextMenu("Add Task Data")]
-        public void AddTaskData()
+    // カスタム色がある場合、それだけ customColor を確認して反映（ただしここでは設定済みの値をそのまま使う）
+    var arrangementData = new DeviceArrangeData
+    {
+        device_arrange_id = Guid.NewGuid().ToString(),
+        device_arrange_name = arrangementName,
+        device_arrange_type = new List<SpatialType>(arrangementType),
+        devices = new List<DeviceColorPair>(inputTaskDevices.Select(pair =>
         {
-            LoadTaskData();
+            if (pair == null) return null;
 
-            var arrangementData = new DeviceArrangeData
+            return new DeviceColorPair
             {
-                device_arrange_id = Guid.NewGuid().ToString(),
-                device_arrange_name = arrangementName,
-                device_arrange_type = new List<SpatialType>(arrangementType),
-                devices = new List<DeviceColorPair>(inputTaskDevices)
+                device = pair.device,
+                color = pair.color,
+                customColor = pair.color == DeviceColor.Custom ? pair.customColor : default
             };
+        }))
+    };
 
-            arrangementDataList.Add(arrangementData);
-            ClearInput();
-            UpdateTaskData();
-        }
+    arrangementDataList.Add(arrangementData);
+    ClearInput();
+    UpdateTaskData();
+}
 
         [ContextMenu("Load Task Data")]
         public void LoadTaskData()

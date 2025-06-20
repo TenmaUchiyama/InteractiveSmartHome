@@ -23,7 +23,7 @@ public class PointingQueryRequest :Singleton<PointingQueryRequest>
     [SerializeField] private int port = 8800;
 
     [SerializeField] public bool speechRequired = true;
-
+        [SerializeField] public bool isTutorial = false;
 
     public UnityEvent<string> OnReceiveResponseFromLLM;
 
@@ -44,7 +44,16 @@ public class PointingQueryRequest :Singleton<PointingQueryRequest>
 
             Debug.Log($"<color=yellow>Sending Pointing Query SPATIAL: {jsonData}</color>");
             
-            await _SendQuery("pointing_spatial", jsonData);
+
+            if (isTutorial)
+            {
+               
+            await _SendQuery("pointing_spatial_tutorial", jsonData);
+            }
+            else
+            {
+                await _SendQuery("pointing_spatial", jsonData);
+            }
         }
 
         public async Task SendQuery(string sending_text, string task_id, string attempt_id, List<DeviceLabelData> deviceLabelData)

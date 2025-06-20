@@ -32,18 +32,39 @@ namespace SpatialLLM.Experiment
             }
         }
 
-        private void OnVoiceRecognized(string recognizedText)
-        {
-            saUIManager.SetRecognizedTxt(recognizedText);
+         private void OnVoiceRecognized(string recognizedText)
+{
 
-            if (!saUIManager.IsRecognizedWordEmplty())
-            {
-                Debug.Log($"<color=green>Recognized Word: {recognizedText}</color>");
-                recognizedWord = saUIManager.GetRecognizedWord();
-                saUIManager.SetInstructionText("Press Y to send to Agent");
-                currentState = "recorded";
-            }
+        saUIManager.SetInstructionText("Press Y to send to Agent");
+
+        // 上書きから追記に変更 ↓↓↓
+        recognizedWord += recognizedText + " "; // スペースで区切る
+        saUIManager.SetRecognizedTxt(recognizedWord);
+        currentState = "recorded";
+        Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
+}
+
+
+
+
+    protected override void OnLeftThumbstickLeftFlick()
+    {
+        base.OnLeftThumbstickLeftFlick();
+
+        // recognizedWordの一番後ろの文字を消す
+        if (recognizedWord.Length > 0)
+        {
+            recognizedWord = recognizedWord.Substring(0, recognizedWord.Length - 1);
+            saUIManager.SetRecognizedTxt(recognizedWord);
         }
+    }
+    
+       private void ResetRecognizedWord()
+    {
+        recognizedWord = "";
+        saUIManager.ClearRecognizedWord(); // もし存在しなければ SetRecognizedTxt("") などで代用
+        saUIManager.SetInstructionText("Press Y to start recording");
+    }
 
         protected override void Update()
         {
@@ -74,8 +95,18 @@ namespace SpatialLLM.Experiment
                 OperationProceed();
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
+            if (OVRInput.GetDown(OVRInput.RawButton.X))
             {
+                ResetRecognizedWord();
+                currentState = "preparation";
+                OperationProceed();
+            }
+
+            // --- キャンセル（XボタンまたはESC） ---
+            if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
+            {
+                ResetRecognizedWord();
+                currentState = "preparation";
                 experimentManager.BackToShowDevice();
             }
         }
@@ -175,6 +206,7 @@ namespace SpatialLLM.Experiment
         {
             try
             {
+                recognizedWord = ""; // 受信後にリセット
                 var response = JsonConvert.DeserializeObject<LLMResponse>(json);
                 latestLLMOutput = response.output ?? "[No output]";
                 Debug.Log($"<color=cyan>LLM Output Saved: {latestLLMOutput}</color>");

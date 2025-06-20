@@ -127,6 +127,10 @@ public class VRCircleSelector : MonoBehaviour
         }
 
         ScreenSpaceSelect();
+        if (previousLine != null)
+            Destroy(previousLine.gameObject);
+        if (previousSurface != null)
+            Destroy(previousSurface);
     }
 
 

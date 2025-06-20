@@ -30,13 +30,32 @@ namespace SpatialLLM.Experiment
         protected bool deviceOperatable = false;
 
 
+
+private float flickThreshold = -0.6f;
+private float flickCooldownTime = 0.15f; // クールダウン時間（秒）
+private float lastFlickTime = -999f;
+
+
+
+
+        protected virtual void OnLeftThumbstickLeftFlick()
+        {
+            Debug.Log("<color=cyan>左スティックを左にフリック検知（基底クラス）</color>");
+            // 子クラスでオーバーライドして使う
+        }
+
          #if UNITY_EDITOR
         void FixedUpdate()
         {
+            
+
+
+
+
                 if (timerStarted)
-                {
-                    elapsedTime += Time.fixedDeltaTime;
-                }
+            {
+                elapsedTime += Time.fixedDeltaTime;
+            }
                 if (!deviceOperatable) return;
                 bool isWhite = Input.GetKeyDown(KeyCode.W); 
                 bool isBlue = Input.GetKeyDown(KeyCode.Q); 
@@ -110,6 +129,13 @@ namespace SpatialLLM.Experiment
             Debug.Log($"{this.GetType().Name} の WaitForExecution が完了");
         }
 
+
+        public void ExietExecutor()
+        { 
+            isStarted = false;
+        }
+
+
         public virtual void CompleteOperation()
         {
             onCompleteOperation?.Invoke();
@@ -120,6 +146,21 @@ namespace SpatialLLM.Experiment
         protected virtual void Start(){}
 
         // 継承先で操作ロジックを書く
-        protected virtual void Update(){}
+        protected virtual void Update()
+        {
+
+                     Vector2 thumbstick = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick);
+
+                // 時間経過でフリック解除（押し戻し不要）
+                if (Time.time - lastFlickTime > flickCooldownTime &&
+                    thumbstick.x < flickThreshold &&
+                    Mathf.Abs(thumbstick.y) < 0.4f)
+                {
+                    lastFlickTime = Time.time;
+                    OnLeftThumbstickLeftFlick();
+                }
+
+            
+        }
     }
 }

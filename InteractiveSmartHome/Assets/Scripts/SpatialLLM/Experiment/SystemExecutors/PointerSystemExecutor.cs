@@ -21,7 +21,29 @@ namespace SpatialLLM.Experiment
         [SerializeField] private Camera userCamera;
         private string currentState = "preparation";
         private string latestLLMOutput = "[No output]";
-        private string recognizedText = "";
+        private string recognizedWord = "";
+
+
+        
+    protected override void OnLeftThumbstickLeftFlick()
+    {
+        base.OnLeftThumbstickLeftFlick();
+
+        // recognizedWordの一番後ろの文字を消す
+        if (recognizedWord.Length > 0)
+        {
+            recognizedWord = recognizedWord.Substring(0, recognizedWord.Length - 1);
+            saUIManager.SetRecognizedTxt(recognizedWord);
+        }
+    }
+    
+       private void ResetRecognizedWord()
+    {
+        recognizedWord = "";
+        saUIManager.ClearRecognizedWord(); // もし存在しなければ SetRecognizedTxt("") などで代用
+        saUIManager.SetInstructionText("Press Y to start recording");
+    }
+
 
         protected override void Start()
         {
@@ -42,25 +64,38 @@ namespace SpatialLLM.Experiment
             circleSelector.SetSelectionStarted(true);
         }
 
-        private void OnVoiceRecognized(string arg0)
-        {
-            recognizedText = arg0;
-            Debug.Log($"<color=green>Recognized Word: {recognizedText}</color>");
-            saUIManager.SetRecognizedTxt(recognizedText);
-
-            if (!saUIManager.IsRecognizedWordEmplty())
+            private void OnVoiceRecognized(string recognizedText)
             {
-                recognizedText = saUIManager.GetRecognizedWord();
-                saUIManager.SetInstructionText("Press Y to send to Agent");
-                currentState = "recorded";
+
+                    saUIManager.SetInstructionText("Press Y to send to Agent");
+
+                    // 上書きから追記に変更 ↓↓↓
+                    recognizedWord += recognizedText + " "; // スペースで区切る
+                    saUIManager.SetRecognizedTxt(recognizedWord);
+                    currentState = "recorded";
+                    Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
             }
-        }
 
         protected override void Update()
         {
+
+
+            
             base.Update();
             if (!isStarted) return;
             
+                  // 音声入力制御
+                if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+                {
+                    SASpeechRecognizer.Instance.ActivateVoice();
+                    Debug.Log("[LabelExecutor] Trigger押下：録音開始");
+                }
+
+                if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+                {
+                    SASpeechRecognizer.Instance.DeactivateVoice();
+                    Debug.Log("[LabelExecutor] Trigger離す：録音終了");
+                }
 
                if (OVRInput.GetDown(OVRInput.RawButton.A))
             {
@@ -87,10 +122,20 @@ namespace SpatialLLM.Experiment
                 OperationProceed();
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.RawButton.X))
-            {
-                experimentManager.BackToShowDevice();
-            }
+              if (OVRInput.GetDown(OVRInput.RawButton.X))
+        {
+            ResetRecognizedWord();
+            currentState = "preparation";
+            OperationProceed();
+        }
+
+        // --- キャンセル（XボタンまたはESC） ---
+        if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
+        {
+            ResetRecognizedWord();
+            currentState = "preparation";
+            experimentManager.BackToShowDevice();
+        }
         }
 
         private async void OperationProceed()
@@ -124,7 +169,7 @@ namespace SpatialLLM.Experiment
                                 pointedDevices.Add(d.GetDevicePositionalRelativeToUser(userCamera.transform));
                             }
 
-                            await PointingQueryRequest.Instance.SendQuery(recognizedText, taskId, this.experimentTask.NextGuid, pointedDevices);
+                            await PointingQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid, pointedDevices);
                         }
                         else
                         {
@@ -136,7 +181,7 @@ namespace SpatialLLM.Experiment
                             }
 
 
-                            await PointingQueryRequest.Instance.SendQuery(recognizedText, taskId, this.experimentTask.NextGuid, pointedIds);
+                            await PointingQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid, pointedIds);
                         }
                       
                     }
@@ -157,7 +202,7 @@ namespace SpatialLLM.Experiment
                     }
 
                      this.experimentTask.AddTaskAttempt(
-                        recognizedText,
+                        recognizedWord,
                         this.elapsedTime.ToString(),
                         operatedIds
                     );
@@ -190,7 +235,7 @@ namespace SpatialLLM.Experiment
             try
             {
 
-
+                recognizedWord = ""; 
                 var response = JsonConvert.DeserializeObject<LLMResponse>(json);
                 latestLLMOutput = response.output ?? "[No output]";
                 Debug.Log($"<color=cyan>LLM Output Saved: {latestLLMOutput}</color>");

@@ -268,6 +268,7 @@ public class ExperimentManager : MonoBehaviour
 
     public void BackToShowDevice() 
     {
+        systemExecutor.ExietExecutor();
         TransitionToState(ExperimentFlowState.SHOW_DEVICE);
     }
 

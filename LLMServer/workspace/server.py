@@ -16,7 +16,7 @@ from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
 
-OUTPUT_FILE_NAME="P6_TUTORIAL"
+OUTPUT_FILE_NAME="P1"
 app = FastAPI()
 
 
@@ -83,7 +83,7 @@ def serialize_value(value):
     else:
         return str(value)  
 
-def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_keys=None, additional_data: dict = None):
+def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_keys=None, additional_data: dict = None, isTutorial = False):
     try:
         response = runner.invoke(state)
       
@@ -99,6 +99,10 @@ def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_ke
         serialized["attempt_id"] = attempt_id
         if additional_data:
             serialized.update(additional_data)
+
+        #　もしチュートリアルであれば保存しない
+        if isTutorial:
+            return {"output": agent_output.get("response"), "reasoning": agent_output.get("reasoning")}
 
         os.makedirs(os.path.dirname(save_file_path), exist_ok=True)
         if os.path.exists(save_file_path) and os.path.getsize(save_file_path) > 0:
@@ -221,6 +225,38 @@ def llm_agent_no_tool(message: InputMessage):
             "error": "LLM processing failed.",
             "detail": str(e)
         }
+
+@app.post("/pointing_spatial_tutorial")
+def llm_pointing_spatial(message: InputMessageWithPointing):
+    print("SR POINTING")
+    is_pointing = message.pointed_devices and len(message.pointed_devices) > 0
+
+    if is_pointing:
+        state = PointingState(
+            user_prompt=message.llm_message,
+            pointed_devices=message.pointed_devices
+        )
+        print("POINTING SPATIAL STATE:" )
+        runner = getPointingSpatialRunner()
+        save_path = make_save_path("2")
+
+
+
+        
+        return run_agent_and_log(
+            state, runner, message.task_id, message.attempt_id, save_path,
+            pop_keys=["input_prompt", "all_devices","callback"],
+            additional_data={"pointed_devices": message.pointed_devices},
+            isTutorial=True
+        )
+    else:
+        state = State(user_prompt=message.llm_message)
+        runner = getSystemRunner()
+        save_path = make_save_path("2")
+        return run_agent_and_log(
+            state, runner, message.task_id, message.attempt_id, save_path,
+            pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt"]
+        )
 
 
 
