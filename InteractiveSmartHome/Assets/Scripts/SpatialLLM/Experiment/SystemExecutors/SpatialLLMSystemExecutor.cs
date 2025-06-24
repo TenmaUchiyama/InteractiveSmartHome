@@ -27,13 +27,15 @@ public class SpatialLLMSystemExecutor : SystemExecutor
     private string currentState = "waiting";
     private string latestLLMOutput = "[No output]";
     private string agentMsg = "";
+         private bool gripHeld = false;
+
 
     protected virtual void Start()
     {
-        
+
         this.onBeginOperation.AddListener(() =>
         {
-            currentState = "preparation"; 
+            currentState = "preparation";
             OperationProceed(); // 初期状態でYボタン操作を実行
         });
         if (SASpeechRecognizer.Instance)
@@ -63,7 +65,8 @@ public class SpatialLLMSystemExecutor : SystemExecutor
         {
             latestLLMOutput = "[LLM Error]";
             Debug.LogError("Failed to parse LLM response: " + ex.Message);
-        }
+            OperationProceed(); 
+    }
     }
 
     void OnDestroy()
@@ -73,9 +76,60 @@ public class SpatialLLMSystemExecutor : SystemExecutor
             SASpeechRecognizer.Instance.OnVoiceRecognized.RemoveListener(OnVoiceRecognized);
         }
     }
+    
+
+
+       private void StateUIHelper()
+{
+    // まず全ラベルをクリア
+    uiButtonHelper.CloseAllLabels();
+
+    switch (currentState)
+    {
+        case "preparation":
+            // Trigger を押して録音開始
+            uiButtonHelper.SetLabel(UIButtonLabelType.LeftTrigger, "音声録音", Color.white, Color.gray);
+           uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
+            break;
+
+        case "recorded":
+            // 録音完了 → 送信・キャンセル
+            uiButtonHelper.SetLabel(UIButtonLabelType.Y, "送信", Color.black, Color.green);
+                uiButtonHelper.SetLabel(UIButtonLabelType.X, "取り消し", Color.black, Color.red);
+                uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
+            break;
+
+        case "received":
+            // LLMレスポンス待ち中は特に何も表示しない or ローディングUI
+            break;
+
+        case "checking":
+            uiButtonHelper.SetLabel(UIButtonLabelType.LeftGrip, "押して操作", Color.black, Color.gray);
+            if (gripHeld)
+            {
+                uiButtonHelper.SetLabel(UIButtonLabelType.Y, "確定", Color.black, Color.green);
+                uiButtonHelper.SetLabel(UIButtonLabelType.X, "やり直し", Color.black, Color.red);
+                saUIManager.SetInstructionText("Grip+Y to confirm, Grip+X to retry");
+            }
+            else
+            {
+                uiButtonHelper.CloseLabel(UIButtonLabelType.Y);
+                uiButtonHelper.CloseLabel(UIButtonLabelType.X);
+                saUIManager.SetInstructionText("Gripを押しながらYかXを使ってください");
+            }
+            break;
+
+        case "done":
+        default:
+            // 完了時は全ラベルを閉じる
+            uiButtonHelper.CloseAllLabels();
+            break;
+    }
+}
+
 
     private void OnVoiceRecognized(string recognizedText)
-{
+    {
 
         saUIManager.SetInstructionText("Press Y to send to Agent");
 
@@ -83,8 +137,9 @@ public class SpatialLLMSystemExecutor : SystemExecutor
         recognizedWord += recognizedText + " "; // スペースで区切る
         saUIManager.SetRecognizedTxt(recognizedWord);
         currentState = "recorded";
+        StateUIHelper();
         Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
-}
+    }
 
     protected override void OnLeftThumbstickLeftFlick()
     {
@@ -128,28 +183,68 @@ public class SpatialLLMSystemExecutor : SystemExecutor
             SASpeechRecognizer.Instance.DeactivateVoice();
             Debug.Log("[LabelExecutor] Trigger離す：録音終了");
         }
+        
 
-        // --- Yボタン + Bボタン同時押し時のみ進める ---
-        bool isYPressed = OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y);
-        bool isGripped = OVRInput.Get(OVRInput.RawButton.LHandTrigger) || Input.GetKey(KeyCode.G);
+          if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger))
+    {
+        gripHeld = true;
+        StateUIHelper();
+        Debug.Log("[LabelSystemExecutor] Grip押下");
+    }
 
+    if (OVRInput.GetUp(OVRInput.RawButton.LHandTrigger))
+    {
+        gripHeld = false;
+        StateUIHelper();
+        Debug.Log("[LabelSystemExecutor] Grip離上");
+    }
 
-        if (isYPressed)
+    // ─── Yボタン（送信／確定） ──────────────────────────
+        if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
         {
-            if (isGripped)
+            if (currentState == "checking")
             {
-                currentState = "done";
+                if (gripHeld)
+                {
+                    currentState = "done";
+                    OperationProceed();
+                }
+                else
+                {
+                    Debug.Log("[LabelSystemExecutor] GripなしでY押下：アクションなし");
+                }
             }
-
-            OperationProceed();
-
-
+            else
+            {
+                OperationProceed();
+            }
         }
 
-        if (OVRInput.GetDown(OVRInput.RawButton.X))
+    // ─── Xボタン（リセット／やり直し） ───────────────────
+     if (OVRInput.GetDown(OVRInput.RawButton.X))
         {
-            ResetRecognizedWord();
-         
+
+
+                if (currentState != "checking")
+                {
+                    //　X押されたとき、認識していた音声データをリセット
+                    ResetRecognizedWord();
+                }
+                else
+                {
+
+                    if (gripHeld)
+                    {
+                          ResetRecognizedWord();             // 音声入力リセット
+                        currentState = "preparation";      // 戻る！
+                        OperationProceed();
+                    }
+                    else
+                    {
+                        Debug.Log("Y pressed without Grip - no action");
+                    }
+                }
+           
         }
 
         // --- キャンセル（XボタンまたはESC） ---
@@ -163,6 +258,8 @@ public class SpatialLLMSystemExecutor : SystemExecutor
 
     private async void OperationProceed()
     {
+
+        StateUIHelper(); // UIラベルの更新
         Debug.Log($"<color=yellow>OperationStates: {currentState}</color>");
 
         switch (currentState)
@@ -182,6 +279,11 @@ public class SpatialLLMSystemExecutor : SystemExecutor
                 saUIManager.StartSendLLM();
                 if (!LLMQueryRequest.Instance.IsRequesting)
                 {
+                    if (recognizedWord == "")
+                    {
+                        saUIManager.SetInstructionText("No input recognized. Please try again.");
+                        return; // 入力がない場合は何もしない
+                    }
                     var sendinData = new
                     {
                         llm_message = recognizedWord, 
@@ -207,8 +309,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
                 break;
 
             case "checking":
-                currentState = "preparation";
-                saUIManager.SetInstructionText("Grip+Y to confirm, or press Y to start over");
+                    saUIManager.SetInstructionText("Grip+Y to confirm, or press Y to start over");
                 break;
 
             case "done":

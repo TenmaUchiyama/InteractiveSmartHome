@@ -11,8 +11,17 @@ from agents.device_operator_agent.operator_tool import operateDevice
 
 
 # プロンプトと全デバイスの読み込み
-script_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(script_dir, "prompts", "pointing_msg.txt")
+script_dir = os.path.dirname(os.path.abspath(__file__))  
+language = os.getenv("VOICE_LANG", "en").strip() if os.getenv("VOICE_LANG") else "en"
+if language == "ja":
+    file_path = os.path.join(script_dir, "prompts", "jp_pointing_msg.txt")
+else:
+    file_path = os.path.join(script_dir, "prompts", "pointing_msg.txt")
+
+
+
+
+
 
 with open(file_path, "r", encoding="utf-8") as f:
     label_message = SystemMessage(f.read())

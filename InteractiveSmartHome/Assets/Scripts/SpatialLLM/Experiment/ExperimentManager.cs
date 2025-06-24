@@ -403,7 +403,7 @@ private int ExtractParticipantNumber(string name)
     
      private async void TransitionToState(ExperimentFlowState nextState)
     {
-        if(uiButtonHelper)uiButtonHelper.DisableAllLabels();
+        if(uiButtonHelper)uiButtonHelper.CloseAllLabels();
         stateHistory.Push(currentState);
         currentState = nextState;
         if (stateActions.ContainsKey(nextState))

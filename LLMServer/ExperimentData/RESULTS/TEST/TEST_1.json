@@ -1,0 +1,508 @@
+[
+  {
+    "user_prompt": "天井の右二つを赤、左二つを緑に して ",
+    "filterAgent": {
+      "input_prompt": [
+        {
+          "type": "system",
+          "content": "\n# DeviceFilterAgentプロンプト\n\nあなたは、スマートホームシステムに組み込まれた **DeviceFilterAgent** です。このエージェントは、大規模言語モデル（LLM）によって動作しており、ユーザーの**自然言語による指示**を受け取り、それに基づいて適切なデバイス選択のための **JSON形式のフィルタ情報** を出力します。\n\n---\n\n##  役割\n\n* ユーザーの発話から **空間的・文脈的手がかり** を理解する\n* 適切な `filter_type` を選択する\n* そのフィルターに必要な `params` を生成する\n* なぜその選択をしたのかを、1～2文で簡潔に `reasoning` に記述する\n\n---\n\n##  フィルタータイプの選択ルール（優先順位あり）\n\n###  優先ルール\n\nまず、ユーザーの指示に以下のような**身体基準の表現**が含まれるかを確認します：\n\n* 「私の右」「後ろ」「上にある」「体の左側」「足元の」など\n\nこのような\\*\\*身体基準（Body-Relative）\\*\\*の語が含まれている場合、**必ず `direction` を選択**してください。\nそうでない場合は、視線や視界に基づくと見なして **デフォルトで `fov` を使用**します。\nオブジェクト（テレビや棚）はBodyRelativeではないです。\n**特に距離の指定の様なものがなければ必ずRangeは0です。**（例えば3m以内とかであれば使ってもいいけど近いとかは使わない）\n---\n\n### `\"fov\"` — 視界ベースのフィルタ（デフォルト）\n\n「見えている」「正面の」「一番右の」など、視界内における空間配置の言及があるが、身体基準の語が含まれていないときに使用します。\n\n**例：**\n\n* 「一番右のライト」→ `order: right`\n* 「見えているライト」→ `order: centrality`\n* 「一番高いライト」→ `order: high`\n\n**パラメータ形式：**\n\n```json\n{\n  \"isInFov\": true,\n  \"order\": \"centrality\" | \"right\" | \"high\" | \"proximity\",\n  \"range\": 0.0\n}\n```\n\n> デフォルトの `order` は `\"centrality\"`\n\n---\n\n### `\"direction\"` — 身体基準の空間参照\n\n「私の右」「後ろのカーテン」「左側にある扇風機」など、ユーザーの身体や視点を基準にした表現がある場合に使用します。\n\n**例：**\n\n* 「私の右にあるライト」→ `direction: Right`\n* 「後ろの扇風機」→ `direction: Back`\n* 「上の方にあるやつ」→ `direction: Up`\n\n**パラメータ形式：**\n\n```json\n{\n  \"direction\": \"Front\" | \"Back\" | \"Left\" | \"Right\" | \"Up\" | \"Down\",\n  \"order\": \"centrality\" | \"proximity\" | \"right\" | \"high\",\n  \"range\": 0.0\n}\n```\n\n> デフォルトの `order` は `\"centrality\"`\n\n---\n\n### `\"all\"` — 全体または近接参照\n\n「全部つけて」「近くのやつ全部消して」など、範囲や数量を示す語が含まれるときに使用します。\n\n**例：**\n\n* 「すべてのライトをつけて」→ `range: 0.0`\n* 「近くのやつ全部消して」→ `range: 4.0`\n\n**パラメータ形式：**\n\n```json\n{\n  \"order\": \"proximity\",\n  \"range\": \"integer\"\n}\n```\n\n---\n\n### `null` — デバイス選別が不要な指示\n\n状態確認や挨拶など、特定のデバイスに関係しない指示には `null` を使います。\n\n```json\n{\n  \"filter_type\": null,\n  \"params\": null,\n  \"reasoning\": \"この指示にはデバイスの選別が不要です。\"\n}\n```\n\n---\n\n## 🧪 使用例\n\n### 入力: 「一番右のライトをつけて」\n\n```json\n{\n  \"filter_type\": \"fov\",\n  \"params\": {\n    \"isInFov\": true,\n    \"order\": \"right\",\n    \"range\": 0.0\n  },\n  \"reasoning\": \"『一番右』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。\"\n}\n```\n\n---\n\n### 入力: 「私の右にあるライトをつけて」\n\n```json\n{\n  \"filter_type\": \"direction\",\n  \"params\": {\n    \"direction\": \"Right\",\n    \"order\": \"centrality\",\n    \"range\": 0.0\n  },\n  \"reasoning\": \"『私の右』という身体基準の空間表現が含まれているため、directionを使用した。\"\n}\n```\n\n---\n\n### 入力: 「近くのライト全部消して」\n\n```json\n{\n  \"filter_type\": \"all\",\n  \"params\": {\n    \"order\": \"proximity\",\n    \"range\": 2.0\n  },\n  \"reasoning\": \"『近くの』という距離に基づく表現があるため、proximityベースのallフィルタを使った。\"\n}\n```\n\n---\n\n### 入力: 「今の状況を教えて」\n\n```json\n{\n  \"filter_type\": null,\n  \"params\": null,\n  \"reasoning\": \"状態確認の指示であり、特定デバイスの選別は不要である。\"\n}\n```\n\n"
+        },
+        {
+          "type": "human",
+          "content": "天井の右二つを赤、左二つを緑に して "
+        }
+      ],
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "right",
+          "range": 0.0
+        },
+        "reasoning": "『右二つ』と『左二つ』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "name": "Ceiling Light 8",
+          "position": {
+            "x": 1.16651082,
+            "y": 1.76892209,
+            "z": 2.655758
+          },
+          "distance_from_user": 3.397482,
+          "eye_centrality_score": 24.5765419
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "name": "Shelf Light 1",
+          "position": {
+            "x": 0.8491064,
+            "y": 0.928921938,
+            "z": 5.58802557
+          },
+          "distance_from_user": 5.72799349,
+          "eye_centrality_score": 29.3185215
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "name": "Ceiling Light 4",
+          "position": {
+            "x": -0.125946254,
+            "y": 1.756922,
+            "z": 4.187285
+          },
+          "distance_from_user": 4.542686,
+          "eye_centrality_score": 12.2845449
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "name": "Ceiling Light 7",
+          "position": {
+            "x": -0.359906822,
+            "y": 1.76892209,
+            "z": 1.36500216
+          },
+          "distance_from_user": 2.26315022,
+          "eye_centrality_score": 18.5177383
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "name": "Ceiling Light 3",
+          "position": {
+            "x": -1.65465462,
+            "y": 1.756922,
+            "z": 2.894592
+          },
+          "distance_from_user": 3.76872945,
+          "eye_centrality_score": 22.6299629
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1390,
+          "completion_tokens": 92,
+          "total_tokens": 1482
+        },
+        "cost_usd": 0.004395,
+        "agent_time_elapsed": 2.8734047412872314,
+        "system_time_elapsed": 3.566384792327881
+      }
+    },
+    "spatialAgent": {
+      "input_prompt": [
+        {
+          "type": "system",
+          "content": "\n# SpatialReasoningAgentプロンプト\n\nあなたは、スマートホームシステムにおける **SpatialReasoningAgent** です。このエージェントは、大規模言語モデル（LLM）によって動作し、ユーザーからの**空間的自然言語指示**を解釈して、操作対象となるスマートホームデバイスを選択します。\n\n---\n\n## 🎯 役割\n\n1. ユーザーの指示文から**空間的な情報**を解釈する\n2. デバイスの位置情報や名前から**空間的なまとまりや配置**（例：列・帯・クラスタ）を推定する\n3. 色や明るさなどの**視覚的指定**が含まれる場合、それを理解して反映する\n4. 上流の**DeviceFilterAgent** から渡された `filter_type`、`params`、`reasoning` を活用する\n5. 数値的な座標ではなく、**視覚的まとまり（レイアウト）を優先して解釈**する\n6. 単純に座標の値の差だけで決めない。一度名前や座標を含めて**グループを割り出してから**その中で比較するようにする\n7. 出力内容：\n\n   * 操作対象となるデバイス一覧（ON/OFF、色、明るさを含む）\n   * ユーザー向けの `response`（自然文による操作内容の要約）\n   * システム向けの `reasoning`（どのように解釈して選択したかの説明）\n\n---\n\n## 📥 入力形式\n\n```json\n{\n  \"filter_type\": \"fov\" | \"direction\" | \"all\" | \"around_furniture\",\n  \"params\": {\n    \"order\": \"proximity\" | \"right\" | \"high\",\n    \"range\": 0.0\n  },\n  \"user_prompt\": \"<ユーザーの自然言語指示>\",\n  \"reasoning\": \"<FilterDeviceAgentによる推論結果>\",\n  \"devices\": [\n    {\n      \"id\": \"device_id\",\n      \"name\": \"light1\",\n      \"position\": { \"x\": 0.5, \"y\": 2.0, \"z\": 3.0 },\n      \"distance_from_user\": 3.1,\n      \"eye_centrality_score\": 14.8\n    },\n    ...\n  ]\n}\n```\n\n---\n\n## 📤 出力形式\n\n```json\n{\n  \"devices\": [\n    {\n      \"id\": \"device_id\",\n      \"state\": true,\n      \"intensity\": 100,\n      \"color\": { \"r\": 255, \"g\": 255, \"b\": 255 }\n    },\n    ...\n  ],\n  \"response\": \"手前のグループを赤色、奥のグループを青色にしました。\",\n  \"reasoning\": \"デバイスはz座標に基づいて奥行き方向の空間的まとまりでグループ化されました。特定の軸に依存せず、自然な配置に基づき手前と奥を判断しました。\"\n}\n```\n\n---\n\n## 📐 座標系\n\n* `+x`: 右    `-x`: 左\n* `+z`: 前    `-z`: 後ろ\n* `+y`: 上    `-y`: 下\n\n---\n\n## 🧠 空間的なまとまりの推定（優先）\n\n* **数値的ソートの前に**、必ず空間的なまとまり（クラスタ、列、面など）を推定する\n* 近接性・連続性・分布パターンから自然なまとまりを検出する\n* 例：「右の列」「奥のグループ」などは、座標値だけでなく**全体レイアウト**を元に解釈する\n\n---\n\n## ↔️ 左右・中央・右の判断について\n\n* `x` 軸の値だけで「右」や「左」と判定しない\n* 微妙に中心付近（例: x ≈ 0）のデバイスは「右」や「左」に分類しない\n* 対称性や空間分布をもとに、「左帯」「右帯」「中央帯」などを推定し、指示語に対応させる\n\n---\n\n## 🔢 順位付けと曖昧さの解決\n\n* `eye_centrality_score` や `distance_from_user` は、**グループ内での順位付け**にのみ使用\n* `eye_centrality_score` は視線の真ん中からの角度を示す。このスコアの数値が低ければ低いほど、真ん中にデバイスがある。\n* グルーピング自体はこれら数値に依存しない\n\n---\n\n## 🎨 色と操作の割り当て\n\n* 色の指定がある場合、空間的なまとまりに基づいて色を割り当てる\n* 指定がない場合のデフォルト：\n\n  * `color`: 白 `{ \"r\": 255, \"g\": 255, \"b\": 255 }`\n  * `intensity`: 100\n  * `state`: `true`（ON）\n\n---\n\n## 🧪 使用例\n\n### 入力\n\n```json\n{\n  \"filter_type\": \"fov\",\n  \"params\": {\n    \"order\": \"proximity\",\n    \"range\": 0.0\n  },\n  \"user_prompt\": \"手前の列を赤色に、奥の列を青色にして下さい\",\n  \"reasoning\": \"『列』という語があり、z軸に沿った空間的まとまりとして手前・奥のグループを推定した。\",\n  \"devices\": [\n    { \"id\": \"light_10\", \"position\": { \"x\": -1.65, \"y\": 2.33, \"z\": 1.93 }, \"distance_from_user\": 3.45, \"eye_centrality_score\": 29.65 },\n    { \"id\": \"light_6\",  \"position\": { \"x\": 0.23,  \"y\": 2.33, \"z\": 2.60 }, \"distance_from_user\": 3.50, \"eye_centrality_score\": 9.27 },\n    { \"id\": \"light_2\",  \"position\": { \"x\": 2.12,  \"y\": 2.32, \"z\": 3.27 }, \"distance_from_user\": 4.54, \"eye_centrality_score\": 31.04 },\n    { \"id\": \"light_9\",  \"position\": { \"x\": -2.31, \"y\": 2.33, \"z\": 3.80 }, \"distance_from_user\": 5.03, \"eye_centrality_score\": 25.39 },\n    { \"id\": \"light_5\",  \"position\": { \"x\": -0.41, \"y\": 2.33, \"z\": 4.48 }, \"distance_from_user\": 5.07, \"eye_centrality_score\": 8.17 },\n    { \"id\": \"light_1\",  \"position\": { \"x\": 1.45,  \"y\": 2.32, \"z\": 5.15 }, \"distance_from_user\": 5.83, \"eye_centrality_score\": 20.58 }\n  ]\n}\n```\n\n### 出力\n\n```json\n{\n  \"devices\": [\n    { \"id\": \"light_10\", \"state\": true, \"intensity\": 100, \"color\": { \"r\": 255, \"g\": 0, \"b\": 0 } },\n    { \"id\": \"light_6\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 255, \"g\": 0, \"b\": 0 } },\n    { \"id\": \"light_2\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 255, \"g\": 0, \"b\": 0 } },\n    { \"id\": \"light_9\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 0, \"g\": 0, \"b\": 255 } },\n    { \"id\": \"light_5\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 0, \"g\": 0, \"b\": 255 } },\n    { \"id\": \"light_1\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 0, \"g\": 0, \"b\": 255 } }\n  ],\n  \"response\": \"手前の列を赤色、奥の列を青色にしました。\",\n  \"reasoning\": \"z座標に基づいてデバイスを2つの列に分け、自然な奥行き方向のまとまりとしてグループ化しました。軸に依存せず、視覚的配置を優先して前後を判断しました。\"\n}\n```\n"
+        },
+        {
+          "type": "human",
+          "content": "{\"filter_type\": \"fov\", \"params\": {\"isInFov\": true, \"order\": \"right\", \"range\": 0.0}, \"reasoning\": \"『右二つ』と『左二つ』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。\", \"user_prompt\": \"天井の右二つを赤、左二つを緑に して \", \"devices\": [{\"id\": \"74a6f0f8-be5d-479e-9e08-91d6bd599916\", \"name\": \"Ceiling Light 8\", \"position\": {\"x\": 1.16651082, \"y\": 1.76892209, \"z\": 2.655758}, \"distance_from_user\": 3.397482, \"eye_centrality_score\": 24.5765419}, {\"id\": \"409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6\", \"name\": \"Shelf Light 1\", \"position\": {\"x\": 0.8491064, \"y\": 0.928921938, \"z\": 5.58802557}, \"distance_from_user\": 5.72799349, \"eye_centrality_score\": 29.3185215}, {\"id\": \"6ac4ec9f-0326-4619-b79a-ecbbe5459d23\", \"name\": \"Ceiling Light 4\", \"position\": {\"x\": -0.125946254, \"y\": 1.756922, \"z\": 4.187285}, \"distance_from_user\": 4.542686, \"eye_centrality_score\": 12.2845449}, {\"id\": \"e9a21485-0eb4-40ad-a985-cef8bc98d190\", \"name\": \"Ceiling Light 7\", \"position\": {\"x\": -0.359906822, \"y\": 1.76892209, \"z\": 1.36500216}, \"distance_from_user\": 2.26315022, \"eye_centrality_score\": 18.5177383}, {\"id\": \"6f1c35e2-1ca1-4f43-93cf-755d9479025b\", \"name\": \"Ceiling Light 3\", \"position\": {\"x\": -1.65465462, \"y\": 1.756922, \"z\": 2.894592}, \"distance_from_user\": 3.76872945, \"eye_centrality_score\": 22.6299629}]}"
+        }
+      ],
+      "output_data": {
+        "devices": [
+          {
+            "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 255,
+              "b": 0
+            }
+          },
+          {
+            "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 255,
+              "b": 0
+            }
+          }
+        ],
+        "response": "天井の右二つを赤色、左二つを緑色にしました。",
+        "reasoning": "デバイスのx座標に基づき、x値が大きいものを空間的に「右」とみなして2つ選び、それ以外の内で最も左に位置する2つを「左」とみなしてグループを作成しました。Ceiling Light 8とCeiling Light 4が右、Ceiling Light 7とCeiling Light 3が左として選択され、対応する色を適用しました。他のデバイスは天井には対応しないため無視しました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2683,
+          "completion_tokens": 444,
+          "total_tokens": 3127
+        },
+        "cost_usd": 0.011148,
+        "agent_time_elapsed": 6.135323524475098,
+        "system_time_elapsed": 6.1447975635528564
+      }
+    },
+    "agent_output": {
+      "devices": [
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "天井の右二つを赤色、左二つを緑色にしました。",
+      "reasoning": "デバイスのx座標に基づき、x値が大きいものを空間的に「右」とみなして2つ選び、それ以外の内で最も左に位置する2つを「左」とみなしてグループを作成しました。Ceiling Light 8とCeiling Light 4が右、Ceiling Light 7とCeiling Light 3が左として選択され、対応する色を適用しました。他のデバイスは天井には対応しないため無視しました。"
+    },
+    "selected_devices": [
+      {
+        "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0
+        }
+      },
+      {
+        "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0
+        }
+      }
+    ],
+    "system_metrics": null,
+    "system_total_time_sec": 10.077061414718628,
+    "task_id": "04f5e376-2845-485a-8cb1-c38e3858ff8a",
+    "attempt_id": "3e38c951-da6e-4990-a2a4-42123a5d65e8"
+  },
+  {
+    "user_prompt": "天井の右二つを赤、左二つを緑に ",
+    "filterAgent": {
+      "input_prompt": [
+        {
+          "type": "system",
+          "content": "\n# DeviceFilterAgentプロンプト\n\nあなたは、スマートホームシステムに組み込まれた **DeviceFilterAgent** です。このエージェントは、大規模言語モデル（LLM）によって動作しており、ユーザーの**自然言語による指示**を受け取り、それに基づいて適切なデバイス選択のための **JSON形式のフィルタ情報** を出力します。\n\n---\n\n##  役割\n\n* ユーザーの発話から **空間的・文脈的手がかり** を理解する\n* 適切な `filter_type` を選択する\n* そのフィルターに必要な `params` を生成する\n* なぜその選択をしたのかを、1～2文で簡潔に `reasoning` に記述する\n\n---\n\n##  フィルタータイプの選択ルール（優先順位あり）\n\n###  優先ルール\n\nまず、ユーザーの指示に以下のような**身体基準の表現**が含まれるかを確認します：\n\n* 「私の右」「後ろ」「上にある」「体の左側」「足元の」など\n\nこのような\\*\\*身体基準（Body-Relative）\\*\\*の語が含まれている場合、**必ず `direction` を選択**してください。\nそうでない場合は、視線や視界に基づくと見なして **デフォルトで `fov` を使用**します。\nオブジェクト（テレビや棚）はBodyRelativeではないです。\n**特に距離の指定の様なものがなければ必ずRangeは0です。**（例えば3m以内とかであれば使ってもいいけど近いとかは使わない）\n---\n\n### `\"fov\"` — 視界ベースのフィルタ（デフォルト）\n\n「見えている」「正面の」「一番右の」など、視界内における空間配置の言及があるが、身体基準の語が含まれていないときに使用します。\n\n**例：**\n\n* 「一番右のライト」→ `order: right`\n* 「見えているライト」→ `order: centrality`\n* 「一番高いライト」→ `order: high`\n\n**パラメータ形式：**\n\n```json\n{\n  \"isInFov\": true,\n  \"order\": \"centrality\" | \"right\" | \"high\" | \"proximity\",\n  \"range\": 0.0\n}\n```\n\n> デフォルトの `order` は `\"centrality\"`\n\n---\n\n### `\"direction\"` — 身体基準の空間参照\n\n「私の右」「後ろのカーテン」「左側にある扇風機」など、ユーザーの身体や視点を基準にした表現がある場合に使用します。\n\n**例：**\n\n* 「私の右にあるライト」→ `direction: Right`\n* 「後ろの扇風機」→ `direction: Back`\n* 「上の方にあるやつ」→ `direction: Up`\n\n**パラメータ形式：**\n\n```json\n{\n  \"direction\": \"Front\" | \"Back\" | \"Left\" | \"Right\" | \"Up\" | \"Down\",\n  \"order\": \"centrality\" | \"proximity\" | \"right\" | \"high\",\n  \"range\": 0.0\n}\n```\n\n> デフォルトの `order` は `\"centrality\"`\n\n---\n\n### `\"all\"` — 全体または近接参照\n\n「全部つけて」「近くのやつ全部消して」など、範囲や数量を示す語が含まれるときに使用します。\n\n**例：**\n\n* 「すべてのライトをつけて」→ `range: 0.0`\n* 「近くのやつ全部消して」→ `range: 4.0`\n\n**パラメータ形式：**\n\n```json\n{\n  \"order\": \"proximity\",\n  \"range\": \"integer\"\n}\n```\n\n---\n\n### `null` — デバイス選別が不要な指示\n\n状態確認や挨拶など、特定のデバイスに関係しない指示には `null` を使います。\n\n```json\n{\n  \"filter_type\": null,\n  \"params\": null,\n  \"reasoning\": \"この指示にはデバイスの選別が不要です。\"\n}\n```\n\n---\n\n## 🧪 使用例\n\n### 入力: 「一番右のライトをつけて」\n\n```json\n{\n  \"filter_type\": \"fov\",\n  \"params\": {\n    \"isInFov\": true,\n    \"order\": \"right\",\n    \"range\": 0.0\n  },\n  \"reasoning\": \"『一番右』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。\"\n}\n```\n\n---\n\n### 入力: 「私の右にあるライトをつけて」\n\n```json\n{\n  \"filter_type\": \"direction\",\n  \"params\": {\n    \"direction\": \"Right\",\n    \"order\": \"centrality\",\n    \"range\": 0.0\n  },\n  \"reasoning\": \"『私の右』という身体基準の空間表現が含まれているため、directionを使用した。\"\n}\n```\n\n---\n\n### 入力: 「近くのライト全部消して」\n\n```json\n{\n  \"filter_type\": \"all\",\n  \"params\": {\n    \"order\": \"proximity\",\n    \"range\": 2.0\n  },\n  \"reasoning\": \"『近くの』という距離に基づく表現があるため、proximityベースのallフィルタを使った。\"\n}\n```\n\n---\n\n### 入力: 「今の状況を教えて」\n\n```json\n{\n  \"filter_type\": null,\n  \"params\": null,\n  \"reasoning\": \"状態確認の指示であり、特定デバイスの選別は不要である。\"\n}\n```\n\n"
+        },
+        {
+          "type": "human",
+          "content": "天井の右二つを赤、左二つを緑に "
+        }
+      ],
+      "output_tool_selection": {
+        "filter_type": "fov",
+        "params": {
+          "isInFov": true,
+          "order": "right",
+          "range": 0.0
+        },
+        "reasoning": "『右二つ』と『左二つ』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。"
+      },
+      "devices": [
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "name": "Ceiling Light 8",
+          "position": {
+            "x": 1.233683,
+            "y": 1.77428913,
+            "z": 2.62168169
+          },
+          "distance_from_user": 3.397542,
+          "eye_centrality_score": 26.1299763
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "name": "Shelf Light 1",
+          "position": {
+            "x": 0.995773256,
+            "y": 0.934289,
+            "z": 5.561467
+          },
+          "distance_from_user": 5.72663736,
+          "eye_centrality_score": 27.74389
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "name": "Ceiling Light 4",
+          "position": {
+            "x": -0.0168410186,
+            "y": 1.762289,
+            "z": 4.18763542
+          },
+          "distance_from_user": 4.54337263,
+          "eye_centrality_score": 10.4707012
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "name": "Ceiling Light 7",
+          "position": {
+            "x": -0.327116847,
+            "y": 1.77428913,
+            "z": 1.37272012
+          },
+          "distance_from_user": 2.26703954,
+          "eye_centrality_score": 20.5056725
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "name": "Ceiling Light 3",
+          "position": {
+            "x": -1.57998323,
+            "y": 1.762289,
+            "z": 2.93679929
+          },
+          "distance_from_user": 3.771843,
+          "eye_centrality_score": 20.9411983
+        }
+      ],
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 1388,
+          "completion_tokens": 92,
+          "total_tokens": 1480
+        },
+        "cost_usd": 0.00439,
+        "agent_time_elapsed": 1.6417722702026367,
+        "system_time_elapsed": 2.001098871231079
+      }
+    },
+    "spatialAgent": {
+      "input_prompt": [
+        {
+          "type": "system",
+          "content": "\n# SpatialReasoningAgentプロンプト\n\nあなたは、スマートホームシステムにおける **SpatialReasoningAgent** です。このエージェントは、大規模言語モデル（LLM）によって動作し、ユーザーからの**空間的自然言語指示**を解釈して、操作対象となるスマートホームデバイスを選択します。\n\n---\n\n## 🎯 役割\n\n1. ユーザーの指示文から**空間的な情報**を解釈する\n2. デバイスの位置情報や名前から**空間的なまとまりや配置**（例：列・帯・クラスタ）を推定する\n3. 色や明るさなどの**視覚的指定**が含まれる場合、それを理解して反映する\n4. 上流の**DeviceFilterAgent** から渡された `filter_type`、`params`、`reasoning` を活用する\n5. 数値的な座標ではなく、**視覚的まとまり（レイアウト）を優先して解釈**する\n6. 単純に座標の値の差だけで決めない。一度名前や座標を含めて**グループを割り出してから**その中で比較するようにする\n7. 出力内容：\n\n   * 操作対象となるデバイス一覧（ON/OFF、色、明るさを含む）\n   * ユーザー向けの `response`（自然文による操作内容の要約）\n   * システム向けの `reasoning`（どのように解釈して選択したかの説明）\n\n---\n\n## 📥 入力形式\n\n```json\n{\n  \"filter_type\": \"fov\" | \"direction\" | \"all\" | \"around_furniture\",\n  \"params\": {\n    \"order\": \"proximity\" | \"right\" | \"high\",\n    \"range\": 0.0\n  },\n  \"user_prompt\": \"<ユーザーの自然言語指示>\",\n  \"reasoning\": \"<FilterDeviceAgentによる推論結果>\",\n  \"devices\": [\n    {\n      \"id\": \"device_id\",\n      \"name\": \"light1\",\n      \"position\": { \"x\": 0.5, \"y\": 2.0, \"z\": 3.0 },\n      \"distance_from_user\": 3.1,\n      \"eye_centrality_score\": 14.8\n    },\n    ...\n  ]\n}\n```\n\n---\n\n## 📤 出力形式\n\n```json\n{\n  \"devices\": [\n    {\n      \"id\": \"device_id\",\n      \"state\": true,\n      \"intensity\": 100,\n      \"color\": { \"r\": 255, \"g\": 255, \"b\": 255 }\n    },\n    ...\n  ],\n  \"response\": \"手前のグループを赤色、奥のグループを青色にしました。\",\n  \"reasoning\": \"デバイスはz座標に基づいて奥行き方向の空間的まとまりでグループ化されました。特定の軸に依存せず、自然な配置に基づき手前と奥を判断しました。\"\n}\n```\n\n---\n\n## 📐 座標系\n\n* `+x`: 右    `-x`: 左\n* `+z`: 前    `-z`: 後ろ\n* `+y`: 上    `-y`: 下\n\n---\n\n## 🧠 空間的なまとまりの推定（優先）\n\n* **数値的ソートの前に**、必ず空間的なまとまり（クラスタ、列、面など）を推定する\n* 近接性・連続性・分布パターンから自然なまとまりを検出する\n* 例：「右の列」「奥のグループ」などは、座標値だけでなく**全体レイアウト**を元に解釈する\n\n---\n\n## ↔️ 左右・中央・右の判断について\n\n* `x` 軸の値だけで「右」や「左」と判定しない\n* 微妙に中心付近（例: x ≈ 0）のデバイスは「右」や「左」に分類しない\n* 対称性や空間分布をもとに、「左帯」「右帯」「中央帯」などを推定し、指示語に対応させる\n\n---\n\n## 🔢 順位付けと曖昧さの解決\n\n* `eye_centrality_score` や `distance_from_user` は、**グループ内での順位付け**にのみ使用\n* `eye_centrality_score` は視線の真ん中からの角度を示す。このスコアの数値が低ければ低いほど、真ん中にデバイスがある。\n* グルーピング自体はこれら数値に依存しない\n\n---\n\n## 🎨 色と操作の割り当て\n\n* 色の指定がある場合、空間的なまとまりに基づいて色を割り当てる\n* 指定がない場合のデフォルト：\n\n  * `color`: 白 `{ \"r\": 255, \"g\": 255, \"b\": 255 }`\n  * `intensity`: 100\n  * `state`: `true`（ON）\n\n---\n\n## 🧪 使用例\n\n### 入力\n\n```json\n{\n  \"filter_type\": \"fov\",\n  \"params\": {\n    \"order\": \"proximity\",\n    \"range\": 0.0\n  },\n  \"user_prompt\": \"手前の列を赤色に、奥の列を青色にして下さい\",\n  \"reasoning\": \"『列』という語があり、z軸に沿った空間的まとまりとして手前・奥のグループを推定した。\",\n  \"devices\": [\n    { \"id\": \"light_10\", \"position\": { \"x\": -1.65, \"y\": 2.33, \"z\": 1.93 }, \"distance_from_user\": 3.45, \"eye_centrality_score\": 29.65 },\n    { \"id\": \"light_6\",  \"position\": { \"x\": 0.23,  \"y\": 2.33, \"z\": 2.60 }, \"distance_from_user\": 3.50, \"eye_centrality_score\": 9.27 },\n    { \"id\": \"light_2\",  \"position\": { \"x\": 2.12,  \"y\": 2.32, \"z\": 3.27 }, \"distance_from_user\": 4.54, \"eye_centrality_score\": 31.04 },\n    { \"id\": \"light_9\",  \"position\": { \"x\": -2.31, \"y\": 2.33, \"z\": 3.80 }, \"distance_from_user\": 5.03, \"eye_centrality_score\": 25.39 },\n    { \"id\": \"light_5\",  \"position\": { \"x\": -0.41, \"y\": 2.33, \"z\": 4.48 }, \"distance_from_user\": 5.07, \"eye_centrality_score\": 8.17 },\n    { \"id\": \"light_1\",  \"position\": { \"x\": 1.45,  \"y\": 2.32, \"z\": 5.15 }, \"distance_from_user\": 5.83, \"eye_centrality_score\": 20.58 }\n  ]\n}\n```\n\n### 出力\n\n```json\n{\n  \"devices\": [\n    { \"id\": \"light_10\", \"state\": true, \"intensity\": 100, \"color\": { \"r\": 255, \"g\": 0, \"b\": 0 } },\n    { \"id\": \"light_6\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 255, \"g\": 0, \"b\": 0 } },\n    { \"id\": \"light_2\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 255, \"g\": 0, \"b\": 0 } },\n    { \"id\": \"light_9\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 0, \"g\": 0, \"b\": 255 } },\n    { \"id\": \"light_5\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 0, \"g\": 0, \"b\": 255 } },\n    { \"id\": \"light_1\",  \"state\": true, \"intensity\": 100, \"color\": { \"r\": 0, \"g\": 0, \"b\": 255 } }\n  ],\n  \"response\": \"手前の列を赤色、奥の列を青色にしました。\",\n  \"reasoning\": \"z座標に基づいてデバイスを2つの列に分け、自然な奥行き方向のまとまりとしてグループ化しました。軸に依存せず、視覚的配置を優先して前後を判断しました。\"\n}\n```\n"
+        },
+        {
+          "type": "human",
+          "content": "{\"filter_type\": \"fov\", \"params\": {\"isInFov\": true, \"order\": \"right\", \"range\": 0.0}, \"reasoning\": \"『右二つ』と『左二つ』という視覚的レイアウトの表現があり、身体参照ではないため、fovを選んだ。\", \"user_prompt\": \"天井の右二つを赤、左二つを緑に \", \"devices\": [{\"id\": \"74a6f0f8-be5d-479e-9e08-91d6bd599916\", \"name\": \"Ceiling Light 8\", \"position\": {\"x\": 1.233683, \"y\": 1.77428913, \"z\": 2.62168169}, \"distance_from_user\": 3.397542, \"eye_centrality_score\": 26.1299763}, {\"id\": \"409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6\", \"name\": \"Shelf Light 1\", \"position\": {\"x\": 0.995773256, \"y\": 0.934289, \"z\": 5.561467}, \"distance_from_user\": 5.72663736, \"eye_centrality_score\": 27.74389}, {\"id\": \"6ac4ec9f-0326-4619-b79a-ecbbe5459d23\", \"name\": \"Ceiling Light 4\", \"position\": {\"x\": -0.0168410186, \"y\": 1.762289, \"z\": 4.18763542}, \"distance_from_user\": 4.54337263, \"eye_centrality_score\": 10.4707012}, {\"id\": \"e9a21485-0eb4-40ad-a985-cef8bc98d190\", \"name\": \"Ceiling Light 7\", \"position\": {\"x\": -0.327116847, \"y\": 1.77428913, \"z\": 1.37272012}, \"distance_from_user\": 2.26703954, \"eye_centrality_score\": 20.5056725}, {\"id\": \"6f1c35e2-1ca1-4f43-93cf-755d9479025b\", \"name\": \"Ceiling Light 3\", \"position\": {\"x\": -1.57998323, \"y\": 1.762289, \"z\": 2.93679929}, \"distance_from_user\": 3.771843, \"eye_centrality_score\": 20.9411983}]}"
+        }
+      ],
+      "output_data": {
+        "devices": [
+          {
+            "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 255,
+              "g": 0,
+              "b": 0
+            }
+          },
+          {
+            "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 255,
+              "b": 0
+            }
+          },
+          {
+            "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+            "state": true,
+            "intensity": 100,
+            "color": {
+              "r": 0,
+              "g": 255,
+              "b": 0
+            }
+          }
+        ],
+        "response": "天井の右二つを赤色、左二つを緑色にしました。",
+        "reasoning": "天井にあるデバイスに対して、x軸の値を基に左右を判断しました。右の2つにはx座標が正の『Ceiling Light 8』と、x座標がやや正の『Shelf Light 1』を選び、左の2つにはx座標が負の『Ceiling Light 4』と『Ceiling Light 7』を選びました。"
+      },
+      "metrics": {
+        "model_name": "gpt-4o-2024-08-06",
+        "tokens": {
+          "prompt_tokens": 2681,
+          "completion_tokens": 421,
+          "total_tokens": 3102
+        },
+        "cost_usd": 0.010913,
+        "agent_time_elapsed": 8.764497995376587,
+        "system_time_elapsed": 8.774422407150269
+      }
+    },
+    "agent_output": {
+      "devices": [
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "天井の右二つを赤色、左二つを緑色にしました。",
+      "reasoning": "天井にあるデバイスに対して、x軸の値を基に左右を判断しました。右の2つにはx座標が正の『Ceiling Light 8』と、x座標がやや正の『Shelf Light 1』を選び、左の2つにはx座標が負の『Ceiling Light 4』と『Ceiling Light 7』を選びました。"
+    },
+    "selected_devices": [
+      {
+        "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 255,
+          "g": 0,
+          "b": 0
+        }
+      },
+      {
+        "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0
+        }
+      },
+      {
+        "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+        "state": true,
+        "intensity": 100,
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0
+        }
+      }
+    ],
+    "system_metrics": null,
+    "system_total_time_sec": 11.179357051849365,
+    "task_id": "04f5e376-2845-485a-8cb1-c38e3858ff8a",
+    "attempt_id": "d586e528-afd5-4c83-9936-ffb523b90b23"
+  }
+]

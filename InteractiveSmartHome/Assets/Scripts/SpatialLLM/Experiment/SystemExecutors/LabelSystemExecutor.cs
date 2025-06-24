@@ -14,6 +14,7 @@ namespace SpatialLLM.Experiment
         private string currentState = "preparation";
         private string recognizedWord = "";
         private string latestLLMOutput = "[No output]";
+        private bool gripHeld = false;
 
 
 
@@ -41,6 +42,7 @@ namespace SpatialLLM.Experiment
         recognizedWord += recognizedText + " "; // スペースで区切る
         saUIManager.SetRecognizedTxt(recognizedWord);
         currentState = "recorded";
+         StateUIHelper();  // ← これを絶対に呼ぶ！
         Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
 }
 
@@ -58,7 +60,54 @@ namespace SpatialLLM.Experiment
             saUIManager.SetRecognizedTxt(recognizedWord);
         }
     }
-    
+    private void StateUIHelper()
+{
+    // まず全ラベルをクリア
+    uiButtonHelper.CloseAllLabels();
+
+    switch (currentState)
+    {
+        case "preparation":
+            // Trigger を押して録音開始
+            uiButtonHelper.SetLabel(UIButtonLabelType.LeftTrigger, "音声録音", Color.white, Color.gray);
+           uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
+            break;
+
+        case "recorded":
+            // 録音完了 → 送信・キャンセル
+            uiButtonHelper.SetLabel(UIButtonLabelType.Y, "送信", Color.black, Color.green);
+                uiButtonHelper.SetLabel(UIButtonLabelType.X, "取り消し", Color.black, Color.red);
+                uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
+            break;
+
+        case "received":
+            // LLMレスポンス待ち中は特に何も表示しない or ローディングUI
+            break;
+
+        case "checking":
+            uiButtonHelper.SetLabel(UIButtonLabelType.LeftGrip, "押して操作", Color.black, Color.gray);
+            if (gripHeld)
+            {
+                uiButtonHelper.SetLabel(UIButtonLabelType.Y, "確定", Color.black, Color.green);
+                uiButtonHelper.SetLabel(UIButtonLabelType.X, "やり直し", Color.black, Color.red);
+                saUIManager.SetInstructionText("Grip+Y to confirm, Grip+X to retry");
+            }
+            else
+            {
+                uiButtonHelper.CloseLabel(UIButtonLabelType.Y);
+                uiButtonHelper.CloseLabel(UIButtonLabelType.X);
+                saUIManager.SetInstructionText("Gripを押しながらYかXを使ってください");
+            }
+            break;
+
+        case "done":
+        default:
+            // 完了時は全ラベルを閉じる
+            uiButtonHelper.CloseAllLabels();
+            break;
+    }
+}
+
        private void ResetRecognizedWord()
     {
         recognizedWord = "";
@@ -66,55 +115,110 @@ namespace SpatialLLM.Experiment
         saUIManager.SetInstructionText("Press Y to start recording");
     }
 
-        protected override void Update()
+protected override void Update()
+{
+    base.Update();
+    if (!isStarted) return;
+
+    // ─── トリガー：録音開始／終了 ──────────────────────
+    if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+    {
+        SASpeechRecognizer.Instance.ActivateVoice();
+        Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
+    }
+
+    if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+    {
+        SASpeechRecognizer.Instance.DeactivateVoice();
+        Debug.Log("[LabelSystemExecutor] Trigger離上：録音終了");
+    }
+
+    // ─── 左スティック押下（最後の文字削除） ────────────────
+    if (OVRInput.GetDown(OVRInput.RawButton.LThumbstick))
+    {
+        OnLeftThumbstickLeftFlick();
+        StateUIHelper();
+        Debug.Log("[LabelSystemExecutor] LeftThumbstick押下：最後の文字削除");
+    }
+
+    // ─── Grip 押下／離上 ────────────────────────────────
+    if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger))
+    {
+        gripHeld = true;
+        StateUIHelper();
+        Debug.Log("[LabelSystemExecutor] Grip押下");
+    }
+
+    if (OVRInput.GetUp(OVRInput.RawButton.LHandTrigger))
+    {
+        gripHeld = false;
+        StateUIHelper();
+        Debug.Log("[LabelSystemExecutor] Grip離上");
+    }
+
+    // ─── Yボタン（送信／確定） ──────────────────────────
+    if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
+    {
+        if (currentState == "checking")
         {
-            base.Update();
-            if (!isStarted) return;
-
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+            if (gripHeld)
             {
-                SASpeechRecognizer.Instance.ActivateVoice();
-                Debug.Log("[LabelSystemExecutor] Trigger押下：録音開始");
-            }
-
-            if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
-            {
-                SASpeechRecognizer.Instance.DeactivateVoice();
-                Debug.Log("[LabelSystemExecutor] Trigger離す：録音終了");
-            }
-
-            bool isYPressed = OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y);
-            bool isGripped = OVRInput.Get(OVRInput.RawButton.LHandTrigger) || Input.GetKey(KeyCode.G);
-
-            if (isYPressed)
-            {
-                if (isGripped)
-                {
-                    currentState = "done";
-                }
+                currentState = "done";
                 OperationProceed();
             }
-
-            if (OVRInput.GetDown(OVRInput.RawButton.X))
+            else
             {
-                ResetRecognizedWord();
-                currentState = "preparation";
-                OperationProceed();
-            }
-
-            // --- キャンセル（XボタンまたはESC） ---
-            if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
-            {
-                ResetRecognizedWord();
-                currentState = "preparation";
-                experimentManager.BackToShowDevice();
+                Debug.Log("[LabelSystemExecutor] GripなしでY押下：アクションなし");
             }
         }
+        else
+        {
+            OperationProceed();
+        }
+    }
+
+    // ─── Xボタン（リセット／やり直し） ───────────────────
+     if (OVRInput.GetDown(OVRInput.RawButton.X))
+        {
+
+
+                if (currentState != "checking")
+                {
+                    //　X押されたとき、認識していた音声データをリセット
+                    ResetRecognizedWord();
+                }
+                else
+                {
+
+                    if (gripHeld)
+                    {
+                          ResetRecognizedWord();             // 音声入力リセット
+                        currentState = "preparation";      // 戻る！
+                        OperationProceed();
+                    }
+                    else
+                    {
+                        Debug.Log("Y pressed without Grip - no action");
+                    }
+                }
+           
+        }
+
+    // ─── キャンセル（Escape or スティック押し込み） ───────────
+    if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
+    {
+        ResetRecognizedWord();
+        currentState = "preparation";
+        experimentManager.BackToShowDevice();
+        StateUIHelper();
+        Debug.Log("[LabelSystemExecutor] キャンセル実行");
+    }
+}
 
         private async void OperationProceed()
         {
             Debug.Log($"<color=green>LabelExecutor State: {currentState}</color>");
-
+        StateUIHelper();
             switch (currentState)
             {
                 case "preparation":
@@ -129,6 +233,12 @@ namespace SpatialLLM.Experiment
                     string taskId = experimentManager.GetCurrentTaskId();
                     if (!LLMQueryRequest.Instance.IsRequesting)
                     {
+
+                        if (recognizedWord == "")
+                        {
+                        
+                            return;
+                        }
                         LLMQueryRequestType llmQueryRequest = new LLMQueryRequestType()
                         {
                             task_id = taskId,
@@ -180,12 +290,13 @@ namespace SpatialLLM.Experiment
                     currentState = "checking";
                     this.timerStarted = false; 
                     this.elapsedTime = 0f; // タイマーをリセット
+                    OperationProceed();
                     break;
 
                 case "checking":
                 
                     saUIManager.SetInstructionText("Grip+Y to confirm, or press Y to retry");
-                   this.currentState = "preparation";
+       
                     break;
 
                 case "done":

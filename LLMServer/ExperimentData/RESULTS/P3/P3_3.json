@@ -1495,5 +1495,139 @@
     "system_total_time_sec": 1.9176394939422607,
     "task_id": "fe0ef0b0-c647-4b3a-b2f6-68a75133a566",
     "attempt_id": "7b979819-0016-4ec1-919b-6728e5d0be1a"
+  },
+  {
+    "user_prompt": "洗濯 下電気でつけて ",
+    "pointed_devices": [
+      {
+        "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+        "name": "Shelf Light 5"
+      }
+    ],
+    "agent_output": {
+      "devices": [],
+      "response": "No action taken.",
+      "reasoning": "The instruction '洗濯 下電気でつけて' is ambiguous and does not clearly specify the action to be taken on the selected device 'Shelf Light 5'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 659,
+        "completion_tokens": 63,
+        "total_tokens": 722
+      },
+      "cost_usd": 0.002278,
+      "agent_time_elapsed": 3.681955099105835,
+      "system_time_elapsed": 4.1496970653533936
+    },
+    "system_total_time_sec": 4.169057846069336,
+    "task_id": "f548cabb-2a47-4399-a702-f76d5d1336df",
+    "attempt_id": "906ab8a9-c837-4ccb-813e-92034a245c2a"
+  },
+  {
+    "user_prompt": "洗濯 下電気をつけて ",
+    "pointed_devices": [
+      {
+        "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+        "name": "Shelf Light 5"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Shelf Light 5 を点灯しました。",
+      "reasoning": "「洗濯」は「選択」の誤字と解釈し、指示に明確な操作内容が含まれていたため、選択されたデバイスに対して制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 986,
+        "completion_tokens": 150,
+        "total_tokens": 1136
+      },
+      "cost_usd": 0.003965,
+      "agent_time_elapsed": 3.159121513366699,
+      "system_time_elapsed": 3.5998785495758057
+    },
+    "system_total_time_sec": 3.607985258102417,
+    "task_id": "f548cabb-2a47-4399-a702-f76d5d1336df",
+    "attempt_id": "0b51be93-0a9e-467a-842a-9bb953f61916"
+  },
+  {
+    "user_prompt": "います。 電気を青色でつけて ",
+    "pointed_devices": [
+      {
+        "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+        "name": "Shelf Light 2"
+      },
+      {
+        "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+        "name": "Shelf Light 5"
+      },
+      {
+        "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+        "name": "Shelf Light 6"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Shelf Light 2、Shelf Light 5、Shelf Light 6 を青色で点灯しました。",
+      "reasoning": "選択されたデバイスに対して、明確に青色で点灯する指示があったため、制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1063,
+        "completion_tokens": 289,
+        "total_tokens": 1352
+      },
+      "cost_usd": 0.005548,
+      "agent_time_elapsed": 3.5868074893951416,
+      "system_time_elapsed": 3.95318603515625
+    },
+    "system_total_time_sec": 3.9567911624908447,
+    "task_id": "f548cabb-2a47-4399-a702-f76d5d1336df",
+    "attempt_id": "b300f3ac-32a1-45f1-bb6e-2414da9006a5"
   }
 ]

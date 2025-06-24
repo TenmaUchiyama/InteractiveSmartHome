@@ -155,7 +155,7 @@ namespace SpatialLLM.Core
         }
 
 
-        public void DisableAllLabels()
+        public void CloseAllLabels()
         {
             foreach (var entry in buttonLabels)
             {
@@ -163,6 +163,14 @@ namespace SpatialLLM.Core
                 {
                     entry.label.SetVisible(false);
                 }
+            }
+        }
+
+        public void CloseLabel(UIButtonLabelType key)
+        {
+            if (labelDict.TryGetValue(key, out var label))
+            {
+                label.SetVisible(false);
             }
         }
     

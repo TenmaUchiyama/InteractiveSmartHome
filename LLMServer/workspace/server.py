@@ -19,7 +19,7 @@ from langchain_core.messages import BaseMessage
 from utils.time_tracker import TimeTracker
 
 
-OUTPUT_FILE_NAME="P3"
+OUTPUT_FILE_NAME="TEST"
 app = FastAPI()
 
 

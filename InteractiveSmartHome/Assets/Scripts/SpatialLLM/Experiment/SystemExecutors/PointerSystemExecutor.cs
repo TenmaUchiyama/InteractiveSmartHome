@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using Oculus.Platform;
 using static SpatialLLM.Network.NetworkDataType;
 using Oculus.Interaction;
 using System.Reflection;
+using Unity.VisualScripting;
 
 namespace SpatialLLM.Experiment
 {
@@ -22,7 +24,7 @@ namespace SpatialLLM.Experiment
         private string currentState = "pointing";
         private string latestLLMOutput = "[No output]";
         private string recognizedWord = "";
-
+private bool gripHeld = false;
 
         
     protected override void OnLeftThumbstickLeftFlick()
@@ -45,51 +47,123 @@ namespace SpatialLLM.Experiment
     }
 
 
-
-        private void UpdatePointingLabel(bool isAPressed)
+private void StateUIHelper()
 {
-    if (isAPressed)
-    {
-        // A押してる間：Trigger = 単一選択
-        uibuttonHelper.SetLabel(
-            UIButtonLabelType.RightTrigger,
-            "単一選択",
-            Color.black,
-            Color.green
-        );
-        
-        // Aのラベルは不要・または非表示にしてもよい
-        uibuttonHelper.SetLabelVisible(UIButtonLabelType.A, false);
-    }
-    else
-    {
-        // A押してないとき：A = レーザーにする、Trigger = 範囲選択にする
-        uibuttonHelper.SetLabel(
-            UIButtonLabelType.A,
-            "レーザーにする",
-            Color.black,
-            Color.gray
-        );
-        
-        uibuttonHelper.SetLabel(
-            UIButtonLabelType.RightTrigger,
-            "範囲選択",
-            Color.black,
-            Color.blue
-        );
+        uiButtonHelper.CloseAllLabels();
+    // 状態に応じてUI更新
+            switch (currentState)
+            {
 
-        uibuttonHelper.SetLabelVisible(UIButtonLabelType.A, true);
-    }
+
+
+                case "pointing":
+                    // 右手操作UI
+                    PointingHelper(true, false); // Aボタン未押下（切替表示）
+                                                 // 左手トリガーに音声認識表示
+                    uiButtonHelper.SetLabel(UIButtonLabelType.LeftTrigger, "音声録音", Color.black, Color.gray);
+                    
+                    uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
+                    break;
+
+                case "recorded":
+                    PointingHelper(false, false); // Pointing系は非表示
+                                                  // 音声送信・取り消し・戻るの表示（左手用）
+                    uiButtonHelper.SetLabel(UIButtonLabelType.Y, "送信", Color.black, Color.green);
+                    uiButtonHelper.SetLabel(UIButtonLabelType.X, "取り消し", Color.black, Color.red);
+                    uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
+                    break;
+
+                case "received":
+                    //     // 一時的に「確認待ち」状態、何も表示しないで良いかもしれないが必要なら記述可能
+                    // uiButtonHelper.CloseAllLabels();
+                    // saUIManager.SetInstructionText("Press Y to confirm");
+                    // uiButtonHelper.SetLabel(UIButtonLabelType.Y, "確認", Color.black, Color.green);
+                    break;
+
+                case "checking":
+                    uiButtonHelper.SetLabel(UIButtonLabelType.LeftGrip, "押して操作", Color.black, Color.gray);
+                    if (gripHeld)
+                    {
+                        uiButtonHelper.SetLabel(UIButtonLabelType.Y, "次へ進む", Color.black, Color.green);
+                        uiButtonHelper.SetLabel(UIButtonLabelType.X, "やり直し", Color.black, Color.red);
+                        saUIManager.SetInstructionText("Grip+Y to confirm, Grip+X to retry");
+                    }
+                    else
+                    {
+                        uiButtonHelper.CloseLabel(UIButtonLabelType.Y);
+                        uiButtonHelper.CloseLabel(UIButtonLabelType.X);
+                        saUIManager.SetInstructionText("Gripを押しながらYかXを使ってください");
+                    }
+                    break;
+
+                case "done":
+                default:
+                    uiButtonHelper.CloseAllLabels();
+                    break;
+            }
 }
+
+
+        private void PointingHelper(bool isShow, bool isAPressed = true)
+        {
+
+
+            if (!isShow)
+            {
+                // ラベルを非表示にする
+                uiButtonHelper.SetLabelVisible(UIButtonLabelType.A, false);
+                uiButtonHelper.SetLabelVisible(UIButtonLabelType.RightTrigger, false);
+                return;
+            }
+
+            // Aボタンが押されているかどうかでラベルを切り替える
+            if (isAPressed)
+            {
+                // A押してる間：Trigger = 単一選択
+                uiButtonHelper.SetLabel(
+                    UIButtonLabelType.RightTrigger,
+                    "単一選択",
+                    Color.black,
+                    Color.green
+                );
+
+                // Aのラベルは不要・または非表示にしてもよい
+                uiButtonHelper.SetLabelVisible(UIButtonLabelType.A, false);
+            }
+            else
+            {
+                // A押してないとき：A = レーザーにする、Trigger = 範囲選択にする
+                uiButtonHelper.SetLabel(
+                    UIButtonLabelType.A,
+                    "レーザーにする",
+                    Color.black,
+                    Color.gray
+                );
+
+                uiButtonHelper.SetLabel(
+                    UIButtonLabelType.RightTrigger,
+                    "範囲選択",
+                    Color.black,
+                    Color.blue
+                );
+
+                uiButtonHelper.SetLabelVisible(UIButtonLabelType.A, true);
+            }
+            ;
+        }
+
+
+
+
 
 
         protected override void Start()
         {
             base.Start();
 
-            this.onBeginOperation.AddListener(()=>
-            { 
-                // UpdatePointingLabel(false);
+            this.onBeginOperation.AddListener(() =>
+            {
+                PointingHelper(true, false);
             });
 
             if (PointingQueryRequest.Instance)
@@ -105,25 +179,28 @@ namespace SpatialLLM.Experiment
 
             rayInteractor.gameObject.SetActive(false);
             circleSelector.SetSelectionStarted(true);
+            OperationProceed();
         }
 
-            private void OnVoiceRecognized(string recognizedText)
-            {
+        private void OnVoiceRecognized(string recognizedText)
+        {
 
-                    saUIManager.SetInstructionText("Press Y to send to Agent");
-
-                    // 上書きから追記に変更 ↓↓↓
-                    recognizedWord += recognizedText + " "; // スペースで区切る
-                    saUIManager.SetRecognizedTxt(recognizedWord);
-                    currentState = "recorded";
-                    Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
+            saUIManager.SetInstructionText("Press Y to send to Agent");
+            
+            // 上書きから追記に変更 ↓↓↓
+            recognizedWord += recognizedText + " "; // スペースで区切る
+            saUIManager.SetRecognizedTxt(recognizedWord);
+            currentState = "recorded";
+            Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
+            StateUIHelper();
             }
 
         protected override void Update()
         {
 
 
-            
+
+        
             base.Update();
             if (!isStarted) return;
             
@@ -148,7 +225,7 @@ namespace SpatialLLM.Experiment
                 Debug.Log("[PointerSystemExecutor] Aボタン押下：Ray Interactorを有効化");
                 rayInteractor.gameObject.SetActive(true);
                 circleSelector.SetSelectionStarted(false);
-                //  UpdatePointingLabel(true);
+                 PointingHelper(true, true);
             }
             if (OVRInput.GetUp(OVRInput.RawButton.A))
             {
@@ -156,39 +233,91 @@ namespace SpatialLLM.Experiment
 
                 rayInteractor.gameObject.SetActive(false);
                 circleSelector.SetSelectionStarted(true);
-                // UpdatePointingLabel(false);
+                PointingHelper(true,false);
 
+            }
+
+
+
+
+            if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger))
+            {
+                gripHeld = true;
+               StateUIHelper();
+            }
+            if (OVRInput.GetUp(OVRInput.RawButton.LHandTrigger))
+            {
+                gripHeld = false;
+                StateUIHelper();
             }
 
             if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
             {
-                bool isGripped = OVRInput.Get(OVRInput.RawButton.LHandTrigger) || Input.GetKey(KeyCode.G);
 
-                if (isGripped)
-                    currentState = "done";
-
-
-                OperationProceed();
+     
+                if (currentState == "checking")
+                {
+                  if (gripHeld)
+                    {
+                        currentState = "done";
+                        OperationProceed();
+                    }
+                    else
+                    {
+                        Debug.Log("Y pressed without Grip - no action");
+                    }
+                }
+                else
+                {
+                    OperationProceed();
+                    
+                }
             }
 
               if (OVRInput.GetDown(OVRInput.RawButton.X))
         {
-            ResetRecognizedWord();
-            currentState = "pointing";
-            OperationProceed();
+
+
+                if (currentState != "checking")
+                {
+                    //　X押されたとき、認識していた音声データをリセット
+                    ResetRecognizedWord();
+                }
+                else
+                {
+
+                    if (gripHeld)
+                    {
+                        ResetRecognizedWord();             // 音声入力リセット
+                        currentState = "preparation";      // 戻る！
+                        OperationProceed();
+                    }
+                    else
+                    {
+                        Debug.Log("Y pressed without Grip - no action");
+                    }
+                }
+
+
+
+        
+           
         }
 
-        // --- キャンセル（XボタンまたはESC） ---
-        if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
-        {
-            ResetRecognizedWord();
-            currentState = "pointing";
-            experimentManager.BackToShowDevice();
+            // --- キャンセル（XボタンまたはESC） ---
+            if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
+            {
+                ResetRecognizedWord();
+                currentState = "pointing";
+                experimentManager.BackToShowDevice();
+            
         }
         }
-
+        
         private async void OperationProceed()
         {
+
+            StateUIHelper();
             Debug.Log($"<color=green>PointerExecutor State: {currentState}</color>");
 
 
@@ -198,8 +327,7 @@ namespace SpatialLLM.Experiment
                 // 初期状態
                 // ここで音声認識を開始する
                 case "pointing":
-                    // UpdatePointingLabel(false);
-
+                    PointingHelper(true, false);
                     SADeviceRef.Instance.ClearAllDeviceOperation();
                     saUIManager.SetInstructionText("Point and Press Y to send");
                     elapsedTime = 0f;
@@ -207,6 +335,7 @@ namespace SpatialLLM.Experiment
                     break;
 
                 case "recorded":
+                    PointingHelper(false, false);
                     saUIManager.DisplaySendingLLM("[Pointed Devices]");
                     saUIManager.StartSendLLM();
 
@@ -215,7 +344,12 @@ namespace SpatialLLM.Experiment
 
                     if (!LLMQueryRequest.Instance.IsRequesting)
                     {
-
+                        
+                        if(recognizedWord == "")
+                        {
+                            Debug.LogWarning("No recognized word, skipping LLM query.");
+                            return;
+                        }
                         if (IS_SPATIAL_POINTING)
                         {
                             var pointedDevices = new List<DeviceSpatialData>();
@@ -260,6 +394,9 @@ namespace SpatialLLM.Experiment
                     break;
 
                 case "received":
+
+
+
                     List<string> operatedIds = new List<string>();
                     foreach (var d in SADeviceRef.Instance.GetAllOperatedDevices())
                     {
@@ -278,12 +415,13 @@ namespace SpatialLLM.Experiment
                     saUIManager.FinishLoadingAndDisplayResponse(latestLLMOutput);
                     currentState = "checking";
                     timerStarted = false;
+                    StateUIHelper();
                     elapsedTime = 0f;
                     break;
 
                 case "checking":
                     saUIManager.SetInstructionText("Grip+Y to confirm, or press Y to retry");
-                    currentState = "pointing";
+            
                     break;
 
                 case "done":
@@ -300,7 +438,7 @@ namespace SpatialLLM.Experiment
             try
             {
 
-                recognizedWord = ""; 
+                recognizedWord = "";
                 var response = JsonConvert.DeserializeObject<LLMResponse>(json);
                 latestLLMOutput = response.output ?? "[No output]";
                 Debug.Log($"<color=cyan>LLM Output Saved: {latestLLMOutput}</color>");
@@ -316,6 +454,7 @@ namespace SpatialLLM.Experiment
                 currentState = "received";
                 OperationProceed();
             }
+            
         }
 
       
