@@ -1,13 +1,7 @@
 from dataclasses import dataclass, field
-from typing import Annotated, List, Optional, Dict
-from langchain_core.messages import BaseMessage, HumanMessage
-from enum import Enum
-from pydantic import BaseModel
-from typing import List, Dict, Any
-
-from utils.callbacks import CustomCallbackHandler
-
-
+from typing import List, Optional, Dict, Any
+from langchain_core.messages import BaseMessage
+from utils.time_tracker import TimeTracker
 
 
 @dataclass
@@ -24,8 +18,7 @@ class PointingState:
     pointed_devices: List[Dict[str, Any]] = field(default_factory=list)
     agent_output: Optional[PointingAgentOutput] = None
     metrics: Optional[Dict[str, Any]] = None
-    callback: Optional[CustomCallbackHandler] = None
-
+    time_tracker: TimeTracker = field(default_factory=TimeTracker)
 
 
 @dataclass 
@@ -34,6 +27,7 @@ class LabelAgentOutput:
     response: str
     reasoning: str
 
+
 @dataclass 
 class LabelState:
     input_prompt: List[BaseMessage] = field(default_factory=list)
@@ -41,6 +35,7 @@ class LabelState:
     all_devices: List[Dict[str, Any]] = field(default_factory=list)
     agent_output: Optional[LabelAgentOutput] = None
     metrics: Optional[Dict[str, Any]] = None
+    time_tracker: TimeTracker = field(default_factory=TimeTracker)
 
 
 @dataclass
@@ -49,6 +44,7 @@ class FilterAgentOutput:
     params: Dict[str, Any]
     reasoning: str
 
+
 @dataclass
 class SpatialOutput:
     devices: List[Dict[str, Any]]
@@ -56,19 +52,20 @@ class SpatialOutput:
     reasoning: str
     response_time_ms: Optional[float] = None
 
+
 @dataclass
 class FilterAgentType:
     input_prompt: List[BaseMessage] = field(default_factory=list)
     output_tool_selection: Optional[FilterAgentOutput] = None
     devices: Optional[List[Dict[str, Any]]] = None
-    metrics: Optional[Dict] = None  # e.g., accuracy, latency
+    metrics: Optional[Dict[str, Any]] = None
+
 
 @dataclass
 class SpatialAgentType:
     input_prompt: List[BaseMessage] = field(default_factory=list)
     output_data: Optional[SpatialOutput] = None
-    metrics: Optional[Dict] = None  # e.g., is_correct, error_type
-
+    metrics: Optional[Dict[str, Any]] = None
 
 
 @dataclass
@@ -76,11 +73,7 @@ class State:
     user_prompt: str
     filterAgent: FilterAgentType = field(default_factory=FilterAgentType)
     spatialAgent: SpatialAgentType = field(default_factory=SpatialAgentType)
-    selected_devices: List[str] = field(default_factory=list) 
-    system_metrics: Optional[Dict] = None
-
-
-
-
-
-
+    agent_output: Optional[SpatialOutput] = None
+    selected_devices: List[str] = field(default_factory=list)
+    system_metrics: Optional[Dict[str, Any]] = None
+    time_tracker: TimeTracker = field(default_factory=TimeTracker)  # ← 追加

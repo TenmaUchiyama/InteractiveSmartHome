@@ -183,6 +183,7 @@ namespace SpatialLLM.Experiment
                     break;
 
                 case "checking":
+                
                     saUIManager.SetInstructionText("Grip+Y to confirm, or press Y to retry");
                    this.currentState = "preparation";
                     break;

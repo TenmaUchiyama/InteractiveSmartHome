@@ -13,7 +13,7 @@ from sr_app_types.node_types import NODE
 
 # プロンプトの読み込み
 script_dir = os.path.dirname(os.path.abspath(__file__))  # スクリプトのあるディレクトリ
-language = os.getenv("LANG", "en").strip() if os.getenv("LANG") else "en"
+language = os.getenv("VOICE_LANG", "en").strip() if os.getenv("VOICE_LANG") else "en"
 if language == "ja":
     file_path = os.path.join(script_dir, "prompts", "jp_filter_msg.txt")
 else:

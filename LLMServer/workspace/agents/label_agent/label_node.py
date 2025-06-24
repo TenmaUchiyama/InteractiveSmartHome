@@ -65,5 +65,5 @@ def label_tool_node(state: LabelState):
     devices = state.agent_output.get("devices", [])
     result = operateDevice.invoke({"devices": devices})
     state.metrics["system_time_elapsed"] = callback.system_end()
-    state.callback = None
-    return state
+    return state  # ← callback を state に入れる必要はない
+

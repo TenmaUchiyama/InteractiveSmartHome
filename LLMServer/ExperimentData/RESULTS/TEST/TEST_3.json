@@ -1,0 +1,220 @@
+[
+  {
+    "user_prompt": "これつけて ",
+    "pointed_devices": [
+      {
+        "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+        "name": "Stand Light 2"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Stand Light 2をつけました。",
+      "reasoning": "デバイスが明示的に選択され、指示により操作が明確に示されているため、制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 659,
+        "completion_tokens": 141,
+        "total_tokens": 800
+      },
+      "cost_usd": 0.003058,
+      "agent_time_elapsed": 3.1373345851898193,
+      "system_time_elapsed": 3.50484037399292
+    },
+    "time_tracker": {
+      "llm_start_time": null,
+      "system_start_time": null,
+      "system_end_time": 1750576249.201404
+    },
+    "system_total_time_sec": 0.0,
+    "task_id": "2d0b42ad-6703-463c-81b3-4ee4d0c8b347",
+    "attempt_id": "01f63c13-a3d4-45bd-85f2-5bd04e1e0d54"
+  },
+  {
+    "user_prompt": "この二つつけてください ",
+    "pointed_devices": [
+      {
+        "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+        "name": "Ceiling Light 3"
+      },
+      {
+        "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+        "name": "Ceiling Light 4"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Ceiling Light 3とCeiling Light 4をつけました。",
+      "reasoning": "選択されたデバイスが明示されており、指示に十分な詳細が含まれていたため、操作を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 699,
+        "completion_tokens": 215,
+        "total_tokens": 914
+      },
+      "cost_usd": 0.003897,
+      "agent_time_elapsed": 1.8769159317016602,
+      "system_time_elapsed": 2.209587335586548
+    },
+    "time_tracker": {
+      "llm_start_time": null,
+      "system_start_time": null,
+      "system_end_time": 1750576276.527073
+    },
+    "system_total_time_sec": 0.0,
+    "task_id": "2d0b42ad-6703-463c-81b3-4ee4d0c8b347",
+    "attempt_id": "dc44ce7a-c121-469e-8a82-aaacb98ab220"
+  },
+  {
+    "user_prompt": "この二つ黄色で付けて ",
+    "pointed_devices": [
+      {
+        "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+        "name": "TV Light 1"
+      },
+      {
+        "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+        "name": "Floor Light １"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "TV Light 1とFloor Light １を黄色で付けました。",
+      "reasoning": "指示には、選択されたデバイスを黄色で点灯するという明確な指示が含まれていました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 701,
+        "completion_tokens": 213,
+        "total_tokens": 914
+      },
+      "cost_usd": 0.003883,
+      "agent_time_elapsed": 2.3898072242736816,
+      "system_time_elapsed": 2.7153992652893066
+    },
+    "time_tracker": {
+      "llm_start_time": null,
+      "system_start_time": null,
+      "system_end_time": 1750576292.3152487
+    },
+    "system_total_time_sec": 0.0,
+    "task_id": "ae59cd40-20ff-4809-8cbb-87c7cc41665c",
+    "attempt_id": "39f4fe9f-f59b-45ac-9d70-0c876878f645"
+  },
+  {
+    "user_prompt": "この二つ青色でつけて ",
+    "pointed_devices": [
+      {
+        "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+        "name": "TV Light 2"
+      },
+      {
+        "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+        "name": "Stand Light 1"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "TV Light 2とStand Light 1を青色でつけました。",
+      "reasoning": "指示には明確に青色でつけるとあり、選択されたデバイスに対して適用可能でした。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 696,
+        "completion_tokens": 209,
+        "total_tokens": 905
+      },
+      "cost_usd": 0.00383,
+      "agent_time_elapsed": 2.5842151641845703,
+      "system_time_elapsed": 2.9157214164733887
+    },
+    "time_tracker": {
+      "llm_start_time": null,
+      "system_start_time": null,
+      "system_end_time": 1750576302.016011
+    },
+    "system_total_time_sec": 0.0,
+    "task_id": "ae59cd40-20ff-4809-8cbb-87c7cc41665c",
+    "attempt_id": "17e69f60-2914-4750-8d9f-fd20133ec3a6"
+  }
+]

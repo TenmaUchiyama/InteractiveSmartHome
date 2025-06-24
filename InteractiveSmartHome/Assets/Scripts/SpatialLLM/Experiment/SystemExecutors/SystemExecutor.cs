@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using SpatialLLM.Core;
 using SpatialLLM.Device;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace SpatialLLM.Experiment
         [SerializeField] protected ExperimentManager experimentManager;
         [SerializeField] protected ExperimentTask experimentTask;
         [SerializeField] protected WordLogger wordLogger;
+        
+        [SerializeField] protected UIButtonHelper uibuttonHelper;
 
         protected float elapsedTime = 0f;
         protected bool timerStarted = false;
@@ -47,12 +50,7 @@ private float lastFlickTime = -999f;
          #if UNITY_EDITOR
         void FixedUpdate()
         {
-            
-
-
-
-
-                if (timerStarted)
+             if (timerStarted)
             {
                 elapsedTime += Time.fixedDeltaTime;
             }
@@ -107,8 +105,6 @@ private float lastFlickTime = -999f;
                 }
         }
     #endif
-
-
 
         public virtual void BeginOperation()
         {

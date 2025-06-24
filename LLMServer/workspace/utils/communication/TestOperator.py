@@ -7,7 +7,6 @@ class TestOperator():
     def __init__(self):
         
         self.request_url = os.getenv("XR_SERVER_API") + "/device/operate"
-        print(self.request_url)
 
     def send_operate_request(self, devices):
         print("Sending Operate Request to Test Server.") 

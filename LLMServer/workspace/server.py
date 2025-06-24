@@ -1,13 +1,14 @@
 from typing import Any, Dict, List
 import dotenv
-from utils.communication.SwitchBotOperator import SwitchBotOperator
 dotenv.load_dotenv("../.env")
+from utils.communication.SwitchBotOperator import SwitchBotOperator
+
 import os
 from sr_app_types.no_tool_agent_types import LabelState, PointingState, State
 from no_tool_agent_runner import getLabelRunner, getPointingRunner, getPointingSpatialRunner, getSystemRunner
 from fastapi import FastAPI # type: ignore
 import httpx # type: ignore
-from starlette.middleware.cors import CORSMiddleware # type: ignore
+from starlette.middleware.cors import CORSMiddleware # t    ype: ignore
 import uvicorn# type: ignore
 from pydantic import BaseModel# type: ignore
 import os 
@@ -15,8 +16,10 @@ import json
 from dataclasses import asdict
 from langchain_core.messages import BaseMessage
 
+from utils.time_tracker import TimeTracker
 
-OUTPUT_FILE_NAME="P1"
+
+OUTPUT_FILE_NAME="P3"
 app = FastAPI()
 
 
@@ -85,15 +88,29 @@ def serialize_value(value):
 
 def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_keys=None, additional_data: dict = None, isTutorial = False):
     try:
+
+        print(save_file_path)
         response = runner.invoke(state)
-      
+        if hasattr(state, "time_tracker") and state.time_tracker is not None:
+            print("SYSTEM に　時間トラッキングがある")
+            
+            system_duration = state.time_tracker.end_system()
+            print("SYSTEM DURATION:", system_duration)
+        else:
+            print("SYSTEM に　時間トラッキングがない")
+            system_duration = None
+            
+        print(response.get("agent_output"))
         agent_output = response.get("agent_output")
         if not agent_output:
             return {"error": "No agent output produced."}
         serialized = remove_keys_flat(response,pop_keys)
         print("SERIALIZED:" , serialized)
         serialized = serialize_value(serialized)
- 
+        if system_duration is not None:
+            serialized["system_total_time_sec"] = system_duration
+
+
 
         serialized["task_id"] = task_id
         serialized["attempt_id"] = attempt_id
@@ -142,95 +159,58 @@ class InputMessageWithPointing(InputMessage):
     pointed_devices: List[Dict[str, Any]]
 
 # ----------- エンドポイント定義 -------------
+
 @app.post("/pointing")
 def llm_pointing(message: InputMessageWithPointing):
     print("POINTING")
+    timer_tracker = TimeTracker()
+    timer_tracker.start_system()
     state = PointingState(
         user_prompt=message.llm_message,
-        pointed_devices=message.pointed_devices
+        pointed_devices=message.pointed_devices,
+        time_tracker=timer_tracker
     )
     runner = getPointingRunner()
     save_path = make_save_path("3")
     return run_agent_and_log(
         state, runner, message.task_id, message.attempt_id, save_path,
-        pop_keys=["input_prompt", "all_devices"],
-        additional_data={"pointed_devices": message.pointed_devices}
-    )
-
-
-@app.post("/pointing_only")
-def llm_pointing(message: InputMessageWithPointing):
-    print("POINTING")
-    state = PointingState(
-        user_prompt=message.llm_message,
-        pointed_devices=message.pointed_devices
-    )
-    runner = getPointingRunner()
-    save_path = make_save_path("3")
-    return run_agent_and_log(
-        state, runner, message.task_id, message.attempt_id, save_path,
-        pop_keys=["input_prompt", "all_devices"],
+        pop_keys=["input_prompt", "all_devices", "time_tracker", "callback"],
         additional_data={"pointed_devices": message.pointed_devices}
     )
 
 @app.post("/label")
 def llm_label(message: InputMessage):
     print("LABEL")
-    state = LabelState(user_prompt=message.llm_message)
+    timer_tracker = TimeTracker()
+    timer_tracker.start_system()
+    state = LabelState(user_prompt=message.llm_message,time_tracker=timer_tracker)
     runner = getLabelRunner()
     save_path = make_save_path("4")
     return run_agent_and_log(
         state, runner, message.task_id, message.attempt_id, save_path,
-        pop_keys=["input_prompt", "all_devices"]
+        pop_keys=["input_prompt", "all_devices","time_tracker"]
     )
-
 @app.post("/llm_agent")
 def llm_agent_no_tool(message: InputMessage):
     print("SpatialReference")
-    state = State(user_prompt=message.llm_message)
-    runner = getSystemRunner()  # Spatial agent runner 呼び出し
+
+    time_tracker = TimeTracker()
+    time_tracker.start_system()
+
+    state = State(user_prompt=message.llm_message, time_tracker=time_tracker)
+    runner = getSystemRunner()
     save_path = make_save_path("1")
 
-    try:
-        response = runner.invoke(state)
-        output = response["spatialAgent"].output_data
-
-        serialized = serialize_value(response)
-        for agent in ["filterAgent", "spatialAgent"]:
-            if agent in serialized:
-                serialized[agent].pop("input_prompt", None)
-
-        serialized["task_id"] = message.task_id
-        serialized["attempt_id"] = message.attempt_id
-
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        if os.path.exists(save_path) and os.path.getsize(save_path) > 0:
-            with open(save_path, "r", encoding="utf-8") as f:
-                existing_logs = json.load(f)
-        else:
-            existing_logs = []
-
-        existing_logs.append(serialized)
-        with open(save_path, "w", encoding="utf-8") as f:
-            json.dump(existing_logs, f, indent=2, ensure_ascii=False)
-
-        return {
-            "output": output.get("response") if output else None
-        }
-
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return {
-            "error": "LLM processing failed.",
-            "detail": str(e)
-        }
+    return run_agent_and_log(
+        state, runner, message.task_id, message.attempt_id, save_path,
+        pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt", "time_tracker"]
+    )
 
 @app.post("/pointing_spatial_tutorial")
 def llm_pointing_spatial(message: InputMessageWithPointing):
     print("SR POINTING")
     is_pointing = message.pointed_devices and len(message.pointed_devices) > 0
-
+    
     if is_pointing:
         state = PointingState(
             user_prompt=message.llm_message,
@@ -255,7 +235,8 @@ def llm_pointing_spatial(message: InputMessageWithPointing):
         save_path = make_save_path("2")
         return run_agent_and_log(
             state, runner, message.task_id, message.attempt_id, save_path,
-            pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt"]
+            pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt"],
+            isTutorial=True
         )
 
 
@@ -265,10 +246,14 @@ def llm_pointing_spatial(message: InputMessageWithPointing):
     print("SR POINTING")
     is_pointing = message.pointed_devices and len(message.pointed_devices) > 0
 
+
+    time_tracker = TimeTracker()
+    time_tracker.start_system()
     if is_pointing:
         state = PointingState(
             user_prompt=message.llm_message,
-            pointed_devices=message.pointed_devices
+            pointed_devices=message.pointed_devices,
+            time_tracker=time_tracker
         )
         print("POINTING SPATIAL STATE:" )
         runner = getPointingSpatialRunner()
@@ -279,16 +264,16 @@ def llm_pointing_spatial(message: InputMessageWithPointing):
         
         return run_agent_and_log(
             state, runner, message.task_id, message.attempt_id, save_path,
-            pop_keys=["input_prompt", "all_devices","callback"],
+            pop_keys=["input_prompt", "all_devices","callback", "time_tracker"],
             additional_data={"pointed_devices": message.pointed_devices}
         )
     else:
-        state = State(user_prompt=message.llm_message)
+        state = State(user_prompt=message.llm_message, time_tracker=time_tracker)
         runner = getSystemRunner()
         save_path = make_save_path("2")
         return run_agent_and_log(
             state, runner, message.task_id, message.attempt_id, save_path,
-            pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt"]
+            pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt", "time_tracker"]
         )
 
 

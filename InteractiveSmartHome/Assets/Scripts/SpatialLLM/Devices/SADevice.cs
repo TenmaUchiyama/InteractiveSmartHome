@@ -24,7 +24,7 @@ namespace SpatialLLM.Device
 
         protected OperatingDeviceData currentOperatingData = new OperatingDeviceData(); 
 
-        protected bool isDeviceSelected = false;
+        [SerializeField] protected bool isDeviceSelected = false;
 
         protected bool isDeviceOn = false; 
 

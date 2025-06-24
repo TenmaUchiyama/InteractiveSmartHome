@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Meta.WitAi.Json;
+using SpatialLLM.Core;
 using SpatialLLM.Device;
 using UnityEngine;
 
@@ -38,6 +39,7 @@ public class ExperimentManager : MonoBehaviour
 
     [SerializeField] private int SEED;
     [SerializeField] private int displayTime = 60; // デバイスの表示時間
+    [SerializeField] private UIButtonHelper uiButtonHelper;
             
     private ExperimentalDataManager experimentalDataManager;
     // private ExperimentTask experimentTask;
@@ -165,11 +167,15 @@ public class ExperimentManager : MonoBehaviour
 
             foreach (DeviceColorPair pair in deviceArrangeDatas)
             {
-                Debug.Log($"<color=yellow>paris {pair.device.name}</color>");
+                Debug.Log($"<color=yellow>paris {pair.device.name} Color{pair.color}</color>");
             }
             Debug.Log($"<color=red>[ShowDevice] Press A to Go To Operation. Device   {this.currentArrange.device_arrange_name}  </color>");
             saUIManager.SetDeviceCountText(deviceArrangeDatas.Count().ToString());
             saUIManager.SetInstructionText("Press Y If You Are Ready");
+
+            if(uiButtonHelper)uiButtonHelper.SetLabel(UIButtonLabelType.Y, "Ready", Color.black, Color.green); 
+
+
             await UniTask.WaitUntil(() => OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y));
             saUIManager.ClearInstruction();
             ClearDeviceVisual();
@@ -202,6 +208,7 @@ public class ExperimentManager : MonoBehaviour
        DeviceColorPair[] deviceColorPairs = this.currentArrange.devices.ToArray();
         foreach (DeviceColorPair devicePair in deviceColorPairs)
         {
+            
             SADevice saDevice = devicePair.device;
             DrawOnHover drawOnHover = saDevice.gameObject.GetComponent<DrawOnHover>();
             saDevice.TurnOnWithColor(devicePair.GetUnityColor());
@@ -396,6 +403,7 @@ private int ExtractParticipantNumber(string name)
     
      private async void TransitionToState(ExperimentFlowState nextState)
     {
+        if(uiButtonHelper)uiButtonHelper.DisableAllLabels();
         stateHistory.Push(currentState);
         currentState = nextState;
         if (stateActions.ContainsKey(nextState))

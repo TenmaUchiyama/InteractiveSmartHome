@@ -52,6 +52,21 @@ public class SADeviceRef : Singleton<SADeviceRef>
     }
 
 
+
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            foreach (SADevice device in this.GetAllSelectedDevices())
+            {
+                string deviceId = device.GetDBDeviceData().device_name;
+                Debug.Log($"[Update] 選択されたデバイスのID: {deviceId}");
+            }
+        }
+    }
+
+
     public string GetDeviceID(string deviceName)
     {
         if (deviceNameToId.TryGetValue(deviceName, out string deviceId))

@@ -20,7 +20,6 @@ class DeviceOperator():
             secret=os.getenv("SB_SECRET")
         )
         self.test_operator = TestOperator()
-        print(self.switchbot.token, self.switchbot.secret)
         # MQTT Publisher の初期化（使う場合）
         # self.mqtt_publisher = MQTTPublisher(...)
 

@@ -19,7 +19,7 @@ namespace SpatialLLM.Experiment
         [SerializeField] private VRCircleSelector circleSelector;
         [SerializeField] private bool IS_SPATIAL_POINTING = false; // Spatial Pointingを有効にするかどうか
         [SerializeField] private Camera userCamera;
-        private string currentState = "preparation";
+        private string currentState = "pointing";
         private string latestLLMOutput = "[No output]";
         private string recognizedWord = "";
 
@@ -45,9 +45,52 @@ namespace SpatialLLM.Experiment
     }
 
 
+
+        private void UpdatePointingLabel(bool isAPressed)
+{
+    if (isAPressed)
+    {
+        // A押してる間：Trigger = 単一選択
+        uibuttonHelper.SetLabel(
+            UIButtonLabelType.RightTrigger,
+            "単一選択",
+            Color.black,
+            Color.green
+        );
+        
+        // Aのラベルは不要・または非表示にしてもよい
+        uibuttonHelper.SetLabelVisible(UIButtonLabelType.A, false);
+    }
+    else
+    {
+        // A押してないとき：A = レーザーにする、Trigger = 範囲選択にする
+        uibuttonHelper.SetLabel(
+            UIButtonLabelType.A,
+            "レーザーにする",
+            Color.black,
+            Color.gray
+        );
+        
+        uibuttonHelper.SetLabel(
+            UIButtonLabelType.RightTrigger,
+            "範囲選択",
+            Color.black,
+            Color.blue
+        );
+
+        uibuttonHelper.SetLabelVisible(UIButtonLabelType.A, true);
+    }
+}
+
+
         protected override void Start()
         {
             base.Start();
+
+            this.onBeginOperation.AddListener(()=>
+            { 
+                // UpdatePointingLabel(false);
+            });
 
             if (PointingQueryRequest.Instance)
             {
@@ -96,12 +139,16 @@ namespace SpatialLLM.Experiment
                     SASpeechRecognizer.Instance.DeactivateVoice();
                     Debug.Log("[LabelExecutor] Trigger離す：録音終了");
                 }
+            // Aボタンの押下状態に応じてラベルを更新
 
-               if (OVRInput.GetDown(OVRInput.RawButton.A))
+
+            if (OVRInput.GetDown(OVRInput.RawButton.A))
             {
+
                 Debug.Log("[PointerSystemExecutor] Aボタン押下：Ray Interactorを有効化");
                 rayInteractor.gameObject.SetActive(true);
                 circleSelector.SetSelectionStarted(false);
+                //  UpdatePointingLabel(true);
             }
             if (OVRInput.GetUp(OVRInput.RawButton.A))
             {
@@ -109,6 +156,8 @@ namespace SpatialLLM.Experiment
 
                 rayInteractor.gameObject.SetActive(false);
                 circleSelector.SetSelectionStarted(true);
+                // UpdatePointingLabel(false);
+
             }
 
             if (OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.Y))
@@ -125,7 +174,7 @@ namespace SpatialLLM.Experiment
               if (OVRInput.GetDown(OVRInput.RawButton.X))
         {
             ResetRecognizedWord();
-            currentState = "preparation";
+            currentState = "pointing";
             OperationProceed();
         }
 
@@ -133,7 +182,7 @@ namespace SpatialLLM.Experiment
         if (Input.GetKeyDown(KeyCode.Escape) || OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
         {
             ResetRecognizedWord();
-            currentState = "preparation";
+            currentState = "pointing";
             experimentManager.BackToShowDevice();
         }
         }
@@ -142,9 +191,15 @@ namespace SpatialLLM.Experiment
         {
             Debug.Log($"<color=green>PointerExecutor State: {currentState}</color>");
 
+
             switch (currentState)
             {
-                case "preparation":
+
+                // 初期状態
+                // ここで音声認識を開始する
+                case "pointing":
+                    // UpdatePointingLabel(false);
+
                     SADeviceRef.Instance.ClearAllDeviceOperation();
                     saUIManager.SetInstructionText("Point and Press Y to send");
                     elapsedTime = 0f;
@@ -157,7 +212,7 @@ namespace SpatialLLM.Experiment
 
                     string taskId = experimentManager.GetCurrentTaskId();
                     var pointed = SADeviceRef.Instance.GetAllSelectedDevices();
-                   
+
                     if (!LLMQueryRequest.Instance.IsRequesting)
                     {
 
@@ -178,12 +233,22 @@ namespace SpatialLLM.Experiment
                             foreach (var d in pointed)
                             {
                                 pointedIds.Add(new DeviceLabelData() { id = d.GetDeviceID(), name = d.GetDBDeviceData().device_name });
+                                // ちゃんと送信するデバイスが選択されているか確認
+                                if (d.GetDeviceID() == "")
+                                {
+                                    Debug.LogWarning("Selected device has no ID, skipping this device.");
+                                    continue;
+                                }
+                                else
+                                {
+                                    Debug.Log($"Selected device ID: {d.GetDeviceID()}");
+                                }
                             }
-
-
+                            //　実際に送信するデータの中を見てみる
+                            Debug.Log($"Sending {pointedIds.Count} devices to LLM: {JsonConvert.SerializeObject(pointedIds)}");
                             await PointingQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid, pointedIds);
                         }
-                      
+
                     }
                     else
                     {
@@ -201,11 +266,11 @@ namespace SpatialLLM.Experiment
                         operatedIds.Add(d.GetDeviceID());
                     }
 
-                     this.experimentTask.AddTaskAttempt(
-                        recognizedWord,
-                        this.elapsedTime.ToString(),
-                        operatedIds
-                    );
+                    this.experimentTask.AddTaskAttempt(
+                       recognizedWord,
+                       this.elapsedTime.ToString(),
+                       operatedIds
+                   );
 
 
                     this.wordLogger.AddOrUpdateTaskData(this.experimentTask.GetExperimentTaskData());
@@ -218,14 +283,14 @@ namespace SpatialLLM.Experiment
 
                 case "checking":
                     saUIManager.SetInstructionText("Grip+Y to confirm, or press Y to retry");
-                    currentState = "preparation";
+                    currentState = "pointing";
                     break;
 
                 case "done":
                     this.wordLogger.AddOrUpdateTaskData(this.experimentTask.GetExperimentTaskData());
                     saUIManager.ClearRecognizedWord();
                     CompleteOperation();
-                    currentState = "preparation";
+                    currentState = "pointing";
                     break;
             }
         }
