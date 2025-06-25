@@ -13,6 +13,7 @@ namespace SpatialLLM.Experiment
     {
         private string currentState = "preparation";
         private string recognizedWord = "";
+        private string lastRecognizedWord = "";
         private string latestLLMOutput = "[No output]";
         private bool gripHeld = false;
 
@@ -40,6 +41,7 @@ namespace SpatialLLM.Experiment
 
         // 上書きから追記に変更 ↓↓↓
         recognizedWord += recognizedText + " "; // スペースで区切る
+        lastRecognizedWord = recognizedText; // 最後の認識結果を保存
         saUIManager.SetRecognizedTxt(recognizedWord);
         currentState = "recorded";
          StateUIHelper();  // ← これを絶対に呼ぶ！
@@ -57,6 +59,7 @@ namespace SpatialLLM.Experiment
         if (recognizedWord.Length > 0)
         {
             recognizedWord = recognizedWord.Substring(0, recognizedWord.Length - 1);
+            lastRecognizedWord = recognizedWord; // 最後の認識結果を更新
             saUIManager.SetRecognizedTxt(recognizedWord);
         }
     }
@@ -278,7 +281,7 @@ protected override void Update()
 
                     // 1. 発話記録を追加
                     this.experimentTask.AddTaskAttempt(
-                        recognizedWord,
+                        lastRecognizedWord,
                         this.elapsedTime.ToString(),
                         operatedIds
                     );

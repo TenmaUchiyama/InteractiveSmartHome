@@ -24,6 +24,7 @@ namespace SpatialLLM.Experiment
         private string currentState = "pointing";
         private string latestLLMOutput = "[No output]";
         private string recognizedWord = "";
+        private string lastRecognizedWord = "";
 private bool gripHeld = false;
 
         
@@ -35,6 +36,7 @@ private bool gripHeld = false;
         if (recognizedWord.Length > 0)
         {
             recognizedWord = recognizedWord.Substring(0, recognizedWord.Length - 1);
+            lastRecognizedWord = recognizedWord; // 最後の認識単語を更新
             saUIManager.SetRecognizedTxt(recognizedWord);
         }
     }
@@ -68,6 +70,7 @@ private void StateUIHelper()
                 case "recorded":
                     PointingHelper(false, false); // Pointing系は非表示
                                                   // 音声送信・取り消し・戻るの表示（左手用）
+                    uiButtonHelper.SetLabel(UIButtonLabelType.LeftTrigger, "音声録音", Color.black, Color.gray);
                     uiButtonHelper.SetLabel(UIButtonLabelType.Y, "送信", Color.black, Color.green);
                     uiButtonHelper.SetLabel(UIButtonLabelType.X, "取り消し", Color.black, Color.red);
                     uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
@@ -189,6 +192,7 @@ private void StateUIHelper()
             
             // 上書きから追記に変更 ↓↓↓
             recognizedWord += recognizedText + " "; // スペースで区切る
+            lastRecognizedWord = recognizedWord; // 最後の認識単語を更新
             saUIManager.SetRecognizedTxt(recognizedWord);
             currentState = "recorded";
             Debug.Log($"[LabelExecutor] 音声認識結果を更新: {recognizedWord}");
@@ -404,7 +408,7 @@ private void StateUIHelper()
                     }
 
                     this.experimentTask.AddTaskAttempt(
-                       recognizedWord,
+                       lastRecognizedWord,
                        this.elapsedTime.ToString(),
                        operatedIds
                    );
@@ -415,8 +419,9 @@ private void StateUIHelper()
                     saUIManager.FinishLoadingAndDisplayResponse(latestLLMOutput);
                     currentState = "checking";
                     timerStarted = false;
-                    StateUIHelper();
+                    
                     elapsedTime = 0f;
+                    OperationProceed();
                     break;
 
                 case "checking":

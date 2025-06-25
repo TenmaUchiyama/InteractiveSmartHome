@@ -19,7 +19,7 @@ from langchain_core.messages import BaseMessage
 from utils.time_tracker import TimeTracker
 
 
-OUTPUT_FILE_NAME="TEST"
+OUTPUT_FILE_NAME="P6"
 app = FastAPI()
 
 
@@ -105,7 +105,7 @@ def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_ke
         if not agent_output:
             return {"error": "No agent output produced."}
         serialized = remove_keys_flat(response,pop_keys)
-        print("SERIALIZED:" , serialized)
+
         serialized = serialize_value(serialized)
         if system_duration is not None:
             serialized["system_total_time_sec"] = system_duration

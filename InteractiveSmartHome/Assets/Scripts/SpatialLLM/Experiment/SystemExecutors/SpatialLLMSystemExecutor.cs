@@ -23,6 +23,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
     private bool isTriggarable = false;
 
     private string recognizedWord = "";
+    private string lastRecognizedWord = "";
 
     private string currentState = "waiting";
     private string latestLLMOutput = "[No output]";
@@ -93,7 +94,8 @@ public class SpatialLLMSystemExecutor : SystemExecutor
             break;
 
         case "recorded":
-            // 録音完了 → 送信・キャンセル
+                // 録音完了 → 送信・キャンセル
+                  uiButtonHelper.SetLabel(UIButtonLabelType.LeftTrigger, "音声録音", Color.white, Color.gray);
             uiButtonHelper.SetLabel(UIButtonLabelType.Y, "送信", Color.black, Color.green);
                 uiButtonHelper.SetLabel(UIButtonLabelType.X, "取り消し", Color.black, Color.red);
                 uiButtonHelper.SetLabel(UIButtonLabelType.LeftThumbstick, "もう一度確認", Color.black, Color.yellow);
@@ -135,6 +137,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
 
         // 上書きから追記に変更 ↓↓↓
         recognizedWord += recognizedText + " "; // スペースで区切る
+        lastRecognizedWord = recognizedText; // 最後の認識結果を保存
         saUIManager.SetRecognizedTxt(recognizedWord);
         currentState = "recorded";
         StateUIHelper();
@@ -149,6 +152,7 @@ public class SpatialLLMSystemExecutor : SystemExecutor
         if (recognizedWord.Length > 0)
         {
             recognizedWord = recognizedWord.Substring(0, recognizedWord.Length - 1);
+            lastRecognizedWord = recognizedWord; // 最後の認識結果も更新
             saUIManager.SetRecognizedTxt(recognizedWord);
         }
     }
@@ -299,13 +303,14 @@ public class SpatialLLMSystemExecutor : SystemExecutor
                 List<string> outputids = SADeviceRef.Instance.GetAllOperatedDevices().Select(d=> d.GetDeviceID()).ToList();
 
                 this.experimentTask.AddTaskAttempt(
-                    recognizedWord, 
+                    lastRecognizedWord, // 最後の認識結果を使用
                     this.elapsedTime.ToString(),
                     outputids
                 );
                 currentState = "checking";
                  this.timerStarted = false; 
                 this.elapsedTime = 0f; // タイマーをリセット
+                OperationProceed();
                 break;
 
             case "checking":
