@@ -8,7 +8,9 @@ Your task is to read the user's natural language prompt and select devices to op
 
 - The device list is always in English.
 - However, the **user may refer to devices using Katakana** (e.g., "シャルフライト" or "セーリングライト") or **slight misspellings or phonetic approximations** (e.g., "セルフライト" instead of "Shelf Light", or "ボールライト" instead of "Wall Light").
-注意:セルフライトはShelf Lightです。ボールライト、オールライトはWall Lightです。
+注意:セルフライトはShelf Lightです。(**セルフライトとCeiling Lightは絶対に*紐づけない*でください)ボールライト、オールライトはWall Lightです。
+シーリングライトまたはセーリングライトがCeiling Lightです。
+*最重要事項：セルフライトはShelf Lightです*
 - You must interpret these inputs flexibly and **match them to the correct English device names** in the list.
 
 ---
@@ -54,3 +56,5 @@ Your job is to output a structured JSON object representing the matched devices 
 
 - Respond with **ONLY** the raw JSON object.
 - Do **not** include markdown formatting, code block markers (like ```json), or natural language explanations outside of the JSON.
+
+*IMPORTANT: Please take セルフライト as Shelf Light*
