@@ -31,7 +31,7 @@ public class ExperimentManager : MonoBehaviour
     private DeviceArrangeData currentArrange;
     [SerializeField]private bool isLabelExperiment = false;
 
-        [SerializeField] private bool isTutorial= false;
+    [SerializeField] private bool isTutorial= false;
     [SerializeField]private  int currentArrangeIndex;
     [SerializeField] private SystemExecutor systemExecutor;
 
@@ -40,6 +40,7 @@ public class ExperimentManager : MonoBehaviour
     [SerializeField] private int SEED;
     [SerializeField] private int displayTime = 60; // デバイスの表示時間
     [SerializeField] private UIButtonHelper uiButtonHelper;
+        [SerializeField] private WordLogger wordLogger;
             
     private ExperimentalDataManager experimentalDataManager;
     // private ExperimentTask experimentTask;
@@ -47,8 +48,9 @@ public class ExperimentManager : MonoBehaviour
     private ExperimentFlowState currentState = ExperimentFlowState.NONE;
     private Stack<ExperimentFlowState> stateHistory = new Stack<ExperimentFlowState>(); 
     private Dictionary<ExperimentFlowState, Func<UniTask>> stateActions; 
+    private float taskTakenTime = 0f; // タスクにかかった時間
 
-    public int CurrentArrangeIndex  => currentArrangeIndex;
+    public int CurrentArrangeIndex => currentArrangeIndex;
 
 
 
@@ -84,27 +86,34 @@ public class ExperimentManager : MonoBehaviour
         }
 
 
-    private async void Init()
-    {   
-
-        
-        Debug.Log("[INIT] Press Space to Init");
-        await UniTask.WaitUntil(() => {
-            
-            
-             if(Input.GetKeyDown(KeyCode.Space))
-             {
-                Debug.Log("Space Pressed"); 
-                return true;
-             }
-             return false;
-             });
+        void Update()
+        {
+            this.taskTakenTime += Time.deltaTime; // タスクの時間を更新
+        }
 
 
-      
-        var firstTask = isLabelExperiment ? ExperimentFlowState.LABEL_EXPERIMENT : ExperimentFlowState.START_TASK;
-        TransitionToState(firstTask);
-    }
+        private async void Init()
+        {
+
+
+            Debug.Log("[INIT] Press Space to Init");
+            await UniTask.WaitUntil(() =>
+            {
+
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    Debug.Log("Space Pressed");
+                    return true;
+                }
+                return false;
+            });
+
+
+
+            var firstTask = isLabelExperiment ? ExperimentFlowState.LABEL_EXPERIMENT : ExperimentFlowState.START_TASK;
+            TransitionToState(firstTask);
+        }
 
 
 
@@ -145,8 +154,9 @@ public class ExperimentManager : MonoBehaviour
     private async UniTask StartTask()
     { 
         this.currentArrange = this.arrangeDataList[this.currentArrangeIndex]; 
+        taskTakenTime = 0f; // タスクの時間をリセット
         // this.experimentTask.Initialize(this.currentArrange);
-        TransitionToState(ExperimentFlowState.SHOW_DEVICE);
+            TransitionToState(ExperimentFlowState.SHOW_DEVICE);
     }
 
 
@@ -242,6 +252,7 @@ public class ExperimentManager : MonoBehaviour
         
 
         this.ClearDeviceVisual();
+        this.wordLogger.AddOrUpdateTotalElapsedTime(this.GetCurrentTaskId(), this.taskTakenTime);
    
 
         currentArrangeIndex++; 
@@ -254,9 +265,10 @@ public class ExperimentManager : MonoBehaviour
 
             return; 
         }
-        // await this.experimentalDataManager.WriteExperimentalDataAsync(this.experimentTask);
-        // this.experimentTask.ClearAllData();
-
+            // await this.experimentalDataManager.WriteExperimentalDataAsync(this.experimentTask);
+            // this.experimentTask.ClearAllData();
+        
+         
         TransitionToState(ExperimentFlowState.START_TASK);
     }
 

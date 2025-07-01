@@ -84,4 +84,23 @@ public class WordLogger : MonoBehaviour
             Debug.LogError("Failed to save task entries: " + e.Message);
         }
     }
+
+
+
+    public void AddOrUpdateTotalElapsedTime(string taskId, float additionalTime)
+    {
+        UpdateFilePathFromEXDataHolder();
+        LoadIfExists();
+
+        var existing = taskDataList.Find(d => d.taskId == taskId);
+        if (existing != null)
+        {
+            existing.totalElapsedTime += additionalTime;
+        }
+        
+
+        SaveToFile();
+    }
+
+
 }

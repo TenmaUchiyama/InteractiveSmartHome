@@ -2076,6 +2076,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
   m_PrefabInstance: {fileID: 73016343}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &73016345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+  m_PrefabInstance: {fileID: 73016343}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523407717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &73296624
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5857,6 +5868,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
   m_PrefabInstance: {fileID: 229767892}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &229767894 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+  m_PrefabInstance: {fileID: 229767892}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784879718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &232465706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22936,6 +22958,7 @@ MonoBehaviour:
   SEED: 0
   displayTime: 60
   uiButtonHelper: {fileID: 1658672699}
+  wordLogger: {fileID: 925221670}
   isDeviceTurnedOn: 0
 --- !u!4 &1178553825
 Transform:
@@ -22970,111 +22993,113 @@ MonoBehaviour:
   arrangementType: 0100000004000000
   inputTaskDevices: []
   arrangementDataList:
-  - device_arrange_id: 2369c5c0-c4bb-4308-a9cd-05a64a69f91a
-    device_arrange_name: "\u624B\u524D\u4E09\u3064\u9752\u5965\u4E09\u3064\u8D64"
+  - device_arrange_id: 2d0b42ad-6703-463c-81b3-4ee4d0c8b347
+    device_arrange_name: "\u5F8C\u308D\u306E\u771F\u4E0A\u306E\u96FB\u6C17"
     device_arrange_type: 
     devices:
-    - device: {fileID: 929798170}
-      color: 2
+    - device: {fileID: 1553592539}
+      color: 0
       customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1844526545}
-      color: 1
-      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: bee10050-f98c-456a-a684-4435ee88ef00
+    device_arrange_name: "\u5965\u304B\u3089\u624B\u524D\u306B\u7DD1\u304B\u3089\u9752"
+    device_arrange_type: 
+    devices:
     - device: {fileID: 2064105105}
-      color: 1
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1992028165}
-      color: 1
+      color: 5
       customColor: {r: 1, g: 1, b: 1, a: 1}
     - device: {fileID: 1212198255}
+      color: 11
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1834327154}
       color: 2
       customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 2112542654}
-      color: 2
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: d58fe3c1-28a0-4e49-9e2f-e72569f6e61e
-    device_arrange_name: "\u5DE6\u8D64\u3001\u771F\u3093\u4E2D\u4E8C\u3064\u9EC4\u8272\u3001\u53F3\u9752"
-    device_arrange_type: 
-    devices:
-    - device: {fileID: 1006005648}
-      color: 1
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 929798170}
-      color: 3
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 2129774519}
-      color: 3
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1844526545}
-      color: 2
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: 0ebd3226-6abe-4b54-8d2f-6c4c8adc1978
-    device_arrange_name: "\u5965\u9752\u624B\u524D\u8D64"
+  - device_arrange_id: c78550a2-290e-4b94-98db-961c2110c668
+    device_arrange_name: "\u624B\u524D\u4E8C\u3064\u9EC4\u8272\u3001\u5965\u4E8C\u3064\u9752"
     device_arrange_type: 
     devices:
     - device: {fileID: 1539070041}
-      color: 1
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 929798170}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1006005648}
+      color: 2
       customColor: {r: 1, g: 1, b: 1, a: 1}
     - device: {fileID: 2129774519}
       color: 2
       customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: fe0ef0b0-c647-4b3a-b2f6-68a75133a566
-    device_arrange_name: "\u68DA\u306E\u771F\u3093\u4E2D"
-    device_arrange_type: 
-    devices:
-    - device: {fileID: 1903415662}
-      color: 0
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: 8aeed698-e7ee-41ef-bfe7-56f37e2232ab
-    device_arrange_name: "\u68DA\u306E\u4E0A\u6BB5\u5DE6\u304B\u3089\u53F3\u306B\u8D64\u304B\u3089\u9752"
+  - device_arrange_id: 40573e58-0087-4bb3-9ed7-d18a24a35b78
+    device_arrange_name: "\u68DA\u306E\u53F3\u304B\u3089\u9752\u3001\u9EC4\u8272\u3001\u8D64"
     device_arrange_type: 
     devices:
     - device: {fileID: 1712959728}
-      color: 1
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 189367430}
-      color: 6
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1907559824}
       color: 2
       customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: 137e922c-0877-46af-a797-5a32df2edf5d
-    device_arrange_name: "\u68DA\u306E\u4E00\u756A\u53F3\u306E\u7E26\u306E\u5217\u4E0B\u304B\u3089\u9806\u756A\u306B\u7DD1\u3001\u9EC4\u8272\u3001\u9752"
+    - device: {fileID: 73016345}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 229767894}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 189367430}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1903415662}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1302733591}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1907559824}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 268162897}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1170897340}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: b1e13b56-4030-40b3-a8c7-fbc4554e6c18
+    device_arrange_name: "\u5DE6\u4E0A\u4E8C\u3064\u9752\u3001\u771F\u3093\u4E2D\u53F3\u4E8C\u3064\u9EC4\u8272"
     device_arrange_type: 
     devices:
-    - device: {fileID: 1170897340}
-      color: 5
+    - device: {fileID: 189367430}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1712959728}
+      color: 2
       customColor: {r: 1, g: 1, b: 1, a: 1}
     - device: {fileID: 268162897}
       color: 3
       customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1907559824}
+    - device: {fileID: 1903415662}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 7aeefa77-f398-4a26-b615-e50c4d05ba64
+    device_arrange_name: "\u30C6\u30FC\u30D6\u30EB\u9752\u3001\u30C6\u30FC\u30D6\u30EB\u4E0B\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 455134356}
       color: 2
       customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: f548cabb-2a47-4399-a702-f76d5d1336df
-    device_arrange_name: "\u68DA\u306E\u771F\u3093\u4E2D\u306E\u96FB\u6C17\u3092\u70B9\u3051\u3066"
-    device_arrange_type: 
-    devices:
-    - device: {fileID: 1903415662}
-      color: 0
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1907559824}
-      color: 0
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: 81c1a60b-c8ac-4a16-b831-1df68863e61e
-    device_arrange_name: "\u771F\u3093\u4E2D\u767D\u3001\u5DE6\u53F3\u7DD1"
-    device_arrange_type: 
-    devices:
-    - device: {fileID: 2119446003}
-      color: 0
-      customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1285929354}
+    - device: {fileID: 1282385011}
       color: 5
       customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1685885357}
-      color: 5
+  - device_arrange_id: 09ff7f59-f6d6-4c54-9955-f1b4bfd11225
+    device_arrange_name: "\u5965\u306E\u96FB\u6C17\u4E09\u3064"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1358393385}
+      color: 0
       customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: c87d383c-41db-4303-8615-9271bbf2465e
+    - device: {fileID: 971393412}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 657314575}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 2e919b0d-6d84-4641-a535-930a7ca6c8b7
     device_arrange_name: "\u53F3\u9752\u3001\u5DE6\u8D64"
     device_arrange_type: 
     devices:
@@ -23084,31 +23109,56 @@ MonoBehaviour:
     - device: {fileID: 1685885357}
       color: 1
       customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: e2dc0c9a-3e6f-40a4-b8c5-7289c1efe296
-    device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u5DE6\u8D64"
+    - device: {fileID: 2119446003}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 79dc7e7b-d1c7-4237-908d-f541b20406d4
+    device_arrange_name: "\u5DE6\u306E\u58C1\u306E\u96FB\u6C17\u8D64"
     device_arrange_type: 
     devices:
-    - device: {fileID: 1685405144}
+    - device: {fileID: 1685885357}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: ae59cd40-20ff-4809-8cbb-87c7cc41665c
+    device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u5DE6\u3068\u4E00\u756A\u53F3\u9EC4\u8272\u3001\u305D\u306E\u4ED6\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 2041330072}
       color: 3
       customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: 7cbd6f03-54a0-426f-b4ea-d8e0ce58e276
-    device_arrange_name: "\u30C6\u30FC\u30D6\u30EB\u3001\u30D5\u30ED\u30A2\u306B\u7DD1"
+    - device: {fileID: 2061067425}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1685405144}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1358393385}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: fdf65cab-a9a0-4e5f-ac35-c3cff2196644
+    device_arrange_name: "\u5DE6\u4E0A\u306E4\u3064\u9EC4\u8272"
     device_arrange_type: 
     devices:
-    - device: {fileID: 455134356}
-      color: 5
+    - device: {fileID: 189367430}
+      color: 3
       customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 1282385011}
-      color: 5
+    - device: {fileID: 1903415662}
+      color: 3
       customColor: {r: 1, g: 1, b: 1, a: 1}
-  - device_arrange_id: eee4a904-a6ad-4369-970f-b656e1f59f12
-    device_arrange_name: "\u5DE6\u30AA\u30EC\u30F3\u30B8\u3001\u53F3\u9752"
+    - device: {fileID: 1712959728}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 229767894}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 5dde3eac-8ee6-4821-99d4-f6e4ae5f7bd2
+    device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u53F3\u306E\u5DE6\u8D64\u4E00\u756A\u53F3\u9752"
     device_arrange_type: 
     devices:
-    - device: {fileID: 971393412}
-      color: 4
+    - device: {fileID: 2041330072}
+      color: 1
       customColor: {r: 1, g: 1, b: 1, a: 1}
-    - device: {fileID: 657314575}
+    - device: {fileID: 1358393385}
       color: 2
       customColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1178553827
@@ -25938,6 +25988,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
   m_PrefabInstance: {fileID: 1302733589}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1302733591 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+  m_PrefabInstance: {fileID: 1302733589}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331870467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1302733596 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5222916985108515361, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
@@ -26999,6 +27060,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6527197870613826799, guid: 6c5022b7268c6784fb8f25e4626aacbd, type: 3}
   m_PrefabInstance: {fileID: 1358393383}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1358393385 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 702386029428479999, guid: 6c5022b7268c6784fb8f25e4626aacbd, type: 3}
+  m_PrefabInstance: {fileID: 1358393383}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170296648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1359840341
 GameObject:
   m_ObjectHideFlags: 0
@@ -30808,6 +30880,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 1553592537}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1553592539 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
+  m_PrefabInstance: {fileID: 1553592537}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671878209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1554484425
 GameObject:
   m_ObjectHideFlags: 0
@@ -32985,8 +33068,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63cd6ed40f97f55449e20dabe455c131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participantName: P17
-  taskSetName: A
+  participantName: P21
+  taskSetName: D
   conditionNum: 4
 --- !u!4 &1686398844
 Transform:
@@ -35704,6 +35787,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 1834327152}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1834327154 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
+  m_PrefabInstance: {fileID: 1834327152}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951698376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1838787239
 GameObject:
   m_ObjectHideFlags: 0
@@ -35921,17 +36015,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 1844526543}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1844526545 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
-  m_PrefabInstance: {fileID: 1844526543}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 848998568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1845307710 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8328928369003298720, guid: a507e28f612237f4eaf48c036c45357b, type: 3}
@@ -38889,17 +38972,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 1992028163}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1992028165 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
-  m_PrefabInstance: {fileID: 1992028163}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1875885215}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1992176989
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39557,6 +39629,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2861902398262688055, guid: 43b16bacd385c6c468aa961d15efe0c6, type: 3}
   m_PrefabInstance: {fileID: 2041330070}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2041330072 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7111290397095411952, guid: 43b16bacd385c6c468aa961d15efe0c6, type: 3}
+  m_PrefabInstance: {fileID: 2041330070}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696193285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2042490067
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39994,6 +40077,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396036179466645272, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
   m_PrefabInstance: {fileID: 2061067423}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2061067425 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 6b8689e606c68394494e6607c981bbb3, type: 3}
+  m_PrefabInstance: {fileID: 2061067423}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858736825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2062816015
 GameObject:
   m_ObjectHideFlags: 0
@@ -40734,17 +40828,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6691240434977001428, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 1540133764}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2112542654 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
-  m_PrefabInstance: {fileID: 1540133764}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2112542653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2119446002 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6691240434977001428, guid: d63f71508da95f44982da72ad2978402, type: 3}

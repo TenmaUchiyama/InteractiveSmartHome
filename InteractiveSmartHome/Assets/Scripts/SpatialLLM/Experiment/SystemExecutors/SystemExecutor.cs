@@ -16,7 +16,8 @@ namespace SpatialLLM.Experiment
         [SerializeField] protected WordLogger wordLogger;
         
         [SerializeField] protected UIButtonHelper uiButtonHelper;
-
+    
+        
         protected float elapsedTime = 0f;
         protected bool timerStarted = false;
 

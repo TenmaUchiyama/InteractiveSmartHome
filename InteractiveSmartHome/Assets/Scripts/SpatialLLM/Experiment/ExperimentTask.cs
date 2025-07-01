@@ -38,7 +38,7 @@ namespace SpatialLLM.Experiment
     {
         public string taskId;
         public int taskAttemptCount = 0;
-
+        public float totalElapsedTime = 0f;
         public string finalId = "";
         public List<SingleTaskAttempt> taskAttempts = new List<SingleTaskAttempt>();
 
