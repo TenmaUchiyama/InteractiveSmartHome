@@ -18,6 +18,22 @@ public class WordLogger : MonoBehaviour
         LoadIfExists();
     }
 
+
+
+
+
+
+
+    public void SetTotalTime(float seconds)
+    {
+        this.totalTimeSeconds = seconds;
+        SaveToFile(); // ここで保存
+    }
+
+
+
+
+    
     private void UpdateFilePathFromEXDataHolder()
     {
         string participant = EXDataHolder.Instance.ParticipantName;
