@@ -8,6 +8,7 @@ using UnityEngine;
 public class WordLogger : MonoBehaviour
 {
     [SerializeField] private string folderRoot = "VOICE_LOG";
+    private float totalTimeSeconds = 0f;
 
     private List<ExperimentTaskDataForSave> taskDataList = new List<ExperimentTaskDataForSave>();
     private string filePath;
