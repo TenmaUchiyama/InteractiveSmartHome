@@ -1,0 +1,151 @@
+[
+  {
+    "user_prompt": "シーリングライト一付けて ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 1.",
+      "reasoning": "Matched 'シーリングライト一' to 'Ceiling Light 1' using Katakana similarity and the number '一' which corresponds to '1'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1743,
+        "completion_tokens": 135,
+        "total_tokens": 1878
+      },
+      "cost_usd": 0.005708,
+      "agent_time_elapsed": 1.6933138370513916,
+      "system_time_elapsed": 2.074533462524414
+    },
+    "system_total_time_sec": 2.078047037124634,
+    "task_id": "81c1a60b-c8ac-4a16-b831-1df68863e61e",
+    "attempt_id": "8386105a-5942-4f7f-bd4b-7ddefa8570d4"
+  },
+  {
+    "user_prompt": "シーリングライトを四から八を から、 黄色、 赤、 青、 緑でつけて ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 4 in yellow, Ceiling Light 5 in red, Ceiling Light 6 in blue, Ceiling Light 7 in green, and Ceiling Light 8 in yellow.",
+      "reasoning": "Matched 'シーリングライト' to 'Ceiling Light' using Katakana similarity and identified the range from 4 to 8. Assigned colors based on the sequence: yellow, red, blue, green, yellow."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1759,
+        "completion_tokens": 451,
+        "total_tokens": 2210
+      },
+      "cost_usd": 0.008908,
+      "agent_time_elapsed": 5.2862420082092285,
+      "system_time_elapsed": 5.600914001464844
+    },
+    "system_total_time_sec": 5.605244398117065,
+    "task_id": "81c1a60b-c8ac-4a16-b831-1df68863e61e",
+    "attempt_id": "f4879a88-0579-4d6f-a742-a468f82daef8"
+  },
+  {
+    "user_prompt": "ウォールライト二は 青 ウォールライト三は あか ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 2 in blue and Wall Light 3 in red.",
+      "reasoning": "Matched 'ウォールライト二' to 'Wall Light 2' and 'ウォールライト三' to 'Wall Light 3' using Katakana similarity and numeric context."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1749,
+        "completion_tokens": 218,
+        "total_tokens": 1967
+      },
+      "cost_usd": 0.006553,
+      "agent_time_elapsed": 2.649549722671509,
+      "system_time_elapsed": 2.9457409381866455
+    },
+    "system_total_time_sec": 2.9492697715759277,
+    "task_id": "c87d383c-41db-4303-8615-9271bbf2465e",
+    "attempt_id": "b36f26dd-e33d-4af7-987d-3c5e47be8adf"
+  }
+]

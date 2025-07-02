@@ -15,7 +15,7 @@ from agents.device_operator_agent.operator_tool import operateDevice
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 language = os.getenv("VOICE_LANG", "en").strip() if os.getenv("VOICE_LANG") else "en"
-file_path = os.path.join(script_dir, "prompts", "jp_spatial_msg.txt" if language == "ja" else "prompts/no_tool_spatial_msg.txt")
+file_path = os.path.join(script_dir, "prompts", "jp_spatial_msg.txt" if language == "ja" else "no_tool_spatial_msg.txt")
 
 with open(file_path, "r", encoding="utf-8") as f:
     spatial_message = SystemMessage(f.read())

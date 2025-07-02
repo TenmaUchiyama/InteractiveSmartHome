@@ -1,0 +1,115 @@
+[
+  {
+    "user_prompt": "右あお、 左赤 ",
+    "pointed_devices": [
+      {
+        "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+        "name": "Stand Light 2",
+        "position": {
+          "x": -2.28002024,
+          "y": -1.20926,
+          "z": 3.73767829
+        },
+        "distance_from_user": 4.54214048,
+        "eye_centrality_score": 3.40282347e+38
+      },
+      {
+        "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+        "name": "Stand Light 3",
+        "position": {
+          "x": 1.83712411,
+          "y": -1.20926,
+          "z": 4.94317532
+        },
+        "distance_from_user": 5.41039,
+        "eye_centrality_score": 3.40282347e+38
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "左のライトを赤色に、右のライトを青色にしました。",
+      "reasoning": "ユーザーが指し示した2つのデバイスが左右に配置されていたため、左のデバイスを赤、右のデバイスを青としました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 2534,
+        "completion_tokens": 226,
+        "total_tokens": 2760
+      },
+      "cost_usd": 0.008595,
+      "agent_time_elapsed": 2.017778158187866,
+      "system_time_elapsed": 407.524222612381
+    },
+    "system_total_time_sec": 2.349719762802124,
+    "task_id": "95479aa7-9c98-49e4-817e-727302518dae",
+    "attempt_id": "56396412-630c-4d24-8e61-62dcc03d8556"
+  },
+  {
+    "user_prompt": "つけて ",
+    "pointed_devices": [
+      {
+        "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+        "name": "Ceiling Light 3",
+        "position": {
+          "x": -0.955353141,
+          "y": 2.238997,
+          "z": 2.99994516
+        },
+        "distance_from_user": 3.86335063,
+        "eye_centrality_score": 18.990387
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Ceiling Light 3を点けました。",
+      "reasoning": "ユーザーが指し示したデバイス『Ceiling Light 3』を操作対象とし、指示に基づき該当デバイスのスイッチをONに設定しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 2327,
+        "completion_tokens": 152,
+        "total_tokens": 2479
+      },
+      "cost_usd": 0.007338,
+      "agent_time_elapsed": 3.646244525909424,
+      "system_time_elapsed": 436.8755989074707
+    },
+    "system_total_time_sec": 3.9811627864837646,
+    "task_id": "2a7b8c63-3775-4bbf-8841-7976b4ccf32f",
+    "attempt_id": "1057ab4e-c35d-4345-b83d-512e7f026ce0"
+  }
+]
