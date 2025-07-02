@@ -1,6 +1,7 @@
 [
   {
     "command": "一番前の列の右二つと後ろの左二つを赤にして",
+    "spatial_command_type": ["horizontal", "depth"],
     "has_color": true,
     "target_devices": [
       {
@@ -114,7 +115,7 @@
     "target_type": "multi"
   },
   {
-    "command": "後ろの列の右から順番にオレンジ、シアン、白にして",
+    "command": "後ろの列の右から順番にオレンジ、シアン、青、赤にして",
     "has_color": true,
     "target_devices": [
       {
@@ -127,7 +128,11 @@
       },
       {
         "device_name": "Ceiling Light 10",
-        "color": "white"
+        "color": "blue"
+      },
+      {
+        "device_name": "Ceiling Light 9",
+        "color": "red"
       }
     ],
     "target_type": "multi"
@@ -194,20 +199,20 @@
     "target_type": "multi"
   },
   {
-    "command": "前列の一番左と左前を青にして、後列の一番右を黄色にして",
+    "command": "自分の一番近い電気を青、そしてそれの左右に隣接している電気を赤にして",
     "has_color": true,
     "target_devices": [
       {
-        "device_name": "Ceiling Light 1",
+        "device_name": "Ceiling Light 7",
         "color": "blue"
       },
       {
-        "device_name": "Ceiling Light 2",
-        "color": "blue"
+        "device_name": "Ceiling Light 6",
+        "color": "red"
       },
       {
-        "device_name": "Ceiling Light 12",
-        "color": "yellow"
+        "device_name": "Ceiling Light 8",
+        "color": "red"
       }
     ]
   },
@@ -306,15 +311,23 @@
     ]
   },
   {
-    "command": "頭上の横一列の両端の左を赤、右を青にして",
+    "command": "最も遠い4つ角の前方二つを赤、後方二つを青にして",
     "has_color": true,
     "target_devices": [
       {
-        "device_name": "Ceiling Light 5",
+        "device_name": "Ceiling Light 1",
         "color": "red"
       },
       {
-        "device_name": "Ceiling Light 8",
+        "device_name": "Ceiling Light 4",
+        "color": "red"
+      },
+      {
+        "device_name": "Ceiling Light 9",
+        "color": "blue"
+      },
+      {
+        "device_name": "Ceiling Light 12",
         "color": "blue"
       }
     ]
@@ -594,30 +607,54 @@
     ]
   },
   {
-    "command": "一番近いライトを赤にして、左奥のライトを青にして",
+    "command": "最も遠い電気を二つ赤色、そしてそれぞれの電気から一つ近い所にある電気を青色にして",
     "has_color": true,
     "target_devices": [
       {
-        "device_name": "Ceiling Light 7",
+        "device_name": "Ceiling Light 1",
         "color": "red"
       },
       {
-        "device_name": "Ceiling Light 1",
+        "device_name": "Ceiling Light 12",
+        "color": "red"
+      },
+      {
+        "device_name": "Ceiling Light 2",
+        "color": "blue"
+      },
+      {
+        "device_name": "Ceiling Light 11",
         "color": "blue"
       }
     ]
   },
   {
-    "command": "自分の右真後ろと右前を赤にして",
+    "command": "自分周辺の6つのライトの内、右側を赤、左側を青にして",
     "has_color": true,
     "target_devices": [
+      {
+        "device_name": "Ceiling Light 3",
+        "color": "red"
+      },
+      {
+        "device_name": "Ceiling Light 7",
+        "color": "red"
+      },
       {
         "device_name": "Ceiling Light 11",
         "color": "red"
       },
       {
-        "device_name": "Ceiling Light 3",
-        "color": "red"
+        "device_name": "Ceiling Light 2",
+        "color": "blue"
+      },
+      {
+        "device_name": "Ceiling Light 6",
+        "color": "blue"
+      },
+      {
+        "device_name": "Ceiling Light 10",
+        "color": "blue"
       }
     ]
   }
