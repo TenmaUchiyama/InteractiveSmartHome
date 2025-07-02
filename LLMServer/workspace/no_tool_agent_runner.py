@@ -75,7 +75,18 @@ def getSpatialRunner():
     return runner
 
 
+def getSpatialRunnerForEvaluation():
+    graph = StateGraph(State)
 
+    graph.add_node(NODE.SR_PREPROCESS.value, sr_preprocess_node)
+    graph.add_node(NODE.SR_AGENT.value, sr_agent_node)
+    
+    graph.add_edge(START, NODE.SR_PREPROCESS.value)
+    graph.add_edge(NODE.SR_PREPROCESS.value, NODE.SR_AGENT.value)
+    graph.add_edge(NODE.SR_AGENT.value, END)
+   
+    runner  = graph.compile()   
+    return runner
 
 
 
