@@ -20,6 +20,7 @@ namespace SpatialLLM.Experiment
         [SerializeField] private RayInteractor rayInteractor;
         [SerializeField] private VRCircleSelector circleSelector;
         [SerializeField] private bool IS_SPATIAL_POINTING = false; // Spatial Pointingを有効にするかどうか
+        [SerializeField] private bool isEvaluation = false;
         [SerializeField] private Camera userCamera;
         private string currentState = "pointing";
         private string latestLLMOutput = "[No output]";
@@ -354,7 +355,8 @@ private void StateUIHelper()
                             Debug.LogWarning("No recognized word, skipping LLM query.");
                             return;
                         }
-                        if (IS_SPATIAL_POINTING)
+
+                        if (isEvaluation)
                         {
                             var pointedDevices = new List<DeviceSpatialData>();
                             foreach (var d in pointed)
@@ -362,30 +364,44 @@ private void StateUIHelper()
                                 pointedDevices.Add(d.GetDevicePositionalRelativeToUser(userCamera.transform));
                             }
 
-                            await PointingQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid, pointedDevices);
-                        }
-                        else
-                        {
-                            var pointedIds = new List<DeviceLabelData>();
+                            await PointingQueryRequest.Instance.SendQueryMulti(recognizedWord, taskId, this.experimentTask.NextGuid, pointedDevices);
+    
 
-                            foreach (var d in pointed)
-                            {
-                                pointedIds.Add(new DeviceLabelData() { id = d.GetDeviceID(), name = d.GetDBDeviceData().device_name });
-                                // ちゃんと送信するデバイスが選択されているか確認
-                                if (d.GetDeviceID() == "")
-                                {
-                                    Debug.LogWarning("Selected device has no ID, skipping this device.");
-                                    continue;
-                                }
-                                else
-                                {
-                                    Debug.Log($"Selected device ID: {d.GetDeviceID()}");
-                                }
-                            }
-                            //　実際に送信するデータの中を見てみる
-                            Debug.Log($"Sending {pointedIds.Count} devices to LLM: {JsonConvert.SerializeObject(pointedIds)}");
-                            await PointingQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid, pointedIds);
+                            break;
                         }
+
+                        if (IS_SPATIAL_POINTING)
+                            {
+                                var pointedDevices = new List<DeviceSpatialData>();
+                                foreach (var d in pointed)
+                                {
+                                    pointedDevices.Add(d.GetDevicePositionalRelativeToUser(userCamera.transform));
+                                }
+
+                                await PointingQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid, pointedDevices);
+                            }
+                            else
+                            {
+                                var pointedIds = new List<DeviceLabelData>();
+
+                                foreach (var d in pointed)
+                                {
+                                    pointedIds.Add(new DeviceLabelData() { id = d.GetDeviceID(), name = d.GetDBDeviceData().device_name });
+                                    // ちゃんと送信するデバイスが選択されているか確認
+                                    if (d.GetDeviceID() == "")
+                                    {
+                                        Debug.LogWarning("Selected device has no ID, skipping this device.");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        Debug.Log($"Selected device ID: {d.GetDeviceID()}");
+                                    }
+                                }
+                                //　実際に送信するデータの中を見てみる
+                                Debug.Log($"Sending {pointedIds.Count} devices to LLM: {JsonConvert.SerializeObject(pointedIds)}");
+                                await PointingQueryRequest.Instance.SendQuery(recognizedWord, taskId, this.experimentTask.NextGuid, pointedIds);
+                            }
 
                     }
                     else

@@ -28,8 +28,6 @@ namespace SpatialLLM.Experiment
 
     public class DeviceArrangementGenerator : MonoBehaviour
     {
-       
-
         [Header("Arrangement Settings")]
         [Tooltip("新しい配置データの名前")]
         public string arrangementName;
@@ -49,8 +47,6 @@ namespace SpatialLLM.Experiment
         [SerializeField] private List<DeviceArrangeData> arrangementDataList = new List<DeviceArrangeData>();
         public IReadOnlyList<DeviceArrangeData> ArrangementDataList => arrangementDataList;
 
-
-
         void Start()
         {
             LoadTaskData();
@@ -62,36 +58,33 @@ namespace SpatialLLM.Experiment
             WriteTaskDataJson(arrangementDataList);
         }
 
-
-
-    [ContextMenu("Add Task Data")]
-public void AddTaskData()
-{
-    LoadTaskData();
-
-    // カスタム色がある場合、それだけ customColor を確認して反映（ただしここでは設定済みの値をそのまま使う）
-    var arrangementData = new DeviceArrangeData
-    {
-        device_arrange_id = Guid.NewGuid().ToString(),
-        device_arrange_name = arrangementName,
-        device_arrange_type = new List<SpatialType>(arrangementType),
-        devices = new List<DeviceColorPair>(inputTaskDevices.Select(pair =>
+        [ContextMenu("Add Task Data")]
+        public void AddTaskData()
         {
-            if (pair == null) return null;
+            LoadTaskData();
 
-            return new DeviceColorPair
+            var arrangementData = new DeviceArrangeData
             {
-                device = pair.device,
-                color = pair.color,
-                customColor = pair.color == DeviceColor.Custom ? pair.customColor : default
-            };
-        }))
-    };
+                device_arrange_id = Guid.NewGuid().ToString(),
+                device_arrange_name = arrangementName,
+                device_arrange_type = new List<SpatialType>(arrangementType),
+                devices = new List<DeviceColorPair>(inputTaskDevices.Select(pair =>
+                {
+                    if (pair == null) return null;
 
-    arrangementDataList.Add(arrangementData);
-    ClearInput();
-    UpdateTaskData();
-}
+                    return new DeviceColorPair
+                    {
+                        device = pair.device,
+                        color = pair.color,
+                        customColor = pair.color == DeviceColor.Custom ? pair.customColor : default
+                    };
+                }))
+            };
+
+            arrangementDataList.Add(arrangementData);
+            ClearInput();
+            UpdateTaskData();
+        }
 
         [ContextMenu("Load Task Data")]
         public void LoadTaskData()
@@ -111,17 +104,14 @@ public void AddTaskData()
         }
 
         private string GetJsonFilePath()
-            {
-
-                string jsonFileRelativePath =  $"ArrangeData/PreTaskArrangement{EXDataHolder.Instance.TaskSetName}.json";
-
-                string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", jsonFileRelativePath);
-                var directory = Path.GetDirectoryName(filePath);
-                if (!Directory.Exists(directory))
-                    Directory.CreateDirectory(directory);
-                return filePath;
-            }
-
+        {
+            string jsonFileRelativePath = $"ArrangeData/PreTaskArrangement{EXDataHolder.Instance.TaskSetName}.json";
+            string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", jsonFileRelativePath);
+            var directory = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            return filePath;
+        }
 
         private List<DeviceColorPairSerializable> ConvertToSerializable(List<DeviceColorPair> devicePairs)
         {
@@ -134,7 +124,7 @@ public void AddTaskData()
                     return null;
                 }
 
-                string id = SADeviceRef.Instance.GetDeviceIdByName(d.device.gameObject?.name); ;
+                string id = SADeviceRef.Instance.GetDeviceIdByName(d.device.gameObject?.name);
                 return new DeviceColorPairSerializable
                 {
                     deviceName = d.device.gameObject?.name ?? "Unknown",
@@ -168,6 +158,8 @@ public void AddTaskData()
 
         private List<DeviceArrangeData> ConvertFromSerializable(List<DeviceArrangeDataSerializable> serializedData)
         {
+            if (serializedData == null) return new List<DeviceArrangeData>();
+
             return serializedData.Select(x => new DeviceArrangeData
             {
                 device_arrange_id = x.device_arrange_id,
@@ -197,18 +189,56 @@ public void AddTaskData()
             Debug.Log("JSON saved to: " + filePath);
         }
 
+        /// <summary>
+        /// JSONファイルからタスクデータを読み込みます。
+        /// IsSystemEvaluationがtrueの場合、A, B, C, DのJSONを統合して読み込みます。
+        /// </summary>
+        /// <returns>読み込まれたデバイス配置データのリスト</returns>
         public List<DeviceArrangeData> ReadTaskData()
         {
-            string filePath = GetJsonFilePath();
-            if (!File.Exists(filePath))
+            // IsSystemEvaluationがtrueの場合、複数のファイルを統合
+            if (EXDataHolder.Instance != null && EXDataHolder.Instance.IsSystemEvaluation)
             {
-                Debug.LogError("File does not exist: " + filePath);
-                return new List<DeviceArrangeData>();
+                var integratedDataList = new List<DeviceArrangeDataSerializable>();
+                var taskSetNames = new[] { "A", "B", "C", "D" };
+
+                Debug.Log("System Evaluation mode enabled. Integrating multiple arrangement files.");
+
+                foreach (var setName in taskSetNames)
+                {
+                    string jsonFileRelativePath = $"ArrangeData/PreTaskArrangement{setName}.json";
+                    string filePath = Path.Combine(Application.dataPath, "EXPERIMENT", jsonFileRelativePath);
+
+                    if (File.Exists(filePath))
+                    {
+                        string json = File.ReadAllText(filePath);
+                        var dataList = JsonConvert.DeserializeObject<List<DeviceArrangeDataSerializable>>(json);
+                        if (dataList != null)
+                        {
+                            integratedDataList.AddRange(dataList);
+                            Debug.Log($"Loaded and integrated data from: {filePath}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"File does not exist, skipping: {filePath}");
+                    }
+                }
+
+                return ConvertFromSerializable(integratedDataList);
             }
-            string json = File.ReadAllText(filePath);
-            Debug.Log(json);
-            var dataList = JsonConvert.DeserializeObject<List<DeviceArrangeDataSerializable>>(json);
-            return ConvertFromSerializable(dataList);
+            else // それ以外の場合は、単一のファイルを読み込む
+            {
+                string filePath = GetJsonFilePath();
+                if (!File.Exists(filePath))
+                {
+                    Debug.LogError("File does not exist: " + filePath);
+                    return new List<DeviceArrangeData>();
+                }
+                string json = File.ReadAllText(filePath);
+                var dataList = JsonConvert.DeserializeObject<List<DeviceArrangeDataSerializable>>(json);
+                return ConvertFromSerializable(dataList);
+            }
         }
 
         private void ClearInput()
@@ -217,8 +247,6 @@ public void AddTaskData()
             arrangementType.Clear();
             inputTaskDevices.Clear();
         }
-
-
 
         public List<DeviceArrangeData> GetDeviceArrangeDatas()
         {
@@ -230,3 +258,4 @@ public void AddTaskData()
         }
     }
 }
+

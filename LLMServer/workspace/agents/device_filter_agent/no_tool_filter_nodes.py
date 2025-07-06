@@ -66,6 +66,9 @@ filter_tool_map = {
 }
 
 
+def change_filter_model(model_name):
+    global filter_agent
+    filter_agent = ChatOpenAI(model=model_name, verbose=True, callbacks=[callback])
 
 
 

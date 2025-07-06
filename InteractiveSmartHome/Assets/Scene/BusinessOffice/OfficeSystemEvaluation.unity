@@ -9397,6 +9397,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6691240434977001428, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 365172299}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &365172302 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
+  m_PrefabInstance: {fileID: 365172299}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365172301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &366576535
 GameObject:
   m_ObjectHideFlags: 0
@@ -19825,8 +19836,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 925221668}
-  - component: {fileID: 925221669}
   - component: {fileID: 925221670}
+  - component: {fileID: 925221671}
   m_Layer: 0
   m_Name: Operator
   m_TagString: Untagged
@@ -19849,29 +19860,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &925221669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 925221667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97b222bd7ef2e734d8923c10b8afb700, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saUIManager: {fileID: 2208641716800745862}
-  experimentManager: {fileID: 1178553824}
-  experimentTask: {fileID: 1178553828}
-  wordLogger: {fileID: 925221670}
-  uiButtonHelper: {fileID: 1738618346}
-  onBeginOperation:
-    m_PersistentCalls:
-      m_Calls: []
-  onCompleteOperation:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &925221670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19885,6 +19873,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   folderRoot: VOICE_LOG
+--- !u!114 &925221671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925221667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5bfb532016cb1419135a0c41044adb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saUIManager: {fileID: 2208641716800745862}
+  experimentManager: {fileID: 1178553824}
+  experimentTask: {fileID: 1178553828}
+  wordLogger: {fileID: 925221670}
+  uiButtonHelper: {fileID: 1738618346}
+  onBeginOperation:
+    m_PersistentCalls:
+      m_Calls: []
+  onCompleteOperation:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &936594293
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20825,6 +20836,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6691240434977001428, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 1011479741}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1011479744 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
+  m_PrefabInstance: {fileID: 1011479741}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011479743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1012273683
 GameObject:
   m_ObjectHideFlags: 0
@@ -20854,7 +20876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e298a5b303f62f49a729de22bd5a31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  systemExecutor: {fileID: 925221669}
+  systemExecutor: {fileID: 0}
   experimentManager: {fileID: 1178553824}
 --- !u!4 &1012273685
 Transform:
@@ -23675,7 +23697,7 @@ MonoBehaviour:
   isLabelExperiment: 0
   isTutorial: 0
   currentArrangeIndex: 0
-  systemExecutor: {fileID: 925221669}
+  systemExecutor: {fileID: 925221671}
   saUIManager: {fileID: 2208641716800745862}
   SEED: 1
   displayTime: 60
@@ -23715,6 +23737,465 @@ MonoBehaviour:
   arrangementType: 
   inputTaskDevices: []
   arrangementDataList:
+  - device_arrange_id: 2369c5c0-c4bb-4308-a9cd-05a64a69f91a
+    device_arrange_name: "\u624B\u524D\u4E09\u3064\u9752\u5965\u4E09\u3064\u8D64"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1461177518}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 2095051471}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1717299748}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 365172302}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 644188030}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1011479744}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: d58fe3c1-28a0-4e49-9e2f-e72569f6e61e
+    device_arrange_name: "\u5DE6\u8D64\u3001\u771F\u3093\u4E2D\u4E8C\u3064\u9EC4\u8272\u3001\u53F3\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1821374103}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1461177518}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1870106776}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 2095051471}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 0ebd3226-6abe-4b54-8d2f-6c4c8adc1978
+    device_arrange_name: "\u5965\u9752\u624B\u524D\u8D64"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1118118424}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1870106776}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: fe0ef0b0-c647-4b3a-b2f6-68a75133a566
+    device_arrange_name: "\u68DA\u306E\u771F\u3093\u4E2D"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 213435721}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 8aeed698-e7ee-41ef-bfe7-56f37e2232ab
+    device_arrange_name: "\u68DA\u306E\u4E0A\u6BB5\u5DE6\u304B\u3089\u53F3\u306B\u8D64\u304B\u3089\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1464983590}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 495565845}
+      color: 6
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 231236224}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 137e922c-0877-46af-a797-5a32df2edf5d
+    device_arrange_name: "\u68DA\u306E\u4E00\u756A\u53F3\u306E\u7E26\u306E\u5217\u4E0B\u304B\u3089\u9806\u756A\u306B\u7DD1\u3001\u9EC4\u8272\u3001\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 51705334}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 673652424}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 231236224}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: f548cabb-2a47-4399-a702-f76d5d1336df
+    device_arrange_name: "\u68DA\u306E\u771F\u3093\u4E2D\u306E\u96FB\u6C17\u3092\u70B9\u3051\u3066"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 213435721}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 231236224}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 81c1a60b-c8ac-4a16-b831-1df68863e61e
+    device_arrange_name: "\u771F\u3093\u4E2D\u767D\u3001\u5DE6\u53F3\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 464183868}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1259558563}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 92680171}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: c87d383c-41db-4303-8615-9271bbf2465e
+    device_arrange_name: "\u53F3\u9752\u3001\u5DE6\u8D64"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1259558563}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 92680171}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: e2dc0c9a-3e6f-40a4-b8c5-7289c1efe296
+    device_arrange_name: "\u30C6\u30EC\u30D3\u306E\u5DE6\u8D64"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1794000247}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 7cbd6f03-54a0-426f-b4ea-d8e0ce58e276
+    device_arrange_name: "\u30C6\u30FC\u30D6\u30EB\u3001\u30D5\u30ED\u30A2\u306B\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1134711171}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 2012196642}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: eee4a904-a6ad-4369-970f-b656e1f59f12
+    device_arrange_name: "\u5DE6\u30AA\u30EC\u30F3\u30B8\u3001\u53F3\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1683020849}
+      color: 4
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1686459477}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 1a84f2f7-1739-41af-94ae-9a3c6677e61d
+    device_arrange_name: "\u771F\u3093\u4E2D\u7DD1\u3001\u5DE6\u53F3\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 365172302}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 2095051471}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1717299748}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 386be10f-0686-4118-928d-b57f06593b2f
+    device_arrange_name: "\u5DE6\u304B\u3089\u53F3\u306B\u5411\u304B\u3063\u3066\u7DD1\u304B\u3089\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1882813281}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1821374103}
+      color: 11
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1870106776}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: b3a3afee-32b8-4986-b9e8-16227e2c7bd9
+    device_arrange_name: "\u624B\u524D\u9752\u3001\u5965\u9EC4\u8272"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 464183868}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 25c3ccdb-26c7-4109-bcfe-730434f9caa9
+    device_arrange_name: "\u5F8C\u308D\u5929\u4E95\u306E\u96FB\u6C17\u5DE6\u4E8C\u3064"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1526204894}
+      color: 4
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 831320261}
+      color: 4
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 4fd86244-384f-4a69-adc8-6fd13c16422c
+    device_arrange_name: "\u5DE6\u304B\u3089\u53F3\u306E\u58C1\u306E\u96FB\u6C17\u306B\u5411\u304B\u3063\u3066\u8D64\u304B\u3089\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1259558563}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 464183868}
+      color: 6
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 92680171}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 19e8d0a8-02bf-4644-9732-e4190e13825e
+    device_arrange_name: "\u5DE6\u4E0B\u306E\u4E8C\u3064\u3092\u9EC4\u8272\u3001\u53F3\u4E0A\u306E\u4E8C\u3064\u3092\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 69073169}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1257511460}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 673652424}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 231236224}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: cd873fbb-fcc1-43bd-8f04-bb3b2d716af4
+    device_arrange_name: "\u4E0A\u306E\u6BB5\u4E09\u3064\u3092\u9752\u3001\u4E0B\u306E\u6BB5\u4E09\u3064\u3092\u30AA\u30EC\u30F3\u30B8"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 495565845}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1464983590}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 231236224}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 69073169}
+      color: 4
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1257511460}
+      color: 4
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 51705334}
+      color: 4
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 95479aa7-9c98-49e4-817e-727302518dae
+    device_arrange_name: "\u68DA\u306E\u771F\u3093\u4E2D\u306E\u4E09\u3064\u70B9\u3051\u308B"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 673652424}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1736876164}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 213435721}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 2a7b8c63-3775-4bbf-8841-7976b4ccf32f
+    device_arrange_name: "\u5DE6\u306E\u30D5\u30ED\u30A2\u30E9\u30A4\u30C8\u3068\u4E00\u3064\u53F3\u306E\u30E9\u30A4\u30C8\u3092\u8D64\u3001\u30C6\u30EC\u30D3\u306E\u5DE6\u3068\u4E00\u756A\u53F3\u3092\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 639213771}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 999368699}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1794000247}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1455711675}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 4f145d76-f69f-4547-90a7-56281733ca5b
+    device_arrange_name: "\u5965\u9EC4\u8272\u624B\u524D\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1683020849}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1134711171}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: fcee09b7-efa4-4e87-956e-553ee7bb3648
+    device_arrange_name: "\u76EE\u7DDA\u306E\u4E2D\u306E\u3084\u3064\u4E8C\u3064\u3092\u70B9\u3051\u3066"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1794000247}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 639213771}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 9e93766e-b621-4d6e-9927-173ac982bf3a
+    device_arrange_name: "\u673A\u306E\u4E0A\u9752\u3001\u673A\u306E\u4E0B\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1134711171}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 2012196642}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 04f5e376-2845-485a-8cb1-c38e3858ff8a
+    device_arrange_name: "\u5DE6\u4E8C\u3064\u7DD1\u3001\u53F3\u4E8C\u3064\u8D64"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1011479744}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 365172302}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1717299748}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 644188030}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 3d9e0045-08fb-4a50-b4e5-e4b24c3554c9
+    device_arrange_name: "\u771F\u4E0A\u4E8C\u3064"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1011479744}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 644188030}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: fd995852-c28d-49e9-97b5-9774af3241c3
+    device_arrange_name: "\u5DE6\u4E8C\u3064\u306F\u8D64\u3001\u771F\u3093\u4E2D\u4E8C\u3064\u9EC4\u8272\u3001\u53F3\u4E8C\u3064\u9752"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1118118424}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1882813281}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1461177518}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1821374103}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1870106776}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 2095051471}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: b594ae95-d981-4868-ae48-3f63eb87087a
+    device_arrange_name: "\u5DE6\u4E0A\u9EC4\u8272\u3001\u771F\u3093\u4E2D\u4E0B\u4E8C\u3064\u9752\u3002"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 213435721}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 69073169}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1464983590}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1736876164}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: e0153245-d5d9-449a-87f1-2a35d3239eef
+    device_arrange_name: "\u4E00\u756A\u4E0A\u306E\u5217\u7DD1\u3001\u771F\u3093\u4E2D\u306E\u5217\u9EC4\u8272"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 231236224}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 495565845}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1464983590}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 673652424}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 213435721}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1736876164}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: e81806f6-a4f2-4336-b77b-3407e101bc18
+    device_arrange_name: "\u771F\u3093\u4E2D\u9752\u3001\u5DE6\u53F3\u9EC4\u8272"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 213435721}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1736876164}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 673652424}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 3bc363f5-3c91-4c51-8139-93034b21f3a9
+    device_arrange_name: 
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1686459477}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 7612d934-759d-4a55-9a58-ef65940b7162
+    device_arrange_name: "\u53F3\u304B\u3089\u5DE6\u306B\u5411\u304B\u3063\u3066\u9752\u8272\u304B\u3089\u8D64\u8272\u306B\u3059\u308B"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1686459477}
+      color: 2
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1683020849}
+      color: 6
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1455711675}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: b0e9f035-c92f-4dc6-bd0a-a10b2941f902
+    device_arrange_name: "\u30C6\u30FC\u30D6\u30EB\u3092\u9EC4\u8272\u306B"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 1134711171}
+      color: 3
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 1ff814e6-7f85-4e81-ad9f-9aababb20e6d
+    device_arrange_name: "\u4E00\u756A\u7AEF\u3092\u8D64\u3001\u771F\u3093\u4E2D\u4E8C\u3064\u3092\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 999368699}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1794000247}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1455711675}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 639213771}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: ff4748e2-cd97-45bb-bf2c-e5c9c33f78ac
+    device_arrange_name: "\u5F8C\u308D\u306E\u58C1\u4E09\u3064"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 464183868}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 1259558563}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 92680171}
+      color: 0
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+  - device_arrange_id: 4e23551b-4fd6-49d6-bc2b-c11836bf2a24
+    device_arrange_name: "\u5F8C\u308D\u306E\u58C1\u306E\u771F\u3093\u4E2D\u3092\u8D64\u3001\u53F3\u3092\u7DD1"
+    device_arrange_type: 
+    devices:
+    - device: {fileID: 464183868}
+      color: 1
+      customColor: {r: 1, g: 1, b: 1, a: 1}
+    - device: {fileID: 92680171}
+      color: 5
+      customColor: {r: 1, g: 1, b: 1, a: 1}
   - device_arrange_id: 2d0b42ad-6703-463c-81b3-4ee4d0c8b347
     device_arrange_name: "\u5F8C\u308D\u306E\u771F\u4E0A\u306E\u96FB\u6C17"
     device_arrange_type: 
@@ -23896,7 +24377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   user_name: TENMA
-  systemExecutor: {fileID: 925221669}
+  systemExecutor: {fileID: 925221671}
 --- !u!114 &1178553828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37891,6 +38372,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6691240434977001428, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 1882813278}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1882813281 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
+  m_PrefabInstance: {fileID: 1882813278}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882813280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1886112970
 GameObject:
   m_ObjectHideFlags: 0
@@ -40884,6 +41376,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6691240434977001428, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
   m_PrefabInstance: {fileID: 2095051468}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2095051471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8464907393251274543, guid: 2e0e9934883196649a666783413c5e6a, type: 3}
+  m_PrefabInstance: {fileID: 2095051468}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095051470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836cc4b95cfcadd43b25705b8fec139d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2095826886
 GameObject:
   m_ObjectHideFlags: 0
@@ -41225,7 +41728,7 @@ Transform:
   m_GameObject: {fileID: 2115785927}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.766, y: 1.317, z: -7.274}
+  m_LocalPosition: {x: -3.766, y: 1.317, z: -7.601}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -41427,10 +41930,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63cd6ed40f97f55449e20dabe455c131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSystemEvaluation: 0
-  participantName: TEST
-  taskSetName: D
-  conditionNum: 1
+  isSystemEvaluation: 1
+  participantName: SystemEvaluation
+  taskSetName: V
+  conditionNum: 0
 --- !u!1001 &2137399527
 PrefabInstance:
   m_ObjectHideFlags: 0

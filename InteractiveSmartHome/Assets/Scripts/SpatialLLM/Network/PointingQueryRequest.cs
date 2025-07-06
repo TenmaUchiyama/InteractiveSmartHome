@@ -69,18 +69,43 @@ public class PointingQueryRequest :Singleton<PointingQueryRequest>
             Debug.Log($"<color=yellow>Sending Pointing Query ONLY_POINTING: {jsonData}</color>");
             await _SendQuery("pointing", jsonData);
         }
+        
 
-  private async Task _SendQuery(string path,string jsonData)
-    {
-        Debug.Log($"<color=yellow>Sending Query: {jsonData}</color>");
-        string url = $"http://{host}:{port}/{path}";
+        public async Task SendQueryMulti(string sending_text, string task_id, string attempt_id, List<DeviceSpatialData> deviceSpatialData)
+        {
+            string jsonData = JsonConvert.SerializeObject(new
+            {
+                 llm_message = sending_text,
+                task_id = task_id,
+                attempt_id = attempt_id,
+                pointed_devices = deviceSpatialData
+            });
+
+            Debug.Log($"<color=yellow>Sending Pointing Query SPATIAL: {jsonData}</color>");
+            
+
+            if (isTutorial)
+            {
+               
+            await _SendQuery("pointing_spatial_tutorial", jsonData);
+            }
+            else
+            {
+                await _SendQuery("pointing_spatial_multi", jsonData);
+            }
+        }
+
+  private async Task _SendQuery(string path, string jsonData)
+        {
+            Debug.Log($"<color=yellow>Sending Query: {jsonData}</color>");
+            string url = $"http://{host}:{port}/{path}";
 
 
-        // 非同期POSTリクエストの送信
-        _isRequesting = true;
-        await PostRequestAsync(url, jsonData);
-        _isRequesting = false;
-    }
+            // 非同期POSTリクエストの送信
+            _isRequesting = true;
+            await PostRequestAsync(url, jsonData);
+            _isRequesting = false;
+        }
 
     private async Task PostRequestAsync(string url, string jsonData)
     {

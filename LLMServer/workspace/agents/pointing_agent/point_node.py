@@ -37,7 +37,9 @@ parser = JsonOutputParser(pydantic_object=Dict)
 
 
 
-
+def change_pointing_model(model_name: str):
+    global pointing_agent
+    pointing_agent = ChatOpenAI(model=model_name, temperature=0.0, callbacks=[callback])
 
 
 

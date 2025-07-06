@@ -121,9 +121,8 @@ def getPointingRunner():
     runner = graph.compile()
     return runner
 
-
-
 def getPointingSpatialRunner():
+
     graph = StateGraph(PointingState)
 
     graph.add_node("pointing_spatial_node", pointing_spatial_node)
@@ -134,4 +133,25 @@ def getPointingSpatialRunner():
     graph.add_edge("pointing_spatial_tool_node", END)
 
     runner = graph.compile()
+    return runner
+
+
+
+
+
+def getSpatialOnlyRunner(): 
+    graph = StateGraph(State)
+
+    graph.add_node(NODE.SR_PREPROCESS.value, sr_preprocess_node)
+    graph.add_node(NODE.SR_AGENT.value, sr_agent_node)
+    graph.add_node(NODE.SR_TOOL.value, sr_tool_node)
+    graph.add_node(NODE.SR_POSTPROCESS.value, system_post_process_node)
+
+    graph.add_edge(START, NODE.SR_PREPROCESS.value)
+    graph.add_edge(NODE.SR_PREPROCESS.value, NODE.SR_AGENT.value)
+    graph.add_edge(NODE.SR_AGENT.value, NODE.SR_TOOL.value)
+    graph.add_edge(NODE.SR_TOOL.value, NODE.SR_POSTPROCESS.value)
+    graph.add_edge(NODE.SR_POSTPROCESS.value, END)
+
+    runner  = graph.compile()   
     return runner

@@ -25,6 +25,10 @@ callback = CustomCallbackHandler("logs/spatial_logs.md")
 spatial_agent = ChatOpenAI(model=os.getenv("GPT_MODEL"), verbose=True, callbacks=[callback])
 parser = JsonOutputParser(pydantic_object=SpatialOutput)
 
+def change_spatial_model(model_name):
+    global spatial_agent
+    spatial_agent = ChatOpenAI(model=model_name, verbose=True, callbacks=[callback])
+
 # --- ノード定義 ---
 
 def sr_preprocess_node(state: State):
@@ -115,7 +119,6 @@ def pointing_spatial_node(state: PointingState):
     input_content = {
         "filter_type": "pointer",
         "user_prompt": state.user_prompt,
-        "pointed_devices": state.pointed_devices,
         "reasoning": "Selected devices are pointed by user",
         "devices": state.pointed_devices
     }

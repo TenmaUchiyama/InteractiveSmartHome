@@ -1013,5 +1013,58 @@
     "system_total_time_sec": 2.398587703704834,
     "task_id": "25c3ccdb-26c7-4109-bcfe-730434f9caa9",
     "attempt_id": "00366b52-b64c-42eb-a4e7-23e8ace48649"
+  },
+  {
+    "user_prompt": "これつけて ",
+    "pointed_devices": [
+      {
+        "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+        "name": "TV Light 2"
+      },
+      {
+        "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+        "name": "Floor Light １"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "TV Light 2 と Floor Light １ を点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 452,
+        "completion_tokens": 203,
+        "total_tokens": 655
+      },
+      "cost_usd": 0.00316,
+      "agent_time_elapsed": 2.4992008209228516,
+      "system_time_elapsed": 2.9601635932922363
+    },
+    "system_total_time_sec": 2.9750115871429443,
+    "task_id": "fcee09b7-efa4-4e87-956e-553ee7bb3648",
+    "attempt_id": "57c87c35-df4b-4ec2-9367-51899a74c88e"
   }
 ]

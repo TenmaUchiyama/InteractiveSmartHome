@@ -1,11 +1,13 @@
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List
 import dotenv
+from agents.device_filter_agent.filter_tool import getDevices
 dotenv.load_dotenv("../.env")
 from utils.communication.SwitchBotOperator import SwitchBotOperator
 
 import os
-from sr_app_types.no_tool_agent_types import LabelState, PointingState, State
-from no_tool_agent_runner import getLabelRunner, getPointingRunner, getPointingSpatialRunner, getSystemRunner
+from sr_app_types.no_tool_agent_types import FilterAgentOutput, FilterAgentType, LabelState, PointingState, State
+from no_tool_agent_runner import getLabelRunner, getPointingRunner, getPointingSpatialRunner, getSpatialOnlyRunner, getSystemRunner
 from fastapi import FastAPI # type: ignore
 import httpx # type: ignore
 from starlette.middleware.cors import CORSMiddleware # t    ype: ignore
@@ -15,11 +17,14 @@ import os
 import json
 from dataclasses import asdict
 from langchain_core.messages import BaseMessage
+from agents.spatial_reasoning_agent.no_tool_spatial_node import change_spatial_model
+from agents.device_filter_agent.no_tool_filter_nodes import change_filter_model
+from agents.pointing_agent.point_node import change_pointing_model
 
 from utils.time_tracker import TimeTracker
 
 
-OUTPUT_FILE_NAME="P24"
+OUTPUT_FILE_NAME="SystemEvaluation"  # Change this to your desired output file name
 app = FastAPI()
 
 
@@ -37,6 +42,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ----------- 入力データモデル -------------
+class InputMessage(BaseModel):
+    llm_message: str
+    task_id: str
+    attempt_id: str
+
+class InputMessageWithPointing(InputMessage):
+    pointed_devices: List[Dict[str, Any]]
 
 
 
@@ -67,6 +81,24 @@ def remove_keys_flat(obj: dict, keys_to_remove: list):
 
 
 
+def build_spatial_only_state(prompt: str) -> State:
+ 
+    all_devices = getDevices.invoke({ "order":"proximity","range":0.0})["devices"]
+
+    dummy_filter_output = FilterAgentOutput(
+        filter_type="all",
+        params={
+        "order": "proximity",
+        "range": 0.0
+    },
+        reasoning="All Devices"
+    )
+    dummy_filter_agent = FilterAgentType(
+        devices=all_devices,
+        output_tool_selection=dummy_filter_output
+    )
+
+    return State(user_prompt=prompt, filterAgent=dummy_filter_agent)
 
 
 def serialize_value(value):
@@ -89,7 +121,7 @@ def serialize_value(value):
 def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_keys=None, additional_data: dict = None, isTutorial = False):
     try:
 
-        print(save_file_path)
+
         response = runner.invoke(state)
         if hasattr(state, "time_tracker") and state.time_tracker is not None:
             print("SYSTEM に　時間トラッキングがある")
@@ -100,11 +132,18 @@ def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_ke
             print("SYSTEM に　時間トラッキングがない")
             system_duration = None
             
-        print(response.get("agent_output"))
+  
         agent_output = response.get("agent_output")
         if not agent_output:
             return {"error": "No agent output produced."}
+        if "spatial" in save_file_path:
+            print("=====================[SPATIAL]================")
+            print("OUTPUT: ", response)
+            print("==========================================")
+            response["filterAgent"].devices = []
         serialized = remove_keys_flat(response,pop_keys)
+        
+      
 
         serialized = serialize_value(serialized)
         if system_duration is not None:
@@ -143,20 +182,114 @@ def run_agent_and_log(state, runner, task_id, attempt_id, save_file_path, pop_ke
         traceback.print_exc()
         return {"error": "Agent processing failed.", "detail": str(e)}
 
+def run_single_model_system(model_name: str, message, task_id: str, attempt_id: str):
+    change_spatial_model(model_name)
+    change_filter_model(model_name)
 
+    time_tracker = TimeTracker()
+    time_tracker.start_system()
+
+    state = State(user_prompt=message.llm_message, time_tracker=time_tracker)
+    runner = getSystemRunner()
+
+    save_path = make_save_path(f"{task_id}_{model_name}_system")
+
+    result = run_agent_and_log(
+        state, runner, task_id, attempt_id, save_path,
+        pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt", "time_tracker"]
+    )
+    return {
+        "model": model_name,
+        "runner_type": "system",
+        "result": result,
+        "save_path": str(save_path)
+    }
+def run_single_model_spatial_only(model_name: str, message, task_id: str, attempt_id: str):
+    change_spatial_model(model_name)
+    # Filterは使わないのでセット不要
+
+    time_tracker = TimeTracker()
+    time_tracker.start_system()
+
+    state = State(user_prompt=message.llm_message, time_tracker=time_tracker)
+    runner = getSpatialOnlyRunner()
+
+    save_path = make_save_path(f"{task_id}_{model_name}_spatial")
+
+    result = run_agent_and_log(
+        state, runner, task_id, attempt_id, save_path,
+        pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt", "time_tracker"]
+    )
+    return {
+        "model": model_name,
+        "runner_type": "spatial",
+        "result": result,
+        "save_path": str(save_path)
+    }
+def run_single_model(model_name: str, message, task_id: str, attempt_id: str, runner_type="system"):
+    change_spatial_model(model_name)
+    time_tracker = TimeTracker()
+    time_tracker.start_system()
+    if runner_type == "system":
+        change_filter_model(model_name)
+        runner = getSystemRunner()
+        state = State(user_prompt=message.llm_message, time_tracker=time_tracker)
+    elif runner_type == "spatial":
+        runner = getSpatialOnlyRunner()
+        state = build_spatial_only_state(message.llm_message)
+        state.time_tracker = time_tracker
+    else:
+        raise ValueError(f"Unknown runner_type: {runner_type}")
+
+    
+
+
+    save_name = f"{model_name}_{runner_type}"
+    save_path = make_save_path(save_name)
+
+    result = run_agent_and_log(
+        state, runner, task_id, attempt_id, save_path,
+        pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt", "time_tracker"]
+    )
+
+    return {
+        "model": model_name,
+        "runner_type": runner_type,
+        "result": result,
+        "save_path": str(save_path)
+    }
+def run_single_model_pointing_spatial(model_name: str, message, task_id: str, attempt_id: str):
+    change_spatial_model(model_name)  # モデルを切り替える関数
+
+    time_tracker = TimeTracker()
+    time_tracker.start_system()
+
+    # Pointing 用の状態構築
+    state = PointingState(
+        user_prompt=message.llm_message,
+        pointed_devices=message.pointed_devices,
+        time_tracker=time_tracker
+    )
+
+    runner = getPointingSpatialRunner()  # model_name 反映される前提
+    save_path = make_save_path(f"{model_name}_pointing")
+
+    result = run_agent_and_log(
+        state, runner, task_id, attempt_id, save_path,
+        pop_keys=["input_prompt", "all_devices", "callback", "time_tracker"],
+        additional_data={"pointed_devices": message.pointed_devices}
+    )
+    print(f"|||||||||||||||||||||||| {model_name} |||||||||||||||||||||||||||||||||||||")
+    return {
+        "model": model_name,
+        "runner_type": "pointing_spatial",
+        "result": result,
+        "save_path": str(save_path)
+    }
 
 def make_save_path(name: str) -> str:
     return f"../ExperimentData/RESULTS/{OUTPUT_FILE_NAME}/{OUTPUT_FILE_NAME}_{name}.json"
 
-
-# ----------- 入力データモデル -------------
-class InputMessage(BaseModel):
-    llm_message: str
-    task_id: str
-    attempt_id: str
-
-class InputMessageWithPointing(InputMessage):
-    pointed_devices: List[Dict[str, Any]]
 
 # ----------- エンドポイント定義 -------------
 
@@ -190,6 +323,8 @@ def llm_label(message: InputMessage):
         state, runner, message.task_id, message.attempt_id, save_path,
         pop_keys=["input_prompt", "all_devices","time_tracker"]
     )
+
+
 @app.post("/llm_agent")
 def llm_agent_no_tool(message: InputMessage):
     print("SpatialReference")
@@ -276,6 +411,68 @@ def llm_pointing_spatial(message: InputMessageWithPointing):
             pop_keys=["filterAgent.input_prompt", "spatialAgent.input_prompt", "time_tracker"]
         )
 
+
+
+from concurrent.futures import ThreadPoolExecutor
+from typing import List
+
+@app.post("/llm_agent_multi")
+def llm_agent_multi(message: InputMessage):
+    task_id = message.task_id or "test"
+    attempt_id = message.attempt_id or "0"
+
+    MODEL_LIST = [
+    "gpt-4o",
+    "gpt-4o-mini",
+    "gpt-4.1",
+    "gpt-4.1-nano",
+    "o3-mini"
+]
+    RUNNER_TYPES = [ "system", 'spatial']  # 両方の構成を試す
+
+    results = []
+
+    # 並列実行（モデル×構成）
+    with ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(run_single_model, model_name, message, task_id, attempt_id, runner_type)
+            for model_name in MODEL_LIST
+            for runner_type in RUNNER_TYPES
+        ]
+        results = [f.result() for f in futures]
+
+    return {
+            "output": "A",
+            "reasoning": "A",
+            "matched_devices":[ "A"]
+        }
+
+@app.post("/pointing_spatial_multi")
+def pointing_spatial_multi(message: InputMessageWithPointing):
+    task_id = message.task_id or "test"
+    attempt_id = message.attempt_id or "0"
+
+    MODEL_LIST = [
+    "gpt-4o",
+    "gpt-4o-mini",
+    "gpt-4.1",
+    "gpt-4.1-nano",
+    "o3-mini"
+]
+
+    results = []
+
+    # 並列実行
+    with ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(run_single_model_pointing_spatial, model_name, message, task_id, attempt_id)
+            for model_name in MODEL_LIST
+        ]
+        results = [f.result() for f in futures]
+
+    return {
+        "results": results
+    }
 
 
 

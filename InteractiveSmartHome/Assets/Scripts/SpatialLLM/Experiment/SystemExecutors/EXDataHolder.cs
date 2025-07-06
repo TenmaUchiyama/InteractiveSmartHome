@@ -6,10 +6,13 @@ using UnityEngine;
 public class EXDataHolder : Singleton<EXDataHolder>
 {
     [Header("Experiment Metadata")]
+    [SerializeField] private bool isSystemEvaluation = false;
+    public bool IsSystemEvaluation => isSystemEvaluation;
+
     [SerializeField] private string participantName = "P1";
     [SerializeField] private string taskSetName = "A";
 
-    [SerializeField] private string conditionNum = "ConditionA";
+    [SerializeField] private string conditionNum = "ConditionA" ;
 
     // 外部アクセス用プロパティ
     public string ParticipantName => participantName;
@@ -17,6 +20,8 @@ public class EXDataHolder : Singleton<EXDataHolder>
     public string TaskSetName => taskSetName;
 
     // Singleton化されたインスタンスは `EXDataHolder.Instance` でアクセス可能
+    
+
     
 
 
