@@ -1,0 +1,41 @@
+[
+  {
+    "user_prompt": "選んだ電気を赤色で点灯してください。 ",
+    "pointed_devices": [
+      {
+        "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+        "name": "Wall Light 3"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Wall Light 3 を赤色で点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 422,
+        "completion_tokens": 129,
+        "total_tokens": 551
+      },
+      "cost_usd": 0.002345,
+      "agent_time_elapsed": 2.766188621520996,
+      "system_time_elapsed": 3.3808212280273438
+    },
+    "system_total_time_sec": 3.3930320739746094,
+    "task_id": "2e919b0d-6d84-4641-a535-930a7ca6c8b7",
+    "attempt_id": "3c94ace5-63ab-43ab-a1cf-c70ccac30ed7"
+  }
+]
