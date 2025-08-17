@@ -547,7 +547,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 838780566700449287, guid: 57a7dcfbf31b62747b852864bade1c55, type: 3}
       propertyPath: m_Name
-      value: "\u30D5\u30ED\u30A2\u30E9\u30A4\u30C8"
+      value: FloorLight
       objectReference: {fileID: 0}
     - target: {fileID: 967679809175300056, guid: 57a7dcfbf31b62747b852864bade1c55, type: 3}
       propertyPath: m_Size.x
@@ -605,6 +605,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1404038322484097010, guid: 57a7dcfbf31b62747b852864bade1c55, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -653,6 +657,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showLabel: {fileID: 6309548047407697281}
+  isDeviceSelected: 0
   intensityScale: 3
-  light: {fileID: 6956651989362312549}
   isDebug: 0
