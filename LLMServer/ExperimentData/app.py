@@ -113,17 +113,11 @@ def backup_original_p17():
     print(f"バックアップ完了: {backup_dir}")
 
 if __name__ == "__main__":
-    print("P17データ分割ツール")
-    print("=" * 50)
     
-    # バックアップ作成の確認
-    backup_response = input("元のP17データをバックアップしますか？ (y/n): ").lower().strip()
-    if backup_response == 'y':
-        backup_original_p17()
-    
-    # 分割実行の確認
-    split_response = input("\nデータ分割を実行しますか？ (y/n): ").lower().strip()
-    if split_response == 'y':
-        split_p17_data()
-    else:
-        print("分割がキャンセルされました。")
+    for j in range(1,16): 
+        dirname = f'P{j}'    
+        for i in range(1, 5):
+            with open(f"./RESULTS/{dirname}/{dirname}_{i}.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+                print(f"{dirname}_{i}.json: {len(data)}エントリ")
+        print("-----")
