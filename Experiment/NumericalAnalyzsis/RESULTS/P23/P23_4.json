@@ -1,0 +1,975 @@
+[
+  {
+    "user_prompt": "棚のライトの三番目と六番目を黄色。 棚のライトの七番目と八番目を 青色につけて ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Shelf Light 3 and Shelf Light 6 in yellow. Turned on Shelf Light 7 and Shelf Light 8 in blue.",
+      "reasoning": "Matched '棚のライトの三番目' to 'Shelf Light 3' and '棚のライトの六番目' to 'Shelf Light 6' using ordinal numbers. Matched '棚のライトの七番目' to 'Shelf Light 7' and '棚のライトの八番目' to 'Shelf Light 8'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1841,
+        "completion_tokens": 401,
+        "total_tokens": 2242
+      },
+      "cost_usd": 0.008613,
+      "agent_time_elapsed": 4.048807859420776,
+      "system_time_elapsed": 4.486553192138672
+    },
+    "system_total_time_sec": 4.491016864776611,
+    "task_id": "19e8d0a8-02bf-4644-9732-e4190e13825e",
+    "attempt_id": "3e118e33-f7f8-4ba9-8ebf-58654fe4b835"
+  },
+  {
+    "user_prompt": "ツーリングライトの二番目と四番目は青色に 三番目を緑色に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 2 and Ceiling Light 4 in blue, and Ceiling Light 3 in green.",
+      "reasoning": "Matched 'ツーリングライト' to 'Ceiling Light' using phonetic similarity. Applied blue color to the second and fourth lights, and green to the third light."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1833,
+        "completion_tokens": 292,
+        "total_tokens": 2125
+      },
+      "cost_usd": 0.007503,
+      "agent_time_elapsed": 4.059121608734131,
+      "system_time_elapsed": 4.488861083984375
+    },
+    "system_total_time_sec": 4.492799282073975,
+    "task_id": "1a84f2f7-1739-41af-94ae-9a3c6677e61d",
+    "attempt_id": "cd4d6fb5-8f3a-4f11-a571-b6c707ae72c8"
+  },
+  {
+    "user_prompt": "二番目のボールライトを青色にして ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 2 in blue.",
+      "reasoning": "Matched 'ボールライト' to 'Wall Light' using phonetic similarity and identified '二番目' as the second device, which is 'Wall Light 2'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1821,
+        "completion_tokens": 140,
+        "total_tokens": 1961
+      },
+      "cost_usd": 0.005953,
+      "agent_time_elapsed": 2.25612735748291,
+      "system_time_elapsed": 2.677630662918091
+    },
+    "system_total_time_sec": 2.6812210083007812,
+    "task_id": "b3a3afee-32b8-4986-b9e8-16227e2c7bd9",
+    "attempt_id": "fc672020-9e30-4753-9694-60d610db4652"
+  },
+  {
+    "user_prompt": "十一番目と十二番目のセブンナイトを 黄色にして ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "3da605b5-b12f-4fe8-9108-f4a6648efb3b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "10c15b3a-4b64-4eb7-8135-61ea6e1f9182",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 11 and Ceiling Light 12 in yellow.",
+      "reasoning": "Matched '十一番目のセブンナイト' to 'Ceiling Light 11' and '十二番目のセブンナイト' to 'Ceiling Light 12' using ordinal number matching and phonetic similarity for 'セブンナイト' to 'Ceiling Light'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1826,
+        "completion_tokens": 242,
+        "total_tokens": 2068
+      },
+      "cost_usd": 0.006985,
+      "agent_time_elapsed": 3.7052621841430664,
+      "system_time_elapsed": 4.145272970199585
+    },
+    "system_total_time_sec": 4.149434328079224,
+    "task_id": "25c3ccdb-26c7-4109-bcfe-730434f9caa9",
+    "attempt_id": "4b9a7944-6238-47f6-a039-c2d84492ca73"
+  },
+  {
+    "user_prompt": "一番目のフロアライトと二番目の シービーライトをつけ ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Floor Light 1.",
+      "reasoning": "Matched 'フロアライト' to 'Floor Light 1' using Katakana similarity. 'シービーライト' did not match any known device."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1829,
+        "completion_tokens": 137,
+        "total_tokens": 1966
+      },
+      "cost_usd": 0.005942,
+      "agent_time_elapsed": 3.067779541015625,
+      "system_time_elapsed": 3.4866790771484375
+    },
+    "system_total_time_sec": 3.490560531616211,
+    "task_id": "fcee09b7-efa4-4e87-956e-553ee7bb3648",
+    "attempt_id": "0e6573c9-309c-41c6-8d85-07c04d3df4f7"
+  },
+  {
+    "user_prompt": "二番目のテレビライトをつけ ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on TV Light 2.",
+      "reasoning": "Matched '二番目のテレビライト' to 'TV Light 2' using the ordinal number and phonetic similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1818,
+        "completion_tokens": 129,
+        "total_tokens": 1947
+      },
+      "cost_usd": 0.005835,
+      "agent_time_elapsed": 2.2259435653686523,
+      "system_time_elapsed": 2.660216808319092
+    },
+    "system_total_time_sec": 2.664106845855713,
+    "task_id": "fcee09b7-efa4-4e87-956e-553ee7bb3648",
+    "attempt_id": "cd34c06f-fd9f-41b9-bed3-cbc9285cd3e2"
+  },
+  {
+    "user_prompt": "一呼吸のセリングライトを青色にして 五番目のセリングライトを青緑にして ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 1 in blue and Ceiling Light 5 in cyan.",
+      "reasoning": "Matched 'セリングライト' to 'Ceiling Light' using phonetic similarity. '一呼吸のセリングライト' was interpreted as 'Ceiling Light 1' and '五番目のセリングライト' as 'Ceiling Light 5'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1834,
+        "completion_tokens": 230,
+        "total_tokens": 2064
+      },
+      "cost_usd": 0.006885,
+      "agent_time_elapsed": 4.480809926986694,
+      "system_time_elapsed": 4.912895441055298
+    },
+    "system_total_time_sec": 4.917181015014648,
+    "task_id": "386be10f-0686-4118-928d-b57f06593b2f",
+    "attempt_id": "02028a3b-ce18-4cd4-8e0f-19e7513c882e"
+  },
+  {
+    "user_prompt": "九番目のツーリングライトを青色 ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "c689031b-92fe-41bc-a9bc-5f579631c813",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Ceiling Light 9 in blue.",
+      "reasoning": "Matched 'ツーリングライト' to 'Ceiling Light' using phonetic similarity and '九番目' to 'Ceiling Light 9'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1820,
+        "completion_tokens": 129,
+        "total_tokens": 1949
+      },
+      "cost_usd": 0.00584,
+      "agent_time_elapsed": 1.9822819232940674,
+      "system_time_elapsed": 2.430461883544922
+    },
+    "system_total_time_sec": 2.434460163116455,
+    "task_id": "386be10f-0686-4118-928d-b57f06593b2f",
+    "attempt_id": "089e2a50-0f23-4e03-bc92-6215cc73fbf7"
+  },
+  {
+    "user_prompt": "二番目と四番目と六番目の セルプライトを付けて ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Shelf Light 2, Shelf Light 3, and Shelf Light 6.",
+      "reasoning": "Matched 'セルプライト' to 'Shelf Light' using phonetic similarity. The numbers '二番目', '四番目', and '六番目' correspond to Shelf Light 2, Shelf Light 3, and Shelf Light 6 respectively."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1829,
+        "completion_tokens": 319,
+        "total_tokens": 2148
+      },
+      "cost_usd": 0.007763,
+      "agent_time_elapsed": 4.3619630336761475,
+      "system_time_elapsed": 4.797419309616089
+    },
+    "system_total_time_sec": 4.801085948944092,
+    "task_id": "95479aa7-9c98-49e4-817e-727302518dae",
+    "attempt_id": "0e8b997b-50db-48e9-a077-783790dd3c77"
+  },
+  {
+    "user_prompt": "セルフライトの二番目と四番目と六番目をつけて ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "b83f2720-25dd-4c31-81d4-53226d3b2c32",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Shelf Light 2, Shelf Light 3, and Shelf Light 6.",
+      "reasoning": "Matched 'セルフライトの二番目' to 'Shelf Light 2', '四番目' to 'Shelf Light 3', and '六番目' to 'Shelf Light 6' using Katakana similarity and ordinal number matching."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1828,
+        "completion_tokens": 317,
+        "total_tokens": 2145
+      },
+      "cost_usd": 0.00774,
+      "agent_time_elapsed": 2.961402654647827,
+      "system_time_elapsed": 3.4192166328430176
+    },
+    "system_total_time_sec": 3.423283815383911,
+    "task_id": "95479aa7-9c98-49e4-817e-727302518dae",
+    "attempt_id": "01414548-7d0f-4795-8a70-d280cefdfb55"
+  },
+  {
+    "user_prompt": "セルフライトの五番目と八番目を付けて ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Shelf Light 5 and Shelf Light 8.",
+      "reasoning": "Matched 'セルフライトの五番目' to 'Shelf Light 5' and 'セルフライトの八番目' to 'Shelf Light 8' using the specified numbering."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1824,
+        "completion_tokens": 216,
+        "total_tokens": 2040
+      },
+      "cost_usd": 0.00672,
+      "agent_time_elapsed": 3.848520040512085,
+      "system_time_elapsed": 4.2474281787872314
+    },
+    "system_total_time_sec": 4.251338720321655,
+    "task_id": "95479aa7-9c98-49e4-817e-727302518dae",
+    "attempt_id": "470e25d6-3f2a-4eec-a7b1-05f9e59ff7c4"
+  },
+  {
+    "user_prompt": "テーブルライトを緑色に スタンディングライト を黄色に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on TableLight in green and Stand Light 1 in yellow.",
+      "reasoning": "Matched 'テーブルライト' to 'TableLight' using Katakana similarity; matched 'スタンディングライト' to 'Stand Light 1' using phonetic similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1825,
+        "completion_tokens": 203,
+        "total_tokens": 2028
+      },
+      "cost_usd": 0.006593,
+      "agent_time_elapsed": 3.103144407272339,
+      "system_time_elapsed": 3.500678300857544
+    },
+    "system_total_time_sec": 3.5045340061187744,
+    "task_id": "4f145d76-f69f-4547-90a7-56281733ca5b",
+    "attempt_id": "41e0bc7c-5810-456a-ac48-4f0f0226b702"
+  },
+  {
+    "user_prompt": "スタンディングライト二を黄色に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Stand Light 2 in yellow.",
+      "reasoning": "Matched 'スタンディングライト二' to 'Stand Light 2' using Katakana similarity and numeric reference."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1818,
+        "completion_tokens": 132,
+        "total_tokens": 1950
+      },
+      "cost_usd": 0.005865,
+      "agent_time_elapsed": 1.5732765197753906,
+      "system_time_elapsed": 1.970853328704834
+    },
+    "system_total_time_sec": 1.9747729301452637,
+    "task_id": "4f145d76-f69f-4547-90a7-56281733ca5b",
+    "attempt_id": "16f82f04-4451-4401-b02d-a206037d6055"
+  },
+  {
+    "user_prompt": "ロールライト一応赤に 気に、 ロールライト二を紫に 三を青に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 128,
+            "g": 0,
+            "b": 128
+          }
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 1 in red, Wall Light 2 in purple, and Wall Light 3 in blue.",
+      "reasoning": "Matched 'ロールライト一' to 'Wall Light 1', 'ロールライト二' to 'Wall Light 2', and 'ロールライト三' to 'Wall Light 3' using phonetic similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1831,
+        "completion_tokens": 305,
+        "total_tokens": 2136
+      },
+      "cost_usd": 0.007628,
+      "agent_time_elapsed": 4.6318886280059814,
+      "system_time_elapsed": 5.02894401550293
+    },
+    "system_total_time_sec": 5.033377408981323,
+    "task_id": "4fd86244-384f-4a69-adc8-6fd13c16422c",
+    "attempt_id": "b6db0f91-8a0e-406b-a26c-1362b536ccb7"
+  },
+  {
+    "user_prompt": "ウォールライト一を 紫に ウォールライト二を赤に ボールライト三を青に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 128,
+            "g": 0,
+            "b": 128
+          }
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 1 in purple, Wall Light 2 in red, and Wall Light 3 in blue.",
+      "reasoning": "Matched 'ウォールライト一' to 'Wall Light 1', 'ウォールライト二' to 'Wall Light 2', and 'ボールライト三' to 'Wall Light 3' using phonetic similarity and context."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1831,
+        "completion_tokens": 307,
+        "total_tokens": 2138
+      },
+      "cost_usd": 0.007647,
+      "agent_time_elapsed": 4.307838439941406,
+      "system_time_elapsed": 4.730803489685059
+    },
+    "system_total_time_sec": 4.73496413230896,
+    "task_id": "4fd86244-384f-4a69-adc8-6fd13c16422c",
+    "attempt_id": "c83f5349-dbf4-43ea-8e45-ee1bfa7a26b1"
+  },
+  {
+    "user_prompt": "ゴールライト位置を 紫に オールライト二を赤に ウォールライト三を青に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 128,
+            "g": 0,
+            "b": 128
+          }
+        },
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Wall Light 1 in purple, Wall Light 2 in red, and Wall Light 3 in blue.",
+      "reasoning": "Matched 'ゴールライト位置' to 'Wall Light 1', 'オールライト二' to 'Wall Light 2', and 'ウォールライト三' to 'Wall Light 3' using phonetic similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1831,
+        "completion_tokens": 305,
+        "total_tokens": 2136
+      },
+      "cost_usd": 0.007628,
+      "agent_time_elapsed": 2.856610059738159,
+      "system_time_elapsed": 3.2834904193878174
+    },
+    "system_total_time_sec": 3.2873330116271973,
+    "task_id": "4fd86244-384f-4a69-adc8-6fd13c16422c",
+    "attempt_id": "c726ae96-a92d-4947-ad46-b31d6ce3ab42"
+  },
+  {
+    "user_prompt": "テーブルライトを青に フロアライト二を 緑 ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on TableLight in blue and Floor Light 2 in green.",
+      "reasoning": "Matched 'テーブルライト' to 'TableLight' using Katakana similarity; matched 'フロアライト二' to 'Floor Light 2' using phonetic similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1823,
+        "completion_tokens": 209,
+        "total_tokens": 2032
+      },
+      "cost_usd": 0.006648,
+      "agent_time_elapsed": 2.987675428390503,
+      "system_time_elapsed": 3.400359630584717
+    },
+    "system_total_time_sec": 3.4048023223876953,
+    "task_id": "9e93766e-b621-4d6e-9927-173ac982bf3a",
+    "attempt_id": "67b9e407-97b6-4137-95e7-0751727a6ffe"
+  },
+  {
+    "user_prompt": "セルフライト一四七を 青 セルフライト三六九を 黄色に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "2838e115-cdde-4c12-ab6d-9a8794a6a0db",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "c1a882b6-ece9-4762-991f-3011f4ef8677",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Turned on Shelf Light 1, Shelf Light 4, and Shelf Light 7 in blue. Turned on Shelf Light 3, Shelf Light 6, and Shelf Light 9 in yellow.",
+      "reasoning": "Matched 'セルフライト一四七' to 'Shelf Light 1', 'Shelf Light 4', and 'Shelf Light 7' using Katakana similarity and numerical matching; matched 'セルフライト三六九' to 'Shelf Light 3', 'Shelf Light 6', and 'Shelf Light 9'."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1827,
+        "completion_tokens": 555,
+        "total_tokens": 2382
+      },
+      "cost_usd": 0.010118,
+      "agent_time_elapsed": 7.226916074752808,
+      "system_time_elapsed": 7.6491899490356445
+    },
+    "system_total_time_sec": 7.653488397598267,
+    "task_id": "cd873fbb-fcc1-43bd-8f04-bb3b2d716af4",
+    "attempt_id": "86da8b1b-5f57-45e8-bfaa-dd55b557409a"
+  },
+  {
+    "user_prompt": "フロアライト二と テレビライト一を付けて テレビライト二と スタンディングライト三を青に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "7b870bf8-74c9-4aac-9e1e-b0e209a6472f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Floor Light 2 and TV Light 1, and set TV Light 2 and Stand Light 3 to blue.",
+      "reasoning": "Matched 'フロアライト二' to 'Floor Light 2', 'テレビライト一' to 'TV Light 1', 'テレビライト二' to 'TV Light 2', and 'スタンディングライト三' to 'Stand Light 3' using Katakana similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1837,
+        "completion_tokens": 414,
+        "total_tokens": 2251
+      },
+      "cost_usd": 0.008733,
+      "agent_time_elapsed": 6.582530736923218,
+      "system_time_elapsed": 6.993934154510498
+    },
+    "system_total_time_sec": 6.998027324676514,
+    "task_id": "2a7b8c63-3775-4bbf-8841-7976b4ccf32f",
+    "attempt_id": "662976c7-f336-4ec1-8b0d-854e003a4bf1"
+  },
+  {
+    "user_prompt": "フロアライトに気をつけて スタンディングライト一応青色に ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "84133dee-2ea3-4fcb-9036-56f264096fac",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Stand Light 1 in blue.",
+      "reasoning": "Matched 'スタンディングライト' to 'Stand Light 1' using phonetic similarity and set the color to blue as specified."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1829,
+        "completion_tokens": 125,
+        "total_tokens": 1954
+      },
+      "cost_usd": 0.005823,
+      "agent_time_elapsed": 3.584537982940674,
+      "system_time_elapsed": 3.9887871742248535
+    },
+    "system_total_time_sec": 3.9925503730773926,
+    "task_id": "2a7b8c63-3775-4bbf-8841-7976b4ccf32f",
+    "attempt_id": "69de691d-e8f2-4c5b-ac40-2ba008178f65"
+  },
+  {
+    "user_prompt": "フロアライト一を付けて ",
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6093cfc6-9ec0-4c71-948e-6e82e920bdb6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Turned on Floor Light 1.",
+      "reasoning": "Matched 'フロアライト一' to 'Floor Light 1' using Katakana similarity."
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 1818,
+        "completion_tokens": 125,
+        "total_tokens": 1943
+      },
+      "cost_usd": 0.005795,
+      "agent_time_elapsed": 2.918242931365967,
+      "system_time_elapsed": 3.3139679431915283
+    },
+    "system_total_time_sec": 3.3176109790802,
+    "task_id": "2a7b8c63-3775-4bbf-8841-7976b4ccf32f",
+    "attempt_id": "c0e7baff-ccbc-4cf0-a820-2f88089d56b5"
+  }
+]

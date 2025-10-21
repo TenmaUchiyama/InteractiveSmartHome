@@ -1,0 +1,1050 @@
+[
+  {
+    "user_prompt": "ライト、青色に付けてください ",
+    "pointed_devices": [
+      {
+        "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+        "name": "Ceiling Light 6"
+      },
+      {
+        "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+        "name": "Ceiling Light 7"
+      },
+      {
+        "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+        "name": "Ceiling Light 8"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "e9a21485-0eb4-40ad-a985-cef8bc98d190",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        },
+        {
+          "id": "74a6f0f8-be5d-479e-9e08-91d6bd599916",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Ceiling Light 6、Ceiling Light 7、Ceiling Light 8 を青色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 493,
+        "completion_tokens": 280,
+        "total_tokens": 773
+      },
+      "cost_usd": 0.004033,
+      "agent_time_elapsed": 3.647250175476074,
+      "system_time_elapsed": 4.098989486694336
+    },
+    "system_total_time_sec": 4.107233285903931,
+    "task_id": "2369c5c0-c4bb-4308-a9cd-05a64a69f91a",
+    "attempt_id": "863d3baf-ff7b-4045-8ff5-6f962a035396"
+  },
+  {
+    "user_prompt": "ライトを赤色に付けてください ",
+    "pointed_devices": [
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "name": "Ceiling Light 2"
+      },
+      {
+        "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+        "name": "Ceiling Light 3"
+      },
+      {
+        "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+        "name": "Ceiling Light 4"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "6f1c35e2-1ca1-4f43-93cf-755d9479025b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        },
+        {
+          "id": "6ac4ec9f-0326-4619-b79a-ecbbe5459d23",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Ceiling Light 2、Ceiling Light 3、Ceiling Light 4 を赤色にしました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 498,
+        "completion_tokens": 283,
+        "total_tokens": 781
+      },
+      "cost_usd": 0.004075,
+      "agent_time_elapsed": 2.3806684017181396,
+      "system_time_elapsed": 2.7897894382476807
+    },
+    "system_total_time_sec": 2.793544054031372,
+    "task_id": "2369c5c0-c4bb-4308-a9cd-05a64a69f91a",
+    "attempt_id": "6ae20c14-138c-4705-a620-e4aee28dfb47"
+  },
+  {
+    "user_prompt": "ライトを青色に付けて ",
+    "pointed_devices": [
+      {
+        "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+        "name": "Ceiling Light 1"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Ceiling Light 1 を青色にしました。",
+      "reasoning": "ユーザーの指示に従い、選択されたデバイスに青色を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 416,
+        "completion_tokens": 129,
+        "total_tokens": 545
+      },
+      "cost_usd": 0.00233,
+      "agent_time_elapsed": 3.7411727905273438,
+      "system_time_elapsed": 4.13320255279541
+    },
+    "system_total_time_sec": 4.137098789215088,
+    "task_id": "0ebd3226-6abe-4b54-8d2f-6c4c8adc1978",
+    "attempt_id": "e0c40118-76b2-49fd-8245-fbdebbb2b686"
+  },
+  {
+    "user_prompt": "はい。 ワイドー、 赤色に付けて ライトを赤色に付けてくださーい ",
+    "pointed_devices": [
+      {
+        "id": "541d973c-4101-4118-ae52-f8f192b69655",
+        "name": "Ceiling Light 10"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "541d973c-4101-4118-ae52-f8f192b69655",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Ceiling Light 10 を赤色にしました。",
+      "reasoning": "ユーザーの指示に従い、選択されたデバイスを赤色に設定しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 431,
+        "completion_tokens": 126,
+        "total_tokens": 557
+      },
+      "cost_usd": 0.002338,
+      "agent_time_elapsed": 4.197644948959351,
+      "system_time_elapsed": 4.598654508590698
+    },
+    "system_total_time_sec": 4.602257013320923,
+    "task_id": "0ebd3226-6abe-4b54-8d2f-6c4c8adc1978",
+    "attempt_id": "fb9325aa-1f3f-47d2-b53e-b7404cd7a19c"
+  },
+  {
+    "user_prompt": "ライトを黄色に付けてください ",
+    "pointed_devices": [
+      {
+        "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+        "name": "Stand Light 2"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "dcc0f42b-a4c0-4cdb-8d11-cc7e3e30ed71",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Stand Light 2 を黄色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 419,
+        "completion_tokens": 130,
+        "total_tokens": 549
+      },
+      "cost_usd": 0.002348,
+      "agent_time_elapsed": 1.9178009033203125,
+      "system_time_elapsed": 2.3331360816955566
+    },
+    "system_total_time_sec": 2.336587905883789,
+    "task_id": "eee4a904-a6ad-4369-970f-b656e1f59f12",
+    "attempt_id": "3760c07a-762d-4b84-a204-4a5bbc0bce15"
+  },
+  {
+    "user_prompt": "はい。 ライトを青色につけてください ",
+    "pointed_devices": [
+      {
+        "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+        "name": "Stand Light 3"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "b9091f32-63d4-49f9-8677-f2a8c167cc62",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Stand Light 3 を青色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 420,
+        "completion_tokens": 129,
+        "total_tokens": 549
+      },
+      "cost_usd": 0.00234,
+      "agent_time_elapsed": 1.6564247608184814,
+      "system_time_elapsed": 2.052015781402588
+    },
+    "system_total_time_sec": 2.0558133125305176,
+    "task_id": "eee4a904-a6ad-4369-970f-b656e1f59f12",
+    "attempt_id": "faf66844-e676-4cd4-be07-3aebbeb6cbae"
+  },
+  {
+    "user_prompt": "ライトを緑色につけて ",
+    "pointed_devices": [
+      {
+        "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+        "name": "Shelf Light 9"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "0e98a772-fb03-4120-b64f-579eb5d5f696",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Shelf Light 9 を緑色で点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 415,
+        "completion_tokens": 128,
+        "total_tokens": 543
+      },
+      "cost_usd": 0.002318,
+      "agent_time_elapsed": 2.598665714263916,
+      "system_time_elapsed": 3.0103585720062256
+    },
+    "system_total_time_sec": 3.0146141052246094,
+    "task_id": "137e922c-0877-46af-a797-5a32df2edf5d",
+    "attempt_id": "fabd57a8-6425-43ab-aefd-059c3a813b06"
+  },
+  {
+    "user_prompt": "ライトを黄色につけてくださーい ",
+    "pointed_devices": [
+      {
+        "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+        "name": "Shelf Light 8"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "f476b5d2-b938-4bc4-a696-b87b21488598",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Shelf Light 8 を黄色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 415,
+        "completion_tokens": 124,
+        "total_tokens": 539
+      },
+      "cost_usd": 0.002278,
+      "agent_time_elapsed": 3.0722334384918213,
+      "system_time_elapsed": 3.5062789916992188
+    },
+    "system_total_time_sec": 3.5097784996032715,
+    "task_id": "137e922c-0877-46af-a797-5a32df2edf5d",
+    "attempt_id": "cae9a524-6fb6-483d-9545-19814062c777"
+  },
+  {
+    "user_prompt": "ライト、青色に付けて ",
+    "pointed_devices": [
+      {
+        "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+        "name": "Shelf Light 7"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Shelf Light 7 を青色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 416,
+        "completion_tokens": 128,
+        "total_tokens": 544
+      },
+      "cost_usd": 0.00232,
+      "agent_time_elapsed": 2.1668126583099365,
+      "system_time_elapsed": 2.5793204307556152
+    },
+    "system_total_time_sec": 2.582766532897949,
+    "task_id": "137e922c-0877-46af-a797-5a32df2edf5d",
+    "attempt_id": "d18ebc26-8f16-4c0b-9a64-1dcd70da12f1"
+  },
+  {
+    "user_prompt": "ライトを緑色につけてくださーい ",
+    "pointed_devices": [
+      {
+        "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+        "name": "Floor Light 2"
+      },
+      {
+        "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+        "name": "TableLight"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6620ef5b-7686-4e7a-9050-2b6c04b8fe77",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "4cf87da5-fadb-4383-b959-8562091cb367",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Floor Light 2 と TableLight を緑色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 453,
+        "completion_tokens": 200,
+        "total_tokens": 653
+      },
+      "cost_usd": 0.003132,
+      "agent_time_elapsed": 1.9412641525268555,
+      "system_time_elapsed": 2.3546745777130127
+    },
+    "system_total_time_sec": 2.3583314418792725,
+    "task_id": "7cbd6f03-54a0-426f-b4ea-d8e0ce58e276",
+    "attempt_id": "3f94d255-e58e-47b3-bc0d-89fa2884d845"
+  },
+  {
+    "user_prompt": "ライトを付けてください ",
+    "pointed_devices": [
+      {
+        "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+        "name": "Shelf Light 7"
+      },
+      {
+        "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+        "name": "Shelf Light 5"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        },
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Shelf Light 7 と Shelf Light 5 を点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 448,
+        "completion_tokens": 197,
+        "total_tokens": 645
+      },
+      "cost_usd": 0.00309,
+      "agent_time_elapsed": 1.6692087650299072,
+      "system_time_elapsed": 2.0615346431732178
+    },
+    "system_total_time_sec": 2.0657057762145996,
+    "task_id": "f548cabb-2a47-4399-a702-f76d5d1336df",
+    "attempt_id": "732e02d2-7c0d-42fe-9616-48991386d028"
+  },
+  {
+    "user_prompt": "はい。 ライトを黄色につけてください ",
+    "pointed_devices": [
+      {
+        "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+        "name": "TV Light 2"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6dc0f2a7-49f5-4feb-acb5-c243e65c6241",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "TV Light 2 を黄色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 419,
+        "completion_tokens": 128,
+        "total_tokens": 547
+      },
+      "cost_usd": 0.002328,
+      "agent_time_elapsed": 2.367689847946167,
+      "system_time_elapsed": 2.767077922821045
+    },
+    "system_total_time_sec": 2.771354913711548,
+    "task_id": "e2dc0c9a-3e6f-40a4-b8c5-7289c1efe296",
+    "attempt_id": "a964797d-eaee-4886-b6b5-7ef9e71d489f"
+  },
+  {
+    "user_prompt": "ライトを赤色に付けてください ",
+    "pointed_devices": [
+      {
+        "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+        "name": "Shelf Light 1"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "409f6dff-d2e2-43c8-8ba5-2492b3e2e5d6",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Shelf Light 1 を赤色にしました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 422,
+        "completion_tokens": 131,
+        "total_tokens": 553
+      },
+      "cost_usd": 0.002365,
+      "agent_time_elapsed": 4.166072607040405,
+      "system_time_elapsed": 4.583297252655029
+    },
+    "system_total_time_sec": 4.586711406707764,
+    "task_id": "8aeed698-e7ee-41ef-bfe7-56f37e2232ab",
+    "attempt_id": "06407b4f-4aff-4f13-801b-60353a31b0f5"
+  },
+  {
+    "user_prompt": "ピンク色につけてください ",
+    "pointed_devices": [
+      {
+        "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+        "name": "Shelf Light 4"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 192,
+            "b": 203
+          }
+        }
+      ],
+      "response": "Shelf Light 4 をピンク色にしました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 417,
+        "completion_tokens": 129,
+        "total_tokens": 546
+      },
+      "cost_usd": 0.002333,
+      "agent_time_elapsed": 1.6678400039672852,
+      "system_time_elapsed": 2.083287477493286
+    },
+    "system_total_time_sec": 2.0864462852478027,
+    "task_id": "8aeed698-e7ee-41ef-bfe7-56f37e2232ab",
+    "attempt_id": "a84ac7e2-c6d9-4ab9-9c31-d3568741e5f4"
+  },
+  {
+    "user_prompt": "紫色につけてください。 ",
+    "pointed_devices": [
+      {
+        "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+        "name": "Shelf Light 4"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "80e64f7b-0589-4de7-977a-9d189a66fd1d",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 128,
+            "g": 0,
+            "b": 128
+          }
+        }
+      ],
+      "response": "Shelf Light 4 を紫色にしました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 417,
+        "completion_tokens": 128,
+        "total_tokens": 545
+      },
+      "cost_usd": 0.002322,
+      "agent_time_elapsed": 2.9729526042938232,
+      "system_time_elapsed": 3.3729164600372314
+    },
+    "system_total_time_sec": 3.376948595046997,
+    "task_id": "8aeed698-e7ee-41ef-bfe7-56f37e2232ab",
+    "attempt_id": "73993fc2-282e-42a6-8fd0-064f8f2321db"
+  },
+  {
+    "user_prompt": "青色につけてください ",
+    "pointed_devices": [
+      {
+        "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+        "name": "Shelf Light 7"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "7ad8857c-4547-4f42-bcc0-dc17bd8e6fee",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Shelf Light 7 を青色にしました。",
+      "reasoning": "ユーザーの指示に従い、選択されたデバイスを青色に設定しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 414,
+        "completion_tokens": 128,
+        "total_tokens": 542
+      },
+      "cost_usd": 0.002315,
+      "agent_time_elapsed": 1.799036979675293,
+      "system_time_elapsed": 2.1907999515533447
+    },
+    "system_total_time_sec": 2.1953954696655273,
+    "task_id": "8aeed698-e7ee-41ef-bfe7-56f37e2232ab",
+    "attempt_id": "c37618fc-efc0-4665-b556-47df373aa28b"
+  },
+  {
+    "user_prompt": "ライトを黄色に付けてください ",
+    "pointed_devices": [
+      {
+        "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+        "name": "Ceiling Light 1"
+      },
+      {
+        "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+        "name": "Ceiling Light 6"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2125de35-62c2-40db-8bee-f0580a92ee8b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "58126407-cde0-4d62-a13d-1a24bf8ea5f3",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Ceiling Light 1 と Ceiling Light 6 を黄色にしました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 454,
+        "completion_tokens": 200,
+        "total_tokens": 654
+      },
+      "cost_usd": 0.003135,
+      "agent_time_elapsed": 1.908259630203247,
+      "system_time_elapsed": 2.3186964988708496
+    },
+    "system_total_time_sec": 2.322131633758545,
+    "task_id": "d58fe3c1-28a0-4e49-9e2f-e72569f6e61e",
+    "attempt_id": "5f84af9e-9f93-4c28-a9af-25118392e22c"
+  },
+  {
+    "user_prompt": "ワイドを赤色に付けてください ",
+    "pointed_devices": [
+      {
+        "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+        "name": "Ceiling Light 5"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "2dc8ca39-d023-42a5-874d-76fb312b5f00",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Ceiling Light 5 を赤色にしました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 418,
+        "completion_tokens": 126,
+        "total_tokens": 544
+      },
+      "cost_usd": 0.002305,
+      "agent_time_elapsed": 3.050774097442627,
+      "system_time_elapsed": 3.4658968448638916
+    },
+    "system_total_time_sec": 3.4691858291625977,
+    "task_id": "d58fe3c1-28a0-4e49-9e2f-e72569f6e61e",
+    "attempt_id": "4fc5e2b7-3d3b-4df8-9c6f-05bf4998c192"
+  },
+  {
+    "user_prompt": "ワイドを青色につけてください ",
+    "pointed_devices": [
+      {
+        "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+        "name": "Ceiling Light 2"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "781e6091-cec9-4c26-9f3e-4d48d6d7570a",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Ceiling Light 2 を青色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 421,
+        "completion_tokens": 132,
+        "total_tokens": 553
+      },
+      "cost_usd": 0.002373,
+      "agent_time_elapsed": 1.4922270774841309,
+      "system_time_elapsed": 1.895536184310913
+    },
+    "system_total_time_sec": 1.8987135887145996,
+    "task_id": "d58fe3c1-28a0-4e49-9e2f-e72569f6e61e",
+    "attempt_id": "af424b7d-82ba-4e3d-a5b3-e025cedebc95"
+  },
+  {
+    "user_prompt": "ライトを青色につけてください ",
+    "pointed_devices": [
+      {
+        "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+        "name": "Wall Light 2"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Wall Light 2 を青色で点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 420,
+        "completion_tokens": 132,
+        "total_tokens": 552
+      },
+      "cost_usd": 0.00237,
+      "agent_time_elapsed": 2.2385499477386475,
+      "system_time_elapsed": 2.643219232559204
+    },
+    "system_total_time_sec": 2.6470513343811035,
+    "task_id": "c87d383c-41db-4303-8615-9271bbf2465e",
+    "attempt_id": "528579f1-2af7-436b-8519-a7f95ccf7715"
+  },
+  {
+    "user_prompt": "はい。 ライトを赤色に付けてください。 ",
+    "pointed_devices": [
+      {
+        "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+        "name": "Wall Light 3"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Wall Light 3 を赤色に点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 422,
+        "completion_tokens": 129,
+        "total_tokens": 551
+      },
+      "cost_usd": 0.002345,
+      "agent_time_elapsed": 1.7199156284332275,
+      "system_time_elapsed": 2.136106014251709
+    },
+    "system_total_time_sec": 2.139798164367676,
+    "task_id": "c87d383c-41db-4303-8615-9271bbf2465e",
+    "attempt_id": "d3a0ba24-7743-47f8-8431-c97449e5b0fd"
+  },
+  {
+    "user_prompt": "ライトを緑色につけてください。 ",
+    "pointed_devices": [
+      {
+        "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+        "name": "Wall Light 2"
+      },
+      {
+        "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+        "name": "Wall Light 3"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "9cbd6e9a-4f7b-41e8-b1dc-464d631dfd7f",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        },
+        {
+          "id": "badaeb49-9e87-4d7b-882e-be2e80f85c84",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0
+          }
+        }
+      ],
+      "response": "Wall Light 2 と Wall Light 3 を緑色で点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 460,
+        "completion_tokens": 209,
+        "total_tokens": 669
+      },
+      "cost_usd": 0.00324,
+      "agent_time_elapsed": 4.6423704624176025,
+      "system_time_elapsed": 5.050586938858032
+    },
+    "system_total_time_sec": 5.054597616195679,
+    "task_id": "81c1a60b-c8ac-4a16-b831-1df68863e61e",
+    "attempt_id": "87d035ef-b63d-4773-bce9-9951311bf895"
+  },
+  {
+    "user_prompt": "ライトを付けてください ",
+    "pointed_devices": [
+      {
+        "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+        "name": "Wall Light 1"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "6e82a90c-d3bb-4e45-b221-ebe21c524b04",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Wall Light 1 を点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 413,
+        "completion_tokens": 124,
+        "total_tokens": 537
+      },
+      "cost_usd": 0.002273,
+      "agent_time_elapsed": 1.6977806091308594,
+      "system_time_elapsed": 2.1175522804260254
+    },
+    "system_total_time_sec": 2.1207144260406494,
+    "task_id": "81c1a60b-c8ac-4a16-b831-1df68863e61e",
+    "attempt_id": "c7e33ed9-3878-4ca5-b2a5-2184d45b1b5b"
+  },
+  {
+    "user_prompt": "はい。ライトを付けてください ",
+    "pointed_devices": [
+      {
+        "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+        "name": "Shelf Light 5"
+      }
+    ],
+    "agent_output": {
+      "devices": [
+        {
+          "id": "f2505762-f11e-446b-a340-90bbfae0460b",
+          "state": true,
+          "intensity": 100,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
+        }
+      ],
+      "response": "Shelf Light 5 を点灯しました。",
+      "reasoning": "デバイスが明示的に選択されていたので制御を適用しました。"
+    },
+    "metrics": {
+      "model_name": "gpt-4o-2024-08-06",
+      "tokens": {
+        "prompt_tokens": 413,
+        "completion_tokens": 122,
+        "total_tokens": 535
+      },
+      "cost_usd": 0.002253,
+      "agent_time_elapsed": 1.6891069412231445,
+      "system_time_elapsed": 2.119135856628418
+    },
+    "system_total_time_sec": 2.1227235794067383,
+    "task_id": "fe0ef0b0-c647-4b3a-b2f6-68a75133a566",
+    "attempt_id": "40bb0858-b9a3-4712-bc76-d50d3eb4e925"
+  }
+]

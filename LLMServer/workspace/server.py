@@ -24,7 +24,7 @@ from agents.pointing_agent.point_node import change_pointing_model
 from utils.time_tracker import TimeTracker
 
 
-OUTPUT_FILE_NAME="P22" # Change this to your desired output file name
+OUTPUT_FILE_NAME="P6" # Change this to your desired output file name
 app = FastAPI()
 
 
@@ -59,7 +59,7 @@ class InputMessageWithPointing(InputMessage):
 def test():
     print("Hello")
     return "HELO"
-
+    
 
 
 @app.get("/simple") 
