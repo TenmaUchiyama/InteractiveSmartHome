@@ -62,7 +62,24 @@ PC_CSV    = os.path.join(OUT_DIR, "participant_condition_summary.csv")
 REPORT_MD = os.path.join(OUT_DIR, "analysis_report.md")
 
 RESULTS_ROOT = "./RESULTS"
+ANALYSIS_CSV = os.path.join(OUT_DIR, "analysis_all.csv")
+CSV_TABLES = []
 
+def add_table(section: str, name: str, df: pd.DataFrame, **meta):
+    """
+    単一CSVにまとめるため、テーブルごとにsection/nameメタ情報を付与して保存。
+    """
+    if df is None or len(df) == 0:
+        return
+    df2 = df.copy()
+    df2.insert(0, "section", section)
+    df2.insert(1, "table", name)
+    # 追加メタ（metricなど）を列にする
+    for k, v in meta.items():
+        df2[k] = v
+    CSV_TABLES.append(df2)
+    
+    
 # ----------------- Small utils -----------------
 def is_json_file(path: str) -> bool:
     b = os.path.basename(path)
@@ -514,27 +531,49 @@ def within_subject_spearman(df_tasks: pd.DataFrame) -> str:
 
 # ----------------- Report blocks -----------------
 def write_friedman_blocks(lines, df_pc: pd.DataFrame):
-    # 分析対象に system_time_total_sec がある場合は含める
     metrics = [m for m in ["T_task_sec","N_cmds","N_actuations","system_time_total_sec"] if m in df_pc.columns]
     for metric in metrics:
         stat, p, pivot, pairs = friedman_block(df_pc, metric)
         lines.append(f"\n## {metric}\n")
         if stat is None:
-            lines.append("有効データ不足\n"); continue
+            lines.append("有効データ不足\n")
+            continue
+
+        # --- Friedman summary（CSV行） ---
+        df_fried = pd.DataFrame([{
+            "metric": metric,
+            "friedman_chi2": stat,
+            "friedman_p": p,
+            "N": len(pivot)
+        }])
+        add_table("Friedman/Wilcoxon", "friedman_summary", df_fried)
+
         lines.append(f"\nFriedman: χ²={stat:.4f}, p={p:.6g}, N={len(pivot)}\n")
-        # 記述統計
+
+        # --- 記述統計（参加者×条件メディアン表） ---
+        rows = []
+        for c in COND_ORDER:
+            vals = pivot[c].dropna().values if c in pivot.columns else np.array([])
+            if len(vals) == 0:
+                rows.append([c, np.nan, np.nan, np.nan, np.nan, np.nan])
+                continue
+            med = np.median(vals); q1=np.percentile(vals,25); q3=np.percentile(vals,75)
+            mu = np.mean(vals); sd = np.std(vals, ddof=1) if len(vals)>1 else 0.0
+            rows.append([c, med, q1, q3, mu, sd])
+        desc = pd.DataFrame(rows, columns=["condition","median","Q1","Q3","mean","sd"])
+        add_table("Friedman/Wilcoxon", "descriptive_by_condition", desc, metric=metric)
+
         lines.append("\n### 記述統計（参加者×条件メディアン）\n")
         lines.append("Condition | Median | Q1 | Q3 | Mean | SD")
         lines.append("---|---:|---:|---:|---:|---:")
-        for c in COND_ORDER:
-            vals = pivot[c].dropna().values if c in pivot.columns else np.array([])
-            if len(vals)==0:
-                lines.append(f"{c} |  |  |  |  | "); continue
-            med = np.median(vals); q1=np.percentile(vals,25); q3=np.percentile(vals,75)
-            mu = np.mean(vals); sd = np.std(vals, ddof=1) if len(vals)>1 else 0.0
-            lines.append(f"{c} | {med:.3g} | {q1:.3g} | {q3:.3g} | {mu:.3g} | {sd:.3g}")
-        # ペア
+        for _, r in desc.iterrows():
+            lines.append(f"{r['condition']} | {r['median']:.3g} | {r['Q1']:.3g} | {r['Q3']:.3g} | {r['mean']:.3g} | {r['sd']:.3g}")
+
+        # --- Wilcoxon + Holm（CSV表） ---
         if p < 0.05 and pairs is not None:
+            pairs2 = pairs.copy()
+            pairs2["metric"] = metric
+            add_table("Friedman/Wilcoxon", "pairwise_wilcoxon_holm", pairs2)
             lines.append("\n### ペアごとの Wilcoxon（Holm 補正）\n")
             lines.append("Pair | n | W | p_raw | p_holm | effect_r")
             lines.append("---|---:|---:|---:|---:|---:")
@@ -543,62 +582,82 @@ def write_friedman_blocks(lines, df_pc: pd.DataFrame):
         else:
             lines.append("\n（Friedman で有意差なし → ペア検定省略）\n")
 
+
 def write_models_blocks(lines, dfm: pd.DataFrame):
-    """
-    統計モデル（MixedLM, GEE, 媒介, ロバスト性, 色×条件交互作用）をまとめて出力。
-    """
     # MixedLM: log(T_task_sec)
     mixed_logT = fit_mixedlm_logT(dfm)
     lines.append("\n## 混合効果モデル：log(T_task_sec)\n")
+
+    # MixedLM 固定効果表をCSVへ
+    if mixed_logT is not None:
+        params = mixed_logT.params
+        conf   = mixed_logT.conf_int()
+        rows = []
+        for name, beta in params.items():
+            ci = conf.loc[name].values if name in conf.index else [np.nan, np.nan]
+            pct = (math.exp(beta)-1)*100
+            rows.append([name, beta, ci[0], ci[1], pct])
+        df_fe = pd.DataFrame(rows, columns=["term","beta","ci_low","ci_high","pct_change"])
+        add_table("Models", "mixedlm_logT_fixed_effects", df_fe)
+
     lines.append(summarize_mixedlm_logT(mixed_logT))
 
     # GEE: N_cmds
     gee_res = fit_gee_ncmds(dfm)
     lines.append("\n## GEE：N_cmds（カウント；過分散に応じ Poisson/NB）\n")
+
+    # GEE 係数（IRR）をCSVへ
+    if gee_res is not None:
+        params = gee_res.params
+        conf   = gee_res.conf_int()
+        rows = []
+        for name, beta in params.items():
+            ci = conf.loc[name].values if name in conf.index else [np.nan, np.nan]
+            irr, lo, hi = math.exp(beta), math.exp(ci[0]), math.exp(ci[1])
+            rows.append([name, beta, ci[0], ci[1], irr, lo, hi])
+        df_gee = pd.DataFrame(rows, columns=["term","beta","ci_low","ci_high","IRR","IRR_low","IRR_high"])
+        df_gee["family"] = gee_res.model.family.__class__.__name__
+        add_table("Models", "gee_ncmds_coefficients", df_gee)
+
     lines.append(summarize_gee(gee_res))
 
-    # GEE ペア比較
+    # GEE ペア比較（対比）
     gee_pairs = pairwise_condition_contrasts_gee(gee_res)
-    if gee_pairs is not None and len(gee_pairs):
+    if (gee_pairs is not None) and len(gee_pairs):
+        add_table("Models", "gee_pairwise_contrasts", gee_pairs)
         lines.append("\n### 条件のモデルベース比較（IRR比；Holm補正）\n")
         lines.append("Pair | est | se | z | p_raw | p_holm | IRR_ratio")
         lines.append("---|---:|---:|---:|---:|---:|---:")
         for _, r in gee_pairs.iterrows():
-            lines.append(
-                f"{r['pair']} | {r['est']:.3g} | {r['se']:.3g} | {r['z']:.3g} | {r['p_raw']:.3g} | {r['p_holm']:.3g} | {r['IRR_ratio']:.3g}"
-            )
+            lines.append(f"{r['pair']} | {r['est']:.3g} | {r['se']:.3g} | {r['z']:.3g} | {r['p_raw']:.3g} | {r['p_holm']:.3g} | {r['IRR_ratio']:.3g}")
 
-    # 媒介
+    # 媒介（DataFrameで返す形に変更）
     lines.append("\n## 媒介の示唆（N_cmds が logT を媒介するか）\n")
-    lines.append(mediation_hint(dfm))
+    med_df = mediation_hint_df(dfm)  # 下で新規定義
+    if med_df is not None:
+        add_table("Models", "mediation_hint", med_df)
+        lines.append("### Mediation (heuristic): effect shrinkage when adding N_cmds\n" + med_df.to_string(index=False) + "\n")
+    else:
+        lines.append("Mediation: insufficient data.\n")
 
-    # ロバスト性
+    # ロバスト性（1%トリム後のMixedLM）
     lines.append("\n## ロバスト性（上位1%トリムの再推定）\n")
     rob = robustness_trim_logT(dfm)
+    if rob is not None:
+        params = rob.params
+        conf   = rob.conf_int()
+        rows = []
+        for name, beta in params.items():
+            ci = conf.loc[name].values if name in conf.index else [np.nan, np.nan]
+            pct = (math.exp(beta)-1)*100
+            rows.append([name, beta, ci[0], ci[1], pct])
+        df_rob = pd.DataFrame(rows, columns=["term","beta","ci_low","ci_high","pct_change"])
+        add_table("Models", "mixedlm_logT_robust_trim1pct", df_rob)
     lines.append(summarize_mixedlm_logT(rob))
 
-    # 色×条件 交互作用（詳細テーブル）
+    # 色×条件 交互作用（固定効果テーブル）
     lines.append("\n## 色×条件 交互作用（logT, MixedLM）\n")
-
-    def fit_mixedlm_logT_with_color_interaction(dfm: pd.DataFrame):
-        sub = dfm.dropna(subset=["logT","n_devices_required_c","n_colors_required_c"])
-        if sub.empty:
-            return None
-        formula = (
-            "logT ~ C(condition)"
-            " + n_devices_required_c"
-            " + n_colors_required_c"
-            " + n_devices_required_c:C(condition)"
-            " + n_colors_required_c:C(condition)"
-        )
-        try:
-            m = smf.mixedlm(formula, data=sub, groups=sub["participant"])
-            return m.fit(method="lbfgs", reml=False)
-        except Exception as e:
-            print("[WARN] MixedLM(logT, color x condition) failed:", e)
-            return None
-
-    mix_color = fit_mixedlm_logT_with_color_interaction(dfm)
+    mix_color = fit_mixedlm_logT_with_color_interaction(dfm)  # 下で新規定義
     if mix_color is None:
         lines.append("色×条件の交互作用モデルが推定できませんでした。\n")
         return
@@ -611,62 +670,138 @@ def write_models_blocks(lines, dfm: pd.DataFrame):
         pct = (math.exp(beta)-1)*100
         tmp.append([nm, beta, ci_low, ci_high, pct])
     df_out = pd.DataFrame(tmp, columns=["term","beta","ci_low","ci_high","pct_change"])
+    add_table("Models", "mixedlm_logT_color_interaction", df_out)
     lines.append(df_out.to_string(index=False) + "\n")
 
-    # 色数ごとの P+SR vs Pointing
+    # 色ごとの P+SR vs Pointing の対比表
+    ct = contrasts_PSR_vs_Pointing_by_colors(mix_color, dfm)  # 下で新規定義
+    add_table("Models", "contrast_PSR_vs_Pointing_by_colors", ct)
     lines.append("\n### 色ごとの P+SR vs Pointing の予測時間比（<1: P+SRが速い）\n")
-
-    def contrasts_PSR_vs_Pointing_by_colors(mix_res, dfm):
-        names = mix_res.model.exog_names
-        beta  = mix_res.fe_params.loc[names].values
-        Vfull = mix_res.cov_params()
-        V     = Vfull.loc[names, names].values
-
-        col_vals = sorted(dfm["n_colors_required"].dropna().unique())
-        rows = []
-
-        def vec(cond, col_raw):
-            col_c = col_raw - dfm["n_colors_required"].dropna().mean()
-            x = np.zeros(len(names))
-            if "Intercept" in names:
-                x[names.index("Intercept")] = 1.0
-            for n in names:
-                if n.startswith("C(condition)") and f"[T.{cond}]" in n:
-                    x[names.index(n)] = 1.0
-            if "n_colors_required_c" in names:
-                x[names.index("n_colors_required_c")] = col_c
-            key = f"n_colors_required_c:C(condition)[T.{cond}]"
-            if key in names:
-                x[names.index(key)] = col_c
-            return x
-
-        for col_raw in col_vals:
-            xa = vec("P+SR", col_raw)
-            xb = vec("Pointing", col_raw)
-            diff = xa - xb
-            est = float(diff @ beta)
-            se  = float(np.sqrt(diff @ V @ diff))
-            z   = est / se if se > 0 else 0.0
-            p   = 2 * (1 - norm.cdf(abs(z)))
-            ratio = math.exp(est)
-            rows.append([col_raw, est, se, z, p, ratio])
-
-        out = pd.DataFrame(rows, columns=["colors","est_logT","se","z","p_raw","time_ratio_PSR/Pointing"])
-        out["p_holm"] = holm_adjust(out["p_raw"].values)
-        return out
-
-    ct = contrasts_PSR_vs_Pointing_by_colors(mix_color, dfm)
     lines.append(ct.to_string(index=False) + "\n")
+# --- 追加：媒介のDataFrame版 ---
+def mediation_hint_df(dfm: pd.DataFrame):
+    sub = dfm[["participant","condition","logT","N_cmds","n_devices_required_c","n_colors_required_c"]].dropna()
+    if sub.empty:
+        return None
+    try:
+        m_red  = smf.mixedlm("logT ~ C(condition) + n_devices_required_c + n_colors_required_c", sub, groups=sub["participant"]).fit(method="lbfgs", reml=False)
+        m_full = smf.mixedlm("logT ~ C(condition) + n_devices_required_c + n_colors_required_c + N_cmds", sub, groups=sub["participant"]).fit(method="lbfgs", reml=False)
+        def coef_series(res):
+            s = res.params.filter(like="C(condition)")
+            return s
+        t = pd.concat([coef_series(m_red), coef_series(m_full)], axis=1)
+        t.columns = ["beta_reduced","beta_full"]
+        t["term"] = t.index
+        t["shrink"] = (t["beta_reduced"].abs() - t["beta_full"].abs()) / t["beta_reduced"].abs()
+        t = t.reset_index(drop=True)[["term","beta_reduced","beta_full","shrink"]]
+        return t
+    except Exception:
+        return None
 
+
+# --- 追加：色×条件モデル ---
+def fit_mixedlm_logT_with_color_interaction(dfm: pd.DataFrame):
+    sub = dfm.dropna(subset=["logT","n_devices_required_c","n_colors_required_c"])
+    if sub.empty:
+        return None
+    formula = (
+        "logT ~ C(condition)"
+        " + n_devices_required_c"
+        " + n_colors_required_c"
+        " + n_devices_required_c:C(condition)"
+        " + n_colors_required_c:C(condition)"
+    )
+    try:
+        m = smf.mixedlm(formula, data=sub, groups=sub["participant"])
+        return m.fit(method="lbfgs", reml=False)
+    except Exception:
+        return None
+
+
+# --- 追加：色別の対比表 ---
+def contrasts_PSR_vs_Pointing_by_colors(mix_res, dfm):
+    names = mix_res.model.exog_names
+    beta  = mix_res.fe_params.loc[names].values
+    Vfull = mix_res.cov_params()
+    V     = Vfull.loc[names, names].values
+    col_vals = sorted(dfm["n_colors_required"].dropna().unique())
+    rows = []
+
+    def vec(cond, col_raw):
+        col_c = col_raw - dfm["n_colors_required"].dropna().mean()
+        x = np.zeros(len(names))
+        if "Intercept" in names:
+            x[names.index("Intercept")] = 1.0
+        for n in names:
+            if n.startswith("C(condition)") and f"[T.{cond}]" in n:
+                x[names.index(n)] = 1.0
+        if "n_colors_required_c" in names:
+            x[names.index("n_colors_required_c")] = col_c
+        key = f"n_colors_required_c:C(condition)[T.{cond}]"
+        if key in names:
+            x[names.index(key)] = col_c
+        return x
+
+    for col_raw in col_vals:
+        xa = vec("P+SR", col_raw)
+        xb = vec("Pointing", col_raw)
+        diff = xa - xb
+        est = float(diff @ beta)
+        se  = float(np.sqrt(diff @ V @ diff))
+        z   = est / se if se > 0 else 0.0
+        p   = 2 * (1 - norm.cdf(abs(z)))
+        ratio = math.exp(est)
+        rows.append([col_raw, est, se, z, p, ratio])
+
+    out = pd.DataFrame(rows, columns=["colors","est_logT","se","z","p_raw","time_ratio_PSR/Pointing"])
+    out["p_holm"] = holm_adjust(out["p_raw"].values)
+    return out
 def write_within_corr_and_QA(lines, df_tasks: pd.DataFrame):
     lines.append("\n## 被験者内スピアマン相関（センタリング）\n")
-    lines.append(within_subject_spearman(df_tasks))
+
+    # 相関をDataFrameで受け取る
+    corr_df = within_subject_spearman_df(df_tasks)  # 下で新規定義
+    if corr_df is not None:
+        add_table("Within-subject", "spearman_centered", corr_df)
+        for _, r in corr_df.iterrows():
+            lines.append(f"- within Spearman ρ({r['y']}, {r['x']}) = {r['rho']:.3f}, p={r['p']:.3g}, N={int(r['N'])}\n")
 
     colors_unique  = sorted(df_tasks["n_colors_required"].dropna().unique().tolist()) if "n_colors_required" in df_tasks.columns else []
     devices_unique = sorted(df_tasks["n_devices_required"].dropna().unique().tolist()) if "n_devices_required" in df_tasks.columns else []
+
+    # 変動の確認もCSVへ
+    qa_rows = []
+    qa_rows.append({"key":"devices_unique_values","value":str(devices_unique)})
+    qa_rows.append({"key":"colors_unique_values","value":str(colors_unique)})
+    qa_df = pd.DataFrame(qa_rows)
+    add_table("Within-subject", "variation_check", qa_df)
+
     lines.append("\n## 変動の確認\n")
     lines.append(f"- devices unique values: {devices_unique}\n")
     lines.append(f"- colors unique values:  {colors_unique}\n")
+
+
+# --- 追加：被験者内スピアマン（DataFrame版） ---
+def within_subject_spearman_df(df_tasks: pd.DataFrame):
+    try:
+        sub = ensure_participant_column(df_tasks.copy())
+        sub["logT"] = np.log(sub["T_task_sec"].clip(lower=1e-6))
+        if "n_devices_required" not in sub.columns and "n_devices_final" in sub.columns:
+            sub["n_devices_required"] = sub["n_devices_final"]
+        # センタリング
+        sub["logT_w"] = within_center(sub, "logT", "participant")
+        sub["dev_w"]  = within_center(sub, "n_devices_required", "participant")
+        sub["col_w"]  = within_center(sub, "n_colors_required", "participant") if "n_colors_required" in sub.columns else np.nan
+
+        out_rows = []
+        for y, x in [("logT_w", "dev_w"), ("logT_w", "col_w")]:
+            s = sub[[y, x]].dropna()
+            if len(s) >= 5:
+                rho, p = spearmanr(s[y], s[x])
+                out_rows.append({"y":y, "x":x, "rho":rho, "p":p, "N":len(s)})
+        return pd.DataFrame(out_rows) if out_rows else None
+    except Exception:
+        return None
 
 # ----------------- Optional stub -----------------
 def plot_partial_effect(dfm: pd.DataFrame):
@@ -702,6 +837,17 @@ def main():
         plot_partial_effect(dfm)
     except Exception:
         pass
+    
+    
+    with open(REPORT_MD, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    print(f"[OK] wrote {REPORT_MD}")
+
+    # NEW 6.5) 単一CSVへ集約
+    if CSV_TABLES:
+        out_csv = pd.concat(CSV_TABLES, ignore_index=True)
+        out_csv.to_csv(ANALYSIS_CSV, index=False, encoding="utf-8")
+        print(f"[OK] wrote {ANALYSIS_CSV}")
 
 if __name__ == "__main__":
     main()

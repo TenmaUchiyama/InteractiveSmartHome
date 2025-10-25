@@ -85,17 +85,17 @@ Pointing vs Label | 23 | 104 | 0.453 | 1 | 0.219
 
 Fixed effects (β), 95%CI, and % change (exp(β)-1)*100.
 
-                                         term          beta        ci_low       ci_high    pct_change
-                                    Intercept  8.515856e-16 -4.257859e-02  4.257859e-02  8.881784e-14
-                         C(condition)[T.P+SR] -2.703332e-01 -3.897805e-01 -1.508860e-01 -2.368749e+01
-                     C(condition)[T.Pointing] -3.812140e-01 -5.006174e-01 -2.618106e-01 -3.169683e+01
-                           C(condition)[T.SR]  3.323132e-01  2.126856e-01  4.519408e-01  3.941894e+01
-                         n_devices_required_c  1.973879e-02 -3.550614e-02  7.498372e-02  1.993489e+00
-    n_devices_required_c:C(condition)[T.P+SR]  4.382683e-02 -3.079576e-02  1.184494e-01  4.480141e+00
-n_devices_required_c:C(condition)[T.Pointing]  2.555038e-02 -4.636670e-02  9.746746e-02  2.587959e+00
-      n_devices_required_c:C(condition)[T.SR]  8.439529e-02  1.758442e-02  1.512062e-01  8.805891e+00
-                          n_colors_required_c  3.300753e-01  2.635146e-01  3.966360e-01  3.910729e+01
-                                    Group Var  0.000000e+00 -1.719704e+20  1.719704e+20  0.000000e+00
+                                         term          beta    ci_low   ci_high  pct_change
+                                    Intercept  1.269352e-17       NaN       NaN    0.000000
+                         C(condition)[T.P+SR] -2.703332e-01 -0.389780 -0.150886  -23.687485
+                     C(condition)[T.Pointing] -3.812140e-01 -0.500617 -0.261811  -31.696829
+                           C(condition)[T.SR]  3.323132e-01  0.212686  0.451941   39.418940
+                         n_devices_required_c  1.973879e-02 -0.035506  0.074984    1.993489
+    n_devices_required_c:C(condition)[T.P+SR]  4.382683e-02 -0.030796  0.118449    4.480141
+n_devices_required_c:C(condition)[T.Pointing]  2.555038e-02 -0.046367  0.097467    2.587959
+      n_devices_required_c:C(condition)[T.SR]  8.439529e-02  0.017584  0.151206    8.805891
+                          n_colors_required_c  3.300753e-01  0.263515  0.396636   39.107289
+                                    Group Var  0.000000e+00       NaN       NaN    0.000000
 
 
 
@@ -144,35 +144,35 @@ C(condition)[T.Pointing]     -0.379544  -0.372989 0.017271
 
 Fixed effects (β), 95%CI, and % change (exp(β)-1)*100.
 
-                                         term          beta        ci_low       ci_high    pct_change
-                                    Intercept  8.700607e-16 -3.459692e-02  3.459692e-02  8.881784e-14
-                         C(condition)[T.P+SR] -2.705127e-01 -3.894056e-01 -1.516199e-01 -2.370118e+01
-                     C(condition)[T.Pointing] -3.808789e-01 -4.997281e-01 -2.620297e-01 -3.167394e+01
-                           C(condition)[T.SR]  3.252160e-01  2.061436e-01  4.442884e-01  3.843296e+01
-                         n_devices_required_c  2.012074e-02 -3.486777e-02  7.510925e-02  2.032453e+00
-    n_devices_required_c:C(condition)[T.P+SR]  4.322586e-02 -3.105036e-02  1.175021e-01  4.417371e+00
-n_devices_required_c:C(condition)[T.Pointing]  2.540233e-02 -4.618095e-02  9.698561e-02  2.572772e+00
-      n_devices_required_c:C(condition)[T.SR]  8.362674e-02  1.712598e-02  1.501275e-01  8.722300e+00
-                          n_colors_required_c  3.285122e-01  2.622605e-01  3.947640e-01  3.889002e+01
-                                    Group Var  0.000000e+00 -1.161773e+20  1.161773e+20  0.000000e+00
+                                         term          beta    ci_low   ci_high  pct_change
+                                    Intercept  1.295912e-17       NaN       NaN    0.000000
+                         C(condition)[T.P+SR] -2.705127e-01 -0.389406 -0.151620  -23.701182
+                     C(condition)[T.Pointing] -3.808789e-01 -0.499728 -0.262030  -31.673937
+                           C(condition)[T.SR]  3.252160e-01  0.206144  0.444288   38.432961
+                         n_devices_required_c  2.012074e-02 -0.034868  0.075109    2.032453
+    n_devices_required_c:C(condition)[T.P+SR]  4.322586e-02 -0.031050  0.117502    4.417371
+n_devices_required_c:C(condition)[T.Pointing]  2.540233e-02 -0.046181  0.096986    2.572772
+      n_devices_required_c:C(condition)[T.SR]  8.362674e-02  0.017126  0.150128    8.722300
+                          n_colors_required_c  3.285122e-01  0.262260  0.394764   38.890023
+                                    Group Var  0.000000e+00       NaN       NaN    0.000000
 
 
 
 ## 色×条件 交互作用（logT, MixedLM）
 
-                                         term          beta    ci_low   ci_high    pct_change
-                                    Intercept  8.615930e-16 -0.024511  0.024511  8.881784e-14
-                         C(condition)[T.P+SR] -2.703088e-01 -0.389645 -0.150973 -2.368562e+01
-                     C(condition)[T.Pointing] -3.820761e-01 -0.501339 -0.262813 -3.175569e+01
-                           C(condition)[T.SR]  3.307565e-01  0.211263  0.450250  3.920209e+01
-                         n_devices_required_c  1.212635e-02 -0.049401  0.073654  1.220017e+00
-    n_devices_required_c:C(condition)[T.P+SR]  5.141557e-02 -0.035388  0.138219  5.276030e+00
-n_devices_required_c:C(condition)[T.Pointing]  2.158387e-02 -0.060282  0.103449  2.181848e+00
-      n_devices_required_c:C(condition)[T.SR]  1.003667e-01  0.026221  0.174512  1.055763e+01
-                          n_colors_required_c  3.647672e-01  0.225248  0.504287  4.401787e+01
-     n_colors_required_c:C(condition)[T.P+SR] -3.448967e-02 -0.230882  0.161903 -3.390168e+00
- n_colors_required_c:C(condition)[T.Pointing]  2.863106e-02 -0.163841  0.221104  2.904486e+00
-       n_colors_required_c:C(condition)[T.SR] -1.191995e-01 -0.306410  0.068011 -1.123693e+01
+                                         term          beta    ci_low   ci_high  pct_change
+                                    Intercept  1.217420e-17       NaN       NaN    0.000000
+                         C(condition)[T.P+SR] -2.703088e-01 -0.389645 -0.150973  -23.685622
+                     C(condition)[T.Pointing] -3.820761e-01 -0.501339 -0.262813  -31.755688
+                           C(condition)[T.SR]  3.307565e-01  0.211263  0.450250   39.202085
+                         n_devices_required_c  1.212635e-02 -0.049401  0.073654    1.220017
+    n_devices_required_c:C(condition)[T.P+SR]  5.141557e-02 -0.035388  0.138219    5.276030
+n_devices_required_c:C(condition)[T.Pointing]  2.158387e-02 -0.060282  0.103449    2.181848
+      n_devices_required_c:C(condition)[T.SR]  1.003667e-01  0.026221  0.174512   10.557626
+                          n_colors_required_c  3.647672e-01  0.225248  0.504287   44.017866
+     n_colors_required_c:C(condition)[T.P+SR] -3.448967e-02 -0.230882  0.161903   -3.390168
+ n_colors_required_c:C(condition)[T.Pointing]  2.863106e-02 -0.163841  0.221104    2.904486
+       n_colors_required_c:C(condition)[T.SR] -1.191995e-01 -0.306410  0.068011  -11.236934
 
 
 ### 色ごとの P+SR vs Pointing の予測時間比（<1: P+SRが速い）
@@ -186,6 +186,7 @@ n_devices_required_c:C(condition)[T.Pointing]  2.158387e-02 -0.060282  0.103449 
 ## 被験者内スピアマン相関（センタリング）
 
 - within Spearman ρ(logT_w, dev_w) = 0.423, p=1.18e-50, N=1139
+
 - within Spearman ρ(logT_w, col_w) = 0.437, p=2.6e-54, N=1139
 
 
