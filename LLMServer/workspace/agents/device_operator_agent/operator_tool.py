@@ -22,7 +22,7 @@ class DeviceControlData(BaseModel):
 deviceOperator = DeviceOperator()
 testOperator = TestOperator()
 
-is_simulation = True
+is_simulation = False
 
 
 
